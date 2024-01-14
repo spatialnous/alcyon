@@ -1,0 +1,6 @@
+[submodule "src/salalib"]
+	path = src/salalib
+	url = git@github.com:/acanth-is/salalib.git
+[submodule "src/genlib"]
+	path = src/genlib
+	url = git@github.com:/acanth-is/genlib.git
