@@ -5,7 +5,7 @@ An R package for spatial network analysis. Based on the rdepthmap package and le
 ```
 install.packages("devtools")
 library(devtools)
-install_github("pklampros/aedon")
+install_github("acanth-is/aedon")
 library(aedon)
 ```
 Windows users might need to also install [Rtools](https://cran.r-project.org/bin/windows/Rtools/)
