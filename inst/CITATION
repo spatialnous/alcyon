@@ -7,9 +7,9 @@ citableAuthors = authors[unlist(lapply(authors, function(author) {
 }))]
 
 bibentry(bibtype = "Misc",
-         title = "{rdepthmap}: R and depthmapX CLI interface",
+         title = "{aedon}: An R package for spatial network analysis",
          author = citableAuthors,
          year = year,
          note = note,
          version = meta$Version,
-         url = "https://github.com/orange-vertex/rdepthmap")
+         url = "https://github.com/pklampros/aedon")

@@ -1,6 +1,6 @@
-Package: rdepthmap
+Package: aedon
 Type: Package
-Title: R and depthmapX CLI interface
+Title: R and the sala library
 Date: 2023-10-25
 Version: 0.2.0
 Authors@R: c(
@@ -9,11 +9,16 @@ Authors@R: c(
     person("Kimon", "Krenz", role = "ctb"),
     person("University College London", role = "fnd"),
     person("Spacelab", role = "fnd"))
-Description: This package interfaces with the depthmapX CLI with the aim of modifying .graph files.
+Description: This package interfaces with the sala library, depthmapX's spatial analysis library. The R parts of the code are based on the rdepthmap package
 License: GPL-3 + file LICENSE
 Encoding: UTF-8
 LazyData: true
+LinkingTo:
+    Rcpp, sp
+Imports:
+    Rcpp
 Depends:
     sp, sf, igraph
 Suggests: 
     testthat
+SystemRequirements: C++17

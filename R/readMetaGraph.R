@@ -1,5 +1,4 @@
-# Copyright 2019 Kimon Krenz
-# Copyright 2019 Petros Koutsolampros
+# Copyright 2024 Petros Koutsolampros
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -14,8 +13,13 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-getTopFeatures = function(spatialDataFrame, column, percent) {
-    numberOfFeatures = nrow(spatialDataFrame)
-    orderedFeatureIDs = order(spatialDataFrame[[column]])
-    spatialDataFrame[tail(orderedFeatureIDs, percent*numberOfFeatures),]
+# Reads a metagraph into a bunch of ShapeMaps/ShapeGraphs
+
+readMetaGraph = function(fileName) {
+  mod = Rcpp::Module("aedon_module", "aedon")
+  mgraphData = mod$readMetaGraph(fileName);
+
+  # convert the shapemap pointers to the ShapeMap class
+  # provided by the package
+  mgraphData$shapeMaps
 }

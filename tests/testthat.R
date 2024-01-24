@@ -1,4 +1,4 @@
 library(testthat)
-library(rdepthmap)
+library(aedon)
 
-test_check("rdepthmap")
+test_check("aedon")

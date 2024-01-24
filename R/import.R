@@ -1,20 +1,18 @@
 # Copyright 2019 Fani Kostourou
 # Copyright 2019 Petros Koutsolampros
 #
-# This file is part of rdepthmap
-#
-# rdepthmap is free software: you can redistribute it and/or modify
+# This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
 #
-# rdepthmap is distributed in the hope that it will be useful,
+# This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with rdepthmap  If not, see <https://www.gnu.org/licenses/>.
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import = function(filesToImport, graphFileOut,
                   cliPath = getDefaultCLILocation(), verbose = FALSE) {
@@ -46,5 +44,5 @@ importLines = function(linesIn, graphFileOut,
   tmpGraph = tempfile(fileext = ".tsv");
   write.table(linesDF, tmpGraph, row.names = F, quote = F, sep = "\t")
 
-  rdepthmap::import(tmpGraph, graphFileOut)
+  aedon::import(tmpGraph, graphFileOut)
 }

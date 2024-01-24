@@ -1,20 +1,18 @@
 # Copyright 2019 Fani Kostourou
 # Copyright 2019 Petros Koutsolampros
 #
-# This file is part of rdepthmap
-#
-# rdepthmap is free software: you can redistribute it and/or modify
+# This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
 #
-# rdepthmap is distributed in the hope that it will be useful,
+# This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with rdepthmap  If not, see <https://www.gnu.org/licenses/>.
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 export = function(graphFileIn, fileOut, exportType,
                   cliPath = getDefaultCLILocation(), verbose = FALSE) {
@@ -27,7 +25,7 @@ export = function(graphFileIn, fileOut, exportType,
 getPointmapData = function(graphFileIn, scale = 1,
                            cliPath = getDefaultCLILocation(), verbose = FALSE) {
   mapFile = tempfile(fileext = ".csv");
-  rdepthmap::export(graphFileIn, mapFile, "pointmap-data-csv", cliPath, verbose)
+  aedon::export(graphFileIn, mapFile, "pointmap-data-csv", cliPath, verbose)
   dpm = processPointMap(mapFile, scale, ",")
   file.remove(mapFile)
   return(dpm);
@@ -36,7 +34,7 @@ getPointmapData = function(graphFileIn, scale = 1,
 getPointmapLinks = function(graphFileIn,
                             cliPath = getDefaultCLILocation(), verbose = FALSE) {
   csvFile = tempfile(fileext = ".csv");
-  rdepthmap::export(graphFileIn, csvFile, "pointmap-links-csv", cliPath, verbose)
+  aedon::export(graphFileIn, csvFile, "pointmap-links-csv", cliPath, verbose)
   links = read.csv(csvFile)
   file.remove(csvFile)
   return(links);
@@ -46,9 +44,9 @@ getPointmapLinks = function(graphFileIn,
 getPointmapDataAndLinks = function(graphFileIn, scale = 1,
                                    cliPath = getDefaultCLILocation(), verbose = FALSE) {
   mapFile = tempfile(fileext = ".csv");
-  rdepthmap::export(graphFileIn, mapFile, "pointmap-data-csv")
+  aedon::export(graphFileIn, mapFile, "pointmap-data-csv")
   linkFile = tempfile(fileext = ".csv");
-  rdepthmap::export(graphFileIn, linkFile, "pointmap-links-csv")
+  aedon::export(graphFileIn, linkFile, "pointmap-links-csv")
   dpm = processPointMapAndLinks(mapFile, linkFile, scale, ",")
   file.remove(mapFile)
   file.remove(linkFile)
@@ -81,7 +79,7 @@ processPointMapAndLinks = function(mapPath, linkPath = NA, scale = 1, sep = "\t"
 getShapeGraph = function(graphFileIn,
                          cliPath = getDefaultCLILocation(), verbose = FALSE) {
   mapFile = tempfile(fileext = ".mif")
-  rdepthmap::export(graphFileIn, mapFile, "shapegraph-map-mif", cliPath, verbose)
+  aedon::export(graphFileIn, mapFile, "shapegraph-map-mif", cliPath, verbose)
   ogr = sf::st_read(mapFile, geometry_column = 1L, quiet = !verbose)
   file.remove(mapFile)
   return(ogr);
@@ -90,7 +88,7 @@ getShapeGraph = function(graphFileIn,
 getShapeGraphConnections = function(graphFileIn,
                          cliPath = getDefaultCLILocation(), verbose = FALSE) {
   connectionsFile = tempfile(fileext = ".csv")
-  rdepthmap::export(graphFileIn, connectionsFile, "shapegraph-connections-csv", cliPath, verbose)
+  aedon::export(graphFileIn, connectionsFile, "shapegraph-connections-csv", cliPath, verbose)
   csv = read.table(connectionsFile,header = TRUE, sep = ",")
   file.remove(connectionsFile)
   return(csv);
@@ -99,7 +97,7 @@ getShapeGraphConnections = function(graphFileIn,
 getShapeGraphLinksUnlinks = function(graphFileIn,
                                     cliPath = getDefaultCLILocation(), verbose = FALSE) {
   linksunlinksFile = tempfile(fileext = ".csv")
-  rdepthmap::export(graphFileIn, linksunlinksFile, "shapegraph-links-unlinks-csv", cliPath, verbose)
+  aedon::export(graphFileIn, linksunlinksFile, "shapegraph-links-unlinks-csv", cliPath, verbose)
   csv = read.table(linksunlinksFile,header = TRUE, sep = ",")
   file.remove(linksunlinksFile)
   return(csv);

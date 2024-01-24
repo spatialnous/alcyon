@@ -1,19 +1,17 @@
 # Copyright 2019 Petros Koutsolampros
 #
-# This file is part of rdepthmap
-#
-# rdepthmap is free software: you can redistribute it and/or modify
+# This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
 #
-# rdepthmap is distributed in the hope that it will be useful,
+# This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with rdepthmap  If not, see <https://www.gnu.org/licenses/>.
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 isovist = function(graphFileIn, graphFileOut = NA, x, y, angle = NA, viewangle = NA,
                    cliPath = getDefaultCLILocation(), verbose = FALSE) {
@@ -47,11 +45,11 @@ isovist2pts = function(graphFileIn, graphFileOut = NA, x, y, toX, toY, viewangle
 makeIsovists = function(graphFilePath, originX, originY, scale = 1,
                         cliPath = getDefaultCLILocation(), verbose = FALSE) {
   tmpGraph = tempfile(fileext = ".graph");
-  rdepthmap::isovist(graphFilePath, tmpGraph, originX, originY)
-  rdepthmap::convertMap(tmpGraph, tmpGraph, "convex")
+  aedon::isovist(graphFilePath, tmpGraph, originX, originY)
+  aedon::convertMap(tmpGraph, tmpGraph, "convex")
 
   tmpMap = tempfile(fileext = ".mif")
-  rdepthmap::export(tmpGraph, tmpMap, "shapegraph-map-mif")
+  aedon::export(tmpGraph, tmpMap, "shapegraph-map-mif")
   isovists = sf::st_read(tmpMap, geometry_column = 1L, quiet = !verbose)
 
   file.remove(tmpGraph);

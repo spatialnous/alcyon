@@ -3,3 +3,7 @@
 .RData
 .Ruserdata
 .DS_Store
+R/RcppExports.R
+src/RcppExports.cpp
+*.o
+*.so

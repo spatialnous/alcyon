@@ -1,0 +1,23 @@
+# Set the C++ standard to C++17
+CXX_STD = CXX17
+
+# Make sure libraries are included so that they can refer to each other
+PKG_CPPFLAGS=-I../inst/include -I.
+
+SOURCES = main.cpp \
+          axialAnalysis.cpp \
+          segmentAnalysis.cpp \
+          RcppExports.cpp \
+          $(wildcard genlib/*.cpp) \
+          $(wildcard salalib/*.cpp) \
+          $(wildcard salalib/*/*.cpp)
+
+# Obtain the object files
+OBJECTS=$(SOURCES:.cpp=.o)
+
+# Make the shared object
+all: $(SHLIB)
+
+# Provide recipe to remove all objects
+clean:
+	@rm -f $(OBJECTS)
