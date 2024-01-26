@@ -37,13 +37,13 @@ test_that("proper formatForCLI output", {
     mod = Rcpp::Module("aedon_module", "aedon")
     lineStringMap = st_read("inst/extdata/testdata/barnsbury/barnsbury_small_axial.mif",
                              geometry_column = 1L, quiet = TRUE)
-
     mod = Rcpp::Module("aedon_module", "aedon")
     shapeMap = mod$toShapeMap(lineStringMap)
+    mod$getAttributeNames(shapeMap);
     shapeGraph = mod$toAxialShapeGraph(shapeMap);
     attrNames = mod$getAttributeNames(shapeGraph);
     attrNames
-    mod$getAttributeData(shapeGraph, attrNames[1]);
+    mod$getAttributeData(shapeGraph, attrNames);
     aedon:::runAxialAnalysis(shapeGraph, c(-1));
     mod$getAttributeNames(shapeGraph);
   }
