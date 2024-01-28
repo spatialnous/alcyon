@@ -1,5 +1,5 @@
 # Copyright 2019 Fani Kostourou
-# Copyright 2019 Petros Koutsolampros
+# Copyright 2019-2024 Petros Koutsolampros
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
