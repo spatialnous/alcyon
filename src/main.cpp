@@ -199,6 +199,23 @@ int getGeometryColumnIndex(Rcpp::DataFrame &df) {
             *getStringVectorAttr(df, "sf_column").begin()));
 }
 
+std::string getSFShapeMapExpectedColName(
+        int rColIdx,
+        std::string colName) {
+    return "df_" + std::to_string(rColIdx) + "_" + colName;
+}
+
+// [[Rcpp::export]]
+std::string getSFShapeMapExpectedColName(
+        Rcpp::DataFrame &df,
+        int rColIdx) {
+
+    auto dfcn = Rcpp::as<const Rcpp::StringVector>(df.attr("names"));
+    const int colIdx = rColIdx - 1;
+    const std::string &colName = Rcpp::as<std::string>(dfcn.at(colIdx));
+    return getSFShapeMapExpectedColName(rColIdx, colName);
+}
+
 // [[Rcpp::export]]
 Rcpp::XPtr<ShapeMap> toShapeMap(
         Rcpp::DataFrame &df,
@@ -262,7 +279,7 @@ Rcpp::XPtr<ShapeMap> toShapeMap(
                 Rcpp::stop("Non-numeric columns are not supported (" +
                     std::to_string(colIdx) + ")");
             int newColIdx = shp->addAttribute(
-                "df_" + std::to_string(rColIdx) + "_" + colName);
+                getSFShapeMapExpectedColName(rColIdx, colName));
 
             if (newColIdx == -1) {
                 // error adding column (e.g., duplicate column names)
@@ -274,7 +291,7 @@ Rcpp::XPtr<ShapeMap> toShapeMap(
         }
         case REALSXP: {
             int newColIdx = shp->addAttribute(
-                "df_" + std::to_string(rColIdx) + "_" + colName);
+                getSFShapeMapExpectedColName(rColIdx, colName));
 
             if (newColIdx == -1) {
                 // error adding column (e.g., duplicate column names)

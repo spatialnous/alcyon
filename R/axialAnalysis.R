@@ -22,12 +22,26 @@ axialAnalysis = function(lineStringMap,
                          includeIntermediateMetrics = FALSE,
                          verbose = FALSE) {
     mod = Rcpp::Module("aedon_module", "aedon")
-    shapeMap = mod$toShapeMap(lineStringMap)
+    weightByIdx = NULL
+    if (weightByAttribute != "") {
+        weightByIdx = which(names(lineStringMap) == weightByAttribute)
+    }
+    shapeMap = mod$toShapeMap(lineStringMap, weightByAttribute)
     shapeGraph = mod$toAxialShapeGraph(shapeMap)
 
     attrNamesBefore = mod$getAttributeNames(shapeGraph)
 
-    aedon::runAxialAnalysis(shapeGraph, radii, weightByAttribute)
+    expectdAttrName = ""
+    if (!is.null(weightByIdx)) {
+        expectdAttrName = aedon:::getSFShapeMapExpectedColName(lineStringMap, 1)
+    }
+
+    aedon::runAxialAnalysis(shapeGraph,
+                            radii,
+                            expectdAttrName,
+                            includeChoice,
+                            includeLocal,
+                            includeIntermediateMetrics)
 
     attrNamesAfter = mod$getAttributeNames(shapeGraph)
 

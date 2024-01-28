@@ -43,8 +43,9 @@ test_that("proper formatForCLI output", {
     shapeGraph = mod$toAxialShapeGraph(shapeMap);
     attrNames = mod$getAttributeNames(shapeGraph);
     attrNames
-    mod$getAttributeData(shapeGraph, attrNames);
-    aedon:::runAxialAnalysis(shapeGraph, c(-1));
+    # mod$getAttributeData(shapeGraph, attrNames);
+    weightBy = aedon:::getSFShapeMapExpectedColName(lineStringMap, 1)
+    aedon:::runAxialAnalysis(shapeGraph, c(-1), weightBy);
     mod$getAttributeNames(shapeGraph);
   }
 
