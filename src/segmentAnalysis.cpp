@@ -58,11 +58,11 @@ bool runSegmentAnalysis(
         const int radiusStepType,
         const int analysisStepType,
         const Rcpp::Nullable<std::string> weightedMeasureColNameNV = R_NilValue,
-        const Rcpp::Nullable<bool> includeChoiceNV = false,
-        const Rcpp::Nullable<int> tulipBinsNV = false,
-        const Rcpp::Nullable<bool> verboseNV = false,
-        const Rcpp::Nullable<bool> selOnlyNV = false,
-        const Rcpp::Nullable<bool> progressNV = false) {
+        const Rcpp::Nullable<bool> includeChoiceNV = R_NilValue,
+        const Rcpp::Nullable<int> tulipBinsNV = R_NilValue,
+        const Rcpp::Nullable<bool> verboseNV = R_NilValue,
+        const Rcpp::Nullable<bool> selOnlyNV = R_NilValue,
+        const Rcpp::Nullable<bool> progressNV = R_NilValue) {
 
     std::string weightedMeasureColName = "";
     if (weightedMeasureColNameNV.isNotNull()) {
@@ -189,8 +189,8 @@ bool segmentStepDepth(
         const std::vector<double> stepDepthPointsX,
         const std::vector<double> stepDepthPointsY,
         const int stepType,
-        const Rcpp::Nullable<bool> verboseNV = false,
-        const Rcpp::Nullable<bool> progressNV = false) {
+        const Rcpp::Nullable<bool> verboseNV = R_NilValue,
+        const Rcpp::Nullable<bool> progressNV = R_NilValue) {
     bool verbose = false;
     if (verboseNV.isNotNull()) {
         verbose = Rcpp::as<bool>(verboseNV);

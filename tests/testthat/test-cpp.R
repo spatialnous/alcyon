@@ -22,12 +22,12 @@ test_that("proper formatForCLI output", {
   #library(aedon)
 
   MetaGraph <- Rcpp::Module("metagraph_module", "aedon")$MetaGraph
-  b <- new(MetaGraph, "inst/extdata/testdata/gallery/gallery_connected.graph")
+  b <- new(MetaGraph, "/home/petros/Projects/depthmapX/data/gallery_connected.graph")
   print(b$getName())
 
   library(aedon)
   mod <- Rcpp::Module("aedon_module", "aedon")
-  fileName = "inst/extdata/testdata/barnsbury/barnsburySmall.graph"
+  fileName = "/home/petros/Projects/Common_nosync/data/barnsburySmall.graph"
   b = mod$getMetaGraph(fileName)
   b
   b[[1]]$getName()
@@ -35,15 +35,15 @@ test_that("proper formatForCLI output", {
   {
     library(aedon)
     mod = Rcpp::Module("aedon_module", "aedon")
-    lineStringMap = st_read("inst/extdata/testdata/barnsbury/barnsbury_small_axial.mif",
+    lineStringMap = st_read("/home/petros/Projects/Common_nosync/data/barnsbury/barnsbury_small_axial.mif",
                              geometry_column = 1L, quiet = TRUE)
+
     mod = Rcpp::Module("aedon_module", "aedon")
     shapeMap = mod$toShapeMap(lineStringMap)
-    mod$getAttributeNames(shapeMap);
     shapeGraph = mod$toAxialShapeGraph(shapeMap);
     attrNames = mod$getAttributeNames(shapeGraph);
     attrNames
-    mod$getAttributeData(shapeGraph, attrNames);
+    mod$getAttributeData(shapeGraph, attrNames[1]);
     aedon:::runAxialAnalysis(shapeGraph, c(-1));
     mod$getAttributeNames(shapeGraph);
   }
@@ -54,4 +54,3 @@ test_that("proper formatForCLI output", {
   shp = aedon::ShapeMap("lala")
   aedon::name(shp)
 })
-

@@ -46,11 +46,11 @@ bool runAxialAnalysis(
         Rcpp::XPtr<ShapeGraph> shapeGraph,
         const Rcpp::NumericVector radii,
         const Rcpp::Nullable<std::string> weightedMeasureColNameNV = R_NilValue,
-        const Rcpp::Nullable<bool> includeChoiceNV = false,
-        const Rcpp::Nullable<bool> includeLocalNV = false,
-        const Rcpp::Nullable<bool> includeIntermediateMetricsNV = false,
-        const Rcpp::Nullable<bool> verboseNV = false,
-        const Rcpp::Nullable<bool> progressNV = false) {
+        const Rcpp::Nullable<bool> includeChoiceNV = R_NilValue,
+        const Rcpp::Nullable<bool> includeLocalNV = R_NilValue,
+        const Rcpp::Nullable<bool> includeIntermediateMetricsNV = R_NilValue,
+        const Rcpp::Nullable<bool> verboseNV = R_NilValue,
+        const Rcpp::Nullable<bool> progressNV = R_NilValue) {
     std::string weightedMeasureColName = "";
     if (weightedMeasureColNameNV.isNotNull()) {
         weightedMeasureColName = Rcpp::as<std::string>(weightedMeasureColNameNV);
@@ -124,8 +124,8 @@ bool axialStepDepth(
         const std::vector<double> stepDepthPointsX,
         const std::vector<double> stepDepthPointsY,
         const int stepType,
-        const Rcpp::Nullable<bool> verboseNV = false,
-        const Rcpp::Nullable<bool> progressNV = false) {
+        const Rcpp::Nullable<bool> verboseNV = R_NilValue,
+        const Rcpp::Nullable<bool> progressNV = R_NilValue) {
     bool verbose = false;
     if (verboseNV.isNotNull()) {
         verbose = Rcpp::as<bool>(verboseNV);

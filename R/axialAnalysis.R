@@ -14,21 +14,21 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-axialAnalysis = function(lineStringMap, radii, includeChoice = FALSE,
-                         includeLocal = FALSE, includeIntermediateMetrics = FALSE,
-                         cliPath = getDefaultCLILocation(), verbose = FALSE) {
-  # if (is.na(graphFileOut)) graphFileOut = graphFileIn;
-  # params = c("-f", formatForCLI(graphFileIn),
-  #            "-o", formatForCLI(graphFileOut),
-  #            "-m", "AXIAL",
-  #            "-xa", paste(radii, collapse = ","))
-  # if (includeChoice) params = c(params, "-xac")
-  # if (includeLocal) params = c(params, "-xal")
-  # if (includeIntermediateMetrics) params = c(params, "-xar")
-  # depthmapXcli(params, cliPath, verbose);
-
+axialAnalysis = function(lineStringMap,
+                         radii,
+                         weightByAttribute = "",
+                         includeChoice = FALSE,
+                         includeLocal = FALSE,
+                         includeIntermediateMetrics = FALSE,
+                         verbose = FALSE) {
     mod = Rcpp::Module("aedon_module", "aedon")
     shapeMap = mod$toShapeMap(lineStringMap)
-    shapeGraph = mod$toAxialShapeGraph(shapeMap);
-    mod$runAxialAnalysis(shapeGraph, c(-1));
+    shapeGraph = mod$toAxialShapeGraph(shapeMap)
+
+    attrNamesBefore = mod$getAttributeNames(shapeGraph)
+
+    aedon::runAxialAnalysis(shapeGraph, radii, weightByAttribute)
+
+    attrNamesAfter = mod$getAttributeNames(shapeGraph)
+
 }
