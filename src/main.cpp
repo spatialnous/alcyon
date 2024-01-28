@@ -251,9 +251,9 @@ Rcpp::XPtr<ShapeMap> toShapeMap(
     }
 
     // for any other columns it has been requested, create in ShapeMa
-    for (const int rcolIdx: keepColumnIdxs) {
+    for (const int rColIdx: keepColumnIdxs) {
         // R indexes start from 1
-        const int colIdx = rcolIdx - 1;
+        const int colIdx = rColIdx - 1;
         const auto &col = df.at(colIdx);
         const std::string &colName = Rcpp::as<std::string>(dfcn.at(colIdx));
         switch( TYPEOF(col) ) {
@@ -261,7 +261,8 @@ Rcpp::XPtr<ShapeMap> toShapeMap(
             if (Rf_isFactor(col))
                 Rcpp::stop("Non-numeric columns are not supported (" +
                     std::to_string(colIdx) + ")");
-            int newColIdx = shp->addAttribute("df_" + colName);
+            int newColIdx = shp->addAttribute(
+                "df_" + std::to_string(rColIdx) + "_" + colName);
 
             if (newColIdx == -1) {
                 // error adding column (e.g., duplicate column names)
@@ -272,7 +273,8 @@ Rcpp::XPtr<ShapeMap> toShapeMap(
             break;
         }
         case REALSXP: {
-            int newColIdx = shp->addAttribute("df_" + colName);
+            int newColIdx = shp->addAttribute(
+                "df_" + std::to_string(rColIdx) + "_" + colName);
 
             if (newColIdx == -1) {
                 // error adding column (e.g., duplicate column names)
