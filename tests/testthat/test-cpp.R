@@ -39,11 +39,11 @@ test_that("proper formatForCLI output", {
                              geometry_column = 1L, quiet = TRUE)
 
     mod = Rcpp::Module("aedon_module", "aedon")
-    shapeMap = mod$toShapeMap(lineStringMap)
+    shapeMap = aedon:::toShapeMap(lineStringMap, c(1,2))
     shapeGraph = mod$toAxialShapeGraph(shapeMap);
     attrNames = mod$getAttributeNames(shapeGraph);
     attrNames
-    mod$getAttributeData(shapeGraph, attrNames[1]);
+    mod$getAttributeData(shapeGraph, attrNames);
     aedon:::runAxialAnalysis(shapeGraph, c(-1));
     mod$getAttributeNames(shapeGraph);
   }
