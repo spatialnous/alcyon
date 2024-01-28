@@ -40,7 +40,7 @@ test_that("proper formatForCLI output", {
 
     mod = Rcpp::Module("aedon_module", "aedon")
     shapeMap = aedon:::toShapeMap(lineStringMap, c(1,2))
-    shapeGraph = mod$toAxialShapeGraph(shapeMap);
+    shapeGraph = aedon::toAxialShapeGraph(shapeMap);
     attrNames = mod$getAttributeNames(shapeGraph);
     attrNames
     # mod$getAttributeData(shapeGraph, attrNames);

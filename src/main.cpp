@@ -355,7 +355,7 @@ Rcpp::XPtr<ShapeMap> toShapeMap(
     return shp;
 }
 
-
+// [[Rcpp::export]]
 Rcpp::XPtr<ShapeGraph> toAxialShapeGraph(Rcpp::XPtr<ShapeMap> shapeMap) {
     std::unique_ptr<ShapeGraph> axMap(MapConverter::convertDataToAxial(
             nullptr, "ax_map", *(shapeMap.get()), true));
@@ -385,8 +385,6 @@ RCPP_MODULE(aedon_module) {
     Rcpp::function("makeShapeMap", &ShapeMapFuncs::make);
     Rcpp::function("getAttributeNames", &ShapeMapFuncs::getAttributeNames);
     Rcpp::function("getAttributeData", &ShapeMapFuncs::getAttributeData);
-
-    Rcpp::function("toAxialShapeGraph", &toAxialShapeGraph);
 }
 
 

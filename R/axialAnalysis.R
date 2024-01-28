@@ -26,8 +26,8 @@ axialAnalysis = function(lineStringMap,
     if (weightByAttribute != "") {
         weightByIdx = which(names(lineStringMap) == weightByAttribute)
     }
-    shapeMap = mod$toShapeMap(lineStringMap, weightByAttribute)
-    shapeGraph = mod$toAxialShapeGraph(shapeMap)
+    shapeMap = aedon::toShapeMap(lineStringMap, weightByAttribute)
+    shapeGraph = aedon::toAxialShapeGraph(shapeMap)
 
     attrNamesBefore = mod$getAttributeNames(shapeGraph)
 
