@@ -36,12 +36,14 @@ axialAnalysis = function(lineStringMap,
         expectdAttrName = aedon:::getSFShapeMapExpectedColName(lineStringMap, 1)
     }
 
-    aedon::runAxialAnalysis(shapeGraph,
-                            radii,
-                            expectdAttrName,
-                            includeChoice,
-                            includeLocal,
-                            includeIntermediateMetrics)
+    aedon::runAxialAnalysis(
+        shapeGraph,
+        radii,
+        expectdAttrName,
+        includeChoice,
+        includeLocal,
+        includeIntermediateMetrics
+    )
 
     attrNamesAfter = mod$getAttributeNames(shapeGraph)
 
