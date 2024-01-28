@@ -37,8 +37,6 @@ test_that("proper formatForCLI output", {
     mod = Rcpp::Module("aedon_module", "aedon")
     lineStringMap = st_read("inst/extdata/testdata/barnsbury/barnsbury_small_axial.mif",
                              geometry_column = 1L, quiet = TRUE)
-
-    mod = Rcpp::Module("aedon_module", "aedon")
     shapeMap = aedon:::toShapeMap(lineStringMap, c(1,2))
     shapeGraph = aedon:::toAxialShapeGraph(shapeMap);
     attrNames = mod$getAttributeNames(shapeGraph);
@@ -48,6 +46,35 @@ test_that("proper formatForCLI output", {
     aedon:::runAxialAnalysis(shapeGraph, c(-1), weightBy);
     mod$getAttributeNames(shapeGraph);
     mod$getAttributeData(shapeGraph, "df_row_name")[["df_row_name"]];
+
+  }
+
+  {
+    library(aedon)
+    mod = Rcpp::Module("aedon_module", "aedon")
+    lineStringMap = st_read("inst/extdata/testdata/barnsbury/barnsbury_small_axial.mif",
+                            geometry_column = 1L, quiet = TRUE)
+
+    shapeMap = aedon:::toShapeMap(lineStringMap, c(1,2))
+    shapeGraph = aedon:::toAxialShapeGraph(shapeMap);
+
+
+    segmMap = aedon:::axialToSegment(shapeGraph)
+
+    mod$getAxialConnections(shapeGraph)
+
+    attrNames = mod$getAttributeNames(segmMap);
+    attrNames
+
+    as.data.frame(do.call(cbind, mod$getAttributeData(segmMap, attrNames)));
+
+
+    segmConns = mod$getSegmentConnections(segmMap)
+
+    weightBy = aedon:::getSFShapeMapExpectedColName(lineStringMap, 1)
+    aedon:::runAxialAnalysis(segmMap, c(-1), weightBy);
+    mod$getAttributeNames(segmMap);
+    mod$getAttributeData(segmMap, "df_row_name")[["df_row_name"]];
 
   }
 

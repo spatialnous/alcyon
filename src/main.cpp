@@ -104,6 +104,56 @@ std::map<std::string, std::vector<double>> getAttributeData(
 }
 }
 
+namespace ShapeGraphFuncs {
+std::map<std::string, std::vector<int>> getAxialConnections(
+        Rcpp::XPtr<ShapeMap> shapeGraph) {
+    auto &connectors = shapeGraph->getConnections();
+    std::map<std::string, std::vector<int>> axialConnections;
+    std::vector<int> &axialConnectionsFrom = axialConnections["from"];
+    std::vector<int> &axialConnectionsTo = axialConnections["to"];
+    for (int i = 0; i < connectors.size(); i++) {
+        const std::vector<int> &connections = connectors[i].m_connections;
+        for (int connection : connections) {
+            axialConnectionsFrom.push_back(i);
+            axialConnectionsTo.push_back(connection);
+        }
+    }
+    return axialConnections;
+}
+
+std::map<std::string, std::vector<int>> getSegmentConnections(
+        Rcpp::XPtr<ShapeMap> shapeGraph) {
+
+    auto &connectors = shapeGraph->getConnections();
+    std::map<std::string, std::vector<int>> segmentConnections;
+    std::vector<int> &segmentConnectionsFrom = segmentConnections["from"];
+    std::vector<int> &segmentConnectionsTo = segmentConnections["to"];
+    std::vector<int> &segmentConnectionsSSWeight = segmentConnections["ss_weight"];
+    std::vector<int> &segmentConnectionsBackward = segmentConnections["backward"];
+    std::vector<int> &segmentConnectionsDirection = segmentConnections["direction"];
+
+    // directed links
+    for (size_t i = 0; i < connectors.size(); i++) {
+        for (auto &segconn : connectors[i].m_forward_segconns) {
+            segmentConnectionsFrom.push_back(i);
+            segmentConnectionsTo.push_back(segconn.first.ref);
+            segmentConnectionsSSWeight.push_back(segconn.second);
+            segmentConnectionsBackward.push_back(0);
+            segmentConnectionsDirection.push_back(int(segconn.first.dir));
+        }
+
+        for (auto &segconn : connectors[i].m_back_segconns) {
+            segmentConnectionsFrom.push_back(i);
+            segmentConnectionsTo.push_back(segconn.first.ref);
+            segmentConnectionsSSWeight.push_back(segconn.second);
+            segmentConnectionsBackward.push_back(1);
+            segmentConnectionsDirection.push_back(int(segconn.first.dir));
+        }
+    }
+    return segmentConnections;
+}
+}
+
 // sample function showing how to extract data from a dataframe
 void exploreDF(Rcpp::DataFrame &df) {
 
@@ -183,15 +233,16 @@ RCPP_MODULE(aedon_module) {
     .field_readonly("shapeGraphs", &MetaGraphData::shapeGraphs)
     ;
 
-    // Rcpp::class_<ShapeMap>("sala_ShapeMap")
-    // .constructor<std::string, int>()
-    // .method("getName", &ShapeMap::getName)
-    // ;
     Rcpp::function("readMetaGraph", &readMetaGraph);
     Rcpp::function("getName", &ShapeMapFuncs::getName);
     Rcpp::function("makeShapeMap", &ShapeMapFuncs::make);
     Rcpp::function("getAttributeNames", &ShapeMapFuncs::getAttributeNames);
     Rcpp::function("getAttributeData", &ShapeMapFuncs::getAttributeData);
+
+    Rcpp::function("getAxialConnections",
+                   &ShapeGraphFuncs::getAxialConnections);
+    Rcpp::function("getSegmentConnections",
+                   &ShapeGraphFuncs::getSegmentConnections);
 }
 
 
