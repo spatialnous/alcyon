@@ -20,25 +20,34 @@ axialAnalysis = function(lineStringMap,
                          includeChoice = FALSE,
                          includeLocal = FALSE,
                          includeIntermediateMetrics = FALSE,
+                         keepGraph = FALSE,
                          verbose = FALSE) {
     mod = Rcpp::Module("aedon_module", "aedon")
+    numRadii = sapply(radii, function(r) {
+        if (r == "n") {
+            return(-1)
+        } else {
+            return(as.numeric(r))
+        }
+    })
+
     weightByIdx = NULL
     if (weightByAttribute != "") {
-        weightByIdx = which(names(lineStringMap) == weightByAttribute)
+        weightByIdx = which(names(lineStringMap) == weightByAttribute)[1]
     }
-    shapeMap = aedon::toShapeMap(lineStringMap, weightByAttribute)
-    shapeGraph = aedon::toAxialShapeGraph(shapeMap)
+    shapeMap = aedon:::toShapeMap(lineStringMap, weightByIdx)
+    shapeGraph = aedon:::toAxialShapeGraph(shapeMap)
 
     attrNamesBefore = mod$getAttributeNames(shapeGraph)
 
-    expectdAttrName = ""
+    expectdAttrName = NULL
     if (!is.null(weightByIdx)) {
-        expectdAttrName = aedon:::getSFShapeMapExpectedColName(lineStringMap, 1)
+        expectdAttrName = aedon:::getSFShapeMapExpectedColName(lineStringMap, weightByIdx)
     }
 
-    aedon::runAxialAnalysis(
+    aedon:::runAxialAnalysis(
         shapeGraph,
-        radii,
+        numRadii,
         expectdAttrName,
         includeChoice,
         includeLocal,
@@ -46,5 +55,13 @@ axialAnalysis = function(lineStringMap,
     )
 
     attrNamesAfter = mod$getAttributeNames(shapeGraph)
+    namesDiff = attrNamesAfter[!(attrNamesAfter %in% attrNamesBefore)]
+    df = as.data.frame(do.call(cbind,
+                               mod$getAttributeData(shapeGraph, namesDiff)))
+    row.names(df) =
+        mod$getAttributeData(shapeGraph, "df_row_name")[["df_row_name"]]
+    result = list(data = df[row.names(lineStringMap),],
+                  graph = NA)
+    return(result)
 
 }

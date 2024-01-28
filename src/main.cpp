@@ -16,7 +16,6 @@
 #include "salalib/shapemap.h"
 #include "salalib/shapegraph.h"
 #include "salalib/mgraph.h"
-#include "salalib/mapconverter.h"
 #include "genlib/p2dpoly.h"
 
 #include <Rcpp.h>
@@ -68,6 +67,7 @@ Rcpp::XPtr<ShapeMap> make(std::string name) {
 std::string getName(Rcpp::XPtr<ShapeMap> shapeMap) {
     return shapeMap->getName();
 }
+
 std::vector<std::string> getAttributeNames(Rcpp::XPtr<ShapeMap> shapeMap) {
     std::vector<std::string> names;
     auto &attributes = shapeMap->getAttributeTable();
@@ -173,199 +173,6 @@ void exploreDF(Rcpp::DataFrame &df) {
         }
     }
 }
-
-bool hasClass(Rcpp::DataFrame &df, std::string cl) {
-    if (df.hasAttribute("class") &&
-        TYPEOF(df.attr("class")) == STRSXP) {
-        // has a class attribute which is a string vector
-        auto classData = Rcpp::as<Rcpp::StringVector>(df.attr("class"));
-        return std::find(
-            classData.begin(), classData.end(),
-            cl) != classData.end();
-    }
-    return false;
-}
-
-Rcpp::StringVector getStringVectorAttr(Rcpp::DataFrame &df, std::string cl) {
-
-    if (!df.hasAttribute(cl)) {
-        Rcpp::stop("Dataframe does not have the attribute \"" + cl + "\"");
-    }
-    return Rcpp::as<Rcpp::StringVector>(df.attr(cl));
-}
-
-int getGeometryColumnIndex(Rcpp::DataFrame &df) {
-    return df.findName(Rcpp::as<std::string>(
-            *getStringVectorAttr(df, "sf_column").begin()));
-}
-
-std::string getSFShapeMapExpectedColName(
-        int rColIdx,
-        std::string colName) {
-    return "df_" + std::to_string(rColIdx) + "_" + colName;
-}
-
-// [[Rcpp::export]]
-std::string getSFShapeMapExpectedColName(
-        Rcpp::DataFrame &df,
-        int rColIdx) {
-
-    auto dfcn = Rcpp::as<const Rcpp::StringVector>(df.attr("names"));
-    const int colIdx = rColIdx - 1;
-    const std::string &colName = Rcpp::as<std::string>(dfcn.at(colIdx));
-    return getSFShapeMapExpectedColName(rColIdx, colName);
-}
-
-// [[Rcpp::export]]
-Rcpp::XPtr<ShapeMap> toShapeMap(
-        Rcpp::DataFrame &df,
-        Rcpp::Nullable<std::vector<int>> keepColumnIdxsNV = R_NilValue) {
-
-    if (!hasClass(df, "sf")) {
-        Rcpp::stop("Not an sf dataframe");
-    }
-
-    auto dfrn = df.attr("row.names");
-    if (TYPEOF(dfrn) != INTSXP &&
-        TYPEOF(dfrn) != REALSXP) {
-        Rcpp::stop("Non-numeric row.names are not supported");
-    }
-
-    auto dfcn = Rcpp::as<const Rcpp::StringVector>(df.attr("names"));
-
-    std::vector<int> keepColumnIdxs;
-    if (keepColumnIdxsNV.isNotNull()) {
-        keepColumnIdxs = Rcpp::as<std::vector<int>>(keepColumnIdxsNV);
-    }
-
-    auto geometryColumnIdx = getGeometryColumnIndex(df);
-    const auto &lines = Rcpp::as<Rcpp::GenericVector>(df.at(geometryColumnIdx));
-
-    Rcpp::XPtr<ShapeMap> shp(new ShapeMap("tmp_df_shp"));
-
-    std::vector<std::pair<const int, Rcpp::IntegerVector::const_iterator>> iIts;
-    std::vector<std::pair<const int, Rcpp::NumericVector::const_iterator>> rIts;
-
-    { // create the row-names column in the shapemap
-        const int rowNameColIdx = shp->addAttribute("df_row_name");
-        if (rowNameColIdx == -1) {
-            // error adding column (e.g., duplicate column names)
-            Rcpp::stop("Error creating df row column");
-        }
-
-        switch( TYPEOF(dfrn) ) {
-        case INTSXP: {
-            const auto &rowNames = Rcpp::as<const Rcpp::IntegerVector>(dfrn);
-            iIts.emplace_back(std::make_pair(rowNameColIdx, rowNames.begin()));
-            break;
-        }
-        case REALSXP: {
-            const auto &rowNames = Rcpp::as<const Rcpp::NumericVector>(dfrn);
-            rIts.emplace_back(std::make_pair(rowNameColIdx, rowNames.begin()));
-            break;
-        }
-        }
-    }
-
-    // for any other columns it has been requested, create in ShapeMa
-    for (const int rColIdx: keepColumnIdxs) {
-        // R indexes start from 1
-        const int colIdx = rColIdx - 1;
-        const auto &col = df.at(colIdx);
-        const std::string &colName = Rcpp::as<std::string>(dfcn.at(colIdx));
-        switch( TYPEOF(col) ) {
-        case INTSXP: {
-            if (Rf_isFactor(col))
-                Rcpp::stop("Non-numeric columns are not supported (" +
-                    std::to_string(colIdx) + ")");
-            int newColIdx = shp->addAttribute(
-                getSFShapeMapExpectedColName(rColIdx, colName));
-
-            if (newColIdx == -1) {
-                // error adding column (e.g., duplicate column names)
-                Rcpp::stop("Error creating df  column");
-            }
-            const auto &tmp = Rcpp::as<const Rcpp::IntegerVector>(col);
-            iIts.emplace_back(std::make_pair(newColIdx, tmp.begin()));
-            break;
-        }
-        case REALSXP: {
-            int newColIdx = shp->addAttribute(
-                getSFShapeMapExpectedColName(rColIdx, colName));
-
-            if (newColIdx == -1) {
-                // error adding column (e.g., duplicate column names)
-                Rcpp::stop("Error creating df  column");
-            }
-            const auto &tmp = Rcpp::as<const Rcpp::NumericVector>(col);
-            rIts.emplace_back(std::make_pair(newColIdx, tmp.begin()));
-            break;
-        }
-        case STRSXP: {
-            Rcpp::stop("String columns are not supported (" +
-                std::to_string(colIdx) + ")");
-            break;
-        }
-        case VECSXP: {
-            Rcpp::stop("Non-numeric columns are not supported (" +
-                std::to_string(colIdx) + ")");
-
-            break;
-        }
-        default: {
-            Rcpp::stop("incompatible SEXP encountered; only accepts lists"
-                           " with REALSXPs, STRSXPs, VECSXPs and INTSXPs");
-        }
-        }
-    }
-
-
-    for (auto lit = lines.begin(); lit != lines.end(); ++lit) {
-        auto coords = Rcpp::as<Rcpp::NumericVector>(*lit);
-
-        if (coords.size() == 4) {
-            // 2D line x1,y1,x2,y2
-            // TODO: Make this a vector of pairs
-            std::map<int, float> extraAttributes;
-
-            for (auto &idxiit: iIts) {
-                extraAttributes.emplace(idxiit.first, *idxiit.second);
-            }
-            for (auto &idxrit: rIts) {
-                extraAttributes.emplace(idxrit.first, *idxrit.second);
-            }
-
-            Line line(Point2f(coords[0], coords[1]),
-                      Point2f(coords[2], coords[3]));
-            shp->makeLineShape(
-                    line,
-                    false /* through_ui */,
-                    false /* tempshape */,
-                    extraAttributes);
-        }
-        for (auto &idxiit: iIts) {
-            ++idxiit.second;
-        }
-        for (auto &idxrit: rIts) {
-            ++idxrit.second;
-        }
-    }
-
-
-    return shp;
-}
-
-// [[Rcpp::export]]
-Rcpp::XPtr<ShapeGraph> toAxialShapeGraph(Rcpp::XPtr<ShapeMap> shapeMap) {
-    std::unique_ptr<ShapeGraph> axMap(MapConverter::convertDataToAxial(
-            nullptr, "ax_map", *(shapeMap.get()), true));
-
-    // release the unique_ptr so that it's not deleted on scope close
-    ShapeGraph *shpgp = axMap.release();
-
-    return Rcpp::XPtr<ShapeGraph>(shpgp);
-}
-
 
 
 // should not expose metagraph, instead only shapemaps/shapegraphs

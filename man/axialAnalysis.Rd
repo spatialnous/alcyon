@@ -23,16 +23,13 @@ Axial Analysis
 Calls the depthmapXcli to carry out Axial Analysis on the currently visible map
 }
 \usage{
-axialAnalysis(graphFileIn, graphFileOut, radii, includeChoice = FALSE,
+axialAnalysis(lineStringMap, radii, includeChoice = FALSE,
               includeLocal = FALSE, includeIntermediateMetrics = FALSE,
               cliPath = getDefaultCLILocation(), verbose = FALSE)
 }
 \arguments{
-  \item{graphFileIn}{
-    The input graph file.
-  }
-  \item{graphFileOut}{
-    The output graph file. If ommited will use the input file.
+  \item{lineStringMap}{
+    The input line string sf map
   }
   \item{radii}{
     One or more radii to limit the analysis at.

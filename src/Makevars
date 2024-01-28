@@ -5,6 +5,8 @@ CXX_STD = CXX17
 PKG_CPPFLAGS=-I../inst/include -I.
 
 SOURCES = main.cpp \
+          convertInternal.cpp \
+          convertExternal.cpp \
           axialAnalysis.cpp \
           segmentAnalysis.cpp \
           RcppExports.cpp \
