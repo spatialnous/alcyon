@@ -1,12 +1,12 @@
-## aedon
+## alcyon
 An R package for spatial network analysis. Based on the rdepthmap package and leveraging the sala library from depthmapX
 
 ### How to install:
 ```
 install.packages("devtools")
 library(devtools)
-install_github("acanth-is/aedon")
-library(aedon)
+install_github("acanth-is/alcyon")
+library(alcyon)
 ```
 Windows users might need to also install [Rtools](https://cran.r-project.org/bin/windows/Rtools/)
 

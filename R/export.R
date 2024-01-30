@@ -25,7 +25,7 @@ export = function(graphFileIn, fileOut, exportType,
 getPointmapData = function(graphFileIn, scale = 1,
                            cliPath = getDefaultCLILocation(), verbose = FALSE) {
   mapFile = tempfile(fileext = ".csv");
-  aedon::export(graphFileIn, mapFile, "pointmap-data-csv", cliPath, verbose)
+  alcyon::export(graphFileIn, mapFile, "pointmap-data-csv", cliPath, verbose)
   dpm = processPointMap(mapFile, scale, ",")
   file.remove(mapFile)
   return(dpm);
@@ -34,7 +34,7 @@ getPointmapData = function(graphFileIn, scale = 1,
 getPointmapLinks = function(graphFileIn,
                             cliPath = getDefaultCLILocation(), verbose = FALSE) {
   csvFile = tempfile(fileext = ".csv");
-  aedon::export(graphFileIn, csvFile, "pointmap-links-csv", cliPath, verbose)
+  alcyon::export(graphFileIn, csvFile, "pointmap-links-csv", cliPath, verbose)
   links = read.csv(csvFile)
   file.remove(csvFile)
   return(links);
@@ -44,9 +44,9 @@ getPointmapLinks = function(graphFileIn,
 getPointmapDataAndLinks = function(graphFileIn, scale = 1,
                                    cliPath = getDefaultCLILocation(), verbose = FALSE) {
   mapFile = tempfile(fileext = ".csv");
-  aedon::export(graphFileIn, mapFile, "pointmap-data-csv")
+  alcyon::export(graphFileIn, mapFile, "pointmap-data-csv")
   linkFile = tempfile(fileext = ".csv");
-  aedon::export(graphFileIn, linkFile, "pointmap-links-csv")
+  alcyon::export(graphFileIn, linkFile, "pointmap-links-csv")
   dpm = processPointMapAndLinks(mapFile, linkFile, scale, ",")
   file.remove(mapFile)
   file.remove(linkFile)
@@ -79,7 +79,7 @@ processPointMapAndLinks = function(mapPath, linkPath = NA, scale = 1, sep = "\t"
 getShapeGraph = function(graphFileIn,
                          cliPath = getDefaultCLILocation(), verbose = FALSE) {
   mapFile = tempfile(fileext = ".mif")
-  aedon::export(graphFileIn, mapFile, "shapegraph-map-mif", cliPath, verbose)
+  alcyon::export(graphFileIn, mapFile, "shapegraph-map-mif", cliPath, verbose)
   ogr = sf::st_read(mapFile, geometry_column = 1L, quiet = !verbose)
   file.remove(mapFile)
   return(ogr);
@@ -88,7 +88,7 @@ getShapeGraph = function(graphFileIn,
 getShapeGraphConnections = function(graphFileIn,
                          cliPath = getDefaultCLILocation(), verbose = FALSE) {
   connectionsFile = tempfile(fileext = ".csv")
-  aedon::export(graphFileIn, connectionsFile, "shapegraph-connections-csv", cliPath, verbose)
+  alcyon::export(graphFileIn, connectionsFile, "shapegraph-connections-csv", cliPath, verbose)
   csv = read.table(connectionsFile,header = TRUE, sep = ",")
   file.remove(connectionsFile)
   return(csv);
@@ -97,7 +97,7 @@ getShapeGraphConnections = function(graphFileIn,
 getShapeGraphLinksUnlinks = function(graphFileIn,
                                     cliPath = getDefaultCLILocation(), verbose = FALSE) {
   linksunlinksFile = tempfile(fileext = ".csv")
-  aedon::export(graphFileIn, linksunlinksFile, "shapegraph-links-unlinks-csv", cliPath, verbose)
+  alcyon::export(graphFileIn, linksunlinksFile, "shapegraph-links-unlinks-csv", cliPath, verbose)
   csv = read.table(linksunlinksFile,header = TRUE, sep = ",")
   file.remove(linksunlinksFile)
   return(csv);

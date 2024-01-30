@@ -22,7 +22,7 @@ axialAnalysis = function(lineStringMap,
                          includeIntermediateMetrics = FALSE,
                          keepGraph = FALSE,
                          verbose = FALSE) {
-    mod = Rcpp::Module("aedon_module", "aedon")
+    mod = Rcpp::Module("alcyon_module", "alcyon")
     numRadii = sapply(radii, function(r) {
         if (r == "n") {
             return(-1)
@@ -35,17 +35,17 @@ axialAnalysis = function(lineStringMap,
     if (weightByAttribute != "") {
         weightByIdx = which(names(lineStringMap) == weightByAttribute)[1]
     }
-    shapeMap = aedon:::toShapeMap(lineStringMap, weightByIdx)
-    shapeGraph = aedon:::toAxialShapeGraph(shapeMap)
+    shapeMap = alcyon:::toShapeMap(lineStringMap, weightByIdx)
+    shapeGraph = alcyon:::toAxialShapeGraph(shapeMap)
 
     attrNamesBefore = mod$getAttributeNames(shapeGraph)
 
     expectdAttrName = NULL
     if (!is.null(weightByIdx)) {
-        expectdAttrName = aedon:::getSFShapeMapExpectedColName(lineStringMap, weightByIdx)
+        expectdAttrName = alcyon:::getSFShapeMapExpectedColName(lineStringMap, weightByIdx)
     }
 
-    aedon:::runAxialAnalysis(
+    alcyon:::runAxialAnalysis(
         shapeGraph,
         numRadii,
         expectdAttrName,

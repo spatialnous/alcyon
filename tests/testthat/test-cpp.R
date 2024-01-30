@@ -18,48 +18,48 @@ context("C++ tests")
 
 
 test_that("proper formatForCLI output", {
-  # aedon::testPrintFromCpp()
-  #library(aedon)
+  # alcyon::testPrintFromCpp()
+  #library(alcyon)
 
-  MetaGraph <- Rcpp::Module("metagraph_module", "aedon")$MetaGraph
+  MetaGraph <- Rcpp::Module("metagraph_module", "alcyon")$MetaGraph
   b <- new(MetaGraph, "inst/extdata/testdata/gallery/gallery_connected.graph")
   print(b$getName())
 
-  library(aedon)
-  mod <- Rcpp::Module("aedon_module", "aedon")
+  library(alcyon)
+  mod <- Rcpp::Module("alcyon_module", "alcyon")
   fileName = "inst/extdata/testdata/barnsbury/barnsburySmall.graph"
   b = mod$getMetaGraph(fileName)
   b
   b[[1]]$getName()
 
   {
-    library(aedon)
-    mod = Rcpp::Module("aedon_module", "aedon")
+    library(alcyon)
+    mod = Rcpp::Module("alcyon_module", "alcyon")
     lineStringMap = st_read("inst/extdata/testdata/barnsbury/barnsbury_small_axial.mif",
                              geometry_column = 1L, quiet = TRUE)
-    shapeMap = aedon:::toShapeMap(lineStringMap, c(1,2))
-    shapeGraph = aedon:::toAxialShapeGraph(shapeMap);
+    shapeMap = alcyon:::toShapeMap(lineStringMap, c(1,2))
+    shapeGraph = alcyon:::toAxialShapeGraph(shapeMap);
     attrNames = mod$getAttributeNames(shapeGraph);
     attrNames
     # mod$getAttributeData(shapeGraph, attrNames);
-    weightBy = aedon:::getSFShapeMapExpectedColName(lineStringMap, 1)
-    aedon:::runAxialAnalysis(shapeGraph, c(-1), weightBy);
+    weightBy = alcyon:::getSFShapeMapExpectedColName(lineStringMap, 1)
+    alcyon:::runAxialAnalysis(shapeGraph, c(-1), weightBy);
     mod$getAttributeNames(shapeGraph);
     mod$getAttributeData(shapeGraph, "df_row_name")[["df_row_name"]];
 
   }
 
   {
-    library(aedon)
-    mod = Rcpp::Module("aedon_module", "aedon")
+    library(alcyon)
+    mod = Rcpp::Module("alcyon_module", "alcyon")
     lineStringMap = st_read("inst/extdata/testdata/barnsbury/barnsbury_small_axial.mif",
                             geometry_column = 1L, quiet = TRUE)
 
-    shapeMap = aedon:::toShapeMap(lineStringMap, c(1,2))
-    shapeGraph = aedon:::toAxialShapeGraph(shapeMap);
+    shapeMap = alcyon:::toShapeMap(lineStringMap, c(1,2))
+    shapeGraph = alcyon:::toAxialShapeGraph(shapeMap);
 
 
-    segmMap = aedon:::axialToSegment(shapeGraph)
+    segmMap = alcyon:::axialToSegment(shapeGraph)
 
     mod$getAxialConnections(shapeGraph)
 
@@ -71,18 +71,18 @@ test_that("proper formatForCLI output", {
 
     segmConns = mod$getSegmentConnections(segmMap)
 
-    weightBy = aedon:::getSFShapeMapExpectedColName(lineStringMap, 1)
-    aedon:::runAxialAnalysis(segmMap, c(-1), weightBy);
+    weightBy = alcyon:::getSFShapeMapExpectedColName(lineStringMap, 1)
+    alcyon:::runAxialAnalysis(segmMap, c(-1), weightBy);
     mod$getAttributeNames(segmMap);
     mod$getAttributeData(segmMap, "df_row_name")[["df_row_name"]];
 
   }
 
   {
-    library(aedon)
+    library(alcyon)
     lineStringMap = st_read("inst/extdata/testdata/barnsbury/barnsbury_small_axial.mif",
                             geometry_column = 1L, quiet = TRUE)
-    aedon::axialAnalysis(lineStringMap, radii = c("n", "3"),
+    alcyon::axialAnalysis(lineStringMap, radii = c("n", "3"),
                          includeChoice = TRUE, includeLocal = TRUE,
                          includeIntermediateMetrics = FALSE)
   }
@@ -90,6 +90,6 @@ test_that("proper formatForCLI output", {
 
   shp@mod$storage$getName
 
-  shp = aedon::ShapeMap("lala")
-  aedon::name(shp)
+  shp = alcyon::ShapeMap("lala")
+  alcyon::name(shp)
 })

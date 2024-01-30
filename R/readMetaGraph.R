@@ -16,7 +16,7 @@
 # Reads a metagraph into a bunch of ShapeMaps/ShapeGraphs
 
 readMetaGraph = function(fileName) {
-  mod = Rcpp::Module("aedon_module", "aedon")
+  mod = Rcpp::Module("alcyon_module", "alcyon")
   mgraphData = mod$readMetaGraph(fileName);
 
   # convert the shapemap pointers to the ShapeMap class

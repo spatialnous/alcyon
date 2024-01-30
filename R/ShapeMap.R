@@ -23,13 +23,13 @@ setClass("ShapeMap",
 )
 
 ShapeMap <- function(name){
-  mod = Rcpp::Module("aedon_module", "aedon")
+  mod = Rcpp::Module("alcyon_module", "alcyon")
   new("ShapeMap", ptr=mod$makeShapeMap(name))
 }
 
 setGeneric("name", function(x) standardGeneric("name"))
 
 setMethod("name", "ShapeMap", function(x) {
-  mod = Rcpp::Module("aedon_module", "aedon")
+  mod = Rcpp::Module("alcyon_module", "alcyon")
   mod$getName(x@ptr)
 })

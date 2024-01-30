@@ -1,4 +1,4 @@
 library(testthat)
-library(aedon)
+library(alcyon)
 
-test_check("aedon")
+test_check("alcyon")

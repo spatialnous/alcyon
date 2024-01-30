@@ -227,7 +227,7 @@ void exploreDF(Rcpp::DataFrame &df) {
 
 // should not expose metagraph, instead only shapemaps/shapegraphs
 // and use the metagraph just to import the shapemaps to an R list
-RCPP_MODULE(aedon_module) {
+RCPP_MODULE(alcyon_module) {
     Rcpp::class_<MetaGraphData>("MetaGraphData")
     .field_readonly("shapeMaps", &MetaGraphData::shapeMaps)
     .field_readonly("shapeGraphs", &MetaGraphData::shapeGraphs)

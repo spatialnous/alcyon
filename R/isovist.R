@@ -45,11 +45,11 @@ isovist2pts = function(graphFileIn, graphFileOut = NA, x, y, toX, toY, viewangle
 makeIsovists = function(graphFilePath, originX, originY, scale = 1,
                         cliPath = getDefaultCLILocation(), verbose = FALSE) {
   tmpGraph = tempfile(fileext = ".graph");
-  aedon::isovist(graphFilePath, tmpGraph, originX, originY)
-  aedon::convertMap(tmpGraph, tmpGraph, "convex")
+  alcyon::isovist(graphFilePath, tmpGraph, originX, originY)
+  alcyon::convertMap(tmpGraph, tmpGraph, "convex")
 
   tmpMap = tempfile(fileext = ".mif")
-  aedon::export(tmpGraph, tmpMap, "shapegraph-map-mif")
+  alcyon::export(tmpGraph, tmpMap, "shapegraph-map-mif")
   isovists = sf::st_read(tmpMap, geometry_column = 1L, quiet = !verbose)
 
   file.remove(tmpGraph);

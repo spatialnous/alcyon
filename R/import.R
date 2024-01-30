@@ -44,5 +44,5 @@ importLines = function(linesIn, graphFileOut,
   tmpGraph = tempfile(fileext = ".tsv");
   write.table(linesDF, tmpGraph, row.names = F, quote = F, sep = "\t")
 
-  aedon::import(tmpGraph, graphFileOut)
+  alcyon::import(tmpGraph, graphFileOut)
 }

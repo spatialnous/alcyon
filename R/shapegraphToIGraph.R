@@ -15,13 +15,13 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 shapegraphToIGraph = function(graphFile, weightcolumn = NA){
-  ogr = aedon::getShapeGraph(graphFile)
-  linksunlinks = aedon::getShapeGraphLinksUnlinks(graphFile)
+  ogr = alcyon::getShapeGraph(graphFile)
+  linksunlinks = alcyon::getShapeGraphLinksUnlinks(graphFile)
   links = linksunlinks[linksunlinks$link == 1,]
   links = links[,c("refA","refB")]
   unlinks = linksunlinks[linksunlinks$link == 0,]
   unlinks = unlinks[,c("refA","refB")]
-  connections = aedon::getShapeGraphConnections(graphFile)
+  connections = alcyon::getShapeGraphConnections(graphFile)
   if (nrow(connections) == 0) {
     edges = links
   } else {
