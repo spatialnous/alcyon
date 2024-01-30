@@ -29,7 +29,7 @@ std::string getSFShapeMapExpectedColName(
 
 }
 }
-// [[Rcpp::export]]
+// [[Rcpp::export("RCPP_getSFShapeMapExpectedColName")]]
 std::string getSFShapeMapExpectedColName(
         Rcpp::DataFrame &df,
         int rColIdx) {
@@ -40,7 +40,7 @@ std::string getSFShapeMapExpectedColName(
     return getSFShapeMapExpectedColName(rColIdx, colName);
 }
 
-// [[Rcpp::export]]
+// [[Rcpp::export("Rcpp_toShapeMap")]]
 Rcpp::XPtr<ShapeMap> toShapeMap(
         Rcpp::DataFrame &df,
         Rcpp::Nullable<std::vector<int>> keepColumnIdxsNV = R_NilValue) {

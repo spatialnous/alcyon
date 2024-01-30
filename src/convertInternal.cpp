@@ -19,7 +19,7 @@
 
 #include <Rcpp.h>
 
-// [[Rcpp::export]]
+// [[Rcpp::export("Rcpp_toAxialShapeGraph")]]
 Rcpp::XPtr<ShapeGraph> toAxialShapeGraph(
         Rcpp::XPtr<ShapeMap> shapeMap,
         Rcpp::Nullable<std::string> nameNV = R_NilValue,
@@ -44,7 +44,7 @@ Rcpp::XPtr<ShapeGraph> toAxialShapeGraph(
 }
 
 
-// [[Rcpp::export]]
+// [[Rcpp::export("Rcpp_axialToSegment")]]
 Rcpp::XPtr<ShapeGraph> axialToSegment(
         Rcpp::XPtr<ShapeGraph> shapeGraph,
         Rcpp::Nullable<std::string> nameNV = R_NilValue,

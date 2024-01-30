@@ -38,7 +38,7 @@ struct MetaGraphData {
 
 RCPP_EXPOSED_CLASS(MetaGraphData);
 
-//*// [[Rcpp::export("getMetaGraph")]]
+//*// [[Rcpp::export("Rcpp_readMetaGraph")]]
 MetaGraphData readMetaGraph(std::string fileName) {
     Rcpp::Rcerr << "Loading MetaGraph at: " << fileName << std::endl;
     auto m = std::unique_ptr<MetaGraph>(new MetaGraph(fileName));

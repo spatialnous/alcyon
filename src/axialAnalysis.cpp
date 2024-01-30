@@ -41,7 +41,7 @@ enum StepType {
 
 }
 
-// [[Rcpp::export]]
+// [[Rcpp::export("Rcpp_runAxialAnalysis")]]
 bool runAxialAnalysis(
         Rcpp::XPtr<ShapeGraph> shapeGraph,
         const Rcpp::NumericVector radii,
@@ -118,7 +118,7 @@ bool runAxialAnalysis(
 }
 
 
-// [[Rcpp::export]]
+// [[Rcpp::export("Rcpp_axialStepDepth")]]
 bool axialStepDepth(
         Rcpp::XPtr<ShapeGraph> shapeGraph,
         const std::vector<double> stepDepthPointsX,

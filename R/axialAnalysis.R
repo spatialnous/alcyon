@@ -35,17 +35,17 @@ axialAnalysis = function(lineStringMap,
     if (weightByAttribute != "") {
         weightByIdx = which(names(lineStringMap) == weightByAttribute)[1]
     }
-    shapeMap = alcyon:::toShapeMap(lineStringMap, weightByIdx)
-    shapeGraph = alcyon:::toAxialShapeGraph(shapeMap)
+    shapeMap = Rcpp_toShapeMap(lineStringMap, weightByIdx)
+    shapeGraph = Rcpp_toAxialShapeGraph(shapeMap)
 
     attrNamesBefore = mod$getAttributeNames(shapeGraph)
 
     expectdAttrName = NULL
     if (!is.null(weightByIdx)) {
-        expectdAttrName = alcyon:::getSFShapeMapExpectedColName(lineStringMap, weightByIdx)
+        expectdAttrName = Rcpp_getSFShapeMapExpectedColName(lineStringMap, weightByIdx)
     }
 
-    alcyon:::runAxialAnalysis(
+    Rcpp_runAxialAnalysis(
         shapeGraph,
         numRadii,
         expectdAttrName,

@@ -51,7 +51,7 @@ std::unique_ptr<Communicator> getCommunicator(const bool printProgress) {
 
 }
 
-// [[Rcpp::export]]
+// [[Rcpp::export("Rcpp_runSegmentAnalysis")]]
 bool runSegmentAnalysis(
         Rcpp::XPtr<ShapeGraph> shapeGraph,
         const Rcpp::NumericVector radii,
@@ -183,7 +183,7 @@ bool runSegmentAnalysis(
 }
 
 
-// [[Rcpp::export]]
+// [[Rcpp::export("Rcpp_segmentStepDepth")]]
 bool segmentStepDepth(
         Rcpp::XPtr<ShapeGraph> shapeGraph,
         const std::vector<double> stepDepthPointsX,

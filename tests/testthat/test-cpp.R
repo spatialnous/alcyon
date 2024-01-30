@@ -37,13 +37,13 @@ test_that("proper formatForCLI output", {
     mod = Rcpp::Module("alcyon_module", "alcyon")
     lineStringMap = st_read("inst/extdata/testdata/barnsbury/barnsbury_small_axial.mif",
                              geometry_column = 1L, quiet = TRUE)
-    shapeMap = alcyon:::toShapeMap(lineStringMap, c(1,2))
-    shapeGraph = alcyon:::toAxialShapeGraph(shapeMap);
+    shapeMap = Rcpp_toShapeMap(lineStringMap, c(1,2))
+    shapeGraph = Rcpp_toAxialShapeGraph(shapeMap);
     attrNames = mod$getAttributeNames(shapeGraph);
     attrNames
     # mod$getAttributeData(shapeGraph, attrNames);
-    weightBy = alcyon:::getSFShapeMapExpectedColName(lineStringMap, 1)
-    alcyon:::runAxialAnalysis(shapeGraph, c(-1), weightBy);
+    weightBy = Rcpp_getSFShapeMapExpectedColName(lineStringMap, 1)
+    Rcpp_runAxialAnalysis(shapeGraph, c(-1), weightBy);
     mod$getAttributeNames(shapeGraph);
     mod$getAttributeData(shapeGraph, "df_row_name")[["df_row_name"]];
 
@@ -55,11 +55,11 @@ test_that("proper formatForCLI output", {
     lineStringMap = st_read("inst/extdata/testdata/barnsbury/barnsbury_small_axial.mif",
                             geometry_column = 1L, quiet = TRUE)
 
-    shapeMap = alcyon:::toShapeMap(lineStringMap, c(1,2))
-    shapeGraph = alcyon:::toAxialShapeGraph(shapeMap);
+    shapeMap = Rcpp_toShapeMap(lineStringMap, c(1,2))
+    shapeGraph = Rcpp_toAxialShapeGraph(shapeMap);
 
 
-    segmMap = alcyon:::axialToSegment(shapeGraph)
+    segmMap = Rcpp_axialToSegment(shapeGraph)
 
     mod$getAxialConnections(shapeGraph)
 
@@ -71,8 +71,8 @@ test_that("proper formatForCLI output", {
 
     segmConns = mod$getSegmentConnections(segmMap)
 
-    weightBy = alcyon:::getSFShapeMapExpectedColName(lineStringMap, 1)
-    alcyon:::runAxialAnalysis(segmMap, c(-1), weightBy);
+    weightBy = Rcpp_getSFShapeMapExpectedColName(lineStringMap, 1)
+    Rcpp_runAxialAnalysis(segmMap, c(-1), weightBy);
     mod$getAttributeNames(segmMap);
     mod$getAttributeData(segmMap, "df_row_name")[["df_row_name"]];
 
