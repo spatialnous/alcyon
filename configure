@@ -15,4 +15,9 @@ cmake ../libs \
   -DCMAKE_BUILD_TYPE=Release \
   -DBUILD_SHARED_LIBS:bool=OFF \
   -DCMAKE_POSITION_INDEPENDENT_CODE:bool=ON
+
+# remove .NOTPARALLEL to stop CMD from complaining
+#sed -i '/^.NOTPARALLEL:$/s/^/#/' Makefile
+find . -name Makefile -exec sed -i '/^.NOTPARALLEL:$/s/^/#/' {} \;
+
 ${MAKE}
