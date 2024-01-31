@@ -61,8 +61,8 @@ export("getShapeGraphConnections")
 export("getShapeGraphLinksUnlinks")
 
 # C++
-export("ShapeMap")
-export("name")
+#export("ShapeMap")
+#export("name")
 
 # libraries
 import("sp")
