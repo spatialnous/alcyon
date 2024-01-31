@@ -1,6 +1,7 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^\.github$
-^src/genlib/\.git$
-^src/salalib/\.git$
+^src/build$
+^src/libs/genlib/\.git$
+^src/libs/salalib/\.git$
 ^inst/extdata/testdata/\.git$
