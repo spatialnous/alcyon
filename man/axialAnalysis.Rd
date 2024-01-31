@@ -51,7 +51,7 @@ axialAnalysis(lineStringMap,
   \item{includeIntermediateMetrics}{
     Set to TRUE to include intermediate measures (RA, RRA and total depth).
   }
-  \item{verbose}{
+  \item{keepGraph}{
     Optional. Keep and return the graph.
   }
   \item{verbose}{
