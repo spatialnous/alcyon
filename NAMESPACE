@@ -61,7 +61,6 @@ export("getShapeGraphConnections")
 export("getShapeGraphLinksUnlinks")
 
 # C++
-export("testPrintFromCpp")
 export("ShapeMap")
 export("name")
 

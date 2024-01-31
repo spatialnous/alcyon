@@ -1,4 +1,0 @@
-
-testPrintFromCpp = function() {
-  testPrint();
-}
