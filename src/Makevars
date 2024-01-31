@@ -13,7 +13,7 @@ SOURCES = main.cpp \
           RcppExports.cpp
 
 # Obtain the object files
-OBJECTS=$(SOURCES:.cpp=.o)
+OBJECTS=$(SOURCES:.cpp=.o) RcppExports.o
 
 # Make the shared object
 all: $(SHLIB)
