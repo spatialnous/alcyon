@@ -2,7 +2,7 @@
 CXX_STD = CXX17
 
 # Make sure libraries are included so that they can refer to each other
-PKG_CPPFLAGS=-Ilibs -I.
+PKG_CPPFLAGS=-Ilibs -I../inst/include/ -I.
 PKG_LIBS = build/libalcyon_gensala.a
 
 SOURCES = main.cpp \
