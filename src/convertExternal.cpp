@@ -29,7 +29,8 @@ std::string getSFShapeMapExpectedColName(
 
 }
 }
-// [[Rcpp::export("RCPP_getSFShapeMapExpectedColName")]]
+
+// [[Rcpp::export("Rcpp_getSFShapeMapExpectedColName")]]
 std::string getSFShapeMapExpectedColName(
         Rcpp::DataFrame &df,
         int rColIdx) {

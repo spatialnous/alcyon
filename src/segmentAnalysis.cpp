@@ -91,7 +91,7 @@ bool runSegmentAnalysis(
         progress = Rcpp::as<bool>(progressNV);
     }
 
-    std::cout << "Running segment analysis... " << std::flush;
+    Rcpp::Rcout << "Running segment analysis... " << '\n';
 
 
     std::set<double> radius_set;
@@ -176,7 +176,7 @@ bool runSegmentAnalysis(
     } catch (Communicator::CancelledException) {
         analysisCompleted = false;
     }
-    std::cout << "ok\n" << std::flush;
+    Rcpp::Rcout << "ok" << '\n';
 
 
     return analysisCompleted;
@@ -200,7 +200,7 @@ bool segmentStepDepth(
         progress = Rcpp::as<bool>(progressNV);
     }
 
-    std::cout << "ok\nSelecting cells... " << std::flush;
+    Rcpp::Rcout << "ok\nSelecting cells... " << '\n';
 
     for (int i = 0; i < stepDepthPointsX.size(); ++i) {
         Point2f p2f(stepDepthPointsX[i], stepDepthPointsY[i]);
@@ -212,7 +212,7 @@ bool segmentStepDepth(
         shapeGraph->setCurSel(r, true);
     }
 
-    std::cout << "ok\nCalculating step-depth... " << std::flush;
+    Rcpp::Rcout << "ok\nCalculating step-depth... " << '\n';
 
     bool analysisCompleted = false;
 
