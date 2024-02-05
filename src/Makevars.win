@@ -1,0 +1,23 @@
+# Set the C++ standard to C++17
+CXX_STD = CXX17
+
+# Make sure libraries are included so that they can refer to each other
+PKG_CPPFLAGS = -Ilibs -I../inst/include/ -I.
+PKG_LIBS = build/libalcyon_gensala.a
+
+SOURCES = main.cpp \
+          convertInternal.cpp \
+          convertExternal.cpp \
+          axialAnalysis.cpp \
+          segmentAnalysis.cpp \
+          RcppExports.cpp
+
+# Obtain the object files
+OBJECTS=$(SOURCES:.cpp=.o)
+
+# Make the shared object
+all: $(SHLIB)
+
+# Provide recipe to remove all objects
+clean:
+	@rm -f $(OBJECTS)
