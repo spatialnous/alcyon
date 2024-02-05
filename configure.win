@@ -11,16 +11,14 @@ LDFLAGS=`"${R_HOME}/bin/R.exe" CMD config LDFLAGS`
 "${R_HOME}/bin/Rscript.exe" -e 'library(Rcpp); compileAttributes(".")'
 
 cd src
-mkdir -p build && cd build
+mkdir -p build-Release && cd build-Release
 cmake.exe ../libs \
   -DCMAKE_VERBOSE_MAKEFILE=ON \
   -DCMAKE_BUILD_TYPE=Release \
   -DBUILD_SHARED_LIBS:bool=OFF \
   -DCMAKE_POSITION_INDEPENDENT_CODE:bool=ON
 
-# remove .NOTPARALLEL to stop CMD from complaining
-#sed -i '/^.NOTPARALLEL:$/s/^/#/' Makefile
-#find . -name Makefile -exec sed -i '/^.NOTPARALLEL:$/s/^/#/' {} \;
+# remove .NOTPARALLEL to stop CMD Check from complaining
+find . -name Makefile -exec sed -i '/^.NOTPARALLEL:$/s/^/#/' {} \;
 
-${MAKE}
-
+cmake.exe --build . --config Release

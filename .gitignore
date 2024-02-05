@@ -5,6 +5,7 @@
 .DS_Store
 R/RcppExports.R
 src/RcppExports.cpp
-src/build
+src/build-Release
 *.o
 *.so
+*.dll

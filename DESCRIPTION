@@ -1,7 +1,7 @@
 Package: alcyon
 Type: Package
-Title: R and the sala library
-Date: 2023-10-25
+Title: R and the Sala Library
+Date: 2024-02-05
 Version: 0.2.0
 Authors@R: c(
     person("Petros", "Koutsolampros", email = "petros.koutsolampros.11@ucl.ac.uk", role = c("cre", "aut")),
@@ -9,7 +9,7 @@ Authors@R: c(
     person("Kimon", "Krenz", role = "ctb"),
     person("University College London", role = "fnd"),
     person("Spacelab", role = "fnd"))
-Description: This package interfaces with the sala library, depthmapX's spatial analysis library. The R parts of the code are based on the rdepthmap package.
+Description: Interface package for sala, depthmapX's spatial network analysis library. The R parts of the code are based on the rdepthmap package.
 License: GPL-3 + file LICENSE
 Encoding: UTF-8
 LazyData: true
