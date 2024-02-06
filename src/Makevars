@@ -1,9 +1,11 @@
 # Set the C++ standard to C++17
 CXX_STD = CXX17
 
+BLDDIR = build-Release
+
 # Make sure libraries are included so that they can refer to each other
-PKG_CPPFLAGS = -Ilibs -I../inst/include/ -I.
-PKG_LIBS = build-Release/libalcyon_gensala.a
+PKG_CPPFLAGS = -I../src/libs -I../../inst/include/ -I..
+PKG_LIBS = $(BLDDIR)/libalcyon_gensala.a
 
 SOURCES = main.cpp \
           convertInternal.cpp \
@@ -12,11 +14,20 @@ SOURCES = main.cpp \
           segmentAnalysis.cpp \
           RcppExports.cpp
 
-# Obtain the object files
-OBJECTS=$(SOURCES:.cpp=.o)
+# Obtain the object files in the build directory
+OBJECTS=$(addprefix $(BLDDIR)/,$(SOURCES:.cpp=.o))
 
 # Make the shared object
 all: $(SHLIB)
+
+# Make sure the build directory exists
+$(BLDDIR):
+	mkdir -p $@
+
+# Build each object. This is necessary to override
+# becasue otherwise .o files would end up in src/
+$(BLDDIR)/%.o: %.cpp | $(BLDDIR)
+	$(CXX) $(ALL_CPPFLAGS) $(ALL_OBJCXXFLAGS) -c $< -o $@
 
 # Provide recipe to remove all objects
 clean:
