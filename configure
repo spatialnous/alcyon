@@ -20,7 +20,7 @@ cmake ../libs \
 
 # remove .NOTPARALLEL to stop CMD from complaining
 #sed -i '/^.NOTPARALLEL:$/s/^/#/' Makefile
-find . -name Makefile -exec sed -i '/^.NOTPARALLEL:$/s/^/#/' {} \;
+find . -name Makefile -exec sed -i '/^\.NOTPARALLEL:$/s/^/#/' {} \;
 
 ${MAKE}
 
