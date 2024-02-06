@@ -19,8 +19,11 @@ cmake ../libs \
   -DCMAKE_POSITION_INDEPENDENT_CODE:bool=ON
 
 # remove .NOTPARALLEL to stop CMD from complaining
-#sed -i '/^.NOTPARALLEL:$/s/^/#/' Makefile
-find . -name Makefile -exec sed -i '/^\.NOTPARALLEL:$/s/^/#/' {} \;
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  find . -name Makefile -exec sed -i '' -e '/^.NOTPARALLEL:$/s/^/#/' {} \;
+else
+  find . -name Makefile -exec sed -i '/^.NOTPARALLEL:$/s/^/#/' {} \;
+fi
 
 ${MAKE}
 
