@@ -20,7 +20,7 @@ cmake ../libs \
 
 # remove .NOTPARALLEL to stop CMD from complaining
 unamestr=$(uname)
-if [ "$unamestr" = "darwin"* ]; then
+if [ "$unamestr" = Darwin ]; then
   find . -name Makefile -exec sed -i '' -e '/^.NOTPARALLEL:$/s/^/#/' {} \;
 else
   find . -name Makefile -exec sed -i '/^.NOTPARALLEL:$/s/^/#/' {} \;
