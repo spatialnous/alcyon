@@ -19,7 +19,8 @@ cmake ../libs \
   -DCMAKE_POSITION_INDEPENDENT_CODE:bool=ON
 
 # remove .NOTPARALLEL to stop CMD from complaining
-if [[ "$OSTYPE" == "darwin"* ]]; then
+unamestr=$(uname)
+if [ "$unamestr" = "darwin"* ]; then
   find . -name Makefile -exec sed -i '' -e '/^.NOTPARALLEL:$/s/^/#/' {} \;
 else
   find . -name Makefile -exec sed -i '/^.NOTPARALLEL:$/s/^/#/' {} \;
