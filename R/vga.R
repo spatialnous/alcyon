@@ -13,25 +13,33 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-VGA = function(graphFileIn, graphFileOut = NA, vgaMode, radii,
-               cliPath = getDefaultCLILocation(), verbose = FALSE) {
-  if (is.na(graphFileOut)) graphFileOut = graphFileIn;
-  if (!(vgaMode %in% c("isovist", "visibility-global", "visibility-local",
-                       "metric", "angular", "thruvision"))) {
-    stop(paste0("Unknown VGA mode: ", vgaMode))
+vga <- function(graphFileIn,
+                graphFileOut,
+                vgaMode,
+                radii,
+                cliPath = getDefaultCLILocation(),
+                verbose = FALSE) {
+  if (is.na(graphFileOut)) graphFileOut <- graphFileIn
+  if (!(vgaMode %in% c(
+    "isovist", "visibility-global", "visibility-local",
+    "metric", "angular", "thruvision"
+  ))) {
+    stop("Unknown VGA mode: ", vgaMode)
   }
-  params = c("-f", formatForCLI(graphFileIn),
-             "-o", formatForCLI(graphFileOut),
-             "-m", "VGA",
-             "-vr", paste0(radii, collapse = ","))
+  params <- c(
+    "-f", formatForCLI(graphFileIn),
+    "-o", formatForCLI(graphFileOut),
+    "-m", "VGA",
+    "-vr", paste0(radii, collapse = ",")
+  )
   if (vgaMode %in% c("isovist", "metric", "angular", "thruvision")) {
-    params = c(params, "-vm", vgaMode);
+    params <- c(params, "-vm", vgaMode)
   } else if (vgaMode == "visibility-global") {
-    params = c(params, "-vm", "visibility");
-    params = c(params, "-vg")
+    params <- c(params, "-vm", "visibility")
+    params <- c(params, "-vg")
   } else if (vgaMode == "visibility-local") {
-    params = c(params, "-vm", "visibility");
-    params = c(params, "-local")
+    params <- c(params, "-vm", "visibility")
+    params <- c(params, "-local")
   }
-  depthmapXcli(params, cliPath, verbose);
+  depthmapXcli(params, cliPath, verbose)
 }

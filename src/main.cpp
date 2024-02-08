@@ -15,7 +15,7 @@
 
 #include "salalib/shapemap.h"
 #include "salalib/shapegraph.h"
-#include "salalib/mgraph.h"
+#include "salalib/pointdata.h"
 #include "genlib/p2dpoly.h"
 
 #include <Rcpp.h>
@@ -29,35 +29,8 @@
 
 RCPP_EXPOSED_CLASS(ShapeMap);
 RCPP_EXPOSED_CLASS(ShapeGraph);
-
-// Simple class meant to hold only the data of the MetaGraph
-struct MetaGraphData {
-    std::vector<Rcpp::XPtr<ShapeMap>> shapeMaps;
-    std::vector<Rcpp::XPtr<ShapeGraph>> shapeGraphs;
-};
-
+RCPP_EXPOSED_CLASS(PointMap);
 RCPP_EXPOSED_CLASS(MetaGraphData);
-
-//*// [[Rcpp::export("Rcpp_readMetaGraph")]]
-MetaGraphData readMetaGraph(std::string fileName) {
-    Rcpp::Rcerr << "Loading MetaGraph at: " << fileName << std::endl;
-    auto m = std::unique_ptr<MetaGraph>(new MetaGraph(fileName));
-    m->readFromFile(fileName);
-    Rcpp::Rcerr << "- bb: " << m->getBoundingBox().area() << std::endl;
-
-    MetaGraphData mgraphData;
-    for (auto & drawingFile : m->m_drawingFiles) {
-        Rcpp::Rcerr << " - drawingName: "
-                    << drawingFile.getName() << std::endl;
-        for (auto &shapeMap : drawingFile.m_spacePixels) {
-            Rcpp::Rcerr << " - shapeMapName: "
-                        << shapeMap.getName() << std::endl;
-            ShapeMap m(std::move(shapeMap));
-            mgraphData.shapeMaps.push_back(Rcpp::XPtr<ShapeMap>(&m, true));
-        }
-    }
-    return mgraphData;
-}
 
 namespace ShapeMapFuncs {
 Rcpp::XPtr<ShapeMap> make(std::string name) {
@@ -128,9 +101,12 @@ std::map<std::string, std::vector<int>> getSegmentConnections(
     std::map<std::string, std::vector<int>> segmentConnections;
     std::vector<int> &segmentConnectionsFrom = segmentConnections["from"];
     std::vector<int> &segmentConnectionsTo = segmentConnections["to"];
-    std::vector<int> &segmentConnectionsSSWeight = segmentConnections["ss_weight"];
-    std::vector<int> &segmentConnectionsBackward = segmentConnections["backward"];
-    std::vector<int> &segmentConnectionsDirection = segmentConnections["direction"];
+    std::vector<int> &segmentConnectionsSSWeight =
+        segmentConnections["ss_weight"];
+    std::vector<int> &segmentConnectionsBackward =
+        segmentConnections["backward"];
+    std::vector<int> &segmentConnectionsDirection =
+        segmentConnections["direction"];
 
     // directed links
     for (size_t i = 0; i < connectors.size(); i++) {
@@ -228,12 +204,6 @@ void exploreDF(Rcpp::DataFrame &df) {
 // should not expose metagraph, instead only shapemaps/shapegraphs
 // and use the metagraph just to import the shapemaps to an R list
 RCPP_MODULE(alcyon_module) {
-    Rcpp::class_<MetaGraphData>("MetaGraphData")
-    .field_readonly("shapeMaps", &MetaGraphData::shapeMaps)
-    .field_readonly("shapeGraphs", &MetaGraphData::shapeGraphs)
-    ;
-
-    Rcpp::function("readMetaGraph", &readMetaGraph);
     Rcpp::function("getName", &ShapeMapFuncs::getName);
     Rcpp::function("makeShapeMap", &ShapeMapFuncs::make);
     Rcpp::function("getAttributeNames", &ShapeMapFuncs::getAttributeNames);

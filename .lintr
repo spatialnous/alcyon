@@ -1,0 +1,7 @@
+linters: all_linters(
+  packages = "lintr",
+  object_name_linter = object_name_linter(styles = c("camelCase", "dotted.case", "symbols")),
+  extraction_operator_linter = NULL
+  )
+encoding: "UTF-8"
+exclusions: list("renv", "packrat") # see ?lintr::exclude

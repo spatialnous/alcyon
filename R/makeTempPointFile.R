@@ -13,9 +13,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-makeTempPointFile = function(pointsX, pointsY, sep = "\t") {
-    tmpPtz = tempfile(fileext = ".csv");
-    dt = data.frame(x = pointsX, y = pointsY)
-    write.table(dt, tmpPtz, row.names = F, quote = F, sep = sep)
-    tmpPtz
+makeTempPointFile <- function(pointsX,
+                              pointsY,
+                              sep = "\t") {
+  tmpPtz <- tempfile(fileext = ".csv")
+  dt <- data.frame(x = pointsX, y = pointsY)
+  write.table(dt, tmpPtz, row.names = FALSE, quote = FALSE, sep = sep)
+  tmpPtz
 }

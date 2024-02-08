@@ -14,55 +14,72 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-makeDepthmapClassicColour = function(value, rangeMin, rangeMax) {
+makeDepthmapClassicColour <- function(value,
+                                      rangeMin,
+                                      rangeMax) {
   if (rangeMin > rangeMax) {
-    value = 1.0 - value;
-    rangeMin = 1.0 - rangeMin;
-    rangeMax = 1.0 - rangeMax;
+    value <- 1.0 - value
+    rangeMin <- 1.0 - rangeMin
+    rangeMax <- 1.0 - rangeMax
   }
-  green = rangeMin + (rangeMax - rangeMin) / 10.0;
-  r = g = b = 0;
-  offset = 0.0333;
+  if (value < 0.0) return(c(0.0, 0.0, 0.0))
 
-  htmlByte = function(colorByte) {
-    return(floor((colorByte + offset) * 15.0) * 17);
+  green <- rangeMin + (rangeMax - rangeMin) / 10.0
+  r <- g <- b <- 0.0
+  offset <- 0.0333
+
+  htmlByte <- function(colorByte) {
+    return(floor((colorByte + offset) * 15.0) * 17.0)
   }
 
-  # NB previously included colour muting: the 1.0 was originally 0.9 to mute the colours slightly
-  if ((value >= 0.0) && (value < rangeMin)) {
-    r = htmlByte(0.5 * (rangeMin - value)/rangeMin)
-    b = 0xFF;
+  ## | --- 0
+  ## |
+  ## | --- rangeMin
+  ## |
+  ## | --- (green + rangeMin) / 2 <- avg between green and rangeMin
+  ## |
+  ## | --- green
+  ## |
+  ## | --- (green + rangeMax) / 2 <- avg between green and rangeMax
+  ## |
+  ## | --- rangeMax
+  ## |
+  ## | --- higher than rangeMax
+
+  # NB previously included colour muting: the 1.0 was originally 0.9 to
+  # mute the colours slightly
+  if (value < rangeMin) {
+    r <- htmlByte(0.5 * (rangeMin - value) / rangeMin)
+    b <- 0xFF
+  } else if (value < (green + rangeMin) / 2.0) {
+    b <- 0xFF
+    g <- htmlByte(2.0 * (value - rangeMin) / (green - rangeMin))
+  } else if (value < green) {
+    b <- htmlByte(2.0 * (green - value) / (green - rangeMin))
+    g <- 0xFF
+  } else if (value < (green + rangeMax) / 2.0) {
+    g <- 0xFF
+    r <- htmlByte(2.0 * (value - green) / (rangeMax - green))
+  } else if (value < rangeMax) {
+    g <- htmlByte(2.0 * (rangeMax - value) / (rangeMax - green))
+    r <- 0xFF
+  } else {
+    r <- 0xFF
+    b <- htmlByte(0.5 * (value - rangeMax) / (1.0 - rangeMax))
   }
-  else if ((value >= rangeMin) && (value < (green + rangeMin)/2.0)) {
-    b = 0xFF;
-    g = htmlByte(2.0*(value - rangeMin)/(green - rangeMin))
-  }
-  else if ((value >= (green + rangeMin)/2.0) && (value < green)) {
-    b = htmlByte(2.0*(green - value)/(green - rangeMin))
-    g = 0xFF;
-  }
-  else if ((value >= green) && (value < (green + rangeMax)/2.0)) {
-    g = 0xFF;
-    r = htmlByte(2.0*(value - green)/(rangeMax - green))
-  }
-  else if ((value >= (green + rangeMax)/2.0) && (value < rangeMax)) {
-    g = htmlByte(2.0*(rangeMax - value)/(rangeMax - green))
-    r = 0xFF;
-  }
-  else if (value >= rangeMax) {
-    r = 0xFF;
-    b = htmlByte(0.5 * (value - rangeMax)/(1.0 - rangeMax))
-  }
-  return(grDevices::rgb(r/255.0,g/255.0,b/255.0));
+  return(grDevices::rgb(r / 255.0, g / 255.0, b / 255.0))
 }
-depthmap.classic.colour = function(n) {
-  unlist(lapply(0:(n - 1), function(i) {
-    makeDepthmapClassicColour(i/n, 0, 1)
+
+depthmap.classic.colour <- function(n) {
+  unlist(lapply(0L:(n - 1L), function(i) {
+    makeDepthmapClassicColour(i / n, 0.0, 1.0)
   }))
 }
 
-makeAxmanesqueColour = function(value, rangeMin = 0, rangeMax = 1) {
-  g_nicecolor = c(
+makeAxmanesqueColour <- function(value,
+                                 rangeMin = 0.0,
+                                 rangeMax = 1.0) {
+  gNicecolor <- c(
     "#3333DD", # 0 blue
     "#3388DD", # 1
     "#22CCDD", # 2
@@ -73,21 +90,24 @@ makeAxmanesqueColour = function(value, rangeMin = 0, rangeMax = 1) {
     "#DDCC22", # 7
     "#DD8833", # 8
     "#DD3333" # 9 red
-  );
-  f = (value - rangeMin) / (rangeMax - rangeMin);
+  )
+  f <- (value - rangeMin) / (rangeMax - rangeMin)
   if (rangeMin > rangeMax) {
-    f = 1.0 - f;
+    f <- 1.0 - f
   }
-  return(g_nicecolor[1 + as.integer((f - 1e-9) * length(g_nicecolor))]);
+  return(gNicecolor[1L + as.integer((f - 1e-9) * length(gNicecolor))])
 }
-depthmap.axmanesque.colour = function(n) {
-  unlist(lapply(0:(n - 1), function(i) {
-    makeAxmanesqueColour(i/n)
+
+depthmap.axmanesque.colour <- function(n) {
+  unlist(lapply(0L:(n - 1L), function(i) {
+    makeAxmanesqueColour(i / n)
   }))
 }
 
-makePurpleOrangeColour = function(value, rangeMin = 0, rangeMax = 1) {
-  g_purpleorange = c(
+makePurpleOrangeColour <- function(value,
+                                   rangeMin = 0.0,
+                                   rangeMax = 1.0) {
+  gPurpleOrange <- c(
     "#542788", # 0 purple
     "#998EC3", # 1
     "#D8DAEB", # 2
@@ -95,21 +115,24 @@ makePurpleOrangeColour = function(value, rangeMin = 0, rangeMax = 1) {
     "#FEE0B6", # 4
     "#F1A340", # 5
     "#B35806" # 6 orange
-  );
-  f = (value - rangeMin) / (rangeMax - rangeMin);
+  )
+  f <- (value - rangeMin) / (rangeMax - rangeMin)
   if (rangeMin > rangeMax) {
-    f = 1.0 - f;
+    f <- 1.0 - f
   }
-  return(g_purpleorange[1 + as.integer((f - 1e-9) * length(g_purpleorange))]);
+  return(gPurpleOrange[1L + as.integer((f - 1e-9) * length(gPurpleOrange))])
 }
-depthmap.purpleorange.colour = function(n) {
-  unlist(lapply(0:(n - 1), function(i) {
-    makePurpleOrangeColour(i/n)
+
+depthmap.purpleorange.colour <- function(n) {
+  unlist(lapply(0L:(n - 1L), function(i) {
+    makePurpleOrangeColour(i / n)
   }))
 }
 
-makeBlueRedColour = function(value, rangeMin = 0, rangeMax = 1) {
-  g_bluered = c(
+makeBlueRedColour <- function(value,
+                              rangeMin = 0.0,
+                              rangeMax = 1.0) {
+  gBlueRed <- c(
     "#4575B4", # 0 blue
     "#91BFDB", # 1
     "#E0F3F8", # 2
@@ -117,21 +140,24 @@ makeBlueRedColour = function(value, rangeMin = 0, rangeMax = 1) {
     "#FEE090", # 4
     "#FC8D59", # 5
     "#D73027" # 6 red
-  );
-  f = (value - rangeMin) / (rangeMax - rangeMin);
+  )
+  f <- (value - rangeMin) / (rangeMax - rangeMin)
   if (rangeMin > rangeMax) {
-    f = 1.0 - f;
+    f <- 1.0 - f
   }
-  return(g_bluered[1 + as.integer((f - 1e-9) * length(g_bluered))]);
+  return(gBlueRed[1L + as.integer((f - 1e-9) * length(gBlueRed))])
 }
-depthmap.bluered.colour = function(n) {
-  unlist(lapply(0:(n - 1), function(i) {
-    makeBlueRedColour(i/n)
+
+depthmap.bluered.colour <- function(n) {
+  unlist(lapply(0L:(n - 1L), function(i) {
+    makeBlueRedColour(i / n)
   }))
 }
 
-makeGreyScaleColour = function(value, rangeMin = 0, rangeMax = 1) {
-  g_greyscale = c(
+makeGreyScaleColour <- function(value,
+                                rangeMin = 0.0,
+                                rangeMax = 1.0) {
+  gGreyscale <- c(
     "#000000", # 0 black
     "#444444", # 1
     "#777777", # 2
@@ -139,21 +165,24 @@ makeGreyScaleColour = function(value, rangeMin = 0, rangeMax = 1) {
     "#CCCCCC", # 4
     "#EEEEEE", # 5
     "#FFFFFF" # 6 white
-  );
-  f = (value - rangeMin) / (rangeMax - rangeMin);
+  )
+  f <- (value - rangeMin) / (rangeMax - rangeMin)
   if (rangeMin > rangeMax) {
-    f = 1.0 - f;
+    f <- 1.0 - f
   }
-  return(g_greyscale[1 + as.integer((f - 1e-9) * length(g_greyscale))]);
+  return(gGreyscale[1L + as.integer((f - 1e-9) * length(gGreyscale))])
 }
-depthmap.grayscale.colour = function(n) {
-  unlist(lapply(0:(n - 1), function(i) {
-    makeGreyScaleColour(i/n)
+
+depthmap.grayscale.colour <- function(n) {
+  unlist(lapply(0L:(n - 1L), function(i) {
+    makeGreyScaleColour(i / n)
   }))
 }
 
-makeNiceHSBColour = function(value, rangeMin = 0, rangeMax = 1) {
-  g_nicecolorhsb = c(
+makeNiceHSBColour <- function(value,
+                              rangeMin = 0.0,
+                              rangeMax = 1.0) {
+  gNicecolorhsb <- c(
     "#3333DD", # 0 blue
     "#3377DD", # 1
     "#33BBDD", # 2
@@ -164,15 +193,16 @@ makeNiceHSBColour = function(value, rangeMin = 0, rangeMax = 1) {
     "#DDBB33", # 7
     "#DD7733", # 8
     "#DD3333" # 9 red
-  );
-  f = (value - rangeMin) / (rangeMax - rangeMin);
+  )
+  f <- (value - rangeMin) / (rangeMax - rangeMin)
   if (rangeMin > rangeMax) {
-    f = 1.0 - f;
+    f <- 1.0 - f
   }
-  return(g_nicecolorhsb[1 + as.integer((f - 1e-9) * length(g_nicecolorhsb))]);
+  return(gNicecolorhsb[1L + as.integer((f - 1e-9) * length(gNicecolorhsb))])
 }
-depthmap.nicehsb.colour = function(n) {
-  unlist(lapply(0:(n - 1), function(i) {
-    makeNiceHSBColour(i/n)
+
+depthmap.nicehsb.colour <- function(n) {
+  unlist(lapply(0L:(n - 1L), function(i) {
+    makeNiceHSBColour(i / n)
   }))
 }

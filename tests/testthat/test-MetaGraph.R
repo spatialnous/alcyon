@@ -1,5 +1,4 @@
-# Copyright 2019 Kimon Krenz
-# Copyright 2019 Petros Koutsolampros
+# Copyright 2024 Petros Koutsolampros
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -14,10 +13,13 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-getTopFeatures <- function(spatialDataFrame,
-                           column,
-                           percent) {
-  numberOfFeatures <- nrow(spatialDataFrame)
-  orderedFeatureIDs <- order(spatialDataFrame[[column]])
-  spatialDataFrame[tail(orderedFeatureIDs, percent * numberOfFeatures), ]
-}
+context("MetaGraph tests")
+
+test_that("Load data from MetaGraph", {
+  fileName <-  file.path("..", "..", "inst", "extdata", "testdata", "barnsbury",
+                         "barnsburySmall.graph")
+  metaGraphData <- Rcpp_MetaGraph_read(fileName)
+  expect_length(metaGraphData$shapeMaps, 1L)
+  expect_length(metaGraphData$shapeGraphs, 1L)
+  expect_length(metaGraphData$pointMaps, 0L)
+})

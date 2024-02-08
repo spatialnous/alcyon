@@ -14,38 +14,48 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-shapegraphToIGraph = function(graphFile, weightcolumn = NA){
-  ogr = alcyon::getShapeGraph(graphFile)
-  linksunlinks = alcyon::getShapeGraphLinksUnlinks(graphFile)
-  links = linksunlinks[linksunlinks$link == 1,]
-  links = links[,c("refA","refB")]
-  unlinks = linksunlinks[linksunlinks$link == 0,]
-  unlinks = unlinks[,c("refA","refB")]
-  connections = alcyon::getShapeGraphConnections(graphFile)
-  if (nrow(connections) == 0) {
-    edges = links
+shapegraphToIGraph <- function(graphFile,
+                               weightcolumn = NA) {
+  ogr <- getShapeGraph(graphFile)
+  linksunlinks <- getShapeGraphLinksUnlinks(graphFile)
+  links <- linksunlinks[linksunlinks$link == 1L, ]
+  links <- links[, c("refA", "refB")]
+  unlinks <- linksunlinks[linksunlinks$link == 0L, ]
+  unlinks <- unlinks[, c("refA", "refB")]
+  connections <- alcyon::getShapeGraphConnections(graphFile)
+  if (nrow(connections) == 0L) {
+    edges <- links
   } else {
-    edges = connections
+    edges <- connections
   }
 
-  for (i in 1:nrow(edges)){
-    edges[i, ] = sort(edges[i,c("refA","refB")])
+  for (i in seq_len(nrow(edges))) {
+    edges[i, ] <- sort(edges[i, c("refA", "refB")])
   }
-  edges = edges[!duplicated(edges),]
+  edges <- edges[!duplicated(edges), ]
 
-  ogr$x = as.data.frame(sf::st_centroid(ogr))[,1]
-  ogr$y = as.data.frame(sf::st_centroid(ogr))[,2]
+  ogr$x <- as.data.frame(sf::st_centroid(ogr))[, 1L]
+  ogr$y <- as.data.frame(sf::st_centroid(ogr))[, 2L]
 
-  refA = edges$refA
-  refB = edges$refB
-  Depth_Ref = ogr$Depthmap_Ref
-  ogr = ogr[,c("Depthmap_Ref",names(ogr)[names(ogr) != "Depthmap_Ref"])]
+  refA <- edges$refA
+  refB <- edges$refB
+  depthRef <- ogr$Depthmap_Ref
+  ogr <- ogr[, c("Depthmap_Ref", names(ogr)[names(ogr) != "Depthmap_Ref"])]
   if (!is.na(weightcolumn)) {
-    edges$weight = ((ogr[[match(refA, Depth_Ref), weightcolumn]])+(ogr[[match(refB, Depth_Ref), weightcolumn]]))/2
-    graph = graph.data.frame(edges, directed = FALSE, vertices = st_drop_geometry(ogr))
-    E(graph)$weight = edges$weight
+    edges$weight <- ((ogr[[match(refA, depthRef), weightcolumn]]) +
+                       (ogr[[match(refB, depthRef), weightcolumn]])) / 2.0
+    graph <- graph.data.frame(
+      edges,
+      directed = FALSE,
+      vertices = st_drop_geometry(ogr)
+    )
+    E(graph)$weight <- edges[["weight"]]
   } else {
-    graph = graph.data.frame(edges, directed = FALSE, vertices = st_drop_geometry(ogr))
+    graph <- graph.data.frame(
+      edges,
+      directed = FALSE,
+      vertices = st_drop_geometry(ogr)
+    )
   }
-  return(graph);
+  return(graph)
 }

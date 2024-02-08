@@ -13,34 +13,46 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-getDefaultCLILocation = function() {
-  depthmapXcli = NA
-  switch(Sys.info()[['sysname']],
-         Windows= {depthmapXcli = "depthmapXcli_win64.exe"},
-         Linux  = {depthmapXcli = "depthmapXcli_linux64"},
-         Darwin = {depthmapXcli = "depthmapXcli_macos"})
-  if(is.na(depthmapXcli)) {stop("Unknown operating system")}
+getDefaultCLILocation <- function() {
+  depthmapXcli <- NA
+  switch(Sys.info()[["sysname"]],
+    Windows = {
+      depthmapXcli <- "depthmapXcli_win64.exe"
+    },
+    Linux = {
+      depthmapXcli <- "depthmapXcli_linux64"
+    },
+    Darwin = {
+      depthmapXcli <- "depthmapXcli_macos"
+    }
+  )
+  if (is.na(depthmapXcli)) {
+    stop("Unknown operating system")
+  }
   system.file("exec", depthmapXcli, package = "rdepthmap")
 }
 
-depthmapXcli = function(params, cliPath = getDefaultCLILocation(), verbose = FALSE) {
+depthmapXcli <- function(params,
+                         cliPath = getDefaultCLILocation(),
+                         verbose = FALSE) {
   suppressWarnings({
-    cmdData = system2(cliPath, params, stdout = T);
+    cmdData <- system2(cliPath, params, stdout = TRUE)
   })
-  if (("status" %in% names(attributes(cmdData))) && attr(cmdData,"status") != 0) {
+  hasStatus <- "status" %in% names(attributes(cmdData))
+  if (hasStatus && attr(cmdData, "status") != 0L) {
     # errored
     for (d in cmdData) {
       if (startsWith(d, "Usage")) {
-        break;
+        break
       }
-      errTxt = d
+      errTxt <- d
     }
     stop(errTxt)
   }
   if (verbose) cat(cmdData, sep = "\n")
 }
 
-formatForCLI = function(filePath) {
+formatForCLI <- function(filePath) {
   if (startsWith(filePath, "\"")) {
     return(filePath)
   }

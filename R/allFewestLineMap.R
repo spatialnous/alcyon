@@ -13,13 +13,20 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-allFewestLineMap  = function(graphFileIn, graphFileOut = NA, seedX, seedY, calculateFewest = TRUE,
-                             cliPath = getDefaultCLILocation(), verbose = FALSE) {
-    if (is.na(graphFileOut)) graphFileOut = graphFileIn;
-    params = c("-f", formatForCLI(graphFileIn),
-               "-o", formatForCLI(graphFileOut),
-               "-m", "AXIAL",
-               "-xl", paste0(seedX, ",", seedY))
-    if (calculateFewest) params = c(params, "-xf")
-    depthmapXcli(params, cliPath, verbose);
+allFewestLineMap <- function(graphFileIn,
+                             graphFileOut,
+                             seedX,
+                             seedY,
+                             calculateFewest = TRUE,
+                             cliPath = getDefaultCLILocation(),
+                             verbose = FALSE) {
+  if (is.na(graphFileOut)) graphFileOut <- graphFileIn
+  params <- c(
+    "-f", formatForCLI(graphFileIn),
+    "-o", formatForCLI(graphFileOut),
+    "-m", "AXIAL",
+    "-xl", paste0(seedX, ",", seedY)
+  )
+  if (calculateFewest) params <- c(params, "-xf")
+  depthmapXcli(params, cliPath, verbose)
 }

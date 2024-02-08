@@ -13,12 +13,13 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-refIDtoIndex = function(refID) {
-    i = bitwShiftR(refID, 16);
-    j = bitwAnd(refID, 0x0000FFFF);
-    return(data.frame(i,j));
+refIDtoIndex <- function(refID) {
+  i <- bitwShiftR(refID, 16L)
+  j <- bitwAnd(refID, 0x0000FFFF)
+  return(data.frame(i, j))
 }
 
-indexToRefID = function(i, j) {
-    return(bitwShiftL(i, 16) + j);
+indexToRefID <- function(i,
+                         j) {
+  return(bitwShiftL(i, 16L) + j)
 }

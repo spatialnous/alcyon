@@ -14,24 +14,38 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-segmentAnalysis = function(graphFileIn, graphFileOut = NA, analysisType, radii, radiusType,
-                           tulipBins = NA, weightWithColumn = NA, includeChoice = FALSE,
-                           cliPath = getDefaultCLILocation(), verbose = FALSE) {
-  if (is.na(graphFileOut)) graphFileOut = graphFileIn;
+segmentAnalysis <- function(graphFileIn,
+                            graphFileOut,
+                            analysisType,
+                            radii,
+                            radiusType,
+                            tulipBins = NA,
+                            weightWithColumn = NA,
+                            includeChoice = FALSE,
+                            cliPath = getDefaultCLILocation(),
+                            verbose = FALSE) {
+  if (is.na(graphFileOut)) graphFileOut <- graphFileIn
   if (!(analysisType %in% c("tulip", "metric", "angular", "topological"))) {
-    stop(paste0("Unknown segment analysis type: ", analysisType))
+    stop("Unknown segment analysis type: ", analysisType)
   }
   if (!(radiusType %in% c("steps", "metric", "angular"))) {
-    stop(paste0("Unknown radius type: ", radiusType))
+    stop("Unknown radius type: ", radiusType)
   }
-  params = c("-f", formatForCLI(graphFileIn),
-             "-o", formatForCLI(graphFileOut),
-             "-m", "SEGMENT",
-             "-st", analysisType,
-             "-sr",  paste(radii, collapse = ","),
-             "-srt", radiusType)
-  if (includeChoice) params = c(params, "-sic")
-  if (!is.na(tulipBins)) params = c(params, "-stb", tulipBins)
-  if (!is.na(weightWithColumn)) params = c(params, "-swa", formatForCLI(weightWithColumn))
-  depthmapXcli(params, cliPath, verbose);
+  params <- c(
+    "-f", formatForCLI(graphFileIn),
+    "-o", formatForCLI(graphFileOut),
+    "-m", "SEGMENT",
+    "-st", analysisType,
+    "-sr", paste(radii, collapse = ","),
+    "-srt", radiusType
+  )
+  if (includeChoice) params <- c(params, "-sic")
+  if (!is.na(tulipBins)) params <- c(params, "-stb", tulipBins)
+  if (!is.na(weightWithColumn)) {
+    params <- c(
+      params, "-swa",
+      formatForCLI(weightWithColumn)
+    )
+  }
+  depthmapXcli(params, cliPath, verbose)
 }

@@ -13,20 +13,26 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-stepdepth = function(graphFileIn, graphFileOut = NA, depthType, fromX, fromY,
-                     cliPath = getDefaultCLILocation(), verbose = FALSE) {
-
+stepdepth <- function(graphFileIn,
+                      graphFileOut,
+                      depthType,
+                      fromX,
+                      fromY,
+                      cliPath = getDefaultCLILocation(),
+                      verbose = FALSE) {
   if (!(depthType %in% c("metric", "angular", "visual"))) {
-    stop(paste0("Unknown depthType: ", depthType))
+    stop("Unknown depthType: ", depthType)
   }
 
-  tmpPtz = makeTempPointFile(fromX, fromY);
+  tmpPtz <- makeTempPointFile(fromX, fromY)
 
-  params = c("-f", formatForCLI(graphFileIn),
-             "-o", formatForCLI(graphFileOut),
-             "-m", "STEPDEPTH",
-             "-sdt", depthType,
-             "-sdf", formatForCLI(tmpPtz));
-  depthmapXcli(params, cliPath, verbose);
-  invisible(file.remove(tmpPtz));
+  params <- c(
+    "-f", formatForCLI(graphFileIn),
+    "-o", formatForCLI(graphFileOut),
+    "-m", "STEPDEPTH",
+    "-sdt", depthType,
+    "-sdf", formatForCLI(tmpPtz)
+  )
+  depthmapXcli(params, cliPath, verbose)
+  invisible(file.remove(tmpPtz))
 }

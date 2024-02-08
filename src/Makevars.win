@@ -10,6 +10,7 @@ SOURCES = main.cpp \
           convertExternal.cpp \
           axialAnalysis.cpp \
           segmentAnalysis.cpp \
+          metagraphdata.cpp \
           RcppExports.cpp
 
 # Obtain the object files

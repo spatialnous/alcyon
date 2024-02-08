@@ -13,6 +13,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-generateRandomCapString <- function(n = 10) {
-    paste(sample(LETTERS, n, TRUE), collapse = "")
+generateRandomCapString <- function(n = 10L) {
+  paste(sample(LETTERS, n, TRUE), collapse = "")
 }

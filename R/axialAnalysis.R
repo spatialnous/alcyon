@@ -14,54 +14,60 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-axialAnalysis = function(lineStringMap,
-                         radii,
-                         weightByAttribute = "",
-                         includeChoice = FALSE,
-                         includeLocal = FALSE,
-                         includeIntermediateMetrics = FALSE,
-                         keepGraph = FALSE,
-                         verbose = FALSE) {
-    mod = Rcpp::Module("alcyon_module", "alcyon")
-    numRadii = sapply(radii, function(r) {
-        if (r == "n") {
-            return(-1)
-        } else {
-            return(as.numeric(r))
-        }
-    })
-
-    weightByIdx = NULL
-    if (weightByAttribute != "") {
-        weightByIdx = which(names(lineStringMap) == weightByAttribute)[1]
+axialAnalysis <- function(lineStringMap,
+                          radii,
+                          weightByAttribute = "",
+                          includeChoice = FALSE,
+                          includeLocal = FALSE,
+                          includeIntermediateMetrics = FALSE,
+                          keepGraph = FALSE,
+                          verbose = FALSE) {
+  mod <- Rcpp::Module("alcyon_module", "alcyon")
+  numRadii <- vapply(radii, function(r) {
+    if (r == "n") {
+      return(-1L)
+    } else {
+      return(as.integer(r))
     }
-    shapeMap = Rcpp_toShapeMap(lineStringMap, weightByIdx)
-    shapeGraph = Rcpp_toAxialShapeGraph(shapeMap)
+  }, FUN.VALUE = 1L)
 
-    attrNamesBefore = mod$getAttributeNames(shapeGraph)
+  weightByIdx <- NULL
+  if (weightByAttribute != "") {
+    weightByIdx <- which(names(lineStringMap) == weightByAttribute)[[1L]]
+  }
+  shapeMap <- Rcpp_toShapeMap(lineStringMap, weightByIdx)
+  shapeGraph <- Rcpp_toAxialShapeGraph(shapeMap)
 
-    expectdAttrName = NULL
-    if (!is.null(weightByIdx)) {
-        expectdAttrName = Rcpp_getSFShapeMapExpectedColName(lineStringMap, weightByIdx)
-    }
+  attrNamesBefore <- mod$getAttributeNames(shapeGraph)
 
-    Rcpp_runAxialAnalysis(
-        shapeGraph,
-        numRadii,
-        expectdAttrName,
-        includeChoice,
-        includeLocal,
-        includeIntermediateMetrics
+  expectdAttrName <- NULL
+  if (!is.null(weightByIdx)) {
+    expectdAttrName <- Rcpp_getSFShapeMapExpectedColName(
+      lineStringMap,
+      weightByIdx
     )
+  }
 
-    attrNamesAfter = mod$getAttributeNames(shapeGraph)
-    namesDiff = attrNamesAfter[!(attrNamesAfter %in% attrNamesBefore)]
-    df = as.data.frame(do.call(cbind,
-                               mod$getAttributeData(shapeGraph, namesDiff)))
-    row.names(df) =
-        mod$getAttributeData(shapeGraph, "df_row_name")[["df_row_name"]]
-    result = list(data = df[row.names(lineStringMap),],
-                  graph = NA)
-    return(result)
+  Rcpp_runAxialAnalysis(
+    shapeGraph,
+    numRadii,
+    expectdAttrName,
+    includeChoice,
+    includeLocal,
+    includeIntermediateMetrics
+  )
 
+  attrNamesAfter <- mod$getAttributeNames(shapeGraph)
+  namesDiff <- attrNamesAfter[!(attrNamesAfter %in% attrNamesBefore)]
+  df <- as.data.frame(do.call(
+    cbind,
+    mod$getAttributeData(shapeGraph, namesDiff)
+  ))
+  row.names(df) <-
+    mod$getAttributeData(shapeGraph, "df_row_name")[["df_row_name"]]
+  result <- list(
+    data = df[row.names(lineStringMap), ],
+    graph = NA
+  )
+  return(result)
 }
