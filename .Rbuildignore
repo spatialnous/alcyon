@@ -5,3 +5,5 @@
 ^src/libs/genlib/\.git$
 ^src/libs/salalib/\.git$
 ^inst/extdata/testdata/\.git$
+^\.lintr$
+^LICENSE\.md$

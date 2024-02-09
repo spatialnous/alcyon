@@ -22,7 +22,7 @@ Fill a VGA grid
 Fills a VGA-ready grid at specfied points.
 }
 \usage{
-fillGrid(graphFileIn, graphFileOut = NA, fillX, fillY,
+fillGrid(graphFileIn, graphFileOut, fillX, fillY,
          cliPath = getDefaultCLILocation(), verbose = FALSE)
 }
 \arguments{

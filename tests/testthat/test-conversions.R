@@ -18,9 +18,9 @@ context("Conversion tests")
 test_that("sf line map to ShapeMap", {
   mod <- Rcpp::Module("alcyon_module", "alcyon")
   lineStringMap <- st_read(
-    file.path(
-      "..", "..", "inst", "extdata", "testdata", "barnsbury",
-      "barnsbury_small_axial.mif"
+    system.file(
+      "extdata", "testdata", "barnsbury", "barnsbury_small_axial.mif",
+      package = "alcyon"
     ),
     geometry_column = 1L, quiet = TRUE
   )
@@ -44,9 +44,9 @@ test_that("sf line map to ShapeMap", {
 test_that("sf line map to Axial ShapeGraph", {
   mod <- Rcpp::Module("alcyon_module", "alcyon")
   lineStringMap <- st_read(
-    file.path(
-      "..", "..", "inst", "extdata", "testdata", "barnsbury",
-      "barnsbury_small_axial.mif"
+    system.file(
+      "extdata", "testdata", "barnsbury", "barnsbury_small_axial.mif",
+      package = "alcyon"
     ),
     geometry_column = 1L, quiet = TRUE
   )
@@ -77,9 +77,9 @@ test_that("sf line map to Axial ShapeGraph", {
 test_that("sf line map to Segment ShapeGraph", {
   mod <- Rcpp::Module("alcyon_module", "alcyon")
   lineStringMap <- st_read(
-    file.path(
-      "..", "..", "inst", "extdata", "testdata", "barnsbury",
-      "barnsbury_small_axial.mif"
+    system.file(
+      "extdata", "testdata", "barnsbury", "barnsbury_small_axial.mif",
+      package = "alcyon"
     ),
     geometry_column = 1L, quiet = TRUE
   )

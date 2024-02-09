@@ -22,8 +22,8 @@ Agent Analysis
 Calls the depthmapXcli to carry out Agent Analysis on the currently visible map
 }
 \usage{
-agentAnalysis(graphFileIn, graphFileOut = NA, lookMode, timesteps, releaseRate,
-              agentFOV, agentSteps, agentLife, originX = NA, originY = NA,
+agentAnalysis(graphFileIn, graphFileOut, lookMode, timesteps, releaseRate,
+              agentFov, agentSteps, agentLife, originX = NA, originY = NA,
               locationSeed = 0, numberOfTrails = NA, outputType = "graph",
               cliPath = getDefaultCLILocation(), verbose = FALSE)
 }
@@ -54,7 +54,7 @@ agentAnalysis(graphFileIn, graphFileOut = NA, lookMode, timesteps, releaseRate,
   \item{releaseRate}{
     Agent release rate (likelyhood of release per timestep).
   }
-  \item{agentFOV}{
+  \item{agentFov}{
     Agent field-of-view (out of 32 bins = 360).
   }
   \item{agentSteps}{

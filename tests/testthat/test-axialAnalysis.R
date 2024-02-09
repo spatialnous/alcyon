@@ -17,9 +17,13 @@ context("Axial Analysis tests")
 
 test_that("Axial Analysis in C++", {
   mod <- Rcpp::Module("alcyon_module", "alcyon")
+
   lineStringMap <- st_read(
-    file.path("..", "..", "inst", "extdata", "testdata", "barnsbury",
-              "barnsbury_small_axial.mif"),
+    system.file(
+      "extdata", "testdata", "barnsbury",
+      "barnsbury_small_axial.mif",
+      package = "alcyon"
+    ),
     geometry_column = 1L, quiet = TRUE
   )
 
@@ -63,16 +67,18 @@ test_that("Axial Analysis in C++", {
 
 test_that("Axial Analysis in R", {
   lineStringMap <- st_read(
-    file.path("..", "..", "inst", "extdata", "testdata", "barnsbury",
-              "barnsbury_small_axial.mif"),
+    system.file(
+      "extdata", "testdata", "barnsbury", "barnsbury_small_axial.mif",
+      package = "alcyon"
+    ),
     geometry_column = 1L, quiet = TRUE
   )
 
   result <- axialAnalysis(lineStringMap,
-    radii = c("n", "3"),
-    includeChoice = TRUE,
-    includeLocal = TRUE,
-    includeIntermediateMetrics = FALSE
+                          radii = c("n", "3"),
+                          includeChoice = TRUE,
+                          includeLocal = TRUE,
+                          includeIntermediateMetrics = FALSE
   )
 
   expectedCols <- c(

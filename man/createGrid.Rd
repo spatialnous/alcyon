@@ -22,7 +22,7 @@ Create a VGA grid
 Creates a VGA-ready grid with a given cell size.
 }
 \usage{
-createGrid(graphFileIn, graphFileOut = NA, gridSize,
+createGrid(graphFileIn, graphFileOut, gridSize,
            cliPath = getDefaultCLILocation(), verbose = FALSE)
 }
 \arguments{

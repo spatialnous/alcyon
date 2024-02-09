@@ -1,1 +1,1 @@
-test_check("alcyon")
+testthat::test_check("alcyon")

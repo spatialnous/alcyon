@@ -16,8 +16,10 @@
 context("MetaGraph tests")
 
 test_that("Load data from MetaGraph", {
-  fileName <-  file.path("..", "..", "inst", "extdata", "testdata", "barnsbury",
-                         "barnsburySmall.graph")
+  fileName <- system.file(
+    "extdata", "testdata", "barnsbury", "barnsburySmall.graph",
+    package = "alcyon"
+  )
   metaGraphData <- Rcpp_MetaGraph_read(fileName)
   expect_length(metaGraphData$shapeMaps, 1L)
   expect_length(metaGraphData$shapeGraphs, 1L)

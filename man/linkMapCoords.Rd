@@ -24,10 +24,10 @@ Link map elements
 Calls upon the depthmapXcli to link elements (cells in VGA, lines in axial/segment)
 }
 \usage{
-linkMapCoords(graphFileIn, graphFileOut = NA, linkFromX, linkFromY,
+linkMapCoords(graphFileIn, graphFileOut, linkFromX, linkFromY,
               linkToX, linkToY, unlink = FALSE, mapTypeToLink = "pointmaps",
               cliPath = getDefaultCLILocation(), verbose = FALSE)
-linkMapRefs(graphFileIn, graphFileOut = NA, linkFrom, linkTo,
+linkMapRefs(graphFileIn, graphFileOut, linkFrom, linkTo,
             mapTypeToLink = "pointmaps", unlink = FALSE,
             cliPath = getDefaultCLILocation(), verbose = FALSE)
 }

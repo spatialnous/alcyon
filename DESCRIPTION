@@ -10,7 +10,7 @@ Authors@R: c(
     person("University College London", role = "fnd"),
     person("Spacelab", role = "fnd"))
 Description: Interface package for sala, depthmapX's spatial network analysis library. The R parts of the code are based on the rdepthmap package.
-License: GPL-3
+License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
 LinkingTo:

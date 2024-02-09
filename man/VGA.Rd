@@ -13,8 +13,8 @@
 % You should have received a copy of the GNU General Public License
 % along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-\name{VGA}
-\alias{VGA}
+\name{vga}
+\alias{vga}
 \title{
 Visibility Graph Analysis
 }
@@ -22,7 +22,7 @@ Visibility Graph Analysis
 Calls the depthmapXcli to carry out Visibility Graph Analysis on the currently visible map
 }
 \usage{
-VGA(graphFileIn, graphFileOut, vgaMode, radii,
+vga(graphFileIn, graphFileOut, vgaMode, radii,
     cliPath = getDefaultCLILocation(), verbose = FALSE)
 }
 \arguments{
