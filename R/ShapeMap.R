@@ -12,13 +12,11 @@ setClass("ShapeMap", slots = c(
 # lintr seems unable to understand this as a contstructor
 # thus we have to exclude it from the particular linter
 ShapeMap <- function(name) { # nolint: object_name_linter
-  mod <- Rcpp::Module("alcyon_module", "alcyon")
-  new("ShapeMap", ptr = mod$makeShapeMap(name))
+  new("ShapeMap", ptr = Rcpp_ShapeMap_make(name))
 }
 
 setGeneric("name", function(x) standardGeneric("name"))
 
 setMethod("name", "ShapeMap", function(x) {
-  mod <- Rcpp::Module("alcyon_module", "alcyon")
-  mod$getName(x@ptr)
+  Rcpp_ShapeMap_getName(x@ptr)
 })

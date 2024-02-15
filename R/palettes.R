@@ -11,7 +11,9 @@ makeDepthmapClassicColour <- function(value,
     rangeMin <- 1.0 - rangeMin
     rangeMax <- 1.0 - rangeMax
   }
-  if (value < 0.0) return(c(0.0, 0.0, 0.0))
+  if (value < 0.0) {
+    return(c(0.0, 0.0, 0.0))
+  }
 
   green <- rangeMin + (rangeMax - rangeMin) / 10.0
   r <- g <- b <- 0.0

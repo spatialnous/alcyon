@@ -2,7 +2,6 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-
 #include "salalib/axialmodules/axialintegration.h"
 #include "salalib/axialmodules/axialstepdepth.h"
 
@@ -10,25 +9,10 @@
 #include "salalib/shapegraph.h"
 #include "genlib/p2dpoly.h"
 
+#include "communicator.h"
+#include "traversal.h"
+
 #include <Rcpp.h>
-
-namespace AxialAnalysis {
-
-
-std::unique_ptr<Communicator> getCommunicator(const bool printProgress) {
-    // if (printProgress) {
-    //   return std::unique_ptr<Communicator>(new PrintCommunicator());
-    // }
-    return nullptr;
-}
-
-enum StepType {
-    TOPOLOGICAL,
-    METRIC,
-    ANGULAR
-};
-
-}
 
 // [[Rcpp::export("Rcpp_runAxialAnalysis")]]
 bool runAxialAnalysis(
@@ -96,7 +80,7 @@ bool runAxialAnalysis(
                                          includeIntermediateMetrics,
                                          includeLocal);
         analysisCompleted = analysis.run(
-            AxialAnalysis::getCommunicator(progress).get(),
+            getCommunicator(progress).get(),
             *shapeGraph,
             false /* simple version*/
         );
@@ -141,7 +125,7 @@ bool axialStepDepth(
     bool analysisCompleted = false;
 
     try {
-        switch (stepType) {
+        switch (static_cast<Traversal>(stepType)) {
         // never really supported for axial maps
         // case AxialAnalysis::AxialStepType::ANGULAR:
         //     pointDepthType = 3;
@@ -149,10 +133,10 @@ bool axialStepDepth(
         // case AxialAnalysis::AxialStepType::METRIC:
         //     pointDepthType = 2;
         //     break;
-        case AxialAnalysis::StepType::TOPOLOGICAL:
+        case Traversal::Topological:
             // currently axial only allows for topological analysis
             analysisCompleted = AxialStepDepth().run(
-                AxialAnalysis::getCommunicator(progress).get(),
+                getCommunicator(progress).get(),
                 *shapeGraph,
                 false /* simple mode */
             );

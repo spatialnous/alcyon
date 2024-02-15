@@ -2,122 +2,13 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include "salalib/shapemap.h"
-#include "salalib/shapegraph.h"
-#include "salalib/pointdata.h"
-#include "genlib/p2dpoly.h"
-
 #include <Rcpp.h>
 #include <typeinfo>
-#include <exception>
 
 // debian 12 install:
 // sudo apt install libudunits2-dev libproj-dev libgdal-dev
 
 // [[Rcpp::plugins(cpp17)]]
-
-RCPP_EXPOSED_CLASS(ShapeMap);
-RCPP_EXPOSED_CLASS(ShapeGraph);
-RCPP_EXPOSED_CLASS(PointMap);
-RCPP_EXPOSED_CLASS(MetaGraphData);
-
-namespace ShapeMapFuncs {
-Rcpp::XPtr<ShapeMap> make(std::string name) {
-    return Rcpp::XPtr<ShapeMap>(new ShapeMap(name), true);
-}
-
-std::string getName(Rcpp::XPtr<ShapeMap> shapeMap) {
-    return shapeMap->getName();
-}
-
-std::vector<std::string> getAttributeNames(Rcpp::XPtr<ShapeMap> shapeMap) {
-    std::vector<std::string> names;
-    auto &attributes = shapeMap->getAttributeTable();
-    int numCols = attributes.getNumColumns();
-    // + 1 for the key column
-    names.reserve(1 + numCols);
-    names.push_back(attributes.getColumnName(size_t(-1)));
-    for(int i = 0; i < attributes.getNumColumns(); ++i) {
-        names.push_back(attributes.getColumnName(i));
-    }
-    return names;
-}
-
-std::map<std::string, std::vector<double>> getAttributeData(
-        Rcpp::XPtr<ShapeMap> shapeMap,
-        std::vector<std::string> attributeNames) {
-    auto &attrbs = shapeMap->getAttributeTable();
-    std::map<std::string, std::vector<double>> data;
-    for (auto &attributeName: attributeNames) {
-        auto& attributeData = data[attributeName];
-        attributeData.reserve(attrbs.getNumRows());
-        if (attributeName == attrbs.getColumnName(size_t(-1))) {
-            for(auto rowIt = attrbs.begin(); rowIt != attrbs.end(); ++rowIt) {
-                attributeData.push_back(rowIt->getKey().value);
-            }
-        } else {
-            size_t colIdx = attrbs.getColumnIndex(attributeName);
-            for(auto rowIt = attrbs.begin(); rowIt != attrbs.end(); ++rowIt) {
-                attributeData.push_back(rowIt->getRow().getValue(colIdx));
-            }
-        }
-    }
-    return data;
-}
-}
-
-namespace ShapeGraphFuncs {
-std::map<std::string, std::vector<int>> getAxialConnections(
-        Rcpp::XPtr<ShapeMap> shapeGraph) {
-    auto &connectors = shapeGraph->getConnections();
-    std::map<std::string, std::vector<int>> axialConnections;
-    std::vector<int> &axialConnectionsFrom = axialConnections["from"];
-    std::vector<int> &axialConnectionsTo = axialConnections["to"];
-    for (int i = 0; i < connectors.size(); i++) {
-        const std::vector<int> &connections = connectors[i].m_connections;
-        for (int connection : connections) {
-            axialConnectionsFrom.push_back(i);
-            axialConnectionsTo.push_back(connection);
-        }
-    }
-    return axialConnections;
-}
-
-std::map<std::string, std::vector<int>> getSegmentConnections(
-        Rcpp::XPtr<ShapeMap> shapeGraph) {
-
-    auto &connectors = shapeGraph->getConnections();
-    std::map<std::string, std::vector<int>> segmentConnections;
-    std::vector<int> &segmentConnectionsFrom = segmentConnections["from"];
-    std::vector<int> &segmentConnectionsTo = segmentConnections["to"];
-    std::vector<int> &segmentConnectionsSSWeight =
-        segmentConnections["ss_weight"];
-    std::vector<int> &segmentConnectionsBackward =
-        segmentConnections["backward"];
-    std::vector<int> &segmentConnectionsDirection =
-        segmentConnections["direction"];
-
-    // directed links
-    for (size_t i = 0; i < connectors.size(); i++) {
-        for (auto &segconn : connectors[i].m_forward_segconns) {
-            segmentConnectionsFrom.push_back(i);
-            segmentConnectionsTo.push_back(segconn.first.ref);
-            segmentConnectionsSSWeight.push_back(segconn.second);
-            segmentConnectionsBackward.push_back(0);
-            segmentConnectionsDirection.push_back(int(segconn.first.dir));
-        }
-
-        for (auto &segconn : connectors[i].m_back_segconns) {
-            segmentConnectionsFrom.push_back(i);
-            segmentConnectionsTo.push_back(segconn.first.ref);
-            segmentConnectionsSSWeight.push_back(segconn.second);
-            segmentConnectionsBackward.push_back(1);
-            segmentConnectionsDirection.push_back(int(segconn.first.dir));
-        }
-    }
-    return segmentConnections;
-}
-}
 
 // sample function showing how to extract data from a dataframe
 void exploreDF(Rcpp::DataFrame &df) {
@@ -187,21 +78,6 @@ void exploreDF(Rcpp::DataFrame &df) {
         }
         }
     }
-}
-
-
-// should not expose metagraph, instead only shapemaps/shapegraphs
-// and use the metagraph just to import the shapemaps to an R list
-RCPP_MODULE(alcyon_module) {
-    Rcpp::function("getName", &ShapeMapFuncs::getName);
-    Rcpp::function("makeShapeMap", &ShapeMapFuncs::make);
-    Rcpp::function("getAttributeNames", &ShapeMapFuncs::getAttributeNames);
-    Rcpp::function("getAttributeData", &ShapeMapFuncs::getAttributeData);
-
-    Rcpp::function("getAxialConnections",
-                   &ShapeGraphFuncs::getAxialConnections);
-    Rcpp::function("getSegmentConnections",
-                   &ShapeGraphFuncs::getSegmentConnections);
 }
 
 

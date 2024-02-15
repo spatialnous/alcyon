@@ -13,32 +13,10 @@
 #include "salalib/segmmodules/segmtulipdepth.h"
 #include "salalib/segmmodules/segmmetricpd.h"
 
+#include "communicator.h"
+#include "traversal.h"
+
 #include <Rcpp.h>
-
-namespace SegmentAnalysis {
-// traversal type
-enum AnalysisStepType {
-    ANGULAR_TULIP,
-    ANGULAR_FULL,
-    TOPOLOGICAL,
-    METRIC
-};
-
-// limit type
-enum RadiusStepType {
-    RADIUS_STEPS,
-    RADIUS_METRIC,
-    RADIUS_ANGULAR
-};
-
-std::unique_ptr<Communicator> getCommunicator(const bool printProgress) {
-    // if (printProgress) {
-    //   return std::unique_ptr<Communicator>(new PrintCommunicator());
-    // }
-    return nullptr;
-}
-
-}
 
 // [[Rcpp::export("Rcpp_runSegmentAnalysis")]]
 bool runSegmentAnalysis(
@@ -80,7 +58,9 @@ bool runSegmentAnalysis(
         progress = Rcpp::as<bool>(progressNV);
     }
 
-    Rcpp::Rcout << "Running segment analysis... " << '\n';
+    if (verbose) {
+        Rcpp::Rcout << "Running segment analysis... " << '\n';
+    }
 
 
     std::set<double> radius_set;
@@ -103,19 +83,19 @@ bool runSegmentAnalysis(
         }
     }
 
-    int radius_type = -1;
+    int radiusType = -1;
 
-    switch (radiusStepType) {
-    case SegmentAnalysis::RadiusStepType::RADIUS_STEPS: {
-        int radius_type = Options::RADIUS_STEPS;
+    switch (static_cast<Traversal>(radiusStepType)) {
+    case Traversal::Topological: {
+        int radiusType = Options::RADIUS_STEPS;
         break;
     }
-    case SegmentAnalysis::RadiusStepType::RADIUS_METRIC: {
-        radius_type = Options::RADIUS_METRIC;
+    case Traversal::Metric: {
+        radiusType = Options::RADIUS_METRIC;
         break;
     }
-    case SegmentAnalysis::RadiusStepType::RADIUS_ANGULAR: {
-        radius_type = Options::RADIUS_ANGULAR;
+    case Traversal::Angular: {
+        radiusType = Options::RADIUS_ANGULAR;
         break;
     }
     default:
@@ -125,37 +105,37 @@ bool runSegmentAnalysis(
     bool analysisCompleted = false;
 
     try {
-        switch (analysisStepType) {
-        case SegmentAnalysis::AnalysisStepType::ANGULAR_TULIP: {
+        switch (static_cast<Traversal>(analysisStepType)) {
+        case Traversal::Tulip: {
             analysisCompleted =
                 SegmentTulip(radius_set, selOnly,
                              tulipBins, weightedMeasureColIdx,
-                             radius_type, includeChoice).run(
-                                     SegmentAnalysis::getCommunicator(progress).get(),
+                             radiusType, includeChoice).run(
+                                     getCommunicator(progress).get(),
                                      *shapeGraph, false /* interactive */);
             break;
         }
-        case SegmentAnalysis::AnalysisStepType::ANGULAR_FULL: {
+        case Traversal::Angular: {
             analysisCompleted =
                 SegmentAngular(radius_set).run(
-                        SegmentAnalysis::getCommunicator(progress).get(),
+                        getCommunicator(progress).get(),
                         *shapeGraph,
                         false /* unused */);
             break;
         }
-        case SegmentAnalysis::AnalysisStepType::TOPOLOGICAL: {
+        case Traversal::Topological: {
             // TODO allow multiple radii
             analysisCompleted =
                 SegmentTopological(*radius_set.begin(), selOnly).run(
-                        SegmentAnalysis::getCommunicator(progress).get(),
+                        getCommunicator(progress).get(),
                         *shapeGraph, false /* unused */);
             break;
         }
-        case SegmentAnalysis::AnalysisStepType::METRIC: {
+        case Traversal::Metric: {
             // TODO allow multiple radii
             analysisCompleted =
                 SegmentMetric(*radius_set.begin(), selOnly).run(
-                        SegmentAnalysis::getCommunicator(progress).get(),
+                        getCommunicator(progress).get(),
                         *shapeGraph, false /* unused */);
             break;
         }
@@ -165,7 +145,9 @@ bool runSegmentAnalysis(
     } catch (Communicator::CancelledException) {
         analysisCompleted = false;
     }
-    Rcpp::Rcout << "ok" << '\n';
+    if (verbose) {
+        Rcpp::Rcout << "ok" << '\n';
+    }
 
 
     return analysisCompleted;
@@ -189,7 +171,9 @@ bool segmentStepDepth(
         progress = Rcpp::as<bool>(progressNV);
     }
 
-    Rcpp::Rcout << "ok\nSelecting cells... " << '\n';
+    if (verbose) {
+        Rcpp::Rcout << "ok\nSelecting cells... " << '\n';
+    }
 
     for (int i = 0; i < stepDepthPointsX.size(); ++i) {
         Point2f p2f(stepDepthPointsX[i], stepDepthPointsY[i]);
@@ -201,33 +185,35 @@ bool segmentStepDepth(
         shapeGraph->setCurSel(r, true);
     }
 
-    Rcpp::Rcout << "ok\nCalculating step-depth... " << '\n';
+    if (verbose) {
+        Rcpp::Rcout << "ok\nCalculating step-depth... " << '\n';
+    }
 
     bool analysisCompleted = false;
 
     try {
 
-        switch (stepType) {
-        case SegmentAnalysis::AnalysisStepType::ANGULAR_FULL:
+        switch (static_cast<Traversal>(stepType)) {
+        case Traversal::Angular:
             // full angular was never created as a step-function
             // do normal tulip
-        case SegmentAnalysis::AnalysisStepType::ANGULAR_TULIP:
+        case Traversal::Metric:
             analysisCompleted = SegmentMetricPD().run(
-                SegmentAnalysis::getCommunicator(progress).get(),
+                getCommunicator(progress).get(),
                 *shapeGraph,
                 false /* simple mode */
             );
             break;
-        case SegmentAnalysis::AnalysisStepType::METRIC:
+        case Traversal::Tulip:
             analysisCompleted = SegmentTulipDepth().run(
-                SegmentAnalysis::getCommunicator(progress).get(),
+                getCommunicator(progress).get(),
                 *shapeGraph,
                 false /* simple mode */
             );
             break;
-        case SegmentAnalysis::AnalysisStepType::TOPOLOGICAL:
-            analysisCompleted = SegmentTulipDepth().run(
-                SegmentAnalysis::getCommunicator(progress).get(),
+        case Traversal::Topological:
+            analysisCompleted = SegmentTopologicalPD().run(
+                getCommunicator(progress).get(),
                 *shapeGraph,
                 false /* simple mode */
             );

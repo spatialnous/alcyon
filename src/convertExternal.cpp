@@ -11,23 +11,29 @@
 
 namespace { // anonymous
 
-std::string getSFShapeMapExpectedColName(
+std::string getSfShapeMapExpectedColName(
         int rColIdx,
         std::string colName) {
     return "df_" + std::to_string(rColIdx) + "_" + colName;
-
-}
 }
 
-// [[Rcpp::export("Rcpp_getSFShapeMapExpectedColName")]]
-std::string getSFShapeMapExpectedColName(
+} // anonymous
+
+// [[Rcpp::export("Rcpp_getSfShapeMapExpectedColName")]]
+std::string getSfShapeMapExpectedColName(
         Rcpp::DataFrame &df,
         int rColIdx) {
 
     auto dfcn = Rcpp::as<const Rcpp::StringVector>(df.attr("names"));
     const int colIdx = rColIdx - 1;
     const std::string &colName = Rcpp::as<std::string>(dfcn.at(colIdx));
-    return getSFShapeMapExpectedColName(rColIdx, colName);
+    return getSfShapeMapExpectedColName(rColIdx, colName);
+}
+
+// [[Rcpp::export("Rcpp_getAxialToSegmentExpectedColName")]]
+std::string getAxialToSegmentExpectedColName(
+        std::string &colName) {
+    return "Axial " + colName;
 }
 
 // [[Rcpp::export("Rcpp_toShapeMap")]]
@@ -93,7 +99,7 @@ Rcpp::XPtr<ShapeMap> toShapeMap(
                 Rcpp::stop("Non-numeric columns are not supported (" +
                     std::to_string(colIdx) + ")");
             int newColIdx = shp->addAttribute(
-                getSFShapeMapExpectedColName(rColIdx, colName));
+                getSfShapeMapExpectedColName(rColIdx, colName));
 
             if (newColIdx == -1) {
                 // error adding column (e.g., duplicate column names)
@@ -105,7 +111,7 @@ Rcpp::XPtr<ShapeMap> toShapeMap(
         }
         case REALSXP: {
             int newColIdx = shp->addAttribute(
-                getSFShapeMapExpectedColName(rColIdx, colName));
+                getSfShapeMapExpectedColName(rColIdx, colName));
 
             if (newColIdx == -1) {
                 // error adding column (e.g., duplicate column names)
@@ -149,8 +155,8 @@ Rcpp::XPtr<ShapeMap> toShapeMap(
                 extraAttributes.emplace(idxrit.first, *idxrit.second);
             }
 
-            Line line(Point2f(coords[0], coords[1]),
-                      Point2f(coords[2], coords[3]));
+            Line line(Point2f(coords[0], coords[2]),
+                      Point2f(coords[1], coords[3]));
             shp->makeLineShape(
                     line,
                     false /* through_ui */,

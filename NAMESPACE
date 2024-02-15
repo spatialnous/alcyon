@@ -17,7 +17,6 @@ export("getPointmapLinks")
 export("getPointmapDataAndLinks")
 export("isovist")
 export("isovist2pts")
-export("makeIsovists")
 export("stepdepth")
 export("export")
 export("convertMap")
@@ -26,6 +25,7 @@ export("importLines")
 export("vga")
 export("axialAnalysis")
 export("segmentAnalysis")
+export("segmentAnalysisSf")
 export("linkMapCoords")
 export("linkMapRefs")
 export("agentAnalysis")
@@ -48,6 +48,17 @@ export("depthmap.nicehsb.colour")
 export("shapegraphToIGraph")
 export("getShapeGraphConnections")
 export("getShapeGraphLinksUnlinks")
+
+# R conversions
+export("sfToShapeMap")
+export("sfToAxialShapeGraph")
+export("sfToSegmentShapeGraph")
+export("shapeMapTolineStringSf")
+export("axialShapeGraphToSf")
+export("segmentShapeGraphToSf")
+
+# R enums
+export("Traversal")
 
 # C++
 #export("ShapeMap")

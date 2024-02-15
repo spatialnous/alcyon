@@ -5,7 +5,6 @@
 context("Conversion tests")
 
 test_that("sf line map to ShapeMap", {
-  mod <- Rcpp::Module("alcyon_module", "alcyon")
   lineStringMap <- st_read(
     system.file(
       "extdata", "testdata", "barnsbury", "barnsbury_small_axial.mif",
@@ -22,16 +21,15 @@ test_that("sf line map to ShapeMap", {
     "df_1_Depthmap_Ref",
     "df_2_Choice"
   )
-  attrNames <- mod$getAttributeNames(shapeMap)
+  attrNames <- Rcpp_ShapeMap_getAttributeNames(shapeMap)
   expect_identical(expectedColNames, attrNames)
 
   firstCol <- attrNames[[1L]]
-  firstColData <- mod$getAttributeData(shapeMap, firstCol)[[firstCol]]
+  firstColData <- Rcpp_ShapeMap_getAttributeData(shapeMap, firstCol)[[firstCol]]
   expect_length(firstColData, nrow(lineStringMap))
 })
 
 test_that("sf line map to Axial ShapeGraph", {
-  mod <- Rcpp::Module("alcyon_module", "alcyon")
   lineStringMap <- st_read(
     system.file(
       "extdata", "testdata", "barnsbury", "barnsbury_small_axial.mif",
@@ -52,19 +50,19 @@ test_that("sf line map to Axial ShapeGraph", {
     "df_2_Choice",
     "df_row_name"
   )
-  attrNames <- mod$getAttributeNames(shapeGraph)
+  attrNames <- Rcpp_ShapeMap_getAttributeNames(shapeGraph)
   expect_identical(expectedColNames, attrNames)
 
   firstCol <- attrNames[[1L]]
-  firstColData <- mod$getAttributeData(shapeGraph, firstCol)[[firstCol]]
+  firstColData <- Rcpp_ShapeMap_getAttributeData(shapeGraph,
+                                                 firstCol)[[firstCol]]
   expect_length(firstColData, nrow(lineStringMap))
 
-  axialConnections <- mod$getAxialConnections(shapeGraph)
-  expect_length(axialConnections$from, 1498L)
+  axialConnections <- Rcpp_ShapeGraph_getAxialConnections(shapeGraph)
+  expect_length(axialConnections$from, 232L)
 })
 
 test_that("sf line map to Segment ShapeGraph", {
-  mod <- Rcpp::Module("alcyon_module", "alcyon")
   lineStringMap <- st_read(
     system.file(
       "extdata", "testdata", "barnsbury", "barnsbury_small_axial.mif",
@@ -91,13 +89,14 @@ test_that("sf line map to Segment ShapeGraph", {
     "Axial df_2_Choice",
     "Axial df_row_name"
   )
-  attrNames <- mod$getAttributeNames(segmentMap)
+  attrNames <- Rcpp_ShapeMap_getAttributeNames(segmentMap)
   expect_identical(expectedColNames, attrNames)
 
   firstCol <- attrNames[[1L]]
-  firstColData <- mod$getAttributeData(segmentMap, firstCol)[[firstCol]]
-  expect_length(firstColData, 1559L)
+  firstColData <- Rcpp_ShapeMap_getAttributeData(segmentMap,
+                                                 firstCol)[[firstCol]]
+  expect_length(firstColData, 293L)
 
-  segmentConnections <- mod$getSegmentConnections(segmentMap)
-  expect_length(segmentConnections$from, 8988L)
+  segmentConnections <- Rcpp_ShapeGraph_getSegmentConnections(segmentMap)
+  expect_length(segmentConnections$from, 1392L)
 })

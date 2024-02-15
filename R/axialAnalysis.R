@@ -3,7 +3,7 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-axialAnalysis <- function(lineStringMap,
+axialAnalysis <- function(shapeGraph,
                           radii,
                           weightByAttribute = "",
                           includeChoice = FALSE,
@@ -11,7 +11,6 @@ axialAnalysis <- function(lineStringMap,
                           includeIntermediateMetrics = FALSE,
                           keepGraph = FALSE,
                           verbose = FALSE) {
-  mod <- Rcpp::Module("alcyon_module", "alcyon")
   numRadii <- vapply(radii, function(r) {
     if (r == "n") {
       return(-1L)
@@ -20,40 +19,60 @@ axialAnalysis <- function(lineStringMap,
     }
   }, FUN.VALUE = 1L)
 
+  return(Rcpp_runAxialAnalysis(
+    shapeGraph,
+    numRadii,
+    weightByAttribute,
+    includeChoice,
+    includeLocal,
+    includeIntermediateMetrics
+  ))
+}
+
+axialAnalysisSf <- function(lineStringMap,
+                            radii,
+                            weightByAttribute = "",
+                            includeChoice = FALSE,
+                            includeLocal = FALSE,
+                            includeIntermediateMetrics = FALSE,
+                            keepGraph = FALSE,
+                            verbose = FALSE) {
   weightByIdx <- NULL
   if (weightByAttribute != "") {
     weightByIdx <- which(names(lineStringMap) == weightByAttribute)[[1L]]
   }
-  shapeMap <- Rcpp_toShapeMap(lineStringMap, weightByIdx)
-  shapeGraph <- Rcpp_toAxialShapeGraph(shapeMap)
+  shapeGraph <- sfToAxialShapeGraph(lineStringMap,
+                                    keepAttributes = weightByIdx)
 
-  attrNamesBefore <- mod$getAttributeNames(shapeGraph)
+  attrNamesBefore <- Rcpp_ShapeMap_getAttributeNames(shapeGraph)
 
   expectdAttrName <- NULL
   if (!is.null(weightByIdx)) {
-    expectdAttrName <- Rcpp_getSFShapeMapExpectedColName(
+    expectdAttrName <- Rcpp_getSfShapeMapExpectedColName(
       lineStringMap,
       weightByIdx
     )
   }
 
-  Rcpp_runAxialAnalysis(
+  axialAnalysis(
     shapeGraph,
-    numRadii,
+    radii,
     expectdAttrName,
     includeChoice,
     includeLocal,
-    includeIntermediateMetrics
+    includeIntermediateMetrics,
+    keepGraph,
+    verbose
   )
 
-  attrNamesAfter <- mod$getAttributeNames(shapeGraph)
+  attrNamesAfter <- Rcpp_ShapeMap_getAttributeNames(shapeGraph)
   namesDiff <- attrNamesAfter[!(attrNamesAfter %in% attrNamesBefore)]
   df <- as.data.frame(do.call(
     cbind,
-    mod$getAttributeData(shapeGraph, namesDiff)
+    Rcpp_ShapeMap_getAttributeData(shapeGraph, namesDiff)
   ))
   row.names(df) <-
-    mod$getAttributeData(shapeGraph, "df_row_name")[["df_row_name"]]
+    Rcpp_ShapeMap_getAttributeData(shapeGraph, "df_row_name")[["df_row_name"]]
   result <- list(
     data = df[row.names(lineStringMap), ],
     graph = NA

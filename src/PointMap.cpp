@@ -2,8 +2,9 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#pragma once
-
-#include "salalib/shapemap.h"
-#include "salalib/shapegraph.h"
 #include "salalib/pointdata.h"
+#include "genlib/p2dpoly.h"
+
+#include <Rcpp.h>
+
+RCPP_EXPOSED_CLASS(PointMap);

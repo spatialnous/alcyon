@@ -12,17 +12,14 @@ Segment Analysis
 Calls the depthmapXcli to carry out Segment Analysis on the currently visible map
 }
 \usage{
-segmentAnalysis(graphFileIn, graphFileOut, analysisType, radii, radiusType,
+segmentAnalysis(lineStringMap, radii, analysisType, radiusType,
                 tulipBins = NA, weightWithColumn = NA, includeChoice = FALSE,
                 cliPath = getDefaultCLILocation(), verbose = FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{graphFileIn}{
-    The input graph file.
-  }
-  \item{graphFileOut}{
-    The output graph file. If ommited will use the input file.
+  \item{lineStringMap}{
+    The input line string sf map
   }
   \item{analysisType}{
     The type of analysis. One of:

@@ -1,40 +1,105 @@
 # SPDX-FileCopyrightText: 2019 Fani Kostourou
-# SPDX-FileCopyrightText: 2019 Petros Koutsolampros
+# SPDX-FileCopyrightText: 2019-2024 Petros Koutsolampros
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-segmentAnalysis <- function(graphFileIn,
-                            graphFileOut,
-                            analysisType,
+segmentAnalysis <- function(segmentGraph,
                             radii,
-                            radiusType,
-                            tulipBins = NA,
-                            weightWithColumn = NA,
+                            radiusStepType,
+                            analysisStepType,
+                            weightWithColumn = NULL,
                             includeChoice = FALSE,
-                            cliPath = getDefaultCLILocation(),
-                            verbose = FALSE) {
-  if (is.na(graphFileOut)) graphFileOut <- graphFileIn
-  if (!(analysisType %in% c("tulip", "metric", "angular", "topological"))) {
-    stop("Unknown segment analysis type: ", analysisType)
+                            tulipBins = NA,
+                            verbose = FALSE,
+                            selOnly = FALSE,
+                            progress = FALSE) {
+
+  if (!(analysisStepType %in% Traversal)) {
+    stop("Unknown segment analysis type: ", analysisStepType)
   }
-  if (!(radiusType %in% c("steps", "metric", "angular"))) {
-    stop("Unknown radius type: ", radiusType)
+  if (!(radiusStepType %in% Traversal)) {
+    stop("Unknown radius type: ", radiusStepType)
   }
-  params <- c(
-    "-f", formatForCLI(graphFileIn),
-    "-o", formatForCLI(graphFileOut),
-    "-m", "SEGMENT",
-    "-st", analysisType,
-    "-sr", paste(radii, collapse = ","),
-    "-srt", radiusType
+
+  numRadii <- vapply(radii, function(r) {
+    if (r == "n") {
+      return(-1L)
+    } else {
+      return(as.integer(r))
+    }
+  }, FUN.VALUE = 1L)
+
+  return(Rcpp_runSegmentAnalysis(
+    segmentGraph,
+    numRadii,
+    radiusStepType,
+    analysisStepType,
+    weightWithColumn,
+    includeChoice,
+    tulipBins,
+    verbose,
+    selOnly,
+    progress
+  ))
+}
+
+segmentAnalysisSf <- function(lineStringMap,
+                              radii,
+                              radiusStepType,
+                              analysisStepType,
+                              weightWithColumn = NULL,
+                              includeChoice = FALSE,
+                              tulipBins = NA,
+                              keepAttributes = NULL,
+                              throughAxial = TRUE,
+                              verbose = FALSE,
+                              selOnly = FALSE,
+                              progress = FALSE) {
+
+  weightByIdx <- NULL
+  if (weightWithColumn != "" && !is.null(weightWithColumn)) {
+    weightByIdx <- which(names(lineStringMap) == weightWithColumn)[[1L]]
+  }
+
+  keepAttributesFinal <- NULL
+  if (!is.null(keepAttributes)) {
+    keepAttributesFinal <- keepAttributes
+  }
+  if (!is.null(weightByIdx) && !(weightByIdx %in% keepAttributesFinal)) {
+    if (is.null(keepAttributesFinal)) {
+      keepAttributesFinal <- weightByIdx
+    } else {
+      keepAttributesFinal <- c(keepAttributesFinal, weightByIdx)
+    }
+  }
+  segmentGraph <- sfToSegmentShapeGraph(
+    lineStringMap,
+    keepAttributesFinal,
+    throughAxial = throughAxial
   )
-  if (includeChoice) params <- c(params, "-sic")
-  if (!is.na(tulipBins)) params <- c(params, "-stb", tulipBins)
-  if (!is.na(weightWithColumn)) {
-    params <- c(
-      params, "-swa",
-      formatForCLI(weightWithColumn)
-    )
+
+  expectdAttrName <- NULL
+  if (!is.null(weightByIdx)) {
+    if (throughAxial) {
+      expectdAttrName <- Rcpp_getAxialToSegmentExpectedColName(
+        Rcpp_getSfShapeMapExpectedColName(lineStringMap, weightByIdx)
+      )
+    } else {
+      expectdAttrName <-
+        Rcpp_getSfShapeMapExpectedColName(lineStringMap, weightByIdx)
+    }
   }
-  depthmapXcli(params, cliPath, verbose)
+
+  segmentAnalysis(segmentGraph,
+                  radii,
+                  radiusStepType,
+                  analysisStepType,
+                  expectdAttrName,
+                  includeChoice,
+                  tulipBins,
+                  verbose,
+                  selOnly,
+                  progress)
+
+  return(segmentShapeGraphToSf(segmentGraph))
 }

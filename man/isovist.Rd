@@ -5,14 +5,12 @@
 \name{isovist}
 \alias{isovist}
 \alias{isovist2pts}
-\alias{makeIsovists}
 \title{
 Isovist
 }
 \description{
 Creates an isovist at a specific point.
 To create an isovist with two points (one the origin, the other the direction) use isovist2pts.
-makeIsovists is a helper function that creates and imports multiple Isovists
 }
 \usage{
 isovist(graphFileIn, graphFileOut, x, y, angle = NA, viewangle = NA,
