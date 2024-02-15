@@ -1,6 +1,7 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^\.github$
+^\.reuse$
 ^src/build-Release$
 ^src/libs/genlib/\.git$
 ^src/libs/salalib/\.git$

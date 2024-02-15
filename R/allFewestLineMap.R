@@ -2,20 +2,31 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-allFewestLineMap <- function(graphFileIn,
-                             graphFileOut,
+allFewestLineMap <- function(boundsMap,
                              seedX,
                              seedY,
                              calculateFewest = TRUE,
-                             cliPath = getDefaultCLILocation(),
                              verbose = FALSE) {
-  if (is.na(graphFileOut)) graphFileOut <- graphFileIn
-  params <- c(
-    "-f", formatForCLI(graphFileIn),
-    "-o", formatForCLI(graphFileOut),
-    "-m", "AXIAL",
-    "-xl", paste0(seedX, ",", seedY)
+  shapeGraph <- sfToShapeMap(
+    boundsMap,
+    keepAttributes = vector(mode = "integer")
   )
-  if (calculateFewest) params <- c(params, "-xf")
-  depthmapXcli(params, cliPath, verbose)
+
+  allLineMap <- Rcpp_makeAllLineMap(
+    shapeGraph,
+    seedX = 3.01,
+    seedY = 6.7
+  )
+
+  result <- list()
+  result[["All Line Map"]] <- shapeMapTolineStringSf(allLineMap)
+
+  if (calculateFewest) {
+    fewestMaps <- Rcpp_extractFewestLineMaps(allLineMap)
+    result[["Fewest-Line Map (Subsets)"]] <-
+      shapeMapTolineStringSf(fewestMaps[["Fewest-Line Map (Subsets)"]])
+    result[["Fewest-Line Map (Minimal)"]] <-
+      shapeMapTolineStringSf(fewestMaps[["Fewest-Line Map (Minimal)"]])
+  }
+  return(result)
 }
