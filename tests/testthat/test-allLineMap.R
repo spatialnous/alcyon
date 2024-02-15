@@ -78,7 +78,7 @@ test_that("Isovists in R", {
   )
 
   result <- allFewestLineMap(
-    # boundsMap,
+    boundsMap,
     seedX = 3.01,
     seedY = 6.7,
     calculateFewest = TRUE
