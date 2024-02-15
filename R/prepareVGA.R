@@ -2,8 +2,7 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-createGrid <- function(graphFileIn,
-                       graphFileOut,
+createGrid <- function(boundsMap,
                        gridSize,
                        cliPath = getDefaultCLILocation(),
                        verbose = FALSE) {
