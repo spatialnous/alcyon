@@ -2,75 +2,99 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-createGrid <- function(boundsMap,
+createGrid <- function(minX,
+                       minY,
+                       maxX,
+                       maxY,
                        gridSize,
-                       cliPath = getDefaultCLILocation(),
                        verbose = FALSE) {
-  if (is.na(graphFileOut)) graphFileOut <- graphFileIn
-  params <- c(
-    "-f", formatForCLI(graphFileIn),
-    "-o", formatForCLI(graphFileOut),
-    "-m", "VISPREP",
-    "-pg", gridSize
+  pointMap <- new("PointMap")
+  pointMap@ptr <- Rcpp_PointMap_createFromGrid(
+    minX,
+    minY,
+    maxX,
+    maxY,
+    gridSize
   )
-  depthmapXcli(params, cliPath, verbose)
+  return(pointMap)
 }
 
-fillGrid <- function(graphFileIn,
-                     graphFileOut,
+blockLines <- function(pointMap,
+                       lineStringMap,
+                       verbose = FALSE) {
+  boundaryMap <- sfToShapeMap(
+    lineStringMap,
+    keepAttributes = vector(mode = "integer")
+  )
+  Rcpp_PointMap_blockLines(
+    pointMap = pointMap@ptr,
+    boundaryMap = boundaryMap
+  )
+}
+
+fillGrid <- function(pointMap,
                      fillX,
                      fillY,
-                     cliPath = getDefaultCLILocation(),
                      verbose = FALSE) {
-  if (is.na(graphFileOut)) graphFileOut <- graphFileIn
-  tmpPtz <- tempfile(fileext = ".tsv")
-  dt <- data.frame(x = fillX, y = fillY)
-  write.table(dt, tmpPtz, row.names = FALSE, quote = FALSE, sep = "\t")
-
-  params <- c(
-    "-f", formatForCLI(graphFileIn),
-    "-o", formatForCLI(graphFileOut),
-    "-m", "VISPREP",
-    "-pf", tmpPtz
+  Rcpp_PointMap_fill(
+    pointMap = pointMap@ptr,
+    pointCoords = cbind(fillX, fillY)
   )
-
-  depthmapXcli(params, cliPath, verbose)
-  file.remove(tmpPtz)
 }
 
-makeVGAGraph <- function(graphFileIn,
-                         graphFileOut = NA,
-                         maxVisibility = NA,
+makeVGAGraph <- function(pointMap,
                          boundaryGraph = FALSE,
-                         cliPath = getDefaultCLILocation(),
+                         maxVisibility = NA,
                          verbose = FALSE) {
-  if (is.na(graphFileOut)) graphFileOut <- graphFileIn
-  params <- c(
-    "-f", formatForCLI(graphFileIn),
-    "-o", formatForCLI(graphFileOut),
-    "-m", "VISPREP",
-    "-pm"
+  Rcpp_PointMap_makeGraph(
+    pointMap = pointMap@ptr,
+    boundaryGraph = boundaryGraph,
+    maxVisibility = maxVisibility
   )
-  if (!is.na(maxVisibility)) params <- c(params, "-pr", maxVisibility)
-  if (boundaryGraph) params <- c(params, "-pb")
-
-  depthmapXcli(params, cliPath, verbose)
 }
 
-unmakeVGAGraph <- function(graphFileIn,
-                           graphFileOut = NA,
-                           removeLinks = FALSE,
-                           cliPath = getDefaultCLILocation(),
-                           verbose = FALSE) {
-  if (is.na(graphFileOut)) graphFileOut <- graphFileIn
-  params <- c(
-    "-f", formatForCLI(graphFileIn),
-    "-o", formatForCLI(graphFileOut),
-    "-m", "VISPREP",
-    "-pu"
+makeVGAPointMap <- function(lineStringMap,
+                            gridSize,
+                            fillX,
+                            fillY,
+                            maxVisibility = NA,
+                            boundaryGraph = FALSE,
+                            verbose = FALSE) {
+
+  mapRegion <- sf::st_bbox(lineStringMap)
+
+  pointMap <- createGrid(
+    mapRegion[["xmin"]],
+    mapRegion[["ymin"]],
+    mapRegion[["xmax"]],
+    mapRegion[["ymax"]],
+    gridSize
   )
 
-  if (removeLinks) params <- c(params, "-pl")
+  blockLines(
+    pointMap = pointMap,
+    lineStringMap = lineStringMap
+  )
 
-  depthmapXcli(params, cliPath, verbose)
+  fillGrid(
+    pointMap = pointMap,
+    fillX,
+    fillY
+  )
+
+  makeVGAGraph(
+    pointMap = pointMap,
+    boundaryGraph = boundaryGraph,
+    maxVisibility = maxVisibility
+  )
+  return(pointMap)
+}
+
+unmakeVGAGraph <- function(pointMap,
+                           removeLinks = FALSE,
+                           verbose = FALSE) {
+  Rcpp_PointMap_unmakeGraph(
+    pointMap = pointMap@ptr,
+    removeLinksWhenUnmaking = removeLinks
+  )
 }

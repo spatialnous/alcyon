@@ -4,4 +4,4 @@ linters: all_linters(
   extraction_operator_linter = NULL
   )
 encoding: "UTF-8"
-exclusions: list("renv", "packrat") # see ?lintr::exclude
+exclusions: list("renv", "packrat", "vignettes") # see ?lintr::exclude

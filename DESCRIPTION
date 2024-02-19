@@ -20,5 +20,8 @@ Imports:
 Depends:
     sp, sf, igraph
 Suggests: 
+    knitr,
+    rmarkdown,
     testthat
 SystemRequirements: C++17
+VignetteBuilder: knitr

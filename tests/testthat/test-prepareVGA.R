@@ -14,27 +14,41 @@ test_that("PointMaps in C++", {
     geometry_column = 1L, quiet = TRUE
   )
 
+  mapRegion <- sf::st_bbox(lineStringMap)
+
+  pointMap <- new("PointMap")
+  pointMap@ptr <- Rcpp_PointMap_createFromGrid(
+    mapRegion[["xmin"]],
+    mapRegion[["ymin"]],
+    mapRegion[["xmax"]],
+    mapRegion[["ymax"]],
+    0.04
+  )
+
   boundaryMap <- sfToShapeMap(
     lineStringMap,
     keepAttributes = vector(mode = "integer")
   )
 
-  pointMap <- alcyon:::Rcpp_PointMap_createFromGrid(
-    boundaryMap,
-    0.04
+  Rcpp_PointMap_blockLines(
+    pointMap = pointMap,
+    boundaryMap = boundaryMap
   )
 
-  alcyon:::Rcpp_PointMap_fill(
+  Rcpp_PointMap_fill(
     pointMap = pointMap,
-    boundaryMap = boundaryMap,
     pointCoords = matrix(c(3.01, 6.7), nrow = 1L)
   )
 
-  alcyon:::Rcpp_PointMap_makeGraph(
+  Rcpp_PointMap_makeGraph(
     pointMap = pointMap,
-    boundaryMap = boundaryMap,
     boundaryGraph = FALSE,
     maxVisibility = -1.0
   )
 
+  coords <- Rcpp_PointMap_getFilledPoints(pointMap = pointMap)
+
+  map <- SpatialPointsDataFrame(coords[, c(1L, 2L)], data = data.frame(coords))
+  gridded(map) <- TRUE
+  plot(map["Connectivity"])
 })

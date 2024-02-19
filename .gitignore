@@ -9,3 +9,4 @@ src/build-Release
 *.o
 *.so
 *.dll
+inst/doc

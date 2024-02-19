@@ -63,3 +63,13 @@ segmentShapeGraphToSf <- function(shapeGraph) {
     graph = Rcpp_ShapeGraph_getSegmentConnections(shapeGraph)
   ))
 }
+
+pointMapToSf <- function(pointMap) {
+  coords <- Rcpp_PointMap_getFilledPoints(pointMap = pointMap@ptr)
+  map <- SpatialPointsDataFrame(coords[, c(1L, 2L)], data = data.frame(coords))
+  gridded(map) <- TRUE
+  return(list(
+    map = map,
+    graph = NULL
+  ))
+}

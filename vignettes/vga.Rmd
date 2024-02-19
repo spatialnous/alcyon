@@ -1,0 +1,41 @@
+---
+title: "Visibility Graph Analysis"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{vga}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(alcyon)
+```
+
+```{r}
+galleryMap <- st_read(
+  system.file(
+    "extdata", "testdata", "gallery",
+    "gallery_lines.mif",
+    package = "alcyon"
+  ),
+  geometry_column = 1L, quiet = TRUE
+)
+```
+
+```{r}
+pointMap <- makeVGAPointMap(galleryMap,
+                            fillX = 3.01,
+                            fillY = 6.7,
+                            gridSize = 0.04)
+vgaMap <- pointMapToSf(pointMap)$map
+
+plot(vgaMap)
+```
+
