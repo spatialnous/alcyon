@@ -22,6 +22,8 @@ SOURCES = main.cpp \
           metagraphdata.cpp \
           isovist.cpp \
           allFewest.cpp \
+          vga.cpp \
+          agentAnalysis.cpp \
           RcppExports.cpp
 
 # Obtain the object files

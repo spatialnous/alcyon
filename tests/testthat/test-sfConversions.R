@@ -28,7 +28,10 @@ test_that("sf linestrings to ShapeMap and back", {
     "df_row_name",
     paste0("df_", numericCols, "_", names(lineStringMap)[numericCols])
   )
-  expect_identical(Rcpp_ShapeMap_getAttributeNames(shapeMap), expectedColNames)
+  expect_identical(
+    Rcpp_ShapeMap_getAttributeNames(shapeMap@ptr),
+    expectedColNames
+  )
 
   newLineStringMap <- shapeMapTolineStringSf(shapeMap)
   expect_named(newLineStringMap, c(expectedColNames, "geometry"))
@@ -67,7 +70,7 @@ test_that("sf linestrings to Axial Map", {
     paste0("df_", numericCols, "_", names(lineStringMap)[numericCols]),
     "df_row_name"
   )
-  attrNames <- Rcpp_ShapeMap_getAttributeNames(shapeGraph)
+  attrNames <- Rcpp_ShapeMap_getAttributeNames(shapeGraph@ptr)
   expect_identical(expectedColNames, attrNames)
 
   newLineStringMap <- axialShapeGraphToSf(shapeGraph)
@@ -115,7 +118,7 @@ test_that("sf linestrings to Segment Map through Axial Map and back", {
     paste0("Axial df_", numericCols, "_", names(lineStringMap)[numericCols]),
     "Axial df_row_name"
   )
-  attrNames <- Rcpp_ShapeMap_getAttributeNames(segmentGraph)
+  attrNames <- Rcpp_ShapeMap_getAttributeNames(segmentGraph@ptr)
   expect_identical(expectedColNames, attrNames)
 
   newLineStringMap <- segmentShapeGraphToSf(segmentGraph)
@@ -150,7 +153,7 @@ test_that("sf linestrings to Segment Map and back", {
     "Angular Connectivity",
     "Connectivity"
   )
-  attrNames <- Rcpp_ShapeMap_getAttributeNames(segmentGraph)
+  attrNames <- Rcpp_ShapeMap_getAttributeNames(segmentGraph@ptr)
   expect_identical(expectedColNames, attrNames)
 
   newLineStringMap <- segmentShapeGraphToSf(segmentGraph)
@@ -158,5 +161,14 @@ test_that("sf linestrings to Segment Map and back", {
 })
 
 test_that("sf polygons to Shape Map and back", {
-  # Not implemented yet
+  polyMap <- st_read(
+    system.file(
+      "extdata", "testdata", "gallery",
+      "gallery_polys.mif",
+      package = "alcyon"
+    ),
+    geometry_column = 1L, quiet = TRUE
+  )
+  shapeMap <- sfToShapeMap(polyMap)
+  shapeMapToPolygongSf(shapeMap)
 })

@@ -19,8 +19,8 @@ Rcpp::XPtr<PointMap> createFromGrid(double minX,
                                     double gridSize) {
 
   if (gridSize <= 0) {
-    Rcpp::stop("gridSize can not be less or equal to zero (", gridSize,
-               " given)");
+    Rcpp::stop("gridSize can not be less or equal to zero (%d given)",
+               gridSize);
   }
   // Create a new pointmap and set tha grid
   QtRegion r(Point2f(minX, minY) /* bottom left */,
@@ -32,9 +32,8 @@ Rcpp::XPtr<PointMap> createFromGrid(double minX,
 
   GridProperties gp(std::max(r.width(), r.height()));
   if (gridSize > gp.getMax() || gridSize < gp.getMin()) {
-    Rcpp::stop("Chosen grid spacing ", gridSize,
-               " is outside of the expected interval of ", gp.getMin(),
-               " <= spacing <= ", gp.getMax());
+    Rcpp::stop("Chosen grid spacing %d is outside of the expected interval of"
+                 "%d <= spacing <= %d", gridSize, gp.getMin(), gp.getMax());
   }
 
   pointMap->setGrid(gridSize, Point2f(0.0, 0.0));
@@ -43,48 +42,48 @@ Rcpp::XPtr<PointMap> createFromGrid(double minX,
 }
 
 // [[Rcpp::export("Rcpp_PointMap_blockLines")]]
-void blockLines(Rcpp::XPtr<PointMap> pointMap,
-                Rcpp::XPtr<ShapeMap> boundaryMap) {
+void blockLines(Rcpp::XPtr<PointMap> pointMapPtr,
+                Rcpp::XPtr<ShapeMap> boundaryMapPtr) {
 
   std::vector<Line> lines;
-  for (auto line: boundaryMap->getAllShapesAsLines()) {
+  for (auto line: boundaryMapPtr->getAllShapesAsLines()) {
     lines.emplace_back(line.start(), line.end());
   }
-  pointMap->blockLines(lines);
+  pointMapPtr->blockLines(lines);
 }
 
 // [[Rcpp::export("Rcpp_PointMap_fill")]]
-void fill(Rcpp::XPtr<PointMap> pointMap,
+void fill(Rcpp::XPtr<PointMap> pointMapPtr,
           Rcpp::NumericMatrix pointCoords) {
   if (pointCoords.rows() == 0) {
     Rcpp::stop("No data provided in point coordinates matrix");
   }
 
-  auto region = pointMap->getRegion();
+  auto region = pointMapPtr->getRegion();
   for (int r = 0; r < pointCoords.rows(); ++r) {
     auto coordRow = pointCoords.row(r);
     Point2f p(coordRow[0], coordRow[1]);
     if (!region.contains(p)) {
-      Rcpp::stop("Point outside of target region: ", p.x, p.y);
+      Rcpp::stop("Point (%d %d) outside of target pointmap region.", p.x, p.y);
     }
   }
 
   for (int r = 0; r < pointCoords.rows(); ++r) {
     auto coordRow = pointCoords.row(r);
     Point2f p(coordRow[0], coordRow[1]);
-    pointMap->makePoints(p, 0, getCommunicator(true).get());
+    pointMapPtr->makePoints(p, 0, getCommunicator(true).get());
   }
 }
 
 // [[Rcpp::export("Rcpp_PointMap_makeGraph")]]
-bool makeGraph(Rcpp::XPtr<PointMap> pointMap,
+bool makeGraph(Rcpp::XPtr<PointMap> pointMapPtr,
                bool boundaryGraph,
                double maxVisibility) {
   bool graphMade = false;
   try {
-    graphMade = pointMap->sparkGraph2(getCommunicator(true).get(),
-                                      boundaryGraph,
-                                      maxVisibility);
+    graphMade = pointMapPtr->sparkGraph2(getCommunicator(true).get(),
+                                         boundaryGraph,
+                                         maxVisibility);
   } catch (Communicator::CancelledException) {
     graphMade = false;
   }
@@ -92,37 +91,44 @@ bool makeGraph(Rcpp::XPtr<PointMap> pointMap,
 }
 
 // [[Rcpp::export("Rcpp_PointMap_unmakeGraph")]]
-void unmakeGraph(Rcpp::XPtr<PointMap> pointMap,
+void unmakeGraph(Rcpp::XPtr<PointMap> pointMapPtr,
                  bool removeLinksWhenUnmaking) {
-  if (!pointMap->isProcessed()) {
-    Rcpp::stop("Current map has not had its graph",
+  if (!pointMapPtr->isProcessed()) {
+    Rcpp::stop("Current map has not had its graph "
                "made so there's nothing to unmake");
   }
 
-  pointMap->unmake(removeLinksWhenUnmaking);
+  pointMapPtr->unmake(removeLinksWhenUnmaking);
 }
 
 // [[Rcpp::export("Rcpp_PointMap_getName")]]
-std::string pointMapGetName(Rcpp::XPtr<PointMap> pointMap) {
-  return pointMap->getName();
+std::string pointMapGetName(Rcpp::XPtr<PointMap> pointMapPtr) {
+  return pointMapPtr->getName();
 }
 
 // [[Rcpp::export("Rcpp_PointMap_getFilledPoints")]]
-Rcpp::NumericMatrix getFilledPoints(Rcpp::XPtr<PointMap> pointMap) {
-  const auto &attrTable = pointMap->getAttributeTable();
+Rcpp::NumericMatrix getFilledPoints(Rcpp::XPtr<PointMap> pointMapPtr) {
+  const auto &attrTable = pointMapPtr->getAttributeTable();
   int numCols = attrTable.getNumColumns();
-  Rcpp::NumericMatrix coordsData(pointMap->getFilledPointCount(), 4 + numCols);
-  Rcpp::CharacterVector colNames(3 + numCols);
-  colNames[0] = "x";
-  colNames[1] = "y";
-  colNames[2] = "filled";
-  colNames[3] = "Ref";
+  std::vector<std::string> cellProperties {
+    "x", "y", "filled", "blocked", "contextfilled", "edge", "Ref"
+  };
+  Rcpp::NumericMatrix coordsData(pointMapPtr->getFilledPointCount(),
+                                 cellProperties.size() + numCols);
+  Rcpp::CharacterVector colNames(cellProperties.size() + numCols);
+  {
+    int i = 0;
+    for(auto prop: cellProperties) {
+      colNames[i] = prop;
+      ++i;
+    }
+  }
   for(int i = 0; i < numCols; ++i) {
-    colNames[4 + i] = attrTable.getColumnName(i);
+    colNames[cellProperties.size() + i] = attrTable.getColumnName(i);
   }
 
   Rcpp::colnames(coordsData) = colNames;
-  const auto &points = pointMap->getPoints();
+  const auto &points = pointMapPtr->getPoints();
 
   int rowIdx = 0;
   auto attrRowIt = attrTable.begin();
@@ -132,9 +138,12 @@ Rcpp::NumericMatrix getFilledPoints(Rcpp::XPtr<PointMap> pointMap) {
     row[0] = point.getLocation().x;
     row[1] = point.getLocation().y;
     row[2] = point.filled();
-    row[3] = attrRowIt->getKey().value;
+    row[3] = point.blocked();
+    row[4] = point.contextfilled();
+    row[5] = point.edge();
+    row[6] = attrRowIt->getKey().value;
     for(int i = 0; i < numCols; ++i) {
-      row[4 + i] = attrRowIt->getRow().getValue(i);
+      row[cellProperties.size() + i] = attrRowIt->getRow().getValue(i);
     }
     rowIdx++;
     attrRowIt++;

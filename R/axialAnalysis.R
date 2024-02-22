@@ -20,7 +20,7 @@ axialAnalysis <- function(shapeGraph,
   }, FUN.VALUE = 1L)
 
   return(Rcpp_runAxialAnalysis(
-    shapeGraph,
+    shapeGraph@ptr,
     numRadii,
     weightByAttribute,
     includeChoice,
@@ -42,9 +42,10 @@ axialAnalysisSf <- function(lineStringMap,
     weightByIdx <- which(names(lineStringMap) == weightByAttribute)[[1L]]
   }
   shapeGraph <- sfToAxialShapeGraph(lineStringMap,
-                                    keepAttributes = weightByIdx)
+    keepAttributes = weightByIdx
+  )
 
-  attrNamesBefore <- Rcpp_ShapeMap_getAttributeNames(shapeGraph)
+  attrNamesBefore <- Rcpp_ShapeMap_getAttributeNames(shapeGraph@ptr)
 
   expectdAttrName <- NULL
   if (!is.null(weightByIdx)) {
@@ -65,14 +66,17 @@ axialAnalysisSf <- function(lineStringMap,
     verbose
   )
 
-  attrNamesAfter <- Rcpp_ShapeMap_getAttributeNames(shapeGraph)
+  attrNamesAfter <- Rcpp_ShapeMap_getAttributeNames(shapeGraph@ptr)
   namesDiff <- attrNamesAfter[!(attrNamesAfter %in% attrNamesBefore)]
   df <- as.data.frame(do.call(
     cbind,
-    Rcpp_ShapeMap_getAttributeData(shapeGraph, namesDiff)
+    Rcpp_ShapeMap_getAttributeData(shapeGraph@ptr, namesDiff)
   ))
   row.names(df) <-
-    Rcpp_ShapeMap_getAttributeData(shapeGraph, "df_row_name")[["df_row_name"]]
+    Rcpp_ShapeMap_getAttributeData(
+      shapeGraph@ptr,
+      "df_row_name"
+    )[["df_row_name"]]
   result <- list(
     data = df[row.names(lineStringMap), ],
     graph = NA

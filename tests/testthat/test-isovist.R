@@ -14,15 +14,15 @@ test_that("Isovists in C++", {
     geometry_column = 1L, quiet = TRUE
   )
 
-  shapeGraph <- sfToShapeMap(
+  shapeMap <- sfToShapeMap(
     lineStringMap,
     keepAttributes = vector(mode = "integer")
   )
 
   isovistMap <- Rcpp_makeIsovists(
-    shapeGraph,
+    shapeMap@ptr,
     matrix(c(3.01, 6.7), nrow = 1L),
-    0.0,
+    0.01,
     3.14,
     FALSE
   )
@@ -38,10 +38,10 @@ test_that("Isovists in C++", {
     geometry = sfGeom
   )
 
-  expect_equal(st_area(isovists[1L, ]), 0.5186441, tolerance = 0.00001)
+  expect_equal(st_area(isovists[1L, ]), 0.51858, tolerance = 0.00001)
 
   centroid <- st_centroid(isovists[1L, "geometry"])[[1L]][[1L]]
-  expect_equal(centroid[[1L]], 3.605456, tolerance = 0.00001)
+  expect_equal(centroid[[1L]], 3.60556, tolerance = 0.00001)
   expect_equal(centroid[[2L]], 6.4919, tolerance = 0.00001)
 
   polygonPointMatrix <- isovists[1L, "geometry"][[1L]][[1L]][[1L]]
@@ -61,14 +61,21 @@ test_that("Isovists in R", {
     geometry_column = 1L, quiet = TRUE
   )
 
-  isovists <- isovist(
+  shapeMap <- sfToShapeMap(
     lineStringMap,
+    keepAttributes = vector(mode = "integer")
+  )
+
+  isovistMap <- isovist(
+    shapeMap,
     x = c(3.01, 1.3),
     y = c(6.70, 5.2),
-    angle = 0.0,
+    angle = 0.01,
     viewAngle = 3.14,
     FALSE
   )
+
+  isovists <- shapeMapToPolygongSf(isovistMap)
 
   expect_equal(st_area(isovists[1L, ]), 0.5186, tolerance = 0.0001)
 
@@ -79,14 +86,14 @@ test_that("Isovists in R", {
   polygonPointMatrix <- isovists[1L, "geometry"][[1L]][[1L]][[1L]]
   expect_identical(
     dim(polygonPointMatrix),
-    c(56L, 2L)
+    c(57L, 2L)
   )
 
 
-  expect_equal(st_area(isovists[2L, ]), 0.1531, tolerance = 0.0001)
+  expect_equal(st_area(isovists[2L, ]), 0.1536, tolerance = 0.0001)
 
   centroid2 <- st_centroid(isovists[2L, "geometry"])[[1L]][[1L]]
-  expect_equal(centroid2[[1L]], 1.7125, tolerance = 0.0001)
+  expect_equal(centroid2[[1L]], 1.7115, tolerance = 0.0001)
   expect_equal(centroid2[[2L]], 5.2319, tolerance = 0.0001)
 
   polygonPointMatrix <- isovists[2L, "geometry"][[1L]][[1L]][[1L]]

@@ -33,14 +33,14 @@ test_that("Segment Analysis in C++", {
     "Axial df_2_Choice",
     "Axial df_row_name"
   )
-  attrNameBefore <- Rcpp_ShapeMap_getAttributeNames(segmentGraph)
+  attrNameBefore <- Rcpp_ShapeMap_getAttributeNames(segmentGraph@ptr)
   expect_identical(expectedColNameBefore, attrNameBefore)
 
   weightBy <- Rcpp_getAxialToSegmentExpectedColName(
     Rcpp_getSfShapeMapExpectedColName(lineStringMap, 1L)
   )
   Rcpp_runSegmentAnalysis(
-    segmentGraph,
+    segmentGraph@ptr,
     radii = c(-1.0, 100.0),
     radiusStepType = alcyon::Traversal$Metric,
     analysisStepType = alcyon::Traversal$Tulip,
@@ -53,7 +53,7 @@ test_that("Segment Analysis in C++", {
   )
 
   testthat::expect_identical(
-    dim(Rcpp_ShapeMap_getShapesAsLineCoords(segmentGraph)),
+    dim(Rcpp_ShapeMap_getShapesAsLineCoords(segmentGraph@ptr)),
     c(293L, 4L)
   )
 
@@ -68,10 +68,10 @@ test_that("Segment Analysis in C++", {
     "T1024 Node Count",
     "T1024 Total Depth"
   )
-  attrNameBefore <- Rcpp_ShapeMap_getAttributeNames(segmentGraph)
+  attrNameBefore <- Rcpp_ShapeMap_getAttributeNames(segmentGraph@ptr)
   expect_identical(expectedColNameAfter, attrNameBefore)
 
-  connections <- Rcpp_ShapeGraph_getSegmentConnections(segmentGraph)
+  connections <- Rcpp_ShapeGraph_getSegmentConnections(segmentGraph@ptr)
   expect_length(connections$from, 1392L)
   expect_length(connections$to, 1392L)
 })

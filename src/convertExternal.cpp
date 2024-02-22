@@ -59,7 +59,7 @@ Rcpp::XPtr<ShapeMap> toShapeMap(
     }
 
     auto geometryColumnIdx = AttrHelper::getGeometryColumnIndex(df);
-    const auto &lines = Rcpp::as<Rcpp::GenericVector>(df.at(geometryColumnIdx));
+    const auto &geom = Rcpp::as<Rcpp::GenericVector>(df.at(geometryColumnIdx));
 
     Rcpp::XPtr<ShapeMap> shp(new ShapeMap("tmp_df_shp"));
 
@@ -96,14 +96,15 @@ Rcpp::XPtr<ShapeMap> toShapeMap(
         switch( TYPEOF(col) ) {
         case INTSXP: {
             if (Rf_isFactor(col))
-                Rcpp::stop("Non-numeric columns are not supported (" +
-                    std::to_string(colIdx) + ")");
+                Rcpp::stop("Non-numeric columns are not supported (%d: %s)",
+                           colIdx, colName);
             int newColIdx = shp->addAttribute(
                 getSfShapeMapExpectedColName(rColIdx, colName));
 
             if (newColIdx == -1) {
                 // error adding column (e.g., duplicate column names)
-                Rcpp::stop("Error creating df  column");
+                Rcpp::stop("Error creating df column (%d: %s)",
+                           colIdx, colName);
             }
             const auto &tmp = Rcpp::as<const Rcpp::IntegerVector>(col);
             iIts.emplace_back(std::make_pair(newColIdx, tmp.begin()));
@@ -115,20 +116,21 @@ Rcpp::XPtr<ShapeMap> toShapeMap(
 
             if (newColIdx == -1) {
                 // error adding column (e.g., duplicate column names)
-                Rcpp::stop("Error creating df  column");
+                Rcpp::stop("Error creating df column (%d: %s)",
+                           colIdx, colName);
             }
             const auto &tmp = Rcpp::as<const Rcpp::NumericVector>(col);
             rIts.emplace_back(std::make_pair(newColIdx, tmp.begin()));
             break;
         }
         case STRSXP: {
-            Rcpp::stop("String columns are not supported (" +
-                std::to_string(colIdx) + ")");
+            Rcpp::stop("String columns are not supported (%d: %s)",
+                       colIdx, colName);
             break;
         }
         case VECSXP: {
-            Rcpp::stop("Non-numeric columns are not supported (" +
-                std::to_string(colIdx) + ")");
+            Rcpp::stop("Non-numeric columns are not supported (%d: %s)",
+                       colIdx, colName);
 
             break;
         }
@@ -139,27 +141,57 @@ Rcpp::XPtr<ShapeMap> toShapeMap(
         }
     }
 
+    for (auto git = geom.begin(); git != geom.end(); ++git) {
+        Rcpp::NumericMatrix coords;
+        if(TYPEOF(*git) == VECSXP) {
+            // multi-object item
+            auto multiObject = Rcpp::as<Rcpp::GenericVector>(*git);
+            // for the moment only get the first
+            coords = Rcpp::as<Rcpp::NumericMatrix>(multiObject[0]);
+        } else {
+            coords = Rcpp::as<Rcpp::NumericMatrix>(*git);
+        }
 
-    for (auto lit = lines.begin(); lit != lines.end(); ++lit) {
-        auto coords = Rcpp::as<Rcpp::NumericVector>(*lit);
+        // TODO: Make this a vector of pairs
+        std::map<int, float> extraAttributes;
 
-        if (coords.size() == 4) {
-            // 2D line x1,y1,x2,y2
-            // TODO: Make this a vector of pairs
-            std::map<int, float> extraAttributes;
+        for (auto &idxiit: iIts) {
+            extraAttributes.emplace(idxiit.first, *idxiit.second);
+        }
+        for (auto &idxrit: rIts) {
+            extraAttributes.emplace(idxrit.first, *idxrit.second);
+        }
 
-            for (auto &idxiit: iIts) {
-                extraAttributes.emplace(idxiit.first, *idxiit.second);
-            }
-            for (auto &idxrit: rIts) {
-                extraAttributes.emplace(idxrit.first, *idxrit.second);
-            }
+        if (coords.rows() == 1) {
+            // 2D point x1,y1
+            Point2f point(coords[0], coords[1]);
+            shp->makePointShape(
+                    point,
+                    false /* tempshape */,
+                    extraAttributes);
+        } else if (coords.rows() == 2) {
+            // 2D line x1,x2,y1,y2
 
             Line line(Point2f(coords[0], coords[2]),
                       Point2f(coords[1], coords[3]));
             shp->makeLineShape(
                     line,
                     false /* through_ui */,
+                    false /* tempshape */,
+                    extraAttributes);
+        } else if (coords.rows() > 2) {
+            // 2D polygon x1,x2,y1,y2
+            // TODO: Make this a vector of pairs
+
+            std::vector<Point2f> points;
+            for (int rowIdx = 0; rowIdx < coords.rows(); ++rowIdx) {
+                const Rcpp::NumericMatrix::Row &row = coords(rowIdx, Rcpp::_);
+                points.push_back(Point2f(row[0], row[1]));
+            }
+
+            shp->makePolyShape(
+                    points,
+                    false /* open */,
                     false /* tempshape */,
                     extraAttributes);
         }
@@ -170,7 +202,5 @@ Rcpp::XPtr<ShapeMap> toShapeMap(
             ++idxrit.second;
         }
     }
-
-
     return shp;
 }

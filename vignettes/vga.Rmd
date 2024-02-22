@@ -31,11 +31,47 @@ galleryMap <- st_read(
 
 ```{r}
 pointMap <- makeVGAPointMap(galleryMap,
-                            fillX = 3.01,
-                            fillY = 6.7,
-                            gridSize = 0.04)
+  fillX = 3.01,
+  fillY = 6.7,
+  gridSize = 0.04
+)
 vgaMap <- pointMapToSf(pointMap)$map
-
-plot(vgaMap)
+plot(vgaMap["Connectivity"])
 ```
 
+```{r}
+vgaMetric(pointMap, -1, FALSE)
+vgaMap <- pointMapToSf(pointMap)$map
+plot(vgaMap["Metric.Mean.Shortest.Path.Distance"])
+```
+
+```{r}
+vgaThroughVision(pointMap)
+vgaMap <- pointMapToSf(pointMap)$map
+plot(vgaMap["Through.vision"])
+```
+
+```{r}
+vgaAngular(pointMap, -1, FALSE)
+vgaMap <- pointMapToSf(pointMap)$map
+plot(vgaMap["Angular.Mean.Depth"])
+```
+
+```{r}
+vgaVisualGlobal(pointMap, -1, FALSE)
+vgaMap <- pointMapToSf(pointMap)$map
+plot(vgaMap["Visual.Integration..HH."])
+```
+
+```{r}
+vgaVisualLocal(pointMap, FALSE)
+vgaMap <- pointMapToSf(pointMap)$map
+plot(vgaMap["Visual.Clustering.Coefficient"])
+```
+
+```{r}
+boundaryMap <- sfToShapeMap(galleryMap)
+vgaIsovist(pointMap, boundaryMap)
+vgaMap <- pointMapToSf(pointMap)$map
+plot(vgaMap["Isovist.Area"])
+```

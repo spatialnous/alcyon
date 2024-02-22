@@ -13,7 +13,6 @@ segmentAnalysis <- function(segmentGraph,
                             verbose = FALSE,
                             selOnly = FALSE,
                             progress = FALSE) {
-
   if (!(analysisStepType %in% Traversal)) {
     stop("Unknown segment analysis type: ", analysisStepType)
   }
@@ -30,7 +29,7 @@ segmentAnalysis <- function(segmentGraph,
   }, FUN.VALUE = 1L)
 
   return(Rcpp_runSegmentAnalysis(
-    segmentGraph,
+    segmentGraph@ptr,
     numRadii,
     radiusStepType,
     analysisStepType,
@@ -55,7 +54,6 @@ segmentAnalysisSf <- function(lineStringMap,
                               verbose = FALSE,
                               selOnly = FALSE,
                               progress = FALSE) {
-
   weightByIdx <- NULL
   if (weightWithColumn != "" && !is.null(weightWithColumn)) {
     weightByIdx <- which(names(lineStringMap) == weightWithColumn)[[1L]]
@@ -90,16 +88,18 @@ segmentAnalysisSf <- function(lineStringMap,
     }
   }
 
-  segmentAnalysis(segmentGraph,
-                  radii,
-                  radiusStepType,
-                  analysisStepType,
-                  expectdAttrName,
-                  includeChoice,
-                  tulipBins,
-                  verbose,
-                  selOnly,
-                  progress)
+  segmentAnalysis(
+    segmentGraph,
+    radii,
+    radiusStepType,
+    analysisStepType,
+    expectdAttrName,
+    includeChoice,
+    tulipBins,
+    verbose,
+    selOnly,
+    progress
+  )
 
   return(segmentShapeGraphToSf(segmentGraph))
 }

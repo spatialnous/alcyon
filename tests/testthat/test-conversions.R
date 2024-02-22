@@ -54,8 +54,10 @@ test_that("sf line map to Axial ShapeGraph", {
   expect_identical(expectedColNames, attrNames)
 
   firstCol <- attrNames[[1L]]
-  firstColData <- Rcpp_ShapeMap_getAttributeData(shapeGraph,
-                                                 firstCol)[[firstCol]]
+  firstColData <- Rcpp_ShapeMap_getAttributeData(
+    shapeGraph,
+    firstCol
+  )[[firstCol]]
   expect_length(firstColData, nrow(lineStringMap))
 
   axialConnections <- Rcpp_ShapeGraph_getAxialConnections(shapeGraph)
@@ -93,8 +95,10 @@ test_that("sf line map to Segment ShapeGraph", {
   expect_identical(expectedColNames, attrNames)
 
   firstCol <- attrNames[[1L]]
-  firstColData <- Rcpp_ShapeMap_getAttributeData(segmentMap,
-                                                 firstCol)[[firstCol]]
+  firstColData <- Rcpp_ShapeMap_getAttributeData(
+    segmentMap,
+    firstCol
+  )[[firstCol]]
   expect_length(firstColData, 293L)
 
   segmentConnections <- Rcpp_ShapeGraph_getSegmentConnections(segmentMap)

@@ -23,7 +23,7 @@ bool hasClass(Rcpp::DataFrame &df, std::string cl) {
 Rcpp::StringVector getStringVectorAttr(Rcpp::DataFrame &df, std::string cl) {
 
     if (!df.hasAttribute(cl)) {
-        Rcpp::stop("Dataframe does not have the attribute \"" + cl + "\"");
+        Rcpp::stop("Dataframe does not have the attribute %s", cl);
     }
     return Rcpp::as<Rcpp::StringVector>(df.attr(cl));
 }

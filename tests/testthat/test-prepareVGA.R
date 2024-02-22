@@ -31,24 +31,57 @@ test_that("PointMaps in C++", {
   )
 
   Rcpp_PointMap_blockLines(
-    pointMap = pointMap,
-    boundaryMap = boundaryMap
+    pointMapPtr = pointMap@ptr,
+    boundaryMap = boundaryMap@ptr
   )
 
   Rcpp_PointMap_fill(
-    pointMap = pointMap,
+    pointMapPtr = pointMap@ptr,
     pointCoords = matrix(c(3.01, 6.7), nrow = 1L)
   )
 
   Rcpp_PointMap_makeGraph(
-    pointMap = pointMap,
+    pointMapPtr = pointMap@ptr,
     boundaryGraph = FALSE,
     maxVisibility = -1.0
   )
 
-  coords <- Rcpp_PointMap_getFilledPoints(pointMap = pointMap)
+  coords <- Rcpp_PointMap_getFilledPoints(pointMapPtr = pointMap@ptr)
+  expect_identical(dim(coords), c(4332L, 10L))
+  expect_identical(colnames(coords), c(
+    "x", "y", "filled", "blocked",
+    "contextfilled", "edge", "Ref",
+    "Connectivity", "Point First Moment",
+    "Point Second Moment"
+  ))
+})
 
-  map <- SpatialPointsDataFrame(coords[, c(1L, 2L)], data = data.frame(coords))
-  gridded(map) <- TRUE
-  plot(map["Connectivity"])
+test_that("PointMaps in R", {
+  lineStringMap <- st_read(
+    system.file(
+      "extdata", "testdata", "gallery",
+      "gallery_lines.mif",
+      package = "alcyon"
+    ),
+    geometry_column = 1L, quiet = TRUE
+  )
+
+  pointMap <- makeVGAPointMap(lineStringMap,
+    gridSize = 0.04,
+    fillX = 3.01,
+    fillY = 6.7,
+    maxVisibility = NA,
+    boundaryGraph = FALSE,
+    verbose = FALSE
+  )
+
+  coords <- Rcpp_PointMap_getFilledPoints(pointMapPtr = pointMap@ptr)
+
+  expect_identical(dim(coords), c(4332L, 10L))
+  expect_identical(colnames(coords), c(
+    "x", "y", "filled", "blocked",
+    "contextfilled", "edge", "Ref",
+    "Connectivity", "Point First Moment",
+    "Point Second Moment"
+  ))
 })

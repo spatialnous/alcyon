@@ -29,11 +29,11 @@ test_that("Axial Analysis in C++", {
     "df_2_Choice",
     "df_row_name"
   )
-  attrNameBefore <- Rcpp_ShapeMap_getAttributeNames(shapeGraph)
+  attrNameBefore <- Rcpp_ShapeMap_getAttributeNames(shapeGraph@ptr)
   expect_identical(expectedColNameBefore, attrNameBefore)
 
   weightBy <- Rcpp_getSfShapeMapExpectedColName(lineStringMap, 1L)
-  Rcpp_runAxialAnalysis(shapeGraph, c(-1.0), weightBy)
+  Rcpp_runAxialAnalysis(shapeGraph@ptr, c(-1.0), weightBy)
 
   expectedColNameAfter <- c(
     expectedColNameBefore,
@@ -49,7 +49,7 @@ test_that("Axial Analysis in C++", {
     "Mean Depth [df_1_Depthmap_Ref Wgt]",
     "Total df_1_Depthmap_Ref"
   )
-  attrNameBefore <- Rcpp_ShapeMap_getAttributeNames(shapeGraph)
+  attrNameBefore <- Rcpp_ShapeMap_getAttributeNames(shapeGraph@ptr)
   expect_identical(expectedColNameAfter, attrNameBefore)
 })
 

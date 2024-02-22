@@ -2,9 +2,9 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-context("Isovists tests")
+context("All-line Map tests")
 
-test_that("Isovists in C++", {
+test_that("All-line Map in C++", {
   boundsMap <- st_read(
     system.file(
       "extdata", "testdata", "gallery",
@@ -20,7 +20,7 @@ test_that("Isovists in C++", {
   )
 
   allLineMap <- Rcpp_makeAllLineMap(
-    shapeGraph,
+    shapeGraph@ptr,
     seedX = 3.01,
     seedY = 6.7
   )
@@ -67,7 +67,7 @@ test_that("Isovists in C++", {
   expect_identical(dim(coords), c(26L, 4L))
 })
 
-test_that("Isovists in R", {
+test_that("All-line Map in R", {
   boundsMap <- st_read(
     system.file(
       "extdata", "testdata", "gallery",
@@ -77,8 +77,12 @@ test_that("Isovists in R", {
     geometry_column = 1L, quiet = TRUE
   )
 
-  result <- allFewestLineMap(
+  shapeMap <- sfToShapeMap(
     boundsMap,
+    keepAttributes = vector(mode = "integer")
+  )
+  result <- allFewestLineMap(
+    shapeMap,
     seedX = 3.01,
     seedY = 6.7,
     calculateFewest = TRUE
@@ -95,11 +99,11 @@ test_that("Isovists in R", {
 
   # Fewest (Subsets)
 
-  expect_length(colnames(fewestSubsets), 3L)
-  expect_identical(nrow(allLineMap), 46L)
+  expect_length(colnames(fewestSubsets), 4L)
+  expect_identical(nrow(fewestSubsets), 46L)
 
   # Fewest (Minimal)
 
-  expect_length(colnames(fewestMinimal), 3L)
-  expect_identical(nrow(allLineMap), 26L)
+  expect_length(colnames(fewestMinimal), 4L)
+  expect_identical(nrow(fewestMinimal), 26L)
 })

@@ -27,8 +27,8 @@ blockLines <- function(pointMap,
     keepAttributes = vector(mode = "integer")
   )
   Rcpp_PointMap_blockLines(
-    pointMap = pointMap@ptr,
-    boundaryMap = boundaryMap
+    pointMapPtr = pointMap@ptr,
+    boundaryMap = boundaryMap@ptr
   )
 }
 
@@ -37,7 +37,7 @@ fillGrid <- function(pointMap,
                      fillY,
                      verbose = FALSE) {
   Rcpp_PointMap_fill(
-    pointMap = pointMap@ptr,
+    pointMapPtr = pointMap@ptr,
     pointCoords = cbind(fillX, fillY)
   )
 }
@@ -47,7 +47,7 @@ makeVGAGraph <- function(pointMap,
                          maxVisibility = NA,
                          verbose = FALSE) {
   Rcpp_PointMap_makeGraph(
-    pointMap = pointMap@ptr,
+    pointMapPtr = pointMap@ptr,
     boundaryGraph = boundaryGraph,
     maxVisibility = maxVisibility
   )
@@ -60,7 +60,6 @@ makeVGAPointMap <- function(lineStringMap,
                             maxVisibility = NA,
                             boundaryGraph = FALSE,
                             verbose = FALSE) {
-
   mapRegion <- sf::st_bbox(lineStringMap)
 
   pointMap <- createGrid(
@@ -94,7 +93,7 @@ unmakeVGAGraph <- function(pointMap,
                            removeLinks = FALSE,
                            verbose = FALSE) {
   Rcpp_PointMap_unmakeGraph(
-    pointMap = pointMap@ptr,
+    pointMapPtr = pointMap@ptr,
     removeLinksWhenUnmaking = removeLinks
   )
 }
