@@ -1,0 +1,76 @@
+---
+title: "segmentAnalysis"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{segmentAnalysis}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(alcyon)
+```
+
+```{r}
+lineStringMap <- st_read(
+  system.file(
+    "extdata", "testdata", "barnsbury", "barnsbury_small_axial.mif",
+    package = "alcyon"
+  ),
+  geometry_column = 1L, quiet = TRUE
+)
+shapeGraph <- sfToSegmentShapeGraph(
+  lineStringMap,
+  throughAxial = TRUE,
+  keepAttributes = c(1L, 2L)
+)
+```
+
+```{r}
+segMap <- segmentShapeGraphToSf(shapeGraph)
+plot(segMap$map, max.plot = 64)
+```
+
+```{r}
+segmentResult = segmentAnalysis(
+  shapeGraph,
+  radii = c("n", "200"),
+  radiusStepType = Traversal$Metric,
+  analysisStepType = Traversal$Tulip,
+  tulipBins = 1024,
+  includeChoice = FALSE
+)
+segMap <- segmentShapeGraphToSf(shapeGraph)
+plot(segMap$map[, segmentResult$newColumns], max.plot = 64)
+```
+
+```{r}
+segmentResult = segmentAnalysis(
+  shapeGraph,
+  radii = c("n", "5"),
+  radiusStepType = Traversal$Topological,
+  analysisStepType = Traversal$Topological,
+  includeChoice = FALSE
+)
+segMap <- segmentShapeGraphToSf(shapeGraph)
+plot(segMap$map[, segmentResult$newColumns], max.plot = 64)
+```
+
+```{r}
+segmentResult = segmentAnalysis(
+  shapeGraph,
+  radii = c("n", "200"),
+  radiusStepType = Traversal$Metric,
+  analysisStepType = Traversal$Metric,
+  includeChoice = FALSE
+)
+segMap <- segmentShapeGraphToSf(shapeGraph)
+plot(segMap$map[, segmentResult$newColumns], max.plot = 64)
+```

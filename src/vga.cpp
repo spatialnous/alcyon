@@ -15,34 +15,54 @@
 #include <Rcpp.h>
 
 // [[Rcpp::export("Rcpp_VGA_throughVision")]]
-bool vgaThroughVision(Rcpp::XPtr<PointMap> pointMapPtr) {
-  return
-  VGAThroughVision().run(getCommunicator(true).get(), *pointMapPtr, false);
+Rcpp::List vgaThroughVision(Rcpp::XPtr<PointMap> pointMapPtr) {
+  Rcpp::List result = Rcpp::List::create(
+    Rcpp::Named("completed") = false
+  );
+  auto analysisResult = VGAThroughVision().run(
+    getCommunicator(true).get(),
+    *pointMapPtr,
+    false);
+  result["completed"] = analysisResult.completed;
+  result["newColumns"] = analysisResult.newColumns;
+  return result;
 }
 
 // [[Rcpp::export("Rcpp_VGA_angular")]]
-bool vgaAngular(Rcpp::XPtr<PointMap> pointMapPtr,
-                double radius, bool gatesOnly) {
+Rcpp::List vgaAngular(Rcpp::XPtr<PointMap> pointMapPtr,
+                      double radius, bool gatesOnly) {
 
-  return VGAAngular(radius, gatesOnly)
-  .run(getCommunicator(true).get(), *pointMapPtr, false);
+  Rcpp::List result = Rcpp::List::create(
+    Rcpp::Named("completed") = false
+  );
+  auto analysisResult = VGAAngular(radius, gatesOnly)
+    .run(getCommunicator(true).get(), *pointMapPtr, false);
+  result["completed"] = analysisResult.completed;
+  result["newColumns"] = analysisResult.newColumns;
+  return result;
 }
 
 // [[Rcpp::export("Rcpp_VGA_metric")]]
-bool vgaMetric(Rcpp::XPtr<PointMap> pointMapPtr,
-               double radius, bool gatesOnly) {
+Rcpp::List vgaMetric(Rcpp::XPtr<PointMap> pointMapPtr,
+                     double radius, bool gatesOnly) {
 
   if (radius != -1.0 && radius <= 0) {
     Rcpp::stop("Radius for metric vga must be n (-1) for the whole range or a "
                  "positive number. Got %d", radius);
   }
-  return VGAMetric(radius, gatesOnly)
+  Rcpp::List result = Rcpp::List::create(
+    Rcpp::Named("completed") = false
+  );
+  auto analysisResult = VGAMetric(radius, gatesOnly)
     .run(getCommunicator(true).get(), *pointMapPtr, false);
+  result["completed"] = analysisResult.completed;
+  result["newColumns"] = analysisResult.newColumns;
+  return result;
 }
 
 // [[Rcpp::export("Rcpp_VGA_visualGlobal")]]
-bool vgaVisualGlobal(Rcpp::XPtr<PointMap> pointMapPtr,
-                     int radius, bool gatesOnly) {
+Rcpp::List vgaVisualGlobal(Rcpp::XPtr<PointMap> pointMapPtr,
+                           int radius, bool gatesOnly) {
 
 
   if (radius != -1 && (radius < 1 || radius > 99)) {
@@ -51,21 +71,36 @@ bool vgaVisualGlobal(Rcpp::XPtr<PointMap> pointMapPtr,
                  radius);
   }
 
-  return VGAVisualGlobal(radius, gatesOnly)
+  Rcpp::List result = Rcpp::List::create(
+    Rcpp::Named("completed") = false
+  );
+  auto analysisResult = VGAVisualGlobal(radius, gatesOnly)
     .run(getCommunicator(true).get(), *pointMapPtr, false);
+  result["completed"] = analysisResult.completed;
+  result["newColumns"] = analysisResult.newColumns;
+  return result;
 }
 
 // [[Rcpp::export("Rcpp_VGA_visualLocal")]]
-bool vgaVisualLocal(Rcpp::XPtr<PointMap> pointMapPtr, bool gatesOnly) {
+Rcpp::List vgaVisualLocal(Rcpp::XPtr<PointMap> pointMapPtr, bool gatesOnly) {
 
-  return VGAVisualLocal(gatesOnly)
-  .run(getCommunicator(true).get(), *pointMapPtr, false);
+  Rcpp::List result = Rcpp::List::create(
+    Rcpp::Named("completed") = false
+  );
+  auto analysisResult = VGAVisualLocal(gatesOnly)
+    .run(getCommunicator(true).get(), *pointMapPtr, false);
+  result["completed"] = analysisResult.completed;
+  result["newColumns"] = analysisResult.newColumns;
+  return result;
 }
 
 // [[Rcpp::export("Rcpp_VGA_isovist")]]
-bool vgaIsovist(Rcpp::XPtr<PointMap> pointMapPtr,
-                Rcpp::XPtr<ShapeMap> shapeMapPtr) {
+Rcpp::List vgaIsovist(Rcpp::XPtr<PointMap> pointMapPtr,
+                      Rcpp::XPtr<ShapeMap> shapeMapPtr) {
 
+  Rcpp::List result = Rcpp::List::create(
+    Rcpp::Named("completed") = false
+  );
   auto shapeMap = shapeMapPtr->getAllShapes();
 
   std::vector<SalaShape> shapes;
@@ -74,7 +109,10 @@ bool vgaIsovist(Rcpp::XPtr<PointMap> pointMapPtr,
     shapes.push_back(it->second);
   }
 
-  return VGAIsovist(shapes)
+  auto analysisResult = VGAIsovist(shapes)
     .run(getCommunicator(true).get(), *pointMapPtr, false);
+  result["completed"] = analysisResult.completed;
+  result["newColumns"] = analysisResult.newColumns;
+  return result;
 }
 

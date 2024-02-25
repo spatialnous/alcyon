@@ -5,9 +5,7 @@
 # A representation of sala's All-line ShapeGraph in R. Holds onto a sala
 # All-line ShapeGraph pointer and operates on that
 
-setClass("AllLineShapeGraph", slots = c(
-  ptr = "externalptr"
-))
+setClass("AllLineShapeGraph", contains = "AxialShapeGraph")
 
 setGeneric("name", function(x) standardGeneric("name"))
 

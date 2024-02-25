@@ -17,9 +17,8 @@ export("getPointmapLinks")
 export("getPointmapDataAndLinks")
 export("isovist")
 export("isovist2pts")
-export("stepdepth")
+export("depth")
 export("export")
-export("convertMap")
 export("import")
 export("importLines")
 export("vgaThroughVision")
@@ -69,10 +68,6 @@ export("pointMapToSf")
 # R enums
 export("Traversal")
 export("AgentLook")
-
-# C++
-#export("ShapeMap")
-#export("name")
 
 # libraries
 import("sp")

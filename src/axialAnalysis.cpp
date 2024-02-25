@@ -15,7 +15,7 @@
 #include <Rcpp.h>
 
 // [[Rcpp::export("Rcpp_runAxialAnalysis")]]
-bool runAxialAnalysis(
+Rcpp::List runAxialAnalysis(
         Rcpp::XPtr<ShapeGraph> shapeGraph,
         const Rcpp::NumericVector radii,
         const Rcpp::Nullable<std::string> weightedMeasureColNameNV = R_NilValue,
@@ -69,9 +69,12 @@ bool runAxialAnalysis(
         }
     }
 
-    bool analysisCompleted = false;
+    Rcpp::List result = Rcpp::List::create(
+        Rcpp::Named("completed") = false
+    );
 
     try {
+
         std::set<double> radius_set;
         radius_set.insert(radii.begin(), radii.end());
         auto analysis = AxialIntegration(radius_set,
@@ -79,24 +82,26 @@ bool runAxialAnalysis(
                                          includeChoice,
                                          includeIntermediateMetrics,
                                          includeLocal);
-        analysisCompleted = analysis.run(
+        AnalysisResult analysisResult = analysis.run(
             getCommunicator(progress).get(),
             *shapeGraph,
             false /* simple version*/
         );
+        result["completed"] = analysisResult.completed;
+        result["newColumns"] = analysisResult.newColumns;
     } catch (Communicator::CancelledException) {
-        analysisCompleted = false;
+        // result["completed"] = false;
     }
-    return analysisCompleted;
+    return result;
 }
 
 
 // [[Rcpp::export("Rcpp_axialStepDepth")]]
-bool axialStepDepth(
+Rcpp::List axialStepDepth(
         Rcpp::XPtr<ShapeGraph> shapeGraph,
+        const int stepType,
         const std::vector<double> stepDepthPointsX,
         const std::vector<double> stepDepthPointsY,
-        const int stepType,
         const Rcpp::Nullable<bool> verboseNV = R_NilValue,
         const Rcpp::Nullable<bool> progressNV = R_NilValue) {
     bool verbose = false;
@@ -122,9 +127,12 @@ bool axialStepDepth(
 
     Rcpp::Rcout << "ok\nCalculating step-depth... " << '\n';
 
-    bool analysisCompleted = false;
+    Rcpp::List result = Rcpp::List::create(
+        Rcpp::Named("completed") = false
+    );
 
     try {
+        AnalysisResult analysisResult;
         switch (static_cast<Traversal>(stepType)) {
         // never really supported for axial maps
         // case AxialAnalysis::AxialStepType::ANGULAR:
@@ -135,7 +143,7 @@ bool axialStepDepth(
         //     break;
         case Traversal::Topological:
             // currently axial only allows for topological analysis
-            analysisCompleted = AxialStepDepth().run(
+            analysisResult = AxialStepDepth().run(
                 getCommunicator(progress).get(),
                 *shapeGraph,
                 false /* simple mode */
@@ -145,10 +153,12 @@ bool axialStepDepth(
                 throw depthmapX::RuntimeException("Error, unsupported step type");
             }
         }
+        result["completed"] = analysisResult.completed;
+        result["newColumns"] = analysisResult.newColumns;
 
     } catch (Communicator::CancelledException) {
-        analysisCompleted = false;
+        //
     }
 
-    return analysisCompleted;
+    return result;
 }
