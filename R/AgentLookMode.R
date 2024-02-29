@@ -21,7 +21,8 @@
 #'   \item{AgentLookMode$OcclusionFurthest (Furthest occlusion per bin)}
 #'   \item{AgentLookMode$BinFarDistance (Per bin far distance weighted)}
 #'   \item{AgentLookMode$BinAngle (Per bin angle weighted)}
-#'   \item{AgentLookMode$BinFarDistanceAngle (Per bin far-distance and angle weighted)}
+#'   \item{AgentLookMode$BinFarDistanceAngle (Per bin far-distance and angle
+#'   weighted)}
 #'   \item{AgentLookMode$BinMemory (Per bin memory)}
 #' }
 #'

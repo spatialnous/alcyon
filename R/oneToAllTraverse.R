@@ -38,13 +38,13 @@ oneToAllTraverse <- function(map,
     stop("Unknown traversalType: ", traversalType)
   }
 
-  if (!is.na(quantizationWidth) & !inherits(map, "SegmentShapeGraph")) {
+  if (!is.na(quantizationWidth) && !inherits(map, "SegmentShapeGraph")) {
     stop("quantizationWidth can only be used with Segment ShapeGraphs")
   }
 
-  if (is.na(quantizationWidth) &
-      inherits(map, "SegmentShapeGraph") &
-      traversalType == TraversalType$Angular) {
+  if (is.na(quantizationWidth)
+      && inherits(map, "SegmentShapeGraph")
+      && traversalType == TraversalType$Angular) {
     stop("Angular traversal requires a quantizationWidth")
   }
 
@@ -59,13 +59,15 @@ oneToAllTraverse <- function(map,
   } else if (inherits(map, "AxialShapeGraph")) {
     return(Rcpp_axialStepDepth(map@ptr, traversalType, fromX, fromY))
   } else if (inherits(map, "SegmentShapeGraph")) {
-    tulipBins = 0;
-    if (traversalType == TraversalType$Angular &
-        !is.na(quantizationWidth)) {
-      tulipBins = as.integer(pi/quantizationWidth)
+    tulipBins <- 0L
+    if (traversalType == TraversalType$Angular
+        && !is.na(quantizationWidth)) {
+      tulipBins <- as.integer(pi / quantizationWidth)
     }
-    return(Rcpp_segmentStepDepth(map@ptr, traversalType,
-                                 fromX, fromY, tulipBins))
+    return(Rcpp_segmentStepDepth(
+      map@ptr, traversalType,
+      fromX, fromY, tulipBins
+    ))
   } else {
     stop("Can only run depth on Axial or Segment ShapeGraphs and PointMaps")
   }

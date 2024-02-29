@@ -48,7 +48,7 @@ allToAllTraverse <- function(map,
   if (!(traversalType %in% as.list(TraversalType))) {
     stop("Unknown traversalType type: ", traversalType)
   }
-  if (!is.na(quantizationWidth) & !inherits(map, "SegmentShapeGraph")) {
+  if (!is.na(quantizationWidth) && !inherits(map, "SegmentShapeGraph")) {
     stop("quantizationWidth can only be used with Segment ShapeGraphs")
   }
 
@@ -56,7 +56,7 @@ allToAllTraverse <- function(map,
     if (traversalType == TraversalType$Metric) {
       analysisResult <- list(
         completed = FALSE,
-        newAttributes = c()
+        newAttributes = vector(mode = "character")
       )
       for (radius in radii) {
         radiusAnalysisResult <- Rcpp_VGA_metric(
@@ -75,7 +75,7 @@ allToAllTraverse <- function(map,
     } else if (traversalType == TraversalType$Topological) {
       analysisResult <- list(
         completed = FALSE,
-        newAttributes = c()
+        newAttributes = vector(mode = "character")
       )
       for (radius in radii) {
         radiusAnalysisResult <- Rcpp_VGA_visualGlobal(
@@ -94,7 +94,7 @@ allToAllTraverse <- function(map,
     } else if (traversalType == TraversalType$Angular) {
       analysisResult <- list(
         completed = FALSE,
-        newAttributes = c()
+        newAttributes = vector(mode = "character")
       )
       for (radius in radii) {
         radiusAnalysisResult <- Rcpp_VGA_angular(
@@ -122,9 +122,9 @@ allToAllTraverse <- function(map,
       verbose = verbose
     ))
   } else if (inherits(map, "SegmentShapeGraph")) {
-    tulipBins <- 0
-    if (traversalType == TraversalType$Angular &
-      !is.na(quantizationWidth)) {
+    tulipBins <- 0L
+    if (traversalType == TraversalType$Angular
+        && !is.na(quantizationWidth)) {
       tulipBins <- as.integer(pi / quantizationWidth)
     }
     return(segmentAnalysis(

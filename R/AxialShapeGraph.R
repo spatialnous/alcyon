@@ -55,8 +55,9 @@ setMethod(
   "linkCoords",
   signature = c(map = "AxialShapeGraph"),
   function(map, fromX, fromY, toX, toY) {
-    Rcpp_ShapeGraph_linkCoords(map@ptr,
-                               cbind(fromX, fromY, toX, toY)
+    Rcpp_ShapeGraph_linkCoords(
+      map@ptr,
+      cbind(fromX, fromY, toX, toY)
     )
   }
 )
@@ -77,8 +78,9 @@ setMethod(
   "unlinkCoords",
   signature = c(map = "AxialShapeGraph"),
   function(map, fromX, fromY, toX, toY) {
-    Rcpp_ShapeGraph_unlinkCoords(map@ptr,
-                                 cbind(fromX, fromY, toX, toY)
+    Rcpp_ShapeGraph_unlinkCoords(
+      map@ptr,
+      cbind(fromX, fromY, toX, toY)
     )
   }
 )
@@ -97,8 +99,9 @@ setMethod(
   "linkRefs",
   signature = c(map = "AxialShapeGraph"),
   function(map, fromRef, toRef) {
-    Rcpp_ShapeGraph_linkRefs(map@ptr,
-                             cbind(fromRef, toRef)
+    Rcpp_ShapeGraph_linkRefs(
+      map@ptr,
+      cbind(fromRef, toRef)
     )
   }
 )
@@ -117,8 +120,9 @@ setMethod(
   "unlinkRefs",
   signature = c(map = "AxialShapeGraph"),
   function(map, fromRef, toRef) {
-    Rcpp_ShapeGraph_unlinkRefs(map@ptr,
-                               cbind(fromRef, toRef)
+    Rcpp_ShapeGraph_unlinkRefs(
+      map@ptr,
+      cbind(fromRef, toRef)
     )
   }
 )

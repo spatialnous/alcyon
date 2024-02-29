@@ -5,7 +5,6 @@
 context("Agent Analysis tests")
 
 test_that("Agent Analysis in C++", {
-
   pointMap <- loadInteriorLinesAsPointMap()$pointMap
 
   Rcpp_agentAnalysis(

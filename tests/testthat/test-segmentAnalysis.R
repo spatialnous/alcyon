@@ -5,7 +5,7 @@
 context("Segment Analysis tests")
 
 test_that("Segment Analysis in C++", {
-  startData <- loadSmallAxialLinesAsSegmentMap(c(1L, 2L))
+  startData <- loadSmallAxialLinesAsSegmMap(c(1L, 2L))
   lineStringMap <- startData$sf
   segmentGraph <- startData$segmentMap
 
@@ -67,7 +67,7 @@ test_that("Segment Analysis in C++", {
 
 
 test_that("Segment Analysis in R (non user-visible)", {
-  startData <- loadSmallSegmentLinesAsSegmentMap(5L)
+  startData <- loadSmallSegmLinesAsSegmMap(5L)
   lineStringMap <- startData$sf
   segmentGraph <- startData$segmentMap
 
@@ -120,7 +120,7 @@ test_that("Segment Analysis in R (non user-visible)", {
 })
 
 test_that("Segment Analysis in R (user-visible)", {
-  startData <- loadSmallAxialLinesAsSegmentMap(c(8L))
+  startData <- loadSmallAxialLinesAsSegmMap(8L)
   lineStringMap <- startData$sf
   segmentGraph <- startData$segmentMap
 
@@ -134,7 +134,7 @@ test_that("Segment Analysis in R (user-visible)", {
     traversalType = TraversalType$Angular,
     weightByAttribute = weightBy,
     includeBetweenness = TRUE,
-    quantizationWidth = pi/1024L,
+    quantizationWidth = pi / 1024L,
     verbose = FALSE,
     progress = FALSE
   )

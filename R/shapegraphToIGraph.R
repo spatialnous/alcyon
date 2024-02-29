@@ -46,8 +46,8 @@ shapegraphToIGraph <- function(shapeGraph,
   depthRef <- ogr$Depthmap_Ref
   ogr <- ogr[, c("Depthmap_Ref", names(ogr)[names(ogr) != "Depthmap_Ref"])]
   if (!is.na(weightcolumn)) {
-    edges$weight <- ((ogr[[match(refA, depthRef), weightcolumn]]) +
-                       (ogr[[match(refB, depthRef), weightcolumn]])) / 2.0
+    edges$weight <- ((ogr[[match(refA, depthRef), weightcolumn]])
+                     + (ogr[[match(refB, depthRef), weightcolumn]])) / 2.0
     graph <- graph.data.frame(
       edges,
       directed = FALSE,

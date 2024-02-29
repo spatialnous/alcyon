@@ -5,7 +5,6 @@
 context("All-line Map tests")
 
 test_that("All-line Map in C++", {
-
   shapeMap <- loadInteriorLinesAsShapeMap(vector())$shapeMap
 
   allLineMap <- Rcpp_makeAllLineMap(
@@ -57,7 +56,6 @@ test_that("All-line Map in C++", {
 })
 
 test_that("All-line Map in R", {
-
   shapeMap <- loadInteriorLinesAsShapeMap(vector())$shapeMap
 
   allLineMap <- makeAllLineMap(

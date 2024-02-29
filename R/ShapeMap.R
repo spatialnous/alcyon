@@ -38,19 +38,21 @@ setMethod(
 #' @importFrom methods as
 setAs("sf", "ShapeMap", function(from) {
   shapeMap <- new("ShapeMap")
-  cols = names(from)[names(from) != "geometry"]
-  if (length(cols) != 0) {
-    numericCols = unlist(lapply(cols, function(col) {
+  cols <- names(from)[names(from) != "geometry"]
+  if (length(cols) != 0L) {
+    numericCols <- unlist(lapply(cols, function(col) {
       is.numeric(from[[col]])
     }))
-    if (any(!numericCols)) {
-      warning("Non-numeric columns will not be transferred to ",
-              "the ShapeMap: ",
-              do.call(paste, as.list(cols[!numericCols])))
+    if (!all(numericCols)) {
+      warning(
+        "Non-numeric columns will not be transferred to ",
+        "the ShapeMap: ",
+        do.call(paste, as.list(cols[!numericCols]))
+      )
     }
     shapeMap@ptr <- Rcpp_toShapeMap(from, which(numericCols))
   } else {
-    shapeMap@ptr <- Rcpp_toShapeMap(from, c())
+    shapeMap@ptr <- Rcpp_toShapeMap(from)
   }
   return(shapeMap)
 })

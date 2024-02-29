@@ -5,7 +5,7 @@
 context("Axial Analysis tests")
 
 test_that("Axial Analysis in C++", {
-  startData <- loadSmallAxialLinesAsAxialMap(c(1L,2L))
+  startData <- loadSmallAxialLinesAsAxialMap(c(1L, 2L))
   shapeGraph <- startData$axialMap
   lineStringMap <- startData$sf
 
@@ -44,7 +44,7 @@ test_that("Axial Analysis in C++", {
 
 
 test_that("Axial Analysis in R (non user-visible)", {
-  startData <- loadSmallAxialLinesAsAxialMap(c(1L,2L))
+  startData <- loadSmallAxialLinesAsAxialMap(c(1L, 2L))
   shapeGraph <- startData$axialMap
   lineStringMap <- startData$sf
 
@@ -98,7 +98,7 @@ test_that("Axial Analysis in R (non user-visible)", {
 })
 
 test_that("Axial Analysis in R (user-visible)", {
-  startData <- loadSmallAxialLinesAsAxialMap(c(1L,2L))
+  startData <- loadSmallAxialLinesAsAxialMap(c(1L, 2L))
   shapeGraph <- startData$axialMap
   lineStringMap <- startData$sf
 
@@ -154,7 +154,7 @@ test_that("Axial Analysis in R (user-visible)", {
 
 
 test_that("Local Axial Analysis in R (user-visible)", {
-  startData <- loadSmallAxialLinesAsAxialMap(c(1L,2L))
+  startData <- loadSmallAxialLinesAsAxialMap(c(1L, 2L))
   shapeGraph <- startData$axialMap
   lineStringMap <- startData$sf
 
@@ -164,15 +164,15 @@ test_that("Local Axial Analysis in R (user-visible)", {
 
   newExpectedCols <- c(
     # TODO: these should not appear in local calculations, sala needs to change
-    'Entropy',
-    'Integration [HH]',
-    'Integration [P-value]',
-    'Integration [Tekl]',
-    'Intensity',
-    'Harmonic Mean Depth',
-    'Mean Depth',
-    'Node Count',
-    'Relativised Entropy',
+    "Entropy",
+    "Integration [HH]",
+    "Integration [P-value]",
+    "Integration [Tekl]",
+    "Intensity",
+    "Harmonic Mean Depth",
+    "Mean Depth",
+    "Node Count",
+    "Relativised Entropy",
     # TODO: remove above from axial analysis in sala
     "Control",
     "Controllability"
@@ -194,6 +194,4 @@ test_that("Local Axial Analysis in R (user-visible)", {
   )
 
   expect_named(axialMap, c(expectedCols, "geometry"))
-
-
 })

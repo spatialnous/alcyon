@@ -19,20 +19,23 @@ loadTestDataMap <- function(folder, file, keepAttributeIdx = NULL) {
 
 loadInteriorLinesAsSf <- function(keepAttributeIdx = NULL) {
   return(list(
-    sf = loadTestDataMap("gallery",
-                         "gallery_lines.mif",
-                         keepAttributeIdx)))
+    sf = loadTestDataMap(
+      "gallery",
+      "gallery_lines.mif",
+      keepAttributeIdx
+    )
+  ))
 }
 
 loadInteriorLinesAsShapeMap <- function(keepAttributeIdx = NULL) {
-  map = loadInteriorLinesAsSf(keepAttributeIdx)
-  map[["shapeMap"]] = as(map$sf, "ShapeMap")
+  map <- loadInteriorLinesAsSf(keepAttributeIdx)
+  map[["shapeMap"]] <- as(map$sf, "ShapeMap")
   return(map)
 }
 
 loadInteriorLinesAsPointMap <- function(keepAttributeIdx = NULL) {
   map <- loadInteriorLinesAsSf(keepAttributeIdx)
-  map[["pointMap"]] = makeVGAPointMap(
+  map[["pointMap"]] <- makeVGAPointMap(
     map$sf,
     gridSize = 0.04,
     fillX = 3.01,
@@ -46,26 +49,29 @@ loadInteriorLinesAsPointMap <- function(keepAttributeIdx = NULL) {
 
 loadSmallAxialLinesAsSf <- function(keepAttributeIdx = NULL) {
   return(list(
-    sf = loadTestDataMap("barnsbury",
-                         "barnsbury_small_axial.mif",
-                         keepAttributeIdx)))
+    sf = loadTestDataMap(
+      "barnsbury",
+      "barnsbury_small_axial.mif",
+      keepAttributeIdx
+    )
+  ))
 }
 
 loadSmallAxialLinesAsShapeMap <- function(keepAttributeIdx = NULL) {
-  map = loadSmallAxialLinesAsSf(keepAttributeIdx)
-  map[["shapeMap"]] = as(map$sf, "ShapeMap")
+  map <- loadSmallAxialLinesAsSf(keepAttributeIdx)
+  map[["shapeMap"]] <- as(map$sf, "ShapeMap")
   return(map)
 }
 
 loadSmallAxialLinesAsAxialMap <- function(keepAttributeIdx = NULL) {
-  map = loadSmallAxialLinesAsSf(keepAttributeIdx)
-  map[["axialMap"]] = as(map$sf, "AxialShapeGraph")
+  map <- loadSmallAxialLinesAsSf(keepAttributeIdx)
+  map[["axialMap"]] <- as(map$sf, "AxialShapeGraph")
   return(map)
 }
 
-loadSmallAxialLinesAsSegmentMap <- function(keepAttributeIdx = NULL) {
-  map = loadSmallAxialLinesAsAxialMap(keepAttributeIdx)
-  map[["segmentMap"]] = axialToSegmentShapeGraph(
+loadSmallAxialLinesAsSegmMap <- function(keepAttributeIdx = NULL) {
+  map <- loadSmallAxialLinesAsAxialMap(keepAttributeIdx)
+  map[["segmentMap"]] <- axialToSegmentShapeGraph(
     map$axialMap,
     stubRemoval = 0.4
   )
@@ -74,20 +80,26 @@ loadSmallAxialLinesAsSegmentMap <- function(keepAttributeIdx = NULL) {
 
 loadSmallSegmentLinesAsSf <- function(keepAttributeIdx = NULL) {
   return(list(
-    sf = loadTestDataMap("barnsbury",
-                         "barnsbury_small_segment.mif",
-                         keepAttributeIdx)))
+    sf = loadTestDataMap(
+      "barnsbury",
+      "barnsbury_small_segment.mif",
+      keepAttributeIdx
+    )
+  ))
 }
 
-loadSmallSegmentLinesAsSegmentMap <- function(keepAttributeIdx = NULL) {
-  map = loadSmallSegmentLinesAsSf(keepAttributeIdx)
-  map[["segmentMap"]] = as(map$sf, "SegmentShapeGraph")
+loadSmallSegmLinesAsSegmMap <- function(keepAttributeIdx = NULL) {
+  map <- loadSmallSegmentLinesAsSf(keepAttributeIdx)
+  map[["segmentMap"]] <- as(map$sf, "SegmentShapeGraph")
   return(map)
 }
 
 loadInteriorPolygonsAsSf <- function(keepAttributeIdx = NULL) {
   return(list(
-    sf = loadTestDataMap("gallery",
-                         "gallery_polys.mif",
-                         keepAttributeIdx)))
+    sf = loadTestDataMap(
+      "gallery",
+      "gallery_polys.mif",
+      keepAttributeIdx
+    )
+  ))
 }

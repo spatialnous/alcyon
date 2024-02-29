@@ -33,26 +33,28 @@ shapeGraph <- axialToSegmentShapeGraph(
 
 ```{r}
 segMap <- as(shapeGraph, "sf")
-for (column in names(segMap))
+for (column in names(segMap)) {
   plot(segMap[, column])
+}
 ```
 
 ```{r}
-segmentResult = allToAllTraverse(
+segmentResult <- allToAllTraverse(
   shapeGraph,
   radii = c("n", "200"),
   radiusTraversalType = TraversalType$Metric,
   traversalType = TraversalType$Angular,
-  quantizationWidth = pi/1024,
+  quantizationWidth = pi / 1024,
   includeBetweenness = FALSE
 )
 segMap <- as(shapeGraph, "sf")
-for (column in segmentResult$newAttributes)
+for (column in segmentResult$newAttributes) {
   plot(segMap[, column])
+}
 ```
 
 ```{r}
-segmentResult = allToAllTraverse(
+segmentResult <- allToAllTraverse(
   shapeGraph,
   radii = c("n", "100"),
   radiusTraversalType = TraversalType$Topological,
@@ -60,12 +62,13 @@ segmentResult = allToAllTraverse(
   includeBetweenness = FALSE
 )
 segMap <- as(shapeGraph, "sf")
-for (column in segmentResult$newAttributes)
+for (column in segmentResult$newAttributes) {
   plot(segMap[, column])
+}
 ```
 
 ```{r}
-segmentResult = allToAllTraverse(
+segmentResult <- allToAllTraverse(
   shapeGraph,
   radii = c("n", "200"),
   radiusTraversalType = TraversalType$Metric,
@@ -73,45 +76,52 @@ segmentResult = allToAllTraverse(
   includeBetweenness = FALSE
 )
 segMap <- as(shapeGraph, "sf")
-for (column in segmentResult$newAttributes)
+for (column in segmentResult$newAttributes) {
   plot(segMap[, column])
+}
 ```
 
 ```{r}
-depthResult = oneToAllTraverse(
+depthResult <- oneToAllTraverse(
   shapeGraph,
   traversalType = TraversalType$Topological,
   fromX = 530684,
-  fromY = 184100.3)
+  fromY = 184100.3
+)
 
 segMap <- as(shapeGraph, "sf")
-for (column in depthResult$newAttributes)
+for (column in depthResult$newAttributes) {
   plot(segMap[, column])
+}
 ```
 
 ```{r}
-depthResult = oneToAllTraverse(
+depthResult <- oneToAllTraverse(
   shapeGraph,
   traversalType = TraversalType$Metric,
   fromX = 530684,
-  fromY = 184100.3)
+  fromY = 184100.3
+)
 
 segMap <- as(shapeGraph, "sf")
-for (column in depthResult$newAttributes)
+for (column in depthResult$newAttributes) {
   plot(segMap[, column])
+}
 ```
 
 ```{r}
-depthResult = oneToAllTraverse(
+depthResult <- oneToAllTraverse(
   shapeGraph,
   traversalType = TraversalType$Angular,
   fromX = 530684,
   fromY = 184100.3,
-  quantizationWidth = pi/1024)
+  quantizationWidth = pi / 1024
+)
 
 segMap <- as(shapeGraph, "sf")
-for (column in depthResult$newAttributes)
+for (column in depthResult$newAttributes) {
   plot(segMap[, column])
+}
 ```
 
 

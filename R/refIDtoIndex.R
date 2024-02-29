@@ -12,12 +12,12 @@
 #' @param j The y-axis index of the cell
 #' @returns A pair of indices (x, y) or a Ref ID
 #' @examples
-#' idx = refIDtoIndex(852645)
+#' idx <- refIDtoIndex(852645)
 #' # outputs:
 #' #    i   j
 #' # 1 13 677
 #'
-#' idx = indexToRefID(13, 667)
+#' idx <- indexToRefID(13, 667)
 #' # outputs:
 #' # 852645
 #' @rdname refIdToIndexAndBack

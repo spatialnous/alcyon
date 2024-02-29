@@ -131,7 +131,7 @@ test_that("sf linestrings to Segment Map and back", {
 
 test_that("sf polygons to Shape Map and back", {
   polyMap <- loadInteriorPolygonsAsSf()$sf
-  shapeMap <- as(polyMap[c()], "ShapeMap")
+  shapeMap <- as(polyMap[vector()], "ShapeMap")
   polygons <- shapeMapToPolygonSf(shapeMap)
 
   expect_equal(st_area(polygons[1L, ]), 0.285, tolerance = 0.0001)

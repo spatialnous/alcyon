@@ -46,9 +46,9 @@ axialAnalysis <- function(shapeGraph,
 axialAnalysisLocal <- function(
     shapeGraph,
     verbose = FALSE) {
-  return (axialAnalysis(
+  return(axialAnalysis(
     shapeGraph = shapeGraph,
-    radii = c("n"),
+    radii = "n",
     weightByAttribute = "",
     includeChoice = FALSE,
     includeLocal = TRUE,

@@ -15,10 +15,12 @@
 axialToSegmentShapeGraph <- function(axialShapeGraph,
                                      stubRemoval = NULL) {
   shapeGraph <- new("SegmentShapeGraph")
-  shapeGraph@ptr <- Rcpp_axialToSegment(axialShapeGraph@ptr,
-                                        "Segment Map",
-                                        TRUE,
-                                        stubRemoval)
+  shapeGraph@ptr <- Rcpp_axialToSegment(
+    axialShapeGraph@ptr,
+    "Segment Map",
+    TRUE,
+    stubRemoval
+  )
   return(shapeGraph)
 }
 

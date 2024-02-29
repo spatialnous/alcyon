@@ -24,9 +24,7 @@ test_that("VGA in C++", {
 
   vgaResult <- Rcpp_VGA_throughVision(pointMap@ptr)
 
-  newExpectedCols <- c(
-    "Through vision"
-  )
+  newExpectedCols <- "Through vision"
   expect_identical(vgaResult$newAttributes, newExpectedCols)
 
   coords <- Rcpp_PointMap_getFilledPoints(pointMapPtr = pointMap@ptr)
@@ -111,7 +109,7 @@ test_that("VGA in C++", {
   expect_identical(colnames(coords), expectedCols)
 
   boundaryMap <- as(lineStringMap, "ShapeMap")
-  vgaResult = Rcpp_VGA_isovist(pointMap@ptr, boundaryMap@ptr)
+  vgaResult <- Rcpp_VGA_isovist(pointMap@ptr, boundaryMap@ptr)
 
   newExpectedCols <- c(
     "Isovist Area",
@@ -155,9 +153,7 @@ test_that("VGA in R", {
 
   vgaResult <- vgaThroughVision(pointMap)
 
-  newExpectedCols <- c(
-    "Through vision"
-  )
+  newExpectedCols <- "Through vision"
   expect_identical(vgaResult$newAttributes, newExpectedCols)
 
   coords <- Rcpp_PointMap_getFilledPoints(pointMapPtr = pointMap@ptr)
@@ -169,9 +165,10 @@ test_that("VGA in R", {
   expect_identical(colnames(coords), expectedCols)
 
   vgaResult <- allToAllTraverse(pointMap,
-                                traversalType = TraversalType$Angular,
-                                radii = -1,
-                                radiusTraversalType = TraversalType$None)
+    traversalType = TraversalType$Angular,
+    radii = -1L,
+    radiusTraversalType = TraversalType$None
+  )
 
   newExpectedCols <- c(
     "Angular Mean Depth",
@@ -189,9 +186,10 @@ test_that("VGA in R", {
   expect_identical(colnames(coords), expectedCols)
 
   vgaResult <- allToAllTraverse(pointMap,
-                                traversalType = TraversalType$Metric,
-                                radii = -1,
-                                radiusTraversalType = TraversalType$None)
+    traversalType = TraversalType$Metric,
+    radii = -1L,
+    radiusTraversalType = TraversalType$None
+  )
 
   newExpectedCols <- c(
     "Metric Mean Shortest-Path Angle",
@@ -210,9 +208,10 @@ test_that("VGA in R", {
   expect_identical(colnames(coords), expectedCols)
 
   vgaResult <- allToAllTraverse(pointMap,
-                                traversalType = TraversalType$Topological,
-                                radii = -1,
-                                radiusTraversalType = TraversalType$None)
+    traversalType = TraversalType$Topological,
+    radii = -1L,
+    radiusTraversalType = TraversalType$None
+  )
 
   newExpectedCols <- c(
     "Visual Entropy",

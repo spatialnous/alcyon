@@ -41,9 +41,8 @@ createGrid <- function(minX,
 blockLines <- function(pointMap,
                        lineStringMap,
                        verbose = FALSE) {
-
   boundaryMap <- lineStringMap
-  if(!inherits(lineStringMap, "ShapeMap")) {
+  if (!inherits(lineStringMap, "ShapeMap")) {
     boundaryMap <- as(lineStringMap, "ShapeMap")
   }
   Rcpp_PointMap_blockLines(
@@ -120,7 +119,7 @@ makeVGAPointMap <- function(lineStringMap,
 
   blockLines(
     pointMap = pointMap,
-    lineStringMap = lineStringMap[c()]
+    lineStringMap = lineStringMap[vector()]
   )
 
   fillGrid(

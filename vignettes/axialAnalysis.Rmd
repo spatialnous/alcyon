@@ -29,29 +29,33 @@ shapeGraph <- as(lineStringMap, "AxialShapeGraph")
 
 ```{r}
 axMap <- as(shapeGraph, "sf")
-for (column in names(axMap))
+for (column in names(axMap)) {
   plot(axMap[, column])
+}
 ```
 
 ```{r}
-axialResult = allToAllTraverse(
+axialResult <- allToAllTraverse(
   shapeGraph,
   traversalType = TraversalType$Topological,
   radii = c("n", "3"),
   includeBetweenness = TRUE
 )
 axMap <- as(shapeGraph, "sf")
-for (column in axialResult$newAttributes)
+for (column in axialResult$newAttributes) {
   plot(axMap[, column])
+}
 ```
 ```{r}
-depthResult = oneToAllTraverse(
+depthResult <- oneToAllTraverse(
   shapeGraph,
   traversalType = TraversalType$Topological,
   fromX = 530684,
-  fromY = 184100.3)
+  fromY = 184100.3
+)
 
 axMap <- as(shapeGraph, "sf")
-for (column in depthResult$newAttributes)
+for (column in depthResult$newAttributes) {
   plot(axMap[, column])
+}
 ```

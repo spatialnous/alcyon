@@ -39,95 +39,107 @@ plot(vgaMap["Connectivity"])
 ```
 
 ```{r}
-vgaResult = allToAllTraverse(
+vgaResult <- allToAllTraverse(
   pointMap,
   traversalType = TraversalType$Metric,
   radii = -1,
   radiusTraversalType = TraversalType$None
 )
 vgaMap <- as(pointMap, "SpatialPixelsDataFrame")
-for (column in vgaResult$newAttributes)
-  plot(vgaMap[column], main=column)
+for (column in vgaResult$newAttributes) {
+  plot(vgaMap[column], main = column)
+}
 ```
 
 ```{r}
-vgaResult = allToAllTraverse(
+vgaResult <- allToAllTraverse(
   pointMap,
   traversalType = TraversalType$Angular,
   radii = -1,
   radiusTraversalType = TraversalType$None
 )
 vgaMap <- as(pointMap, "SpatialPixelsDataFrame")
-for (column in vgaResult$newAttributes)
-  plot(vgaMap[column], main=column)
+for (column in vgaResult$newAttributes) {
+  plot(vgaMap[column], main = column)
+}
 ```
 
 
 ```{r}
-vgaResult = allToAllTraverse(
+vgaResult <- allToAllTraverse(
   pointMap,
   traversalType = TraversalType$Topological,
   radii = -1,
   radiusTraversalType = TraversalType$None
 )
 vgaMap <- as(pointMap, "SpatialPixelsDataFrame")
-for (column in vgaResult$newAttributes)
-  plot(vgaMap[column], main=column)
+for (column in vgaResult$newAttributes) {
+  plot(vgaMap[column], main = column)
+}
 ```
 
 ```{r}
-vgaResult = vgaThroughVision(pointMap)
+vgaResult <- vgaThroughVision(pointMap)
 vgaMap <- as(pointMap, "SpatialPixelsDataFrame")
-for (column in vgaResult$newAttributes)
-  plot(vgaMap[column], main=column)
+for (column in vgaResult$newAttributes) {
+  plot(vgaMap[column], main = column)
+}
 ```
 
 ```{r}
-vgaResult = vgaVisualLocal(pointMap, FALSE)
+vgaResult <- vgaVisualLocal(pointMap, FALSE)
 vgaMap <- as(pointMap, "SpatialPixelsDataFrame")
-for (column in vgaResult$newAttributes)
-  plot(vgaMap[column], main=column)
+for (column in vgaResult$newAttributes) {
+  plot(vgaMap[column], main = column)
+}
 ```
 
 ```{r}
 boundaryMap <- as(galleryMap, "ShapeMap")
-vgaResult = vgaIsovist(pointMap, boundaryMap)
+vgaResult <- vgaIsovist(pointMap, boundaryMap)
 vgaMap <- as(pointMap, "SpatialPixelsDataFrame")
-for (column in vgaResult$newAttributes)
-  plot(vgaMap[column], main=column)
+for (column in vgaResult$newAttributes) {
+  plot(vgaMap[column], main = column)
+}
 ```
 
 ```{r}
-vgaResult = oneToAllTraverse(
+vgaResult <- oneToAllTraverse(
   pointMap,
   traversalType = TraversalType$Metric,
   fromX = 3.01,
-  fromY = 6.7)
+  fromY = 6.7
+)
 vgaMap <- as(pointMap, "SpatialPixelsDataFrame")
-for (column in vgaResult$newAttributes)
-  plot(vgaMap[column], main=column)
+for (column in vgaResult$newAttributes) {
+  plot(vgaMap[column], main = column)
+}
 ```
 
 
 ```{r}
-vgaResult = oneToAllTraverse(
+vgaResult <- oneToAllTraverse(
   pointMap,
   traversalType = TraversalType$Angular,
   fromX = 3.01,
-  fromY = 6.7)
+  fromY = 6.7
+)
 vgaMap <- as(pointMap, "SpatialPixelsDataFrame")
-for (column in vgaResult$newAttributes)
-  plot(vgaMap[column], main=column)
+for (column in vgaResult$newAttributes) {
+  plot(vgaMap[column], main = column)
+}
 ```
 
 
 ```{r}
-vgaResult = oneToAllTraverse(
+vgaResult <- oneToAllTraverse(
   pointMap,
   traversalType = TraversalType$Topological,
   fromX = 3.01,
-  fromY = 6.7)
+  fromY = 6.7
+)
 vgaMap <- as(pointMap, "SpatialPixelsDataFrame")
-for (column in vgaResult$newAttributes)
-  plot(vgaMap[column], main=column)
+for (column in vgaResult$newAttributes) {
+  plot(vgaMap[column], main = column)
+}
 ```

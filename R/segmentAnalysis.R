@@ -9,7 +9,7 @@ segmentAnalysis <- function(segmentGraph,
                             analysisStepType,
                             weightWithColumn = NULL,
                             includeChoice = FALSE,
-                            tulipBins = 0,
+                            tulipBins = 0L,
                             verbose = FALSE,
                             selOnly = FALSE,
                             progress = FALSE) {

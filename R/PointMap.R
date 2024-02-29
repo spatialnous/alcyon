@@ -45,7 +45,6 @@ setMethod(
   "connections",
   signature = c(map = "PointMap"),
   function(map) {
-    # Rcpp_PointMap_getConnections(x@ptr)
     stop("Unimplemented")
   }
 )
@@ -61,7 +60,7 @@ setMethod(
   "links",
   signature = c(map = "PointMap"),
   function(map) {
-    # Rcpp_PointMap_getLinks(map@ptr)
+    stop("Unimplemented")
   }
 )
 
@@ -81,8 +80,9 @@ setMethod(
   "linkCoords",
   signature = c(map = "PointMap"),
   function(map, fromX, fromY, toX, toY) {
-    Rcpp_PointMap_linkCoords(map@ptr,
-                             cbind(fromX, fromY, toX, toY)
+    Rcpp_PointMap_linkCoords(
+      map@ptr,
+      cbind(fromX, fromY, toX, toY)
     )
   }
 )
@@ -103,8 +103,9 @@ setMethod(
   "unlinkCoords",
   signature = c(map = "PointMap"),
   function(map, fromX, fromY, toX, toY) {
-    Rcpp_PointMap_unlinkCoords(map@ptr,
-                               cbind(fromX, fromY, toX, toY)
+    Rcpp_PointMap_unlinkCoords(
+      map@ptr,
+      cbind(fromX, fromY, toX, toY)
     )
   }
 )
@@ -123,8 +124,9 @@ setMethod(
   "linkRefs",
   signature = c(map = "PointMap"),
   function(map, fromRef, toRef) {
-    Rcpp_PointMap_linkRefs(map@ptr,
-                           cbind(fromRef, toRef)
+    Rcpp_PointMap_linkRefs(
+      map@ptr,
+      cbind(fromRef, toRef)
     )
   }
 )
@@ -143,8 +145,9 @@ setMethod(
   "unlinkRefs",
   signature = c(map = "PointMap"),
   function(map, fromRef, toRef) {
-    Rcpp_PointMap_unlinkRefs(map@ptr,
-                             cbind(fromRef, toRef)
+    Rcpp_PointMap_unlinkRefs(
+      map@ptr,
+      cbind(fromRef, toRef)
     )
   }
 )
@@ -161,8 +164,10 @@ setMethod(
 setAs("PointMap", "SpatialPixelsDataFrame", function(from) {
   coords <- Rcpp_PointMap_getFilledPoints(pointMapPtr = from@ptr)
   map <- SpatialPointsDataFrame(coords[, c(1L, 2L)],
-                                data = data.frame(coords,
-                                                  check.names = FALSE))
+    data = data.frame(coords,
+      check.names = FALSE
+    )
+  )
   gridded(map) <- TRUE
   return(map)
 })
