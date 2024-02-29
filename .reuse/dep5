@@ -3,6 +3,6 @@ Upstream-Name: alcyon
 Upstream-Contact: Petros Koutsolampros <commits@pklampros.io>
 Source: https://github.com/acanth-id/alcyon
 
-Files: .github/*.yml .Rbuildignore .gitignore .gitmodules .lintr DESCRIPTION README.md alcyon.Rproj inst/CITATION
+Files: .github/*.yml .Rbuildignore .gitignore .gitmodules .lintr DESCRIPTION README.md alcyon.Rproj inst/CITATION man/*.Rd NAMESPACE vignettes/.gitignore
 Copyright: Petros Koutsolampros <commits@pklampros.io>
 License: GPL-3.0-or-later
