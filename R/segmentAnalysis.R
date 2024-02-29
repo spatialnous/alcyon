@@ -9,14 +9,14 @@ segmentAnalysis <- function(segmentGraph,
                             analysisStepType,
                             weightWithColumn = NULL,
                             includeChoice = FALSE,
-                            tulipBins = NA,
+                            tulipBins = 0,
                             verbose = FALSE,
                             selOnly = FALSE,
                             progress = FALSE) {
-  if (!(analysisStepType %in% Traversal)) {
+  if (!(analysisStepType %in% as.list(TraversalType))) {
     stop("Unknown segment analysis type: ", analysisStepType)
   }
-  if (!(radiusStepType %in% Traversal)) {
+  if (!(radiusStepType %in% as.list(TraversalType))) {
     stop("Unknown radius type: ", radiusStepType)
   }
 
@@ -40,66 +40,4 @@ segmentAnalysis <- function(segmentGraph,
     selOnly,
     progress
   ))
-}
-
-segmentAnalysisSf <- function(lineStringMap,
-                              radii,
-                              radiusStepType,
-                              analysisStepType,
-                              weightWithColumn = NULL,
-                              includeChoice = FALSE,
-                              tulipBins = NA,
-                              keepAttributes = NULL,
-                              throughAxial = TRUE,
-                              verbose = FALSE,
-                              selOnly = FALSE,
-                              progress = FALSE) {
-  weightByIdx <- NULL
-  if (weightWithColumn != "" && !is.null(weightWithColumn)) {
-    weightByIdx <- which(names(lineStringMap) == weightWithColumn)[[1L]]
-  }
-
-  keepAttributesFinal <- NULL
-  if (!is.null(keepAttributes)) {
-    keepAttributesFinal <- keepAttributes
-  }
-  if (!is.null(weightByIdx) && !(weightByIdx %in% keepAttributesFinal)) {
-    if (is.null(keepAttributesFinal)) {
-      keepAttributesFinal <- weightByIdx
-    } else {
-      keepAttributesFinal <- c(keepAttributesFinal, weightByIdx)
-    }
-  }
-  segmentGraph <- sfToSegmentShapeGraph(
-    lineStringMap,
-    keepAttributesFinal,
-    throughAxial = throughAxial
-  )
-
-  expectdAttrName <- NULL
-  if (!is.null(weightByIdx)) {
-    if (throughAxial) {
-      expectdAttrName <- Rcpp_getAxialToSegmentExpectedColName(
-        Rcpp_getSfShapeMapExpectedColName(lineStringMap, weightByIdx)
-      )
-    } else {
-      expectdAttrName <-
-        Rcpp_getSfShapeMapExpectedColName(lineStringMap, weightByIdx)
-    }
-  }
-
-  segmentAnalysis(
-    segmentGraph,
-    radii,
-    radiusStepType,
-    analysisStepType,
-    expectdAttrName,
-    includeChoice,
-    tulipBins,
-    verbose,
-    selOnly,
-    progress
-  )
-
-  return(segmentShapeGraphToSf(segmentGraph))
 }

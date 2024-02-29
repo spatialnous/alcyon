@@ -1,17 +1,32 @@
 # SPDX-FileCopyrightText: 2019 Fani Kostourou
-# SPDX-FileCopyrightText: 2019 Petros Koutsolampros
+# SPDX-FileCopyrightText: 2019-2024 Petros Koutsolampros
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-shapegraphToIGraph <- function(graphFile,
+#' Conversion of shapegraph to igraph
+#'
+#' Creates igraph based on the connections and the x,y coordinates of the
+#' centroids of shapes in a shapegraph (axial,segment, convex). Specify
+#' weightcolumn to assign weight to graph edges.
+#'
+#' If weightcolumn is provided, edge connections weight is calculated by taking
+#' the average of the variable of the connected nodes.
+#'
+#' @param shapeGraph A ShapeGraph
+#' @param weightcolumn Optional.The variable used to assign weight to graph
+#' edges
+#' @importFrom igraph graph.data.frame E E<-
+#' @importFrom sf st_drop_geometry
+#' @returns Returns graph.data.frame.
+shapegraphToIGraph <- function(shapeGraph,
                                weightcolumn = NA) {
-  ogr <- getShapeGraph(graphFile)
-  linksunlinks <- getShapeGraphLinksUnlinks(graphFile)
+  ogr <- shapeGraph
+  linksunlinks <- links(shapeGraph)
   links <- linksunlinks[linksunlinks$link == 1L, ]
   links <- links[, c("refA", "refB")]
   unlinks <- linksunlinks[linksunlinks$link == 0L, ]
   unlinks <- unlinks[, c("refA", "refB")]
-  connections <- alcyon::getShapeGraphConnections(graphFile)
+  connections <- connections(shapeGraph)
   if (nrow(connections) == 0L) {
     edges <- links
   } else {

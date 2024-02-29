@@ -53,53 +53,53 @@ bool makeBSPtree(Communicator *communicator,
 
 std::set<std::string> setIsovistData(Isovist &isovist, AttributeTable &table,
                                      AttributeRow &row, bool simple_version) {
-  std::set<std::string> newColumns;
+  std::set<std::string> newAttributes;
   auto [centroid, area] = isovist.getCentroidArea();
   auto [driftmag, driftang] = isovist.getDriftData();
   double perimeter = isovist.getPerimeter();
 
   std::string colText = "Isovist Area";
   int col = table.getOrInsertColumn(colText);
-  newColumns.insert(colText);
+  newAttributes.insert(colText);
   row.setValue(col, float(area));
 
   if (!simple_version) {
     colText = "Isovist Compactness";
     col = table.getOrInsertColumn(colText);
-    newColumns.insert(colText);
+    newAttributes.insert(colText);
     row.setValue(col, float(4.0 * M_PI * area / (perimeter * perimeter)));
 
     colText = "Isovist Drift Angle";
     col = table.getOrInsertColumn(colText);
-    newColumns.insert(colText);
+    newAttributes.insert(colText);
     row.setValue(col, float(180.0 * driftang / M_PI));
 
     colText = "Isovist Drift Magnitude";
     col = table.getOrInsertColumn(colText);
-    newColumns.insert(colText);
+    newAttributes.insert(colText);
     row.setValue(col, float(driftmag));
 
     colText = "Isovist Min Radial";
     col = table.getOrInsertColumn(colText);
-    newColumns.insert(colText);
+    newAttributes.insert(colText);
     row.setValue(col, float(isovist.getMinRadial()));
 
     colText = "Isovist Max Radial";
     col = table.getOrInsertColumn(colText);
-    newColumns.insert(colText);
+    newAttributes.insert(colText);
     row.setValue(col, float(isovist.getMaxRadial()));
 
     colText = "Isovist Occlusivity";
     col = table.getOrInsertColumn(colText);
-    newColumns.insert(colText);
+    newAttributes.insert(colText);
     row.setValue(col, float(isovist.getOccludedPerimeter()));
 
     colText = "Isovist Perimeter";
     col = table.getOrInsertColumn(colText);
-    newColumns.insert(colText);
+    newAttributes.insert(colText);
     row.setValue(col, float(perimeter));
   }
-  return newColumns;
+  return newAttributes;
 }
 
 // [[Rcpp::export("Rcpp_makeIsovists")]]

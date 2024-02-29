@@ -5,14 +5,9 @@
 context("PointMap tests")
 
 test_that("PointMaps in C++", {
-  lineStringMap <- st_read(
-    system.file(
-      "extdata", "testdata", "gallery",
-      "gallery_lines.mif",
-      package = "alcyon"
-    ),
-    geometry_column = 1L, quiet = TRUE
-  )
+  startData <- loadInteriorLinesAsShapeMap(vector())
+  lineStringMap <- startData$sf
+  boundaryMap <- startData$shapeMap
 
   mapRegion <- sf::st_bbox(lineStringMap)
 
@@ -25,10 +20,6 @@ test_that("PointMaps in C++", {
     0.04
   )
 
-  boundaryMap <- sfToShapeMap(
-    lineStringMap,
-    keepAttributes = vector(mode = "integer")
-  )
 
   Rcpp_PointMap_blockLines(
     pointMapPtr = pointMap@ptr,
@@ -57,14 +48,7 @@ test_that("PointMaps in C++", {
 })
 
 test_that("PointMaps in R", {
-  lineStringMap <- st_read(
-    system.file(
-      "extdata", "testdata", "gallery",
-      "gallery_lines.mif",
-      package = "alcyon"
-    ),
-    geometry_column = 1L, quiet = TRUE
-  )
+  lineStringMap <- loadInteriorLinesAsSf()$sf
 
   pointMap <- makeVGAPointMap(lineStringMap,
     gridSize = 0.04,

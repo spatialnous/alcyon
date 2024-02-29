@@ -5,22 +5,11 @@
 context("All-line Map tests")
 
 test_that("All-line Map in C++", {
-  boundsMap <- st_read(
-    system.file(
-      "extdata", "testdata", "gallery",
-      "gallery_lines.mif",
-      package = "alcyon"
-    ),
-    geometry_column = 1L, quiet = TRUE
-  )
 
-  shapeGraph <- sfToShapeMap(
-    boundsMap,
-    keepAttributes = vector(mode = "integer")
-  )
+  shapeMap <- loadInteriorLinesAsShapeMap(vector())$shapeMap
 
   allLineMap <- Rcpp_makeAllLineMap(
-    shapeGraph@ptr,
+    shapeMap@ptr,
     seedX = 3.01,
     seedY = 6.7
   )
@@ -68,42 +57,29 @@ test_that("All-line Map in C++", {
 })
 
 test_that("All-line Map in R", {
-  boundsMap <- st_read(
-    system.file(
-      "extdata", "testdata", "gallery",
-      "gallery_lines.mif",
-      package = "alcyon"
-    ),
-    geometry_column = 1L, quiet = TRUE
-  )
 
-  shapeMap <- sfToShapeMap(
-    boundsMap,
-    keepAttributes = vector(mode = "integer")
-  )
-  result <- allFewestLineMap(
+  shapeMap <- loadInteriorLinesAsShapeMap(vector())$shapeMap
+
+  allLineMap <- makeAllLineMap(
     shapeMap,
     seedX = 3.01,
-    seedY = 6.7,
-    calculateFewest = TRUE
+    seedY = 6.7
   )
+  allLineMapSf <- as(allLineMap, "sf")
 
-  allLineMap <- result[["All Line Map"]]
-  fewestSubsets <- result[["Fewest-Line Map (Subsets)"]]
-  fewestMinimal <- result[["Fewest-Line Map (Minimal)"]]
+  fewestMaps <- reduceToFewest(allLineMap)
+  fewestSubsets <- as(fewestMaps[["Fewest-Line Map (Subsets)"]], "sf")
+  fewestMinimal <- as(fewestMaps[["Fewest-Line Map (Minimal)"]], "sf")
 
   # All line
-
-  expect_length(colnames(allLineMap), 4L)
-  expect_identical(nrow(allLineMap), 1874L)
+  expect_length(colnames(allLineMapSf), 4L)
+  expect_identical(nrow(allLineMapSf), 1874L)
 
   # Fewest (Subsets)
-
   expect_length(colnames(fewestSubsets), 4L)
   expect_identical(nrow(fewestSubsets), 46L)
 
   # Fewest (Minimal)
-
   expect_length(colnames(fewestMinimal), 4L)
   expect_identical(nrow(fewestMinimal), 26L)
 })

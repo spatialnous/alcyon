@@ -14,7 +14,7 @@
 #include "salalib/segmmodules/segmmetricpd.h"
 
 #include "communicator.h"
-#include "traversal.h"
+#include "TraversalType.h"
 
 #include <Rcpp.h>
 
@@ -39,7 +39,7 @@ Rcpp::List runSegmentAnalysis(
     if (includeChoiceNV.isNotNull()) {
         includeChoice = Rcpp::as<bool>(includeChoiceNV);
     }
-    int tulipBins = 1024;
+    int tulipBins = 0;
     if (tulipBinsNV.isNotNull()) {
         tulipBins = Rcpp::as<int>(tulipBinsNV);
     }
@@ -76,10 +76,10 @@ Rcpp::List runSegmentAnalysis(
             }
         }
         if (weightedMeasureColIdx == -1) {
-            throw depthmapX::RuntimeException("Given attribute (" +
-                                              weightedMeasureColName +
-                                              ") does not exist in " +
-                                              "currently selected map");
+            Rcpp::stop("Given attribute (" +
+                weightedMeasureColName +
+                ") does not exist in " +
+                "currently selected map");
         }
     }
 
@@ -87,8 +87,8 @@ Rcpp::List runSegmentAnalysis(
     std::map<double, std::string> radiusSuffixes;
     radiusSuffixes[-1] = "";
 
-    switch (static_cast<Traversal>(radiusStepType)) {
-    case Traversal::Topological: {
+    switch (static_cast<TraversalType>(radiusStepType)) {
+    case TraversalType::Topological: {
         int radiusType = Options::RADIUS_STEPS;
         for (auto radius: radii) {
             if (radius != -1) {
@@ -97,7 +97,7 @@ Rcpp::List runSegmentAnalysis(
         }
         break;
     }
-    case Traversal::Metric: {
+    case TraversalType::Metric: {
         radiusType = Options::RADIUS_METRIC;
         for (auto radius: radii) {
             if (radius != -1) {
@@ -107,7 +107,7 @@ Rcpp::List runSegmentAnalysis(
         }
         break;
     }
-    case Traversal::Angular: {
+    case TraversalType::Angular: {
         radiusType = Options::RADIUS_ANGULAR;
         for (auto radius: radii) {
             if (radius != -1) {
@@ -117,7 +117,7 @@ Rcpp::List runSegmentAnalysis(
         break;
     }
     default:
-        throw depthmapX::RuntimeException("No radius analysis type given");
+        Rcpp::stop("No radius analysis type given");
     }
 
     Rcpp::List result = Rcpp::List::create(
@@ -127,45 +127,55 @@ Rcpp::List runSegmentAnalysis(
 
     try {
         AnalysisResult analysisResult;
-        switch (static_cast<Traversal>(analysisStepType)) {
-        case Traversal::Tulip: {
-            analysisResult =
-                SegmentTulip(radius_set, selOnly,
-                             tulipBins, weightedMeasureColIdx,
-                             radiusType, includeChoice).run(
-                                     getCommunicator(progress).get(),
-                                     *shapeGraph, false /* interactive */);
-            break;
+        switch (static_cast<TraversalType>(analysisStepType)) {
+        case TraversalType::Angular: {
+            if (tulipBins > 0) {
+                analysisResult =
+                    SegmentTulip(radius_set, selOnly,
+                                 tulipBins, weightedMeasureColIdx,
+                                 radiusType, includeChoice).run(
+                                         getCommunicator(progress).get(),
+                                         *shapeGraph, false /* interactive */);
+            } else {
+                analysisResult =
+                    SegmentAngular(radius_set).run(
+                            getCommunicator(progress).get(),
+                            *shapeGraph,
+                            false /* unused */);
+            }
+        break;
         }
-        case Traversal::Angular: {
-            analysisResult =
-                SegmentAngular(radius_set).run(
-                        getCommunicator(progress).get(),
-                        *shapeGraph,
-                        false /* unused */);
-            break;
-        }
-        case Traversal::Topological: {
-            // TODO allow multiple radii
-            analysisResult =
-                SegmentTopological(*radius_set.begin(), selOnly).run(
-                        getCommunicator(progress).get(),
-                        *shapeGraph, false /* unused */);
-            break;
-        }
-        case Traversal::Metric: {
-            // TODO allow multiple radii
-            analysisResult =
-                SegmentMetric(*radius_set.begin(), selOnly).run(
+        case TraversalType::Topological: {
+            for (auto radius: radius_set) {
+            auto radiusAnalysisResult =
+                SegmentTopological(radius, selOnly).run(
                         getCommunicator(progress).get(),
                         *shapeGraph, false /* unused */);
+            analysisResult.completed = analysisResult.completed &
+            radiusAnalysisResult.completed;
+            for (auto column: radiusAnalysisResult.getColumns())
+                analysisResult.addAttribute(column);
+        }
+            break;
+        }
+        case TraversalType::Metric: {
+            for (auto radius: radius_set) {
+            auto radiusAnalysisResult =
+                SegmentMetric(radius, selOnly).run(
+                        getCommunicator(progress).get(),
+                        *shapeGraph, false /* unused */);
+            analysisResult.completed = analysisResult.completed &
+            radiusAnalysisResult.completed;
+            for (auto column: radiusAnalysisResult.getColumns())
+                analysisResult.addAttribute(column);
+        }
             break;
         }
         default:
-            throw depthmapX::RuntimeException("No segment analysis type given");
+            Rcpp::stop("No segment analysis type given");
         }
         result["completed"] = analysisResult.completed;
-        result["newColumns"] = analysisResult.newColumns;
+        result["newAttributes"] = analysisResult.getColumns();
     } catch (Communicator::CancelledException) {
         // result["completed"] = false;
     }
@@ -184,8 +194,13 @@ Rcpp::List segmentStepDepth(
         const int stepType,
         const std::vector<double> stepDepthPointsX,
         const std::vector<double> stepDepthPointsY,
+        const Rcpp::Nullable<int> tulipBinsNV = R_NilValue,
         const Rcpp::Nullable<bool> verboseNV = R_NilValue,
         const Rcpp::Nullable<bool> progressNV = R_NilValue) {
+    int tulipBins = 0;
+    if (tulipBinsNV.isNotNull()) {
+        tulipBins = Rcpp::as<int>(tulipBinsNV);
+    }
     bool verbose = false;
     if (verboseNV.isNotNull()) {
         verbose = Rcpp::as<bool>(verboseNV);
@@ -203,7 +218,7 @@ Rcpp::List segmentStepDepth(
         Point2f p2f(stepDepthPointsX[i], stepDepthPointsY[i]);
         auto graphRegion = shapeGraph->getRegion();
         if (!graphRegion.contains(p2f)) {
-            throw depthmapX::RuntimeException("Point outside of target region");
+            Rcpp::stop("Point outside of target region");
         }
         QtRegion r(p2f, p2f);
         shapeGraph->setCurSel(r, true);
@@ -219,11 +234,22 @@ Rcpp::List segmentStepDepth(
 
     try {
         AnalysisResult analysisResult;
-        switch (static_cast<Traversal>(stepType)) {
-        case Traversal::Angular:
-            // full angular was never created as a step-function
-            // do normal tulip
-        case Traversal::Metric: {
+        switch (static_cast<TraversalType>(stepType)) {
+        case TraversalType::Angular:
+            if (tulipBins != 0) {
+                analysisResult = SegmentTulipDepth(tulipBins).run(
+                    getCommunicator(progress).get(),
+                    *shapeGraph,
+                    false /* simple mode */
+                );
+            } else {
+                // full angular was never created as a step-function
+                // do normal tulip
+                Rcpp::stop("Full angular depth not implemented, "
+                               "provide tulipBins for quantization");
+            }
+            break;
+        case TraversalType::Metric: {
             analysisResult = SegmentMetricPD().run(
                 getCommunicator(progress).get(),
                 *shapeGraph,
@@ -231,15 +257,7 @@ Rcpp::List segmentStepDepth(
             );
             break;
         }
-        case Traversal::Tulip: {
-            analysisResult = SegmentTulipDepth().run(
-                getCommunicator(progress).get(),
-                *shapeGraph,
-                false /* simple mode */
-            );
-            break;
-        }
-        case Traversal::Topological: {
+        case TraversalType::Topological: {
             analysisResult = SegmentTopologicalPD().run(
                 getCommunicator(progress).get(),
                 *shapeGraph,
@@ -248,11 +266,11 @@ Rcpp::List segmentStepDepth(
             break;
         }
         default: {
-            throw depthmapX::RuntimeException("Error, unsupported step type");
+            Rcpp::stop("Error, unsupported step type");
         }
         }
         result["completed"] = analysisResult.completed;
-        result["newColumns"] = analysisResult.newColumns;
+        result["newAttributes"] = analysisResult.getColumns();
 
     } catch (Communicator::CancelledException) {
         // result["completed"] = false;

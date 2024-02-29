@@ -5,24 +5,8 @@
 context("Agent Analysis tests")
 
 test_that("Agent Analysis in C++", {
-  lineStringMap <- st_read(
-    system.file(
-      "extdata", "testdata", "gallery",
-      "gallery_lines.mif",
-      package = "alcyon"
-    ),
-    geometry_column = 1L, quiet = TRUE
-  )
 
-  pointMap <- makeVGAPointMap(
-    lineStringMap,
-    gridSize = 0.04,
-    fillX = 3.01,
-    fillY = 6.7,
-    maxVisibility = NA,
-    boundaryGraph = FALSE,
-    verbose = FALSE
-  )
+  pointMap <- loadInteriorLinesAsPointMap()$pointMap
 
   Rcpp_agentAnalysis(
     pointMap@ptr,
@@ -31,7 +15,7 @@ test_that("Agent Analysis in C++", {
     agentStepsToDecision = 3L,
     agentFov = 11L,
     agentLife = 1000L,
-    agentLook = AgentLook$Standard,
+    agentLookMode = AgentLookMode$Standard,
     agentReleaseLocations = cbind(1L, 1L),
     randomReleaseLocationSeed = 1L,
     recordTrailForAgents = 50L,
@@ -59,25 +43,7 @@ test_that("Agent Analysis in C++", {
 })
 
 test_that("Agent Analysis in R", {
-  lineStringMap <- st_read(
-    system.file(
-      "extdata", "testdata", "gallery",
-      "gallery_lines.mif",
-      package = "alcyon"
-    ),
-    geometry_column = 1L, quiet = TRUE
-  )
-
-  pointMap <- makeVGAPointMap(
-    lineStringMap,
-    gridSize = 0.04,
-    fillX = 3.01,
-    fillY = 6.7,
-    maxVisibility = NA,
-    boundaryGraph = FALSE,
-    verbose = FALSE
-  )
-
+  pointMap <- loadInteriorLinesAsPointMap()$pointMap
 
   agentAnalysis(
     pointMap,
@@ -86,7 +52,7 @@ test_that("Agent Analysis in R", {
     agentStepsToDecision = 3L,
     agentFov = 11L,
     agentLife = 1000L,
-    lookMode = AgentLook$Standard,
+    agentLookMode = AgentLookMode$Standard,
     originX = NA,
     originY = NA,
     locationSeed = 1L,

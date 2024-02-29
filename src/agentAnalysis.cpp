@@ -4,7 +4,7 @@
 
 #include "salalib/agents/agentengine.h"
 
-#include "agentLook.h"
+#include "AgentLookMode.h"
 #include "communicator.h"
 
 #include <Rcpp.h>
@@ -16,7 +16,7 @@ Rcpp::List agentAnalysis(Rcpp::XPtr<PointMap> pointMapPtr,
                          int agentLifeTimesteps,
                          int agentFov,
                          int agentStepsToDecision,
-                         int agentLook,
+                         int agentLookMode,
                          Rcpp::NumericMatrix agentReleaseLocations,
                          int randomReleaseLocationSeed,
                          int recordTrailForAgents,
@@ -39,39 +39,39 @@ Rcpp::List agentAnalysis(Rcpp::XPtr<PointMap> pointMapPtr,
     eng.agentSets.back().m_vbin = (agentFov - 1) / 2;
   }
   eng.agentSets.back().m_steps = agentStepsToDecision;
-  switch (static_cast<AgentLook>(agentLook)) {
-  case AgentLook::None:
-  case AgentLook::Standard:
+  switch (static_cast<AgentLookMode>(agentLookMode)) {
+  case AgentLookMode::None:
+  case AgentLookMode::Standard:
     eng.agentSets.back().m_sel_type = AgentProgram::SEL_STANDARD;
     break;
-  case AgentLook::LineOfSightLength:
+  case AgentLookMode::LineOfSightLength:
     eng.agentSets.back().m_sel_type = AgentProgram::SEL_LOS;
     break;
-  case AgentLook::OcclusionLength:
+  case AgentLookMode::OcclusionLength:
     eng.agentSets.back().m_sel_type = AgentProgram::SEL_LOS_OCC;
     break;
-  case AgentLook::OcclusionAny:
+  case AgentLookMode::OcclusionAny:
     eng.agentSets.back().m_sel_type = AgentProgram::SEL_OCC_ALL;
     break;
-  case AgentLook::OcclusionGroup45:
+  case AgentLookMode::OcclusionGroup45:
     eng.agentSets.back().m_sel_type = AgentProgram::SEL_OCC_BIN45;
     break;
-  case AgentLook::OcclusionGroup60:
+  case AgentLookMode::OcclusionGroup60:
     eng.agentSets.back().m_sel_type = AgentProgram::SEL_OCC_BIN60;
     break;
-  case AgentLook::OcclusionFurthest:
+  case AgentLookMode::OcclusionFurthest:
     eng.agentSets.back().m_sel_type = AgentProgram::SEL_OCC_STANDARD;
     break;
-  case AgentLook::BinFarDistance:
+  case AgentLookMode::BinFarDistance:
     eng.agentSets.back().m_sel_type = AgentProgram::SEL_OCC_WEIGHT_DIST;
     break;
-  case AgentLook::BinAngle:
+  case AgentLookMode::BinAngle:
     eng.agentSets.back().m_sel_type = AgentProgram::SEL_OCC_WEIGHT_ANG;
     break;
-  case AgentLook::BinFarDistanceAngle:
+  case AgentLookMode::BinFarDistanceAngle:
     eng.agentSets.back().m_sel_type = AgentProgram::SEL_OCC_WEIGHT_DIST_ANG;
     break;
-  case AgentLook::BinMemory:
+  case AgentLookMode::BinMemory:
     eng.agentSets.back().m_sel_type = AgentProgram::SEL_OCC_MEMORY;
     break;
   }
@@ -104,16 +104,15 @@ Rcpp::List agentAnalysis(Rcpp::XPtr<PointMap> pointMapPtr,
     eng.m_trail_count = recordTrailForAgents;
   }
   if (verbose) {
-    std::cout << "ok\nRunning agent analysis... " << std::flush;
+    Rcpp::Rcout << "ok\nRunning agent analysis... " << std::flush;
   }
   eng.run(getCommunicator(true).get(), pointMapPtr);
 
   Rcpp::List result = Rcpp::List::create(
-  Rcpp::Named("newColumns") = Rcpp::CharacterVector(
+  Rcpp::Named("newAttributes") = Rcpp::CharacterVector(
     "Gate Counts"
   )
   );
-  // result["newColumns"].insert("Gate Counts");
   if (recordTrailForAgents > 0) {
     ShapeMap trailMap("Agent Trails");
     eng.insertTrailsInMap(trailMap);

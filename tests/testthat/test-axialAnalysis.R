@@ -5,20 +5,9 @@
 context("Axial Analysis tests")
 
 test_that("Axial Analysis in C++", {
-  lineStringMap <- st_read(
-    system.file(
-      "extdata", "testdata", "barnsbury",
-      "barnsbury_small_axial.mif",
-      package = "alcyon"
-    ),
-    geometry_column = 1L, quiet = TRUE
-  )
-
-
-  shapeGraph <- sfToAxialShapeGraph(
-    lineStringMap,
-    keepAttributes = c(1L, 2L)
-  )
+  startData <- loadSmallAxialLinesAsAxialMap(c(1L,2L))
+  shapeGraph <- startData$axialMap
+  lineStringMap <- startData$sf
 
   expectedColNameBefore <- c(
     "Ref",
@@ -54,20 +43,11 @@ test_that("Axial Analysis in C++", {
 })
 
 
-test_that("Axial Analysis in R", {
-  lineStringMap <- st_read(
-    system.file(
-      "extdata", "testdata", "barnsbury", "barnsbury_small_axial.mif",
-      package = "alcyon"
-    ),
-    geometry_column = 1L, quiet = TRUE
-  )
+test_that("Axial Analysis in R (non user-visible)", {
+  startData <- loadSmallAxialLinesAsAxialMap(c(1L,2L))
+  shapeGraph <- startData$axialMap
+  lineStringMap <- startData$sf
 
-
-  shapeGraph <- sfToAxialShapeGraph(
-    lineStringMap,
-    keepAttributes = c(1L, 2L)
-  )
   weightBy <- Rcpp_getSfShapeMapExpectedColName(lineStringMap, 1L)
 
   axialAnalysis(
@@ -78,7 +58,7 @@ test_that("Axial Analysis in R", {
     includeIntermediateMetrics = FALSE
   )
 
-  result <- axialShapeGraphToSf(shapeGraph)
+  result <- as(shapeGraph, "sf")
 
   expectedCols <- c(
     "Ref",
@@ -114,52 +94,106 @@ test_that("Axial Analysis in R", {
     "Controllability"
   )
 
-  expect_named(result$map, c(expectedCols, "geometry"))
+  expect_named(result, c(expectedCols, "geometry"))
 })
 
-test_that("Axial Analysis in R from an sf linestring map", {
-  lineStringMap <- st_read(
-    system.file(
-      "extdata", "testdata", "barnsbury", "barnsbury_small_axial.mif",
-      package = "alcyon"
-    ),
-    geometry_column = 1L, quiet = TRUE
+test_that("Axial Analysis in R (user-visible)", {
+  startData <- loadSmallAxialLinesAsAxialMap(c(1L,2L))
+  shapeGraph <- startData$axialMap
+  lineStringMap <- startData$sf
+
+  axialResult <- allToAllTraverse(
+    shapeGraph,
+    traversalType = TraversalType$Topological,
+    radii = c("n", "3"),
+    includeBetweenness = TRUE
   )
 
-  result <- axialAnalysisSf(
-    lineStringMap,
-    radii = c("n", "3"),
-    includeChoice = TRUE,
-    includeLocal = TRUE,
-    includeIntermediateMetrics = FALSE
+  newExpectedCols <- c(
+    "Choice R3",
+    "Choice [Norm] R3",
+    "Entropy R3",
+    "Integration [HH] R3",
+    "Integration [P-value] R3",
+    "Integration [Tekl] R3",
+    "Intensity R3",
+    "Harmonic Mean Depth R3",
+    "Mean Depth R3",
+    "Node Count R3",
+    "Relativised Entropy R3",
+    "Choice",
+    "Choice [Norm]",
+    "Entropy",
+    "Integration [HH]",
+    "Integration [P-value]",
+    "Integration [Tekl]",
+    "Intensity",
+    "Harmonic Mean Depth",
+    "Mean Depth",
+    "Node Count",
+    "Relativised Entropy"
   )
+
+  expect_identical(axialResult$newAttributes, newExpectedCols)
+
+  result <- as(shapeGraph, "sf")
 
   expectedCols <- c(
-    "Choice",
-    "Choice R3",
-    "Choice [Norm]",
-    "Choice [Norm] R3",
-    "Control",
-    "Controllability",
-    "Entropy",
-    "Entropy R3",
-    "Harmonic Mean Depth",
-    "Harmonic Mean Depth R3",
-    "Integration [HH]",
-    "Integration [HH] R3",
-    "Integration [P-value]",
-    "Integration [P-value] R3",
-    "Integration [Tekl]",
-    "Integration [Tekl] R3",
-    "Intensity",
-    "Intensity R3",
-    "Mean Depth",
-    "Mean Depth R3",
-    "Node Count",
-    "Node Count R3",
-    "Relativised Entropy",
-    "Relativised Entropy R3"
+    "Ref",
+    "Connectivity",
+    "Line Length",
+    "Data Map Ref",
+    "df_1_Depthmap_Ref",
+    "df_2_Choice",
+    "df_row_name",
+    newExpectedCols
   )
 
-  expect_named(result$data, expectedCols)
+  expect_named(result, c(expectedCols, "geometry"))
+})
+
+
+test_that("Local Axial Analysis in R (user-visible)", {
+  startData <- loadSmallAxialLinesAsAxialMap(c(1L,2L))
+  shapeGraph <- startData$axialMap
+  lineStringMap <- startData$sf
+
+  axialResult <- axialAnalysisLocal(
+    shapeGraph
+  )
+
+  newExpectedCols <- c(
+    # TODO: these should not appear in local calculations, sala needs to change
+    'Entropy',
+    'Integration [HH]',
+    'Integration [P-value]',
+    'Integration [Tekl]',
+    'Intensity',
+    'Harmonic Mean Depth',
+    'Mean Depth',
+    'Node Count',
+    'Relativised Entropy',
+    # TODO: remove above from axial analysis in sala
+    "Control",
+    "Controllability"
+  )
+
+  expect_identical(axialResult$newAttributes, newExpectedCols)
+
+  axialMap <- as(shapeGraph, "sf")
+
+  expectedCols <- c(
+    "Ref",
+    "Connectivity",
+    "Line Length",
+    "Data Map Ref",
+    "df_1_Depthmap_Ref",
+    "df_2_Choice",
+    "df_row_name",
+    newExpectedCols
+  )
+
+  expect_named(axialMap, c(expectedCols, "geometry"))
+
+
 })

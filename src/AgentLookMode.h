@@ -2,13 +2,13 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-// The values here should be kept the same as the ones in agentLook.R
+// The values here should be kept the same as the ones in AgentLookMode.R
 
 #pragma once
 
 #include <Rcpp.h>
 
-enum class AgentLook {
+enum class AgentLookMode {
   None = 0,
     Standard = 1,
     LineOfSightLength = 2,

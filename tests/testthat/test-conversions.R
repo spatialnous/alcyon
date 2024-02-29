@@ -5,13 +5,7 @@
 context("Conversion tests")
 
 test_that("sf line map to ShapeMap", {
-  lineStringMap <- st_read(
-    system.file(
-      "extdata", "testdata", "barnsbury", "barnsbury_small_axial.mif",
-      package = "alcyon"
-    ),
-    geometry_column = 1L, quiet = TRUE
-  )
+  lineStringMap <- loadSmallAxialLinesAsSf()$sf
 
   shapeMap <- Rcpp_toShapeMap(lineStringMap, c(1L, 2L))
 
@@ -30,13 +24,7 @@ test_that("sf line map to ShapeMap", {
 })
 
 test_that("sf line map to Axial ShapeGraph", {
-  lineStringMap <- st_read(
-    system.file(
-      "extdata", "testdata", "barnsbury", "barnsbury_small_axial.mif",
-      package = "alcyon"
-    ),
-    geometry_column = 1L, quiet = TRUE
-  )
+  lineStringMap <- loadSmallAxialLinesAsSf()$sf
 
   shapeMap <- Rcpp_toShapeMap(lineStringMap, c(1L, 2L))
   shapeGraph <- Rcpp_toAxialShapeGraph(shapeMap)
@@ -65,13 +53,7 @@ test_that("sf line map to Axial ShapeGraph", {
 })
 
 test_that("sf line map to Segment ShapeGraph", {
-  lineStringMap <- st_read(
-    system.file(
-      "extdata", "testdata", "barnsbury", "barnsbury_small_axial.mif",
-      package = "alcyon"
-    ),
-    geometry_column = 1L, quiet = TRUE
-  )
+  lineStringMap <- loadSmallAxialLinesAsSf()$sf
 
   shapeMap <- Rcpp_toShapeMap(lineStringMap, c(1L, 2L))
   shapeGraph <- Rcpp_toAxialShapeGraph(shapeMap)

@@ -2,16 +2,15 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-// The values here should be kept the same as the ones in enum.R
+// The values here should be kept the same as the ones in TraversalType.R
 
 #pragma once
 
 #include <Rcpp.h>
 
-enum class Traversal {
+enum class TraversalType {
   None = 0,
   Angular = 1,
-  Tulip = 2,
-  Topological = 3,
-  Metric = 4
+  Topological = 2,
+  Metric = 3
 };

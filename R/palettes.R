@@ -3,9 +3,85 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+#' Colour Palettes from depthmapX
+#'
+#' Create n contiguous colours taken from depthmapX.
+#'
+#' @name palettes
+#' @param n Numer of colours to generate
+#' @param rangeMin The min value of the range
+#' @param rangeMax The max value of the range
+#' @returns Returns a vector of colours.
+#' @export
+#' @rdname palettes
+depthmap.classic.colour <- function(n,
+                                    rangeMin = 0.0,
+                                    rangeMax = 1.0) {
+  unlist(lapply(0L:(n - 1L), function(i) {
+    makeDepthmapClassicColour(i / n, rangeMin, rangeMax)
+  }))
+}
+
+#' @rdname palettes
+depthmap.axmanesque.colour <- function(n,
+                                       rangeMin = 0.0,
+                                       rangeMax = 1.0) {
+  unlist(lapply(0L:(n - 1L), function(i) {
+    makeAxmanesqueColour(i / n, rangeMin, rangeMax)
+  }))
+}
+
+#' @rdname palettes
+depthmap.purpleorange.colour <- function(n,
+                                         rangeMin = 0.0,
+                                         rangeMax = 1.0) {
+  unlist(lapply(0L:(n - 1L), function(i) {
+    makePurpleOrangeColour(i / n, rangeMin, rangeMax)
+  }))
+}
+
+#' @rdname palettes
+depthmap.bluered.colour <- function(n,
+                                    rangeMin = 0.0,
+                                    rangeMax = 1.0) {
+  unlist(lapply(0L:(n - 1L), function(i) {
+    makeBlueRedColour(i / n, rangeMin, rangeMax)
+  }))
+}
+
+#' @rdname palettes
+depthmap.grayscale.colour <- function(n,
+                                      rangeMin = 0.0,
+                                      rangeMax = 1.0) {
+  unlist(lapply(0L:(n - 1L), function(i) {
+    makeGreyScaleColour(i / n, rangeMin, rangeMax)
+  }))
+}
+
+#' @rdname palettes
+depthmap.nicehsb.colour <- function(n,
+                                    rangeMin = 0.0,
+                                    rangeMax = 1.0) {
+  unlist(lapply(0L:(n - 1L), function(i) {
+    makeNiceHSBColour(i / n, rangeMin, rangeMax)
+  }))
+}
+
+
+#' Single Colour from depthmapX's Palettes
+#'
+#' Create a single colour from depthmapX's palettes.
+#'
+#' @name makeColour
+#' @param value Value within the min/max range to take
+#' @param rangeMin The min value of the range
+#' @param rangeMax The max value of the range
+#' @returns Returns a single colour.
+#' @export
+#' @rdname makeColour
 makeDepthmapClassicColour <- function(value,
-                                      rangeMin,
-                                      rangeMax) {
+                                      rangeMin = 0.0,
+                                      rangeMax = 1.0) {
   if (rangeMin > rangeMax) {
     value <- 1.0 - value
     rangeMin <- 1.0 - rangeMin
@@ -61,12 +137,7 @@ makeDepthmapClassicColour <- function(value,
   return(grDevices::rgb(r / 255.0, g / 255.0, b / 255.0))
 }
 
-depthmap.classic.colour <- function(n) {
-  unlist(lapply(0L:(n - 1L), function(i) {
-    makeDepthmapClassicColour(i / n, 0.0, 1.0)
-  }))
-}
-
+#' @rdname makeColour
 makeAxmanesqueColour <- function(value,
                                  rangeMin = 0.0,
                                  rangeMax = 1.0) {
@@ -89,12 +160,7 @@ makeAxmanesqueColour <- function(value,
   return(gNicecolor[1L + as.integer((f - 1e-9) * length(gNicecolor))])
 }
 
-depthmap.axmanesque.colour <- function(n) {
-  unlist(lapply(0L:(n - 1L), function(i) {
-    makeAxmanesqueColour(i / n)
-  }))
-}
-
+#' @rdname makeColour
 makePurpleOrangeColour <- function(value,
                                    rangeMin = 0.0,
                                    rangeMax = 1.0) {
@@ -114,12 +180,7 @@ makePurpleOrangeColour <- function(value,
   return(gPurpleOrange[1L + as.integer((f - 1e-9) * length(gPurpleOrange))])
 }
 
-depthmap.purpleorange.colour <- function(n) {
-  unlist(lapply(0L:(n - 1L), function(i) {
-    makePurpleOrangeColour(i / n)
-  }))
-}
-
+#' @rdname makeColour
 makeBlueRedColour <- function(value,
                               rangeMin = 0.0,
                               rangeMax = 1.0) {
@@ -139,12 +200,7 @@ makeBlueRedColour <- function(value,
   return(gBlueRed[1L + as.integer((f - 1e-9) * length(gBlueRed))])
 }
 
-depthmap.bluered.colour <- function(n) {
-  unlist(lapply(0L:(n - 1L), function(i) {
-    makeBlueRedColour(i / n)
-  }))
-}
-
+#' @rdname makeColour
 makeGreyScaleColour <- function(value,
                                 rangeMin = 0.0,
                                 rangeMax = 1.0) {
@@ -164,12 +220,7 @@ makeGreyScaleColour <- function(value,
   return(gGreyscale[1L + as.integer((f - 1e-9) * length(gGreyscale))])
 }
 
-depthmap.grayscale.colour <- function(n) {
-  unlist(lapply(0L:(n - 1L), function(i) {
-    makeGreyScaleColour(i / n)
-  }))
-}
-
+#' @rdname makeColour
 makeNiceHSBColour <- function(value,
                               rangeMin = 0.0,
                               rangeMax = 1.0) {
@@ -190,10 +241,4 @@ makeNiceHSBColour <- function(value,
     f <- 1.0 - f
   }
   return(gNicecolorhsb[1L + as.integer((f - 1e-9) * length(gNicecolorhsb))])
-}
-
-depthmap.nicehsb.colour <- function(n) {
-  unlist(lapply(0L:(n - 1L), function(i) {
-    makeNiceHSBColour(i / n)
-  }))
 }

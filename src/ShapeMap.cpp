@@ -61,7 +61,9 @@ Rcpp::NumericMatrix getShapesAsLineCoords(Rcpp::XPtr<ShapeMap> shapeMap) {
   std::vector<std::string> names;
   const auto &lines = shapeMap->getAllShapesAsLines();
   Rcpp::NumericMatrix coords(lines.size(), 4);
-
+  Rcpp::colnames(coords) = Rcpp::CharacterVector({
+    "x1", "y1", "x2", "y2"
+  });
   int rowIdx = 0;
   for (auto &line: lines) {
     const Rcpp::NumericMatrix::Row &row = coords( rowIdx , Rcpp::_ );
@@ -89,6 +91,9 @@ Rcpp::GenericVector getShapesAsPolygonCoords(Rcpp::XPtr<ShapeMap> shapeMap) {
       fabs(firstPoint.y - lastPoint.y) < TOLERANCE;
     Rcpp::NumericMatrix poly(shape.second.m_points.size() +
       (lastPointIsFirst ? 0 : 1), 2);
+    Rcpp::colnames(poly) = Rcpp::CharacterVector({
+      "x", "y"
+    });
     int rowIdx = 0;
     for (const auto &point: shape.second.m_points) {
       const Rcpp::NumericMatrix::Row &row = poly( rowIdx , Rcpp::_ );
@@ -105,3 +110,68 @@ Rcpp::GenericVector getShapesAsPolygonCoords(Rcpp::XPtr<ShapeMap> shapeMap) {
   }
   return coords;
 }
+
+// [[Rcpp::export("Rcpp_ShapeMap_getShapeCoords")]]
+Rcpp::List getShapeCoords(
+    Rcpp::XPtr<ShapeMap> shapeMapPtr,
+    int ref) {
+  float TOLERANCE = 0.0001;
+  auto &shapes = shapeMapPtr->getAllShapes();
+  auto shape = shapes.find(ref);
+  if (shape != shapes.end()) {
+    Rcpp::stop("ShapeMap does not contain any shapes with ref %d", ref);
+  }
+
+  Rcpp::List shapeProperties = Rcpp::List::create();
+  shapeProperties["isPolygon"] = shape->second.isPolygon();
+  shapeProperties["isClosed"] = shape->second.isClosed();
+  shapeProperties["isLine"] = shape->second.isLine();
+  shapeProperties["isPoint"] = shape->second.isPoint();
+
+  const auto &firstPoint = *shape->second.m_points.begin();
+  const auto &lastPoint = *shape->second.m_points.rbegin();
+  bool isPolyAndlastPointIsFirst = shape->second.isPolygon() &&
+    fabs(firstPoint.x - lastPoint.x) < TOLERANCE &&
+    fabs(firstPoint.y - lastPoint.y) < TOLERANCE;
+  Rcpp::NumericMatrix coords(shape->second.m_points.size() +
+    ( isPolyAndlastPointIsFirst ? 0 : 1), 2);
+  Rcpp::colnames(coords) = Rcpp::CharacterVector({
+    "x", "y"
+  });
+  int rowIdx = 0;
+  for (const auto &point: shape->second.m_points) {
+    const Rcpp::NumericMatrix::Row &row = coords( rowIdx , Rcpp::_ );
+    row[0] = point.x;
+    row[1] = point.y;
+    rowIdx++;
+  }
+  if (!isPolyAndlastPointIsFirst) {
+    const Rcpp::NumericMatrix::Row &row = coords( rowIdx , Rcpp::_ );
+    row[0] = firstPoint.x;
+    row[1] = firstPoint.y;
+  }
+  shapeProperties["coords"] = coords;
+  return shapeProperties;
+}
+
+
+// [[Rcpp::export("Rcpp_ShapeMap_getShapeAttributes")]]
+Rcpp::List getShapeAttributes(
+    Rcpp::XPtr<ShapeMap> shapeMapPtr,
+    int ref) {
+  float TOLERANCE = 0.0001;
+  Rcpp::List shapeAttributes = Rcpp::List::create();
+  try {
+    auto &attributes = shapeMapPtr->getAttributeTable();
+    auto &row = attributes.getRow(AttributeKey(ref));
+    for (int col = 0; col < attributes.getNumColumns(); ++col) {
+      shapeAttributes[attributes.getColumnName(col)] = row.getValue(col);
+    }
+  } catch (std::out_of_range) {
+    Rcpp::stop("ShapeMap does not contain any shapes with ref %d", ref);
+  }
+  return shapeAttributes;
+}
+
+
+

@@ -10,7 +10,7 @@
 #include "genlib/p2dpoly.h"
 
 #include "communicator.h"
-#include "traversal.h"
+#include "TraversalType.h"
 
 #include <Rcpp.h>
 
@@ -88,7 +88,7 @@ Rcpp::List runAxialAnalysis(
             false /* simple version*/
         );
         result["completed"] = analysisResult.completed;
-        result["newColumns"] = analysisResult.newColumns;
+        result["newAttributes"] = analysisResult.getColumns();
     } catch (Communicator::CancelledException) {
         // result["completed"] = false;
     }
@@ -133,7 +133,7 @@ Rcpp::List axialStepDepth(
 
     try {
         AnalysisResult analysisResult;
-        switch (static_cast<Traversal>(stepType)) {
+        switch (static_cast<TraversalType>(stepType)) {
         // never really supported for axial maps
         // case AxialAnalysis::AxialStepType::ANGULAR:
         //     pointDepthType = 3;
@@ -141,7 +141,7 @@ Rcpp::List axialStepDepth(
         // case AxialAnalysis::AxialStepType::METRIC:
         //     pointDepthType = 2;
         //     break;
-        case Traversal::Topological:
+        case TraversalType::Topological:
             // currently axial only allows for topological analysis
             analysisResult = AxialStepDepth().run(
                 getCommunicator(progress).get(),
@@ -154,7 +154,7 @@ Rcpp::List axialStepDepth(
             }
         }
         result["completed"] = analysisResult.completed;
-        result["newColumns"] = analysisResult.newColumns;
+        result["newAttributes"] = analysisResult.getColumns();
 
     } catch (Communicator::CancelledException) {
         //

@@ -25,25 +25,24 @@ Suggests:
     testthat
 SystemRequirements: C++17
 VignetteBuilder: knitr
-Collate: 
+Collate:
+    'generics.R'
+    'rcppRoxygen.R'
     'ShapeMap.R'
     'ShapeGraph.R'
     'AxialShapeGraph.R'
     'AllLineShapeGraph.R'
     'SegmentShapeGraph.R'
     'PointMap.R'
+    'TraversalType.R'
+    'AgentLookMode.R'
     'RcppExports.R'
     'agentAnalysis.R'
-    'agentLook.R'
     'allFewestLineMap.R'
     'axialAnalysis.R'
-    'export.R'
     'generateRandomCapString.R'
     'getTopFeatures.R'
-    'import.R'
     'isovist.R'
-    'link.R'
-    'makeTempPointFile.R'
     'matchPointsToLines.R'
     'palettes.R'
     'prepareVGA.R'
@@ -52,6 +51,6 @@ Collate:
     'segmentAnalysis.R'
     'sfConversions.R'
     'shapegraphToIGraph.R'
-    'depth.R'
-    'traversal.R'
-    'vga.R'
+    'oneToAllTraverse.R'
+    'allToAllTraverse.R'
+RoxygenNote: 7.3.1

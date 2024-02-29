@@ -2,7 +2,7 @@
 title: "Axial Analysis"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{axialAnalysis}
+  %\VignetteIndexEntry{Axial Analysis}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -16,9 +16,7 @@ knitr::opts_chunk$set(
   
 ```{r setup}
 library(alcyon)
-```
 
-```{r}
 lineStringMap <- st_read(
   system.file(
     "extdata", "testdata", "barnsbury", "barnsbury_small_axial.mif",
@@ -26,40 +24,34 @@ lineStringMap <- st_read(
   ),
   geometry_column = 1L, quiet = TRUE
 )
-shapeGraph <- sfToAxialShapeGraph(
-  lineStringMap,
-  keepAttributes = c(1L, 2L)
-)
+shapeGraph <- as(lineStringMap, "AxialShapeGraph")
 ```
 
 ```{r}
-axMap <- axialShapeGraphToSf(shapeGraph)
-plot(axMap$map, max.plot = 64)
+axMap <- as(shapeGraph, "sf")
+for (column in names(axMap))
+  plot(axMap[, column])
 ```
 
 ```{r}
-axialResult = axialAnalysis(
+axialResult = allToAllTraverse(
   shapeGraph,
+  traversalType = TraversalType$Topological,
   radii = c("n", "3"),
-  includeChoice = TRUE,
-  includeLocal = TRUE,
-  includeIntermediateMetrics = TRUE
+  includeBetweenness = TRUE
 )
-```
-
-```{r}
-axMap <- axialShapeGraphToSf(shapeGraph)
-plot(axMap$map[, axialResult$newColumns], max.plot = 64)
+axMap <- as(shapeGraph, "sf")
+for (column in axialResult$newAttributes)
+  plot(axMap[, column])
 ```
 ```{r}
-depthResult = depth(
+depthResult = oneToAllTraverse(
   shapeGraph,
-  depthType = Traversal$Topological,
+  traversalType = TraversalType$Topological,
   fromX = 530684,
   fromY = 184100.3)
-```
 
-```{r}
-axMap <- axialShapeGraphToSf(shapeGraph)
-plot(axMap$map[, depthResult$newColumns], max.plot = 64)
+axMap <- as(shapeGraph, "sf")
+for (column in depthResult$newAttributes)
+  plot(axMap[, column])
 ```

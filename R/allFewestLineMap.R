@@ -2,31 +2,41 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-allFewestLineMap <- function(boundsMap,
-                             seedX,
-                             seedY,
-                             calculateFewest = TRUE,
-                             verbose = FALSE) {
+#' Create an All-line Map
+#'
+#' @param boundsMap The boundary ShapeMap to create the all-line map in
+#' @param seedX X coordinate of the seed (the point that initiates the process)
+#' @param seedY Y coordinate of the seed (the point that initiates the process)
+#' @param verbose Optional. Show more information of the process.
+#' @returns An All-line Axial ShapeGraph
+#' @export
+makeAllLineMap <- function(boundsMap,
+                           seedX,
+                           seedY,
+                           verbose = FALSE) {
   allLineMap <- new("AllLineShapeGraph")
   allLineMap@ptr <- Rcpp_makeAllLineMap(
     boundsMap@ptr,
-    seedX = 3.01,
-    seedY = 6.7
+    seedX = seedX,
+    seedY = seedY
   )
+  return(allLineMap)
+}
 
+
+#' Reduce an All-line Map to two types of fewest-line maps
+#'
+#' @param allLineMap An AllLineShapeGraph
+#' @returns A list with two fewest-line axial ShapeGraphs
+#' @export
+reduceToFewest <- function(allLineMap) {
   result <- list()
-  result[["All Line Map"]] <- shapeMapTolineStringSf(allLineMap)
-
-  if (calculateFewest) {
-    fewestMaps <- Rcpp_extractFewestLineMaps(allLineMap@ptr)
-    fewestSubsets <- new("AxialShapeGraph")
-    fewestSubsets@ptr <- fewestMaps[["Fewest-Line Map (Subsets)"]]
-    fewestMinimal <- new("AxialShapeGraph")
-    fewestMinimal@ptr <- fewestMaps[["Fewest-Line Map (Minimal)"]]
-    result[["Fewest-Line Map (Subsets)"]] <-
-      shapeMapTolineStringSf(fewestSubsets)
-    result[["Fewest-Line Map (Minimal)"]] <-
-      shapeMapTolineStringSf(fewestMinimal)
-  }
+  fewestMaps <- Rcpp_extractFewestLineMaps(allLineMap@ptr)
+  fewestSubsets <- new("AxialShapeGraph")
+  fewestSubsets@ptr <- fewestMaps[["Fewest-Line Map (Subsets)"]]
+  fewestMinimal <- new("AxialShapeGraph")
+  fewestMinimal@ptr <- fewestMaps[["Fewest-Line Map (Minimal)"]]
+  result[["Fewest-Line Map (Subsets)"]] <- fewestSubsets
+  result[["Fewest-Line Map (Minimal)"]] <- fewestMinimal
   return(result)
 }

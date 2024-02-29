@@ -2,7 +2,7 @@
 title: "Visibility Graph Analysis"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{vga}
+  %\VignetteIndexEntry{Visibility Graph Analysis}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -16,9 +16,7 @@ knitr::opts_chunk$set(
 
 ```{r setup}
 library(alcyon)
-```
 
-```{r}
 galleryMap <- st_read(
   system.file(
     "extdata", "testdata", "gallery",
@@ -30,48 +28,106 @@ galleryMap <- st_read(
 ```
 
 ```{r}
-pointMap <- makeVGAPointMap(galleryMap,
+pointMap <- makeVGAPointMap(
+  galleryMap,
   fillX = 3.01,
   fillY = 6.7,
   gridSize = 0.04
 )
-vgaMap <- pointMapToSf(pointMap)$map
+vgaMap <- as(pointMap, "SpatialPixelsDataFrame")
 plot(vgaMap["Connectivity"])
 ```
 
 ```{r}
-vgaMetric(pointMap, -1, FALSE)
-vgaMap <- pointMapToSf(pointMap)$map
-plot(vgaMap["Metric.Mean.Shortest.Path.Distance"])
+vgaResult = allToAllTraverse(
+  pointMap,
+  traversalType = TraversalType$Metric,
+  radii = -1,
+  radiusTraversalType = TraversalType$None
+)
+vgaMap <- as(pointMap, "SpatialPixelsDataFrame")
+for (column in vgaResult$newAttributes)
+  plot(vgaMap[column], main=column)
 ```
 
 ```{r}
-vgaThroughVision(pointMap)
-vgaMap <- pointMapToSf(pointMap)$map
-plot(vgaMap["Through.vision"])
+vgaResult = allToAllTraverse(
+  pointMap,
+  traversalType = TraversalType$Angular,
+  radii = -1,
+  radiusTraversalType = TraversalType$None
+)
+vgaMap <- as(pointMap, "SpatialPixelsDataFrame")
+for (column in vgaResult$newAttributes)
+  plot(vgaMap[column], main=column)
+```
+
+
+```{r}
+vgaResult = allToAllTraverse(
+  pointMap,
+  traversalType = TraversalType$Topological,
+  radii = -1,
+  radiusTraversalType = TraversalType$None
+)
+vgaMap <- as(pointMap, "SpatialPixelsDataFrame")
+for (column in vgaResult$newAttributes)
+  plot(vgaMap[column], main=column)
 ```
 
 ```{r}
-vgaAngular(pointMap, -1, FALSE)
-vgaMap <- pointMapToSf(pointMap)$map
-plot(vgaMap["Angular.Mean.Depth"])
+vgaResult = vgaThroughVision(pointMap)
+vgaMap <- as(pointMap, "SpatialPixelsDataFrame")
+for (column in vgaResult$newAttributes)
+  plot(vgaMap[column], main=column)
 ```
 
 ```{r}
-vgaVisualGlobal(pointMap, -1, FALSE)
-vgaMap <- pointMapToSf(pointMap)$map
-plot(vgaMap["Visual.Integration..HH."])
+vgaResult = vgaVisualLocal(pointMap, FALSE)
+vgaMap <- as(pointMap, "SpatialPixelsDataFrame")
+for (column in vgaResult$newAttributes)
+  plot(vgaMap[column], main=column)
 ```
 
 ```{r}
-vgaVisualLocal(pointMap, FALSE)
-vgaMap <- pointMapToSf(pointMap)$map
-plot(vgaMap["Visual.Clustering.Coefficient"])
+boundaryMap <- as(galleryMap, "ShapeMap")
+vgaResult = vgaIsovist(pointMap, boundaryMap)
+vgaMap <- as(pointMap, "SpatialPixelsDataFrame")
+for (column in vgaResult$newAttributes)
+  plot(vgaMap[column], main=column)
 ```
 
 ```{r}
-boundaryMap <- sfToShapeMap(galleryMap)
-vgaIsovist(pointMap, boundaryMap)
-vgaMap <- pointMapToSf(pointMap)$map
-plot(vgaMap["Isovist.Area"])
+vgaResult = oneToAllTraverse(
+  pointMap,
+  traversalType = TraversalType$Metric,
+  fromX = 3.01,
+  fromY = 6.7)
+vgaMap <- as(pointMap, "SpatialPixelsDataFrame")
+for (column in vgaResult$newAttributes)
+  plot(vgaMap[column], main=column)
+```
+
+
+```{r}
+vgaResult = oneToAllTraverse(
+  pointMap,
+  traversalType = TraversalType$Angular,
+  fromX = 3.01,
+  fromY = 6.7)
+vgaMap <- as(pointMap, "SpatialPixelsDataFrame")
+for (column in vgaResult$newAttributes)
+  plot(vgaMap[column], main=column)
+```
+
+
+```{r}
+vgaResult = oneToAllTraverse(
+  pointMap,
+  traversalType = TraversalType$Topological,
+  fromX = 3.01,
+  fromY = 6.7)
+vgaMap <- as(pointMap, "SpatialPixelsDataFrame")
+for (column in vgaResult$newAttributes)
+  plot(vgaMap[column], main=column)
 ```

@@ -24,6 +24,7 @@ SOURCES = main.cpp \
           allFewest.cpp \
           vga.cpp \
           agentAnalysis.cpp \
+          link.cpp \
           RcppExports.cpp
 
 # Obtain the object files

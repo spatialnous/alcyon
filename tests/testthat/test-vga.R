@@ -5,24 +5,9 @@
 context("VGA tests")
 
 test_that("VGA in C++", {
-  lineStringMap <- st_read(
-    system.file(
-      "extdata", "testdata", "gallery",
-      "gallery_lines.mif",
-      package = "alcyon"
-    ),
-    geometry_column = 1L, quiet = TRUE
-  )
-
-  pointMap <- makeVGAPointMap(
-    lineStringMap,
-    gridSize = 0.04,
-    fillX = 3.01,
-    fillY = 6.7,
-    maxVisibility = NA,
-    boundaryGraph = FALSE,
-    verbose = FALSE
-  )
+  startData <- loadInteriorLinesAsPointMap(vector())
+  lineStringMap <- startData$sf
+  pointMap <- startData$pointMap
 
   expectedCols <- c(
     "x",
@@ -37,47 +22,59 @@ test_that("VGA in C++", {
     "Point Second Moment"
   )
 
-  Rcpp_VGA_throughVision(pointMap@ptr)
+  vgaResult <- Rcpp_VGA_throughVision(pointMap@ptr)
+
+  newExpectedCols <- c(
+    "Through vision"
+  )
+  expect_identical(vgaResult$newAttributes, newExpectedCols)
 
   coords <- Rcpp_PointMap_getFilledPoints(pointMapPtr = pointMap@ptr)
   expect_identical(dim(coords), c(4332L, 11L))
   expectedCols <- c(
     expectedCols,
-    "Through vision"
+    newExpectedCols
   )
   expect_identical(colnames(coords), expectedCols)
 
-  Rcpp_VGA_angular(pointMap@ptr, -1.0, FALSE)
+  vgaResult <- Rcpp_VGA_angular(pointMap@ptr, -1.0, FALSE)
+
+  newExpectedCols <- c(
+    "Angular Mean Depth",
+    "Angular Total Depth",
+    "Angular Node Count"
+  )
+  expect_identical(vgaResult$newAttributes, newExpectedCols)
 
   coords <- Rcpp_PointMap_getFilledPoints(pointMapPtr = pointMap@ptr)
   expect_identical(dim(coords), c(4332L, 14L))
   expectedCols <- c(
     expectedCols,
-    "Angular Mean Depth",
-    "Angular Total Depth",
-    "Angular Node Count"
+    newExpectedCols
   )
   expect_identical(colnames(coords), expectedCols)
 
-  Rcpp_VGA_metric(pointMap@ptr, -1.0, FALSE)
+  vgaResult <- Rcpp_VGA_metric(pointMap@ptr, -1.0, FALSE)
 
-  coords <- Rcpp_PointMap_getFilledPoints(pointMapPtr = pointMap@ptr)
-  expect_identical(dim(coords), c(4332L, 18L))
-  expectedCols <- c(
-    expectedCols,
+  newExpectedCols <- c(
     "Metric Mean Shortest-Path Angle",
     "Metric Mean Shortest-Path Distance",
     "Metric Mean Straight-Line Distance",
     "Metric Node Count"
   )
-  expect_identical(colnames(coords), expectedCols)
-
-  Rcpp_VGA_visualGlobal(pointMap@ptr, -1L, FALSE)
+  expect_identical(vgaResult$newAttributes, newExpectedCols)
 
   coords <- Rcpp_PointMap_getFilledPoints(pointMapPtr = pointMap@ptr)
-  expect_identical(dim(coords), c(4332L, 25L))
+  expect_identical(dim(coords), c(4332L, 18L))
   expectedCols <- c(
     expectedCols,
+    newExpectedCols
+  )
+  expect_identical(colnames(coords), expectedCols)
+
+  vgaResult <- Rcpp_VGA_visualGlobal(pointMap@ptr, -1L, FALSE)
+
+  newExpectedCols <- c(
     "Visual Entropy",
     "Visual Integration [HH]",
     "Visual Integration [P-value]",
@@ -86,27 +83,37 @@ test_that("VGA in C++", {
     "Visual Node Count",
     "Visual Relativised Entropy"
   )
+  expect_identical(vgaResult$newAttributes, newExpectedCols)
+
+  coords <- Rcpp_PointMap_getFilledPoints(pointMapPtr = pointMap@ptr)
+  expect_identical(dim(coords), c(4332L, 25L))
+  expectedCols <- c(
+    expectedCols,
+    newExpectedCols
+  )
   expect_identical(colnames(coords), expectedCols)
 
-  Rcpp_VGA_visualLocal(pointMap@ptr, FALSE)
+  vgaResult <- Rcpp_VGA_visualLocal(pointMap@ptr, FALSE)
+
+  newExpectedCols <- c(
+    "Visual Clustering Coefficient",
+    "Visual Control",
+    "Visual Controllability"
+  )
+  expect_identical(vgaResult$newAttributes, newExpectedCols)
 
   coords <- Rcpp_PointMap_getFilledPoints(pointMapPtr = pointMap@ptr)
   expect_identical(dim(coords), c(4332L, 28L))
   expectedCols <- c(
     expectedCols,
-    "Visual Clustering Coefficient",
-    "Visual Control",
-    "Visual Controllability"
+    newExpectedCols
   )
   expect_identical(colnames(coords), expectedCols)
 
-  boundaryMap <- sfToShapeMap(lineStringMap)
-  Rcpp_VGA_isovist(pointMap@ptr, boundaryMap@ptr)
+  boundaryMap <- as(lineStringMap, "ShapeMap")
+  vgaResult = Rcpp_VGA_isovist(pointMap@ptr, boundaryMap@ptr)
 
-  coords <- Rcpp_PointMap_getFilledPoints(pointMapPtr = pointMap@ptr)
-  expect_identical(dim(coords), c(4332L, 36L))
-  expectedCols <- c(
-    expectedCols,
+  newExpectedCols <- c(
     "Isovist Area",
     "Isovist Compactness",
     "Isovist Drift Angle",
@@ -115,30 +122,23 @@ test_that("VGA in C++", {
     "Isovist Max Radial",
     "Isovist Occlusivity",
     "Isovist Perimeter"
+  )
+  expect_identical(vgaResult$newAttributes, newExpectedCols)
+
+  coords <- Rcpp_PointMap_getFilledPoints(pointMapPtr = pointMap@ptr)
+  expect_identical(dim(coords), c(4332L, 36L))
+  expectedCols <- c(
+    expectedCols,
+    newExpectedCols
   )
   expect_identical(colnames(coords), expectedCols)
 })
 
 
 test_that("VGA in R", {
-  lineStringMap <- st_read(
-    system.file(
-      "extdata", "testdata", "gallery",
-      "gallery_lines.mif",
-      package = "alcyon"
-    ),
-    geometry_column = 1L, quiet = TRUE
-  )
-
-  pointMap <- makeVGAPointMap(
-    lineStringMap,
-    gridSize = 0.04,
-    fillX = 3.01,
-    fillY = 6.7,
-    maxVisibility = NA,
-    boundaryGraph = FALSE,
-    verbose = FALSE
-  )
+  startData <- loadInteriorLinesAsPointMap(vector())
+  lineStringMap <- startData$sf
+  pointMap <- startData$pointMap
 
   expectedCols <- c(
     "x",
@@ -153,47 +153,68 @@ test_that("VGA in R", {
     "Point Second Moment"
   )
 
-  vgaThroughVision(pointMap)
+  vgaResult <- vgaThroughVision(pointMap)
+
+  newExpectedCols <- c(
+    "Through vision"
+  )
+  expect_identical(vgaResult$newAttributes, newExpectedCols)
 
   coords <- Rcpp_PointMap_getFilledPoints(pointMapPtr = pointMap@ptr)
   expect_identical(dim(coords), c(4332L, 11L))
   expectedCols <- c(
     expectedCols,
-    "Through vision"
+    newExpectedCols
   )
   expect_identical(colnames(coords), expectedCols)
 
-  vgaAngular(pointMap, -1.0, FALSE)
+  vgaResult <- allToAllTraverse(pointMap,
+                                traversalType = TraversalType$Angular,
+                                radii = -1,
+                                radiusTraversalType = TraversalType$None)
+
+  newExpectedCols <- c(
+    "Angular Mean Depth",
+    "Angular Total Depth",
+    "Angular Node Count"
+  )
+  expect_identical(vgaResult$newAttributes, newExpectedCols)
 
   coords <- Rcpp_PointMap_getFilledPoints(pointMapPtr = pointMap@ptr)
   expect_identical(dim(coords), c(4332L, 14L))
   expectedCols <- c(
     expectedCols,
-    "Angular Mean Depth",
-    "Angular Total Depth",
-    "Angular Node Count"
+    newExpectedCols
   )
   expect_identical(colnames(coords), expectedCols)
 
-  vgaMetric(pointMap, -1.0, FALSE)
+  vgaResult <- allToAllTraverse(pointMap,
+                                traversalType = TraversalType$Metric,
+                                radii = -1,
+                                radiusTraversalType = TraversalType$None)
 
-  coords <- Rcpp_PointMap_getFilledPoints(pointMapPtr = pointMap@ptr)
-  expect_identical(dim(coords), c(4332L, 18L))
-  expectedCols <- c(
-    expectedCols,
+  newExpectedCols <- c(
     "Metric Mean Shortest-Path Angle",
     "Metric Mean Shortest-Path Distance",
     "Metric Mean Straight-Line Distance",
     "Metric Node Count"
   )
-  expect_identical(colnames(coords), expectedCols)
-
-  vgaVisualGlobal(pointMap, -1L, FALSE)
+  expect_identical(vgaResult$newAttributes, newExpectedCols)
 
   coords <- Rcpp_PointMap_getFilledPoints(pointMapPtr = pointMap@ptr)
-  expect_identical(dim(coords), c(4332L, 25L))
+  expect_identical(dim(coords), c(4332L, 18L))
   expectedCols <- c(
     expectedCols,
+    newExpectedCols
+  )
+  expect_identical(colnames(coords), expectedCols)
+
+  vgaResult <- allToAllTraverse(pointMap,
+                                traversalType = TraversalType$Topological,
+                                radii = -1,
+                                radiusTraversalType = TraversalType$None)
+
+  newExpectedCols <- c(
     "Visual Entropy",
     "Visual Integration [HH]",
     "Visual Integration [P-value]",
@@ -202,27 +223,37 @@ test_that("VGA in R", {
     "Visual Node Count",
     "Visual Relativised Entropy"
   )
+  expect_identical(vgaResult$newAttributes, newExpectedCols)
+
+  coords <- Rcpp_PointMap_getFilledPoints(pointMapPtr = pointMap@ptr)
+  expect_identical(dim(coords), c(4332L, 25L))
+  expectedCols <- c(
+    expectedCols,
+    newExpectedCols
+  )
   expect_identical(colnames(coords), expectedCols)
 
-  vgaVisualLocal(pointMap, FALSE)
+  vgaResult <- vgaVisualLocal(pointMap, FALSE)
+
+  newExpectedCols <- c(
+    "Visual Clustering Coefficient",
+    "Visual Control",
+    "Visual Controllability"
+  )
+  expect_identical(vgaResult$newAttributes, newExpectedCols)
 
   coords <- Rcpp_PointMap_getFilledPoints(pointMapPtr = pointMap@ptr)
   expect_identical(dim(coords), c(4332L, 28L))
   expectedCols <- c(
     expectedCols,
-    "Visual Clustering Coefficient",
-    "Visual Control",
-    "Visual Controllability"
+    newExpectedCols
   )
   expect_identical(colnames(coords), expectedCols)
 
-  boundaryMap <- sfToShapeMap(lineStringMap)
-  vgaIsovist(pointMap, boundaryMap)
+  boundaryMap <- as(lineStringMap, "ShapeMap")
+  vgaResult <- vgaIsovist(pointMap, boundaryMap)
 
-  coords <- Rcpp_PointMap_getFilledPoints(pointMapPtr = pointMap@ptr)
-  expect_identical(dim(coords), c(4332L, 36L))
-  expectedCols <- c(
-    expectedCols,
+  newExpectedCols <- c(
     "Isovist Area",
     "Isovist Compactness",
     "Isovist Drift Angle",
@@ -231,6 +262,14 @@ test_that("VGA in R", {
     "Isovist Max Radial",
     "Isovist Occlusivity",
     "Isovist Perimeter"
+  )
+  expect_identical(vgaResult$newAttributes, newExpectedCols)
+
+  coords <- Rcpp_PointMap_getFilledPoints(pointMapPtr = pointMap@ptr)
+  expect_identical(dim(coords), c(4332L, 36L))
+  expectedCols <- c(
+    expectedCols,
+    newExpectedCols
   )
   expect_identical(colnames(coords), expectedCols)
 })

@@ -74,8 +74,27 @@ Rcpp::List readMetaGraph(
       Rcpp::Rcout << " - dataMap name: "
                   << (*it)->getName() << std::endl;
     }
+    std::string mapType = "none";
+    switch((*it)->getMapType()) {
+    case ShapeMap::AXIALMAP:
+      mapType = "axial";
+      break;
+    case ShapeMap::ALLLINEMAP:
+      mapType = "allline";
+      break;
+    case ShapeMap::SEGMENTMAP:
+      mapType = "segment";
+      break;
+    case ShapeMap::CONVEXMAP:
+      mapType = "convex";
+      break;
+    case ShapeMap::PESHMAP:
+      mapType = "pesh";
+      break;
+    }
     shapeGraphs.push_back(
       Rcpp::List::create(
+        Rcpp::Named("type") = mapType,
         Rcpp::Named("ptr") =
           Rcpp::XPtr<ShapeGraph>(
             std::move(*it).release(), true)

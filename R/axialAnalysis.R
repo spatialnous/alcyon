@@ -29,57 +29,30 @@ axialAnalysis <- function(shapeGraph,
   ))
 }
 
-axialAnalysisSf <- function(lineStringMap,
-                            radii,
-                            weightByAttribute = "",
-                            includeChoice = FALSE,
-                            includeLocal = FALSE,
-                            includeIntermediateMetrics = FALSE,
-                            keepGraph = FALSE,
-                            verbose = FALSE) {
-  weightByIdx <- NULL
-  if (weightByAttribute != "") {
-    weightByIdx <- which(names(lineStringMap) == weightByAttribute)[[1L]]
-  }
-  shapeGraph <- sfToAxialShapeGraph(lineStringMap,
-    keepAttributes = weightByIdx
-  )
-
-  attrNamesBefore <- Rcpp_ShapeMap_getAttributeNames(shapeGraph@ptr)
-
-  expectdAttrName <- NULL
-  if (!is.null(weightByIdx)) {
-    expectdAttrName <- Rcpp_getSfShapeMapExpectedColName(
-      lineStringMap,
-      weightByIdx
-    )
-  }
-
-  axialAnalysis(
+#' Axial analysis - local metrics
+#'
+#' Runs axial analysis to get the local metrics Control and Controllability
+#'
+#' @param shapeGraph An Axial ShapeGraph
+#' @param verbose Optional. Show more information of the process.
+#'
+#' @return Returns a list with:
+#' \itemize{
+#'   \item{completed: Whether the analysis completed}
+#'   \item{newAttributes: The new attributes that were created during the
+#'   process}
+#' }
+#' @export
+axialAnalysisLocal <- function(
     shapeGraph,
-    radii,
-    expectdAttrName,
-    includeChoice,
-    includeLocal,
-    includeIntermediateMetrics,
-    keepGraph,
-    verbose
-  )
-
-  attrNamesAfter <- Rcpp_ShapeMap_getAttributeNames(shapeGraph@ptr)
-  namesDiff <- attrNamesAfter[!(attrNamesAfter %in% attrNamesBefore)]
-  df <- as.data.frame(do.call(
-    cbind,
-    Rcpp_ShapeMap_getAttributeData(shapeGraph@ptr, namesDiff)
+    verbose = FALSE) {
+  return (axialAnalysis(
+    shapeGraph = shapeGraph,
+    radii = c("n"),
+    weightByAttribute = "",
+    includeChoice = FALSE,
+    includeLocal = TRUE,
+    includeIntermediateMetrics = FALSE,
+    verbose = verbose
   ))
-  row.names(df) <-
-    Rcpp_ShapeMap_getAttributeData(
-      shapeGraph@ptr,
-      "df_row_name"
-    )[["df_row_name"]]
-  result <- list(
-    data = df[row.names(lineStringMap), ],
-    graph = NA
-  )
-  return(result)
 }

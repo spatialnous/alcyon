@@ -5,19 +5,7 @@
 context("Isovists tests")
 
 test_that("Isovists in C++", {
-  lineStringMap <- st_read(
-    system.file(
-      "extdata", "testdata", "gallery",
-      "gallery_lines.mif",
-      package = "alcyon"
-    ),
-    geometry_column = 1L, quiet = TRUE
-  )
-
-  shapeMap <- sfToShapeMap(
-    lineStringMap,
-    keepAttributes = vector(mode = "integer")
-  )
+  shapeMap <- loadInteriorLinesAsShapeMap(vector())$shapeMap
 
   isovistMap <- Rcpp_makeIsovists(
     shapeMap@ptr,
@@ -47,24 +35,12 @@ test_that("Isovists in C++", {
   polygonPointMatrix <- isovists[1L, "geometry"][[1L]][[1L]][[1L]]
   expect_identical(
     dim(polygonPointMatrix),
-    c(56L, 2L)
+    c(57L, 2L)
   )
 })
 
 test_that("Isovists in R", {
-  lineStringMap <- st_read(
-    system.file(
-      "extdata", "testdata", "gallery",
-      "gallery_lines.mif",
-      package = "alcyon"
-    ),
-    geometry_column = 1L, quiet = TRUE
-  )
-
-  shapeMap <- sfToShapeMap(
-    lineStringMap,
-    keepAttributes = vector(mode = "integer")
-  )
+  shapeMap <- loadInteriorLinesAsShapeMap(vector())$shapeMap
 
   isovistMap <- isovist(
     shapeMap,
@@ -75,7 +51,7 @@ test_that("Isovists in R", {
     FALSE
   )
 
-  isovists <- shapeMapToPolygongSf(isovistMap)
+  isovists <- shapeMapToPolygonSf(isovistMap)
 
   expect_equal(st_area(isovists[1L, ]), 0.5186, tolerance = 0.0001)
 
