@@ -167,7 +167,7 @@ Rcpp::List getShapeAttributes(
     for (int col = 0; col < attributes.getNumColumns(); ++col) {
       shapeAttributes[attributes.getColumnName(col)] = row.getValue(col);
     }
-  } catch (std::out_of_range) {
+  } catch (const std::out_of_range&) {
     Rcpp::stop("ShapeMap does not contain any shapes with ref %d", ref);
   }
   return shapeAttributes;
