@@ -14,9 +14,9 @@ test_that("Axial Analysis in C++", {
     "Connectivity",
     "Line Length",
     "Data Map Ref",
+    "df_row_name",
     "df_1_Depthmap_Ref",
-    "df_2_Choice",
-    "df_row_name"
+    "df_2_Choice"
   )
   attrNameBefore <- Rcpp_ShapeMap_getAttributeNames(shapeGraph@ptr)
   expect_identical(expectedColNameBefore, attrNameBefore)
@@ -54,7 +54,6 @@ test_that("Axial Analysis in R (non user-visible)", {
     shapeGraph,
     radii = c("n", "3"),
     includeChoice = TRUE,
-    includeLocal = TRUE,
     includeIntermediateMetrics = FALSE
   )
 
@@ -65,9 +64,9 @@ test_that("Axial Analysis in R (non user-visible)", {
     "Connectivity",
     "Line Length",
     "Data Map Ref",
+    "df_row_name",
     "df_1_Depthmap_Ref",
     "df_2_Choice",
-    "df_row_name",
     "Choice R3",
     "Choice [Norm] R3",
     "Entropy R3",
@@ -89,9 +88,7 @@ test_that("Axial Analysis in R (non user-visible)", {
     "Harmonic Mean Depth",
     "Mean Depth",
     "Node Count",
-    "Relativised Entropy",
-    "Control",
-    "Controllability"
+    "Relativised Entropy"
   )
 
   expect_named(result, c(expectedCols, "geometry"))
@@ -143,9 +140,9 @@ test_that("Axial Analysis in R (user-visible)", {
     "Connectivity",
     "Line Length",
     "Data Map Ref",
+    "df_row_name",
     "df_1_Depthmap_Ref",
     "df_2_Choice",
-    "df_row_name",
     newExpectedCols
   )
 
@@ -163,17 +160,6 @@ test_that("Local Axial Analysis in R (user-visible)", {
   )
 
   newExpectedCols <- c(
-    # TODO: these should not appear in local calculations, sala needs to change
-    "Entropy",
-    "Integration [HH]",
-    "Integration [P-value]",
-    "Integration [Tekl]",
-    "Intensity",
-    "Harmonic Mean Depth",
-    "Mean Depth",
-    "Node Count",
-    "Relativised Entropy",
-    # TODO: remove above from axial analysis in sala
     "Control",
     "Controllability"
   )
@@ -187,9 +173,9 @@ test_that("Local Axial Analysis in R (user-visible)", {
     "Connectivity",
     "Line Length",
     "Data Map Ref",
+    "df_row_name",
     "df_1_Depthmap_Ref",
     "df_2_Choice",
-    "df_row_name",
     newExpectedCols
   )
 

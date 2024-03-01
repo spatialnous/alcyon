@@ -7,7 +7,6 @@ axialAnalysis <- function(shapeGraph,
                           radii,
                           weightByAttribute = "",
                           includeChoice = FALSE,
-                          includeLocal = FALSE,
                           includeIntermediateMetrics = FALSE,
                           keepGraph = FALSE,
                           verbose = FALSE) {
@@ -24,7 +23,6 @@ axialAnalysis <- function(shapeGraph,
     numRadii,
     weightByAttribute,
     includeChoice,
-    includeLocal,
     includeIntermediateMetrics
   ))
 }
@@ -46,13 +44,8 @@ axialAnalysis <- function(shapeGraph,
 axialAnalysisLocal <- function(
     shapeGraph,
     verbose = FALSE) {
-  return(axialAnalysis(
-    shapeGraph = shapeGraph,
-    radii = "n",
-    weightByAttribute = "",
-    includeChoice = FALSE,
-    includeLocal = TRUE,
-    includeIntermediateMetrics = FALSE,
+  return(Rcpp_runAxialLocalAnalysis(
+    shapeGraph@ptr,
     verbose = verbose
   ))
 }

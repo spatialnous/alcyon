@@ -117,7 +117,6 @@ allToAllTraverse <- function(map,
       radii = radii,
       weightByAttribute = weightByAttribute,
       includeChoice = includeBetweenness,
-      includeLocal = FALSE,
       includeIntermediateMetrics = FALSE,
       verbose = verbose
     ))

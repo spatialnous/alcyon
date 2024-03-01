@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "salalib/axialmodules/axialintegration.h"
+#include "salalib/axialmodules/axiallocal.h"
 #include "salalib/axialmodules/axialstepdepth.h"
 
 #include "salalib/shapemap.h"
@@ -20,7 +21,6 @@ Rcpp::List runAxialAnalysis(
         const Rcpp::NumericVector radii,
         const Rcpp::Nullable<std::string> weightedMeasureColNameNV = R_NilValue,
         const Rcpp::Nullable<bool> includeChoiceNV = R_NilValue,
-        const Rcpp::Nullable<bool> includeLocalNV = R_NilValue,
         const Rcpp::Nullable<bool> includeIntermediateMetricsNV = R_NilValue,
         const Rcpp::Nullable<bool> verboseNV = R_NilValue,
         const Rcpp::Nullable<bool> progressNV = R_NilValue) {
@@ -31,10 +31,6 @@ Rcpp::List runAxialAnalysis(
     bool includeChoice = false;
     if (includeChoiceNV.isNotNull()) {
         includeChoice = Rcpp::as<bool>(includeChoiceNV);
-    }
-    bool includeLocal = false;
-    if (includeLocalNV.isNotNull()) {
-        includeLocal = Rcpp::as<bool>(includeLocalNV);
     }
     bool includeIntermediateMetrics = false;
     if (includeIntermediateMetricsNV.isNotNull()) {
@@ -80,21 +76,56 @@ Rcpp::List runAxialAnalysis(
         auto analysis = AxialIntegration(radius_set,
                                          weightedMeasureColIdx,
                                          includeChoice,
-                                         includeIntermediateMetrics,
-                                         includeLocal);
+                                         includeIntermediateMetrics);
         AnalysisResult analysisResult = analysis.run(
             getCommunicator(progress).get(),
             *shapeGraph,
             false /* simple version*/
         );
         result["completed"] = analysisResult.completed;
-        result["newAttributes"] = analysisResult.getColumns();
+        result["newAttributes"] = analysisResult.getAttributes();
     } catch (Communicator::CancelledException) {
         // result["completed"] = false;
     }
     return result;
 }
 
+// [[Rcpp::export("Rcpp_runAxialLocalAnalysis")]]
+Rcpp::List runAxialLocalAnalysis(
+        Rcpp::XPtr<ShapeGraph> shapeGraph,
+        const Rcpp::Nullable<bool> verboseNV = R_NilValue,
+        const Rcpp::Nullable<bool> progressNV = R_NilValue) {
+    bool verbose = false;
+    if (verboseNV.isNotNull()) {
+        verbose = Rcpp::as<bool>(verboseNV);
+    }
+    bool progress = false;
+    if (progressNV.isNotNull()) {
+        progress = Rcpp::as<bool>(progressNV);
+    }
+
+    if (verbose)
+        Rcpp::Rcout << "Running axial analysis... " << '\n';
+
+    Rcpp::List result = Rcpp::List::create(
+        Rcpp::Named("completed") = false
+    );
+
+    try {
+
+        auto analysis = AxialLocal();
+        AnalysisResult analysisResult = analysis.run(
+            getCommunicator(progress).get(),
+            *shapeGraph,
+            false /* simple version*/
+        );
+        result["completed"] = analysisResult.completed;
+        result["newAttributes"] = analysisResult.getAttributes();
+    } catch (Communicator::CancelledException) {
+        // result["completed"] = false;
+    }
+    return result;
+}
 
 // [[Rcpp::export("Rcpp_axialStepDepth")]]
 Rcpp::List axialStepDepth(

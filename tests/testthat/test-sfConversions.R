@@ -39,19 +39,13 @@ test_that("sf linestrings to Axial Map", {
 
   shapeGraph <- as(lineStringMap[numericCols], "AxialShapeGraph")
 
-  # TODO: sala messes up the column order when copying data
-  numericCols <- c(
-    numericCols[numericCols > 9L],
-    numericCols[numericCols <= 9L]
-  )
-
   expectedColNames <- c(
     "Ref",
     "Connectivity",
     "Line Length",
     "Data Map Ref",
-    paste0("df_", numericCols, "_", names(lineStringMap)[numericCols]),
-    "df_row_name"
+    "df_row_name",
+    paste0("df_", numericCols, "_", names(lineStringMap)[numericCols])
   )
   attrNames <- Rcpp_ShapeMap_getAttributeNames(shapeGraph@ptr)
   expect_identical(expectedColNames, attrNames)
@@ -75,13 +69,6 @@ test_that("sf linestrings to Segment Map through Axial Map and back", {
     stubRemoval = 0.4
   )
 
-
-  # TODO: sala messes up the column order when copying data
-  numericCols <- c(
-    numericCols[numericCols > 9L],
-    numericCols[numericCols <= 9L]
-  )
-
   expectedColNames <- c(
     "Ref",
     "Axial Line Ref",
@@ -91,8 +78,8 @@ test_that("sf linestrings to Segment Map through Axial Map and back", {
     "Axial Connectivity",
     "Axial Line Length",
     "Axial Data Map Ref",
-    paste0("Axial df_", numericCols, "_", names(lineStringMap)[numericCols]),
-    "Axial df_row_name"
+    "Axial df_row_name",
+    paste0("Axial df_", numericCols, "_", names(lineStringMap)[numericCols])
   )
   attrNames <- Rcpp_ShapeMap_getAttributeNames(segmentGraph@ptr)
   expect_identical(expectedColNames, attrNames)
