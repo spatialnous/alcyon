@@ -5,3 +5,7 @@
 #' @useDynLib alcyon
 #' @importFrom Rcpp getRcppVersion
 NULL
+
+# required in testthat
+#' @importFrom sf st_read
+NULL
