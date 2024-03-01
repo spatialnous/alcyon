@@ -28,7 +28,7 @@ Rcpp::List vgaThroughVision(Rcpp::XPtr<PointMap> pointMapPtr) {
     *pointMapPtr,
     false);
   result["completed"] = analysisResult.completed;
-  result["newAttributes"] = analysisResult.getColumns();
+  result["newAttributes"] = analysisResult.getAttributes();
   return result;
 }
 
@@ -42,7 +42,7 @@ Rcpp::List vgaAngular(Rcpp::XPtr<PointMap> pointMapPtr,
   auto analysisResult = VGAAngular(radius, gatesOnly)
     .run(getCommunicator(true).get(), *pointMapPtr, false);
   result["completed"] = analysisResult.completed;
-  result["newAttributes"] = analysisResult.getColumns();
+  result["newAttributes"] = analysisResult.getAttributes();
   return result;
 }
 
@@ -60,7 +60,7 @@ Rcpp::List vgaMetric(Rcpp::XPtr<PointMap> pointMapPtr,
   auto analysisResult = VGAMetric(radius, gatesOnly)
     .run(getCommunicator(true).get(), *pointMapPtr, false);
   result["completed"] = analysisResult.completed;
-  result["newAttributes"] = analysisResult.getColumns();
+  result["newAttributes"] = analysisResult.getAttributes();
   return result;
 }
 
@@ -80,7 +80,7 @@ Rcpp::List vgaVisualGlobal(Rcpp::XPtr<PointMap> pointMapPtr,
   auto analysisResult = VGAVisualGlobal(radius, gatesOnly)
     .run(getCommunicator(true).get(), *pointMapPtr, false);
   result["completed"] = analysisResult.completed;
-  result["newAttributes"] = analysisResult.getColumns();
+  result["newAttributes"] = analysisResult.getAttributes();
   return result;
 }
 
@@ -93,7 +93,7 @@ Rcpp::List vgaVisualLocal(Rcpp::XPtr<PointMap> pointMapPtr, bool gatesOnly) {
   auto analysisResult = VGAVisualLocal(gatesOnly)
     .run(getCommunicator(true).get(), *pointMapPtr, false);
   result["completed"] = analysisResult.completed;
-  result["newAttributes"] = analysisResult.getColumns();
+  result["newAttributes"] = analysisResult.getAttributes();
   return result;
 }
 
@@ -115,7 +115,7 @@ Rcpp::List vgaIsovist(Rcpp::XPtr<PointMap> pointMapPtr,
   auto analysisResult = VGAIsovist(shapes)
     .run(getCommunicator(true).get(), *pointMapPtr, false);
   result["completed"] = analysisResult.completed;
-  result["newAttributes"] = analysisResult.getColumns();
+  result["newAttributes"] = analysisResult.getAttributes();
   return result;
 }
 
@@ -137,7 +137,7 @@ Rcpp::List vgaVisualDepth(Rcpp::XPtr<PointMap> pointMapPtr,
     .run(getCommunicator(true).get(), *pointMapPtr, false);
   pointMapPtr->clearSel();
   result["completed"] = analysisResult.completed;
-  result["newAttributes"] = analysisResult.getColumns();
+  result["newAttributes"] = analysisResult.getAttributes();
   return result;
 }
 
@@ -159,7 +159,7 @@ Rcpp::List vgaMetricDepth(Rcpp::XPtr<PointMap> pointMapPtr,
     .run(getCommunicator(true).get(), *pointMapPtr, false);
   pointMapPtr->clearSel();
   result["completed"] = analysisResult.completed;
-  result["newAttributes"] = analysisResult.getColumns();
+  result["newAttributes"] = analysisResult.getAttributes();
   return result;
 }
 
@@ -181,7 +181,7 @@ Rcpp::List vgaAngularDepth(Rcpp::XPtr<PointMap> pointMapPtr,
     .run(getCommunicator(true).get(), *pointMapPtr, false);
   pointMapPtr->clearSel();
   result["completed"] = analysisResult.completed;
-  result["newAttributes"] = analysisResult.getColumns();
+  result["newAttributes"] = analysisResult.getAttributes();
   return result;
 }
 

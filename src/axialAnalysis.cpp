@@ -185,7 +185,7 @@ Rcpp::List axialStepDepth(
             }
         }
         result["completed"] = analysisResult.completed;
-        result["newAttributes"] = analysisResult.getColumns();
+        result["newAttributes"] = analysisResult.getAttributes();
 
     } catch (Communicator::CancelledException) {
         //

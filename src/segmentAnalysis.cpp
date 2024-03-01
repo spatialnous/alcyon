@@ -153,7 +153,7 @@ Rcpp::List runSegmentAnalysis(
                         *shapeGraph, false /* unused */);
             analysisResult.completed = analysisResult.completed &
             radiusAnalysisResult.completed;
-            for (auto column: radiusAnalysisResult.getColumns())
+            for (auto column: radiusAnalysisResult.getAttributes())
                 analysisResult.addAttribute(column);
         }
             break;
@@ -166,7 +166,7 @@ Rcpp::List runSegmentAnalysis(
                         *shapeGraph, false /* unused */);
             analysisResult.completed = analysisResult.completed &
             radiusAnalysisResult.completed;
-            for (auto column: radiusAnalysisResult.getColumns())
+            for (auto column: radiusAnalysisResult.getAttributes())
                 analysisResult.addAttribute(column);
         }
             break;
@@ -175,7 +175,7 @@ Rcpp::List runSegmentAnalysis(
             Rcpp::stop("No segment analysis type given");
         }
         result["completed"] = analysisResult.completed;
-        result["newAttributes"] = analysisResult.getColumns();
+        result["newAttributes"] = analysisResult.getAttributes();
     } catch (Communicator::CancelledException) {
         // result["completed"] = false;
     }
@@ -270,7 +270,7 @@ Rcpp::List segmentStepDepth(
         }
         }
         result["completed"] = analysisResult.completed;
-        result["newAttributes"] = analysisResult.getColumns();
+        result["newAttributes"] = analysisResult.getAttributes();
 
     } catch (Communicator::CancelledException) {
         // result["completed"] = false;
