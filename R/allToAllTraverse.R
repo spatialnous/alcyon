@@ -53,64 +53,18 @@ allToAllTraverse <- function(map,
   }
 
   if (inherits(map, "PointMap")) {
-    if (traversalType == TraversalType$Metric) {
-      analysisResult <- list(
-        completed = FALSE,
-        newAttributes = vector(mode = "character")
-      )
-      for (radius in radii) {
-        radiusAnalysisResult <- Rcpp_VGA_metric(
-          map@ptr,
-          radius,
-          gatesOnly
-        )
-        analysisResult$completed <- analysisResult$completed &
-          radiusAnalysisResult$completed
-        analysisResult$newAttributes <- c(
-          analysisResult$newAttributes,
-          radiusAnalysisResult$newAttributes
-        )
-      }
-      return(analysisResult)
-    } else if (traversalType == TraversalType$Topological) {
-      analysisResult <- list(
-        completed = FALSE,
-        newAttributes = vector(mode = "character")
-      )
-      for (radius in radii) {
-        radiusAnalysisResult <- Rcpp_VGA_visualGlobal(
-          map@ptr,
-          radius,
-          gatesOnly
-        )
-        analysisResult$completed <- analysisResult$completed &
-          radiusAnalysisResult$completed
-        analysisResult$newAttributes <- c(
-          analysisResult$newAttributes,
-          radiusAnalysisResult$newAttributes
-        )
-      }
-      return(analysisResult)
-    } else if (traversalType == TraversalType$Angular) {
-      analysisResult <- list(
-        completed = FALSE,
-        newAttributes = vector(mode = "character")
-      )
-      for (radius in radii) {
-        radiusAnalysisResult <- Rcpp_VGA_angular(
-          map@ptr,
-          radius,
-          gatesOnly
-        )
-        analysisResult$completed <- analysisResult$completed &
-          radiusAnalysisResult$completed
-        analysisResult$newAttributes <- c(
-          analysisResult$newAttributes,
-          radiusAnalysisResult$newAttributes
-        )
-      }
-      return(analysisResult)
-    }
+    return(allToAllTraverse(
+      map,
+      traversalType,
+      radii,
+      radiusTraversalType,
+      weightByAttribute,
+      includeBetweenness,
+      quantizationWidth,
+      gatesOnly,
+      verbose,
+      progress
+    ))
   } else if (inherits(map, "AxialShapeGraph")) {
     return(axialAnalysis(
       shapeGraph = map,
@@ -143,6 +97,76 @@ allToAllTraverse <- function(map,
       "Can only run all-to-all traversal on Axial or Segment ",
       "ShapeGraphs and PointMaps"
     )
+  }
+}
+
+allToAllTraversePointMap <- function(map,
+                                     traversalType,
+                                     radii,
+                                     radiusTraversalType,
+                                     weightByAttribute = NULL,
+                                     includeBetweenness = FALSE,
+                                     quantizationWidth = NA,
+                                     gatesOnly = FALSE,
+                                     verbose = FALSE,
+                                     progress = FALSE) {
+  if (traversalType == TraversalType$Metric) {
+    analysisResult <- list(
+      completed = FALSE,
+      newAttributes = vector(mode = "character")
+    )
+    for (radius in radii) {
+      radiusAnalysisResult <- Rcpp_VGA_metric(
+        map@ptr,
+        radius,
+        gatesOnly
+      )
+      analysisResult$completed <- analysisResult$completed &
+        radiusAnalysisResult$completed
+      analysisResult$newAttributes <- c(
+        analysisResult$newAttributes,
+        radiusAnalysisResult$newAttributes
+      )
+    }
+    return(analysisResult)
+  } else if (traversalType == TraversalType$Topological) {
+    analysisResult <- list(
+      completed = FALSE,
+      newAttributes = vector(mode = "character")
+    )
+    for (radius in radii) {
+      radiusAnalysisResult <- Rcpp_VGA_visualGlobal(
+        map@ptr,
+        radius,
+        gatesOnly
+      )
+      analysisResult$completed <- analysisResult$completed &
+        radiusAnalysisResult$completed
+      analysisResult$newAttributes <- c(
+        analysisResult$newAttributes,
+        radiusAnalysisResult$newAttributes
+      )
+    }
+    return(analysisResult)
+  } else if (traversalType == TraversalType$Angular) {
+    analysisResult <- list(
+      completed = FALSE,
+      newAttributes = vector(mode = "character")
+    )
+    for (radius in radii) {
+      radiusAnalysisResult <- Rcpp_VGA_angular(
+        map@ptr,
+        radius,
+        gatesOnly
+      )
+      analysisResult$completed <- analysisResult$completed &
+        radiusAnalysisResult$completed
+      analysisResult$newAttributes <- c(
+        analysisResult$newAttributes,
+        radiusAnalysisResult$newAttributes
+      )
+    }
+    return(analysisResult)
   }
 }
 

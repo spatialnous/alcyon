@@ -47,15 +47,31 @@ oneToAllTraverse <- function(map,
       && traversalType == TraversalType$Angular) {
     stop("Angular traversal requires a quantizationWidth")
   }
+  return(oneToAllTraversePerMapType(
+    map,
+    traversalType,
+    fromX,
+    fromY,
+    quantizationWidth,
+    verbose
+  ))
+}
+oneToAllTraversePerMapType <- function(map,
+                                       traversalType,
+                                       fromX,
+                                       fromY,
+                                       quantizationWidth = NA,
+                                       verbose = FALSE) {
 
   if (inherits(map, "PointMap")) {
-    if (traversalType == TraversalType$Topological) {
-      return(Rcpp_VGA_visualDepth(map@ptr, cbind(fromX, fromY)))
-    } else if (traversalType == TraversalType$Metric) {
-      return(Rcpp_VGA_metricDepth(map@ptr, cbind(fromX, fromY)))
-    } else if (traversalType == TraversalType$Angular) {
-      return(Rcpp_VGA_angularDepth(map@ptr, cbind(fromX, fromY)))
-    }
+    return(oneToAllTraversePointMap(
+      map,
+      traversalType,
+      fromX,
+      fromY,
+      quantizationWidth,
+      verbose
+    ))
   } else if (inherits(map, "AxialShapeGraph")) {
     return(Rcpp_axialStepDepth(map@ptr, traversalType, fromX, fromY))
   } else if (inherits(map, "SegmentShapeGraph")) {
@@ -70,5 +86,20 @@ oneToAllTraverse <- function(map,
     ))
   } else {
     stop("Can only run depth on Axial or Segment ShapeGraphs and PointMaps")
+  }
+}
+
+oneToAllTraversePointMap <- function(map,
+                                     traversalType,
+                                     fromX,
+                                     fromY,
+                                     quantizationWidth = NA,
+                                     verbose = FALSE) {
+  if (traversalType == TraversalType$Topological) {
+    return(Rcpp_VGA_visualDepth(map@ptr, cbind(fromX, fromY)))
+  } else if (traversalType == TraversalType$Metric) {
+    return(Rcpp_VGA_metricDepth(map@ptr, cbind(fromX, fromY)))
+  } else if (traversalType == TraversalType$Angular) {
+    return(Rcpp_VGA_angularDepth(map@ptr, cbind(fromX, fromY)))
   }
 }
