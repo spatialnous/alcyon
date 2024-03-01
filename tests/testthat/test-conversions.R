@@ -34,9 +34,9 @@ test_that("sf line map to Axial ShapeGraph", {
     "Connectivity",
     "Line Length",
     "Data Map Ref",
+    "df_row_name",
     "df_1_Depthmap_Ref",
-    "df_2_Choice",
-    "df_row_name"
+    "df_2_Choice"
   )
   attrNames <- Rcpp_ShapeMap_getAttributeNames(shapeGraph)
   expect_identical(expectedColNames, attrNames)
@@ -69,9 +69,9 @@ test_that("sf line map to Segment ShapeGraph", {
     "Axial Connectivity",
     "Axial Line Length",
     "Axial Data Map Ref",
+    "Axial df_row_name",
     "Axial df_1_Depthmap_Ref",
-    "Axial df_2_Choice",
-    "Axial df_row_name"
+    "Axial df_2_Choice"
   )
   attrNames <- Rcpp_ShapeMap_getAttributeNames(segmentMap)
   expect_identical(expectedColNames, attrNames)

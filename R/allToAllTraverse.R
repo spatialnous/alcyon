@@ -53,7 +53,7 @@ allToAllTraverse <- function(map,
   }
 
   if (inherits(map, "PointMap")) {
-    return(allToAllTraverse(
+    return(allToAllTraversePointMap(
       map,
       traversalType,
       radii,

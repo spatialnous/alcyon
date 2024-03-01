@@ -18,9 +18,9 @@ test_that("Segment Analysis in C++", {
     "Axial Connectivity",
     "Axial Line Length",
     "Axial Data Map Ref",
+    "Axial df_row_name",
     "Axial df_1_Depthmap_Ref",
-    "Axial df_2_Choice",
-    "Axial df_row_name"
+    "Axial df_2_Choice"
   )
   attrNameBefore <- Rcpp_ShapeMap_getAttributeNames(segmentGraph@ptr)
   expect_identical(expectedColNameBefore, attrNameBefore)
@@ -171,8 +171,8 @@ test_that("Segment Analysis in R (user-visible)", {
     "Axial Connectivity",
     "Axial Line Length",
     "Axial Data Map Ref",
-    "Axial df_1_Line_Length",
     "Axial df_row_name",
+    "Axial df_1_Line_Length",
     newExpectedCols,
     "geometry"
   )
