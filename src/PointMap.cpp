@@ -106,6 +106,67 @@ std::string pointMapGetName(Rcpp::XPtr<PointMap> pointMapPtr) {
   return pointMapPtr->getName();
 }
 
+// [[Rcpp::export("Rcpp_PointMap_getLinks")]]
+Rcpp::IntegerMatrix pointMapGetLinks(Rcpp::XPtr<PointMap> pointMapPtr) {
+  auto mergedPixelPairs = pointMapPtr->getMergedPixelPairs();
+  Rcpp::IntegerMatrix linkData(
+      mergedPixelPairs.size(), 2L
+  );
+  Rcpp::colnames(linkData) = Rcpp::CharacterVector({
+    "from", "to"
+  });
+  int rowIdx = 0;
+  for (auto link: mergedPixelPairs) {
+    const Rcpp::IntegerMatrix::Row &row = linkData( rowIdx , Rcpp::_ );
+    row[0] = link.first;
+    row[1] = link.second;
+    rowIdx++;
+  }
+  return linkData;
+}
+
+// [[Rcpp::export("Rcpp_PointMap_getConnections")]]
+Rcpp::IntegerMatrix pointMapGetConnections(Rcpp::XPtr<PointMap> pointMapPtr) {
+  auto &points = pointMapPtr->getPoints();
+  int numConnections = 0;
+  for (size_t i = 0; i < points.columns(); i++) {
+    for (size_t j = 0; j < points.rows(); j++) {
+      Point &pnt = points(static_cast<size_t>(j), static_cast<size_t>(i));
+      if (pnt.filled() && pnt.hasNode()) {
+        PixelRef pix(i, j);
+        PixelRefVector connections;
+        pnt.getNode().contents(connections);
+        numConnections += connections.size();
+      }
+    }
+  }
+
+  Rcpp::IntegerMatrix connectionData(
+      numConnections, 2L
+  );
+  Rcpp::colnames(connectionData) = Rcpp::CharacterVector({
+    "from", "to"
+  });
+  int rowIdx = 0;
+  for (size_t i = 0; i < points.columns(); i++) {
+    for (size_t j = 0; j < points.rows(); j++) {
+      Point &pnt = points(static_cast<size_t>(j), static_cast<size_t>(i));
+      if (pnt.filled() && pnt.hasNode()) {
+        PixelRef pix(i, j);
+        PixelRefVector hood;
+        pnt.getNode().contents(hood);
+        for (PixelRef &p : hood) {
+          const Rcpp::IntegerMatrix::Row &row = connectionData(rowIdx, Rcpp::_);
+          row[0] = pix;
+          row[1] = p;
+          rowIdx++;
+        }
+      }
+    }
+  }
+  return connectionData;
+}
+
 // [[Rcpp::export("Rcpp_PointMap_getFilledPoints")]]
 Rcpp::NumericMatrix getFilledPoints(Rcpp::XPtr<PointMap> pointMapPtr) {
   const auto &attrTable = pointMapPtr->getAttributeTable();

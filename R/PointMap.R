@@ -45,7 +45,7 @@ setMethod(
   "connections",
   signature = c(map = "PointMap"),
   function(map) {
-    stop("Unimplemented")
+    return(Rcpp_PointMap_getConnections(map@ptr))
   }
 )
 
@@ -60,7 +60,7 @@ setMethod(
   "links",
   signature = c(map = "PointMap"),
   function(map) {
-    stop("Unimplemented")
+    return(Rcpp_PointMap_getLinks(map@ptr))
   }
 )
 
