@@ -1,9 +1,9 @@
 [submodule "src/salalib"]
 	path = src/libs/salalib
-	url = git@github.com:/acanth-is/salalib.git
+	url = git@github.com:spatialnous/salalib.git
 [submodule "src/genlib"]
 	path = src/libs/genlib
-	url = git@github.com:/acanth-is/genlib.git
+	url = git@github.com:spatialnous/genlib.git
 [submodule "inst/extdata/testdata"]
 	path = inst/extdata/testdata
-	url = git@github.com:acanth-is/testdata.git
+	url = git@github.com:spatialnous/testdata.git
