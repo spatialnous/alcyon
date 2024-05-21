@@ -13,7 +13,9 @@ Description: Interface package for 'sala', the spatial network analysis library
     from the 'depthmapX' softwre application. The R parts of the code are based
     on the 'rdepthmap' package. Allows for the analysis of urban and
     bulding-scale networks and provides metrics and methods usually found within
-    the Space Syntax domain.
+    the Space Syntax domain. Methods in this package are described by K.
+    Al-Sayed, A. Turner, B. Hillier, S. Iida and A. Penn (2014) "Space Syntax
+    methodology".
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
