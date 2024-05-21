@@ -1,6 +1,6 @@
 # SPDX-FileCopyrightText: 2024 Petros Koutsolampros
 #
-# SPDX-License-Identifier: GPL-3.0-or-later
+# SPDX-License-Identifier: GPL-3.0
 
 # A representation of sala's ShapeMap in R. Holds onto a sala Shapemap
 # pointer and operates on that

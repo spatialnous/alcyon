@@ -1,6 +1,6 @@
 # SPDX-FileCopyrightText: 2019 Petros Koutsolampros
 #
-# SPDX-License-Identifier: GPL-3.0-or-later
+# SPDX-License-Identifier: GPL-3.0
 
 #' All-to-all traversal
 #'

@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: 2019 Kimon Krenz
 # SPDX-FileCopyrightText: 2019 Petros Koutsolampros
 #
-# SPDX-License-Identifier: GPL-3.0-or-later
+# SPDX-License-Identifier: GPL-3.0
 
 getMatches <- function(d) {
   # the process needs to be done for the fewer objects

@@ -1,6 +1,6 @@
 // SPDX-FileCopyrightText: 2024 Petros Koutsolampros
 //
-// SPDX-License-Identifier: GPL-3.0-or-later
+// SPDX-License-Identifier: GPL-3.0
 
 #include "salalib/pointdata.h"
 #include "salalib/vgamodules/vgametric.h"

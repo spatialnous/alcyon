@@ -1,6 +1,6 @@
 # SPDX-FileCopyrightText: 2024 Petros Koutsolampros
 #
-# SPDX-License-Identifier: GPL-3.0-or-later
+# SPDX-License-Identifier: GPL-3.0
 
 # Set the C++ standard to C++17
 CXX_STD = CXX17

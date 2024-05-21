@@ -1,6 +1,6 @@
 # SPDX-FileCopyrightText: 2019-2024 Petros Koutsolampros
 #
-# SPDX-License-Identifier: GPL-3.0-or-later
+# SPDX-License-Identifier: GPL-3.0
 
 #' Ref ID to index and vice-versa
 #'

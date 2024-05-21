@@ -1,6 +1,6 @@
 # SPDX-FileCopyrightText: 2024 Petros Koutsolampros
 #
-# SPDX-License-Identifier: GPL-3.0-or-later
+# SPDX-License-Identifier: GPL-3.0
 
 # The values here should be kept the same order as the ones in TraversalType.h
 
