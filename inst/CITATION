@@ -12,4 +12,4 @@ bibentry(bibtype = "Misc",
          year = year,
          note = note,
          version = meta$Version,
-         url = "https://github.com/acanth-is/alcyon")
+         url = "https://github.com/spatialnous/alcyon")

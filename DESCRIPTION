@@ -1,15 +1,19 @@
 Package: alcyon
 Type: Package
-Title: R and the Sala Library
+Title: Interface to the 'sala' Spatial Network Analysis Library
 Date: 2024-02-05
 Version: 0.2.0
 Authors@R: c(
-    person("Petros", "Koutsolampros", email = "petros.koutsolampros.11@ucl.ac.uk", role = c("cre", "aut")),
-    person("Fani", "Kostourou", role = c("aut", "ctb")),
-    person("Kimon", "Krenz", role = "ctb"),
+    person("Petros", "Koutsolampros", email = "petros.koutsolampros.11@ucl.ac.uk", role = c("cre", "aut", "cph")),
+    person("Fani", "Kostourou", role = c("aut", "ctb", "cph")),
+    person("Kimon", "Krenz", role = c("ctb", "cph")),
     person("University College London", role = "fnd"),
     person("Spacelab", role = "fnd"))
-Description: Interface package for sala, depthmapX's spatial network analysis library. The R parts of the code are based on the rdepthmap package.
+Description: Interface package for 'sala', the spatial network analysis library
+    from the 'depthmapX' softwre application. The R parts of the code are based
+    on the 'rdepthmap' package. Allows for the analysis of urban and
+    bulding-scale networks and provides metrics and methods usually found within
+    the Space Syntax domain.
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
