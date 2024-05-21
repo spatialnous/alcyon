@@ -15,7 +15,9 @@ Description: Interface package for 'sala', the spatial network analysis library
     bulding-scale networks and provides metrics and methods usually found within
     the Space Syntax domain. Methods in this package are described by K.
     Al-Sayed, A. Turner, B. Hillier, S. Iida and A. Penn (2014) "Space Syntax
-    methodology".
+    methodology", and also by A. Turner (2004)
+    \<https:https://discovery.ucl.ac.uk/id/eprint/2651/\> "Depthmap 4: a
+    researcher's handbook"
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
