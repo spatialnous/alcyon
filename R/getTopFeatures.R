@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: 2019 Kimon Krenz
 # SPDX-FileCopyrightText: 2019-2024 Petros Koutsolampros
 #
-# SPDX-License-Identifier: GPL-3.0
+# SPDX-License-Identifier: GPL-3.0-only
 
 #' Extract top x percent of features
 #'

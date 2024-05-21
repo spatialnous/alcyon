@@ -1,6 +1,6 @@
 # SPDX-FileCopyrightText: 2024 Petros Koutsolampros
 #
-# SPDX-License-Identifier: GPL-3.0
+# SPDX-License-Identifier: GPL-3.0-only
 
 # The values here should be kept the same as the ones in AgentLookMode.h
 

@@ -1,6 +1,6 @@
 # SPDX-FileCopyrightText: 2019 Petros Koutsolampros
 #
-# SPDX-License-Identifier: GPL-3.0
+# SPDX-License-Identifier: GPL-3.0-only
 
 #' Create an emprt PointMap through a grid
 #'

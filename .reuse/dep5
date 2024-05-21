@@ -5,4 +5,4 @@ Source: https://github.com/acanth-id/alcyon
 
 Files: .github/*.yml .Rbuildignore .gitignore .gitmodules .lintr DESCRIPTION README.md alcyon.Rproj inst/CITATION man/*.Rd NAMESPACE vignettes/.gitignore NEWS.md cran-comments.md
 Copyright: Petros Koutsolampros <commits@pklampros.io>
-License: GPL-3.0
+License: GPL-3.0-only

@@ -1,6 +1,6 @@
 # SPDX-FileCopyrightText: 2024 Petros Koutsolampros
 #
-# SPDX-License-Identifier: GPL-3.0
+# SPDX-License-Identifier: GPL-3.0-only
 
 set(CMAKE_OSX_DEPLOYMENT_TARGET "10.9" CACHE STRING "Minimum macOS deployment version")
 cmake_minimum_required(VERSION 3.13.0)

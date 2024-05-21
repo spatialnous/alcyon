@@ -1,6 +1,6 @@
 # SPDX-FileCopyrightText: 2019-2023 Petros Koutsolampros
 #
-# SPDX-License-Identifier: GPL-3.0
+# SPDX-License-Identifier: GPL-3.0-only
 
 #' Create isovists at point and direction angle
 #'
