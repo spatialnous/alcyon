@@ -14,8 +14,32 @@ unmakeVGAGraph(pointMap, removeLinks = FALSE, verbose = FALSE)
 \item{verbose}{Optional. Show more information of the process.}
 }
 \value{
-A new PointMap
+None
 }
 \description{
 Unmake the graph in a PointMap
+}
+\examples{
+mifFile = system.file(
+  "extdata", "testdata", "gallery",
+  "gallery_lines.mif",
+  package = "alcyon"
+)
+sfMap <- st_read(mifFile,
+  geometry_column = 1L, quiet = TRUE
+)
+shapeMap <- as(sfMap[, c()], "ShapeMap")
+pointMap <- makeVGAPointMap(
+  sfMap,
+  gridSize = 0.04,
+  fillX = 3.01,
+  fillY = 6.7,
+  maxVisibility = NA,
+  boundaryGraph = FALSE,
+  verbose = FALSE
+)
+unmakeVGAGraph(
+  pointMap = pointMap,
+  removeLinks = FALSE
+)
 }

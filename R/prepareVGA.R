@@ -10,7 +10,18 @@
 #' @param maxY Maximum Y of the bounding region
 #' @param gridSize Size of the cells
 #' @param verbose Optional. Show more information of the process.
-#' @return A new PointMap
+#' @returns A new PointMap
+#' @eval c("@examples",
+#' rxgn_loadInteriorLinesAsShapeMap(),
+#' "lineStringMap <- as(sfMap, \"sf\")",
+#' "mapRegion <- sf::st_bbox(lineStringMap)",
+#' "createGrid(",
+#' "  minX = mapRegion[[\"xmin\"]],",
+#' "  minY = mapRegion[[\"ymin\"]],",
+#' "  maxX = mapRegion[[\"xmax\"]],",
+#' "  maxY = mapRegion[[\"ymax\"]],",
+#' "  gridSize = 0.04",
+#' ")")
 #' @export
 createGrid <- function(minX,
                        minY,
@@ -37,6 +48,22 @@ createGrid <- function(minX,
 #' @param pointMap The input PointMap
 #' @param lineStringMap Map of lines, either a ShapeMap, or an sf lineString map
 #' @param verbose Optional. Show more information of the process.
+#' @returns None
+#' @eval c("@examples",
+#' rxgn_loadInteriorLinesAsShapeMap(),
+#' "lineStringMap <- as(sfMap, \"sf\")",
+#' "mapRegion <- sf::st_bbox(lineStringMap)",
+#' "pointMap <- createGrid(",
+#' "  minX = mapRegion[[\"xmin\"]],",
+#' "  minY = mapRegion[[\"ymin\"]],",
+#' "  maxX = mapRegion[[\"xmax\"]],",
+#' "  maxY = mapRegion[[\"ymax\"]],",
+#' "  gridSize = 0.04",
+#' ")",
+#' "blockLines(",
+#' "  pointMap = pointMap,",
+#' "  lineStringMap = lineStringMap[vector()]",
+#' ")")
 #' @export
 blockLines <- function(pointMap,
                        lineStringMap,
@@ -57,6 +84,27 @@ blockLines <- function(pointMap,
 #' @param fillX X coordinate of the fill points
 #' @param fillY Y coordinate of the fill points
 #' @param verbose Optional. Show more information of the process.
+#' @returns None
+#' @eval c("@examples",
+#' rxgn_loadInteriorLinesAsShapeMap(),
+#' "lineStringMap <- as(sfMap, \"sf\")",
+#' "mapRegion <- sf::st_bbox(lineStringMap)",
+#' "pointMap <- createGrid(",
+#' "  minX = mapRegion[[\"xmin\"]],",
+#' "  minY = mapRegion[[\"ymin\"]],",
+#' "  maxX = mapRegion[[\"xmax\"]],",
+#' "  maxY = mapRegion[[\"ymax\"]],",
+#' "  gridSize = 0.04",
+#' ")",
+#' "blockLines(",
+#' "  pointMap = pointMap,",
+#' "  lineStringMap = lineStringMap[vector()]",
+#' ")",
+#' "fillGrid(",
+#' "  pointMap = pointMap,",
+#' "  fillX = 3.01,",
+#' "  fillY = 6.7",
+#' ")")
 #' @export
 fillGrid <- function(pointMap,
                      fillX,
@@ -74,6 +122,32 @@ fillGrid <- function(pointMap,
 #' @param boundaryGraph Only create a graph on the boundary cells
 #' @param maxVisibility Limit how far two cells can be to be connected
 #' @param verbose Optional. Show more information of the process.
+#' @returns None
+#' @eval c("@examples",
+#' rxgn_loadInteriorLinesAsShapeMap(),
+#' "lineStringMap <- as(sfMap, \"sf\")",
+#' "mapRegion <- sf::st_bbox(lineStringMap)",
+#' "pointMap <- createGrid(",
+#' "  minX = mapRegion[[\"xmin\"]],",
+#' "  minY = mapRegion[[\"ymin\"]],",
+#' "  maxX = mapRegion[[\"xmax\"]],",
+#' "  maxY = mapRegion[[\"ymax\"]],",
+#' "  gridSize = 0.04",
+#' ")",
+#' "blockLines(",
+#' "  pointMap = pointMap,",
+#' "  lineStringMap = lineStringMap[vector()]",
+#' ")",
+#' "fillGrid(",
+#' "  pointMap = pointMap,",
+#' "  fillX = 3.01,",
+#' "  fillY = 6.7",
+#' ")",
+#' "makeVGAGraph(",
+#' "  pointMap = pointMap,",
+#' "  boundaryGraph = FALSE,",
+#' "  maxVisibility = NA",
+#' ")")
 #' @export
 makeVGAGraph <- function(pointMap,
                          boundaryGraph = FALSE,
@@ -98,7 +172,18 @@ makeVGAGraph <- function(pointMap,
 #' @param boundaryGraph Only create a graph on the boundary cells
 #' @param maxVisibility Limit how far two cells can be to be connected
 #' @param verbose Optional. Show more information of the process.
-#' @return A new PointMap
+#' @returns A new PointMap
+#' @eval c("@examples",
+#' rxgn_loadInteriorLinesAsShapeMap(),
+#' "makeVGAPointMap(",
+#' "  sfMap,",
+#' "  gridSize = 0.04,",
+#' "  fillX = 3.01,",
+#' "  fillY = 6.7,",
+#' "  maxVisibility = NA,",
+#' "  boundaryGraph = FALSE,",
+#' "  verbose = FALSE",
+#' ")")
 #' @export
 makeVGAPointMap <- function(lineStringMap,
                             gridSize,
@@ -141,7 +226,22 @@ makeVGAPointMap <- function(lineStringMap,
 #' @param pointMap The input PointMap
 #' @param removeLinks Also remove the links
 #' @param verbose Optional. Show more information of the process.
-#' @return A new PointMap
+#' @returns None
+#' @eval c("@examples",
+#' rxgn_loadInteriorLinesAsShapeMap(),
+#' "pointMap <- makeVGAPointMap(",
+#' "  sfMap,",
+#' "  gridSize = 0.04,",
+#' "  fillX = 3.01,",
+#' "  fillY = 6.7,",
+#' "  maxVisibility = NA,",
+#' "  boundaryGraph = FALSE,",
+#' "  verbose = FALSE",
+#' ")",
+#' "unmakeVGAGraph(",
+#' "  pointMap = pointMap,",
+#' "  removeLinks = FALSE",
+#' ")")
 #' @export
 unmakeVGAGraph <- function(pointMap,
                            removeLinks = FALSE,

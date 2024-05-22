@@ -9,7 +9,7 @@
 #' These are meant to be used to indicate what kind of analysis
 #' is meant to be carried out.
 #'
-#' @return A list of numbers representing each particular analysis type
+#' @returns A list of numbers representing each particular analysis type
 #' @examples
 #' TraversalType$Angular
 #' TraversalType$Topological

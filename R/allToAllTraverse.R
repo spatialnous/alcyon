@@ -28,12 +28,43 @@
 #' @param verbose Optional. Show more information of the process.
 #' @param progress Optional. Enable progress display
 #'
-#' @return Returns a list with:
+#' @returns Returns a list with:
 #' \itemize{
 #'   \item{completed: Whether the analysis completed}
 #'   \item{newAttributes: The new attributes that were created during the
 #'   process}
 #' }
+#' @eval c("@examples",
+#' "# Pointmap analysis (VGA)",
+#' rxgn_loadInteriorLinesAsPointMap(),
+#' "allToAllTraverse(pointMap,",
+#' "  traversalType = TraversalType$Angular,",
+#' "  radii = -1L,",
+#' "  radiusTraversalType = TraversalType$None",
+#' ")",
+#' "",
+#' "# Axial analysis",
+#' rxgn_loadSmallAxialLines(),
+#' "allToAllTraverse(",
+#' "  shapeGraph,",
+#' "  traversalType = TraversalType$Topological,",
+#' "  radii = c(\"n\", \"3\"),",
+#' "  includeBetweenness = TRUE",
+#' ")",
+#' "",
+#' "# Segment analysis",
+#' rxgn_loadSmallSegmentLines(),
+#' "allToAllTraverse(",
+#' "  shapeGraph,",
+#' "  radii = c(\"n\", \"100\"),",
+#' "  radiusTraversalType = TraversalType$Metric,",
+#' "  traversalType = TraversalType$Angular,",
+#' "  weightByAttribute = \"Segment Length\",",
+#' "  includeBetweenness = TRUE,",
+#' "  quantizationWidth = pi / 1024L,",
+#' "  verbose = FALSE,",
+#' "  progress = FALSE",
+#' ")")
 #' @export
 allToAllTraverse <- function(map,
                              traversalType,
@@ -175,7 +206,10 @@ allToAllTraversePointMap <- function(map,
 #' Runs Visibility Graph Analysis to get the Through Vision metric
 #'
 #' @param pointMap A PointMap
-#'
+#' @returns None
+#' @eval c("@examples",
+#' rxgn_loadInteriorLinesAsPointMap(),
+#' "vgaThroughVision(pointMap)")
 #' @export
 vgaThroughVision <- function(pointMap) {
   Rcpp_VGA_throughVision(pointMap@ptr)
@@ -187,7 +221,11 @@ vgaThroughVision <- function(pointMap) {
 #'
 #' @param pointMap A PointMap
 #' @param gatesOnly Optional. Only keep the values at specific gates
-#'
+#' @returns None
+#' @eval c("@examples",
+#' "# Note: This example takes a while to run",
+#' rxgn_loadInteriorLinesAsPointMap(),
+#' "vgaVisualLocal(pointMap, FALSE)")
 #' @export
 vgaVisualLocal <- function(pointMap, gatesOnly = FALSE) {
   Rcpp_VGA_visualLocal(pointMap@ptr, gatesOnly)
@@ -199,7 +237,11 @@ vgaVisualLocal <- function(pointMap, gatesOnly = FALSE) {
 #'
 #' @param pointMap A PointMap
 #' @param boundaryMap A ShapeMap of lines
-#'
+#' @returns None
+#' @eval c("@examples",
+#' rxgn_loadInteriorLinesAsPointMap(),
+#' "boundaryMap <- as(sfMap[, c()], \"ShapeMap\")",
+#' "vgaIsovist(pointMap, boundaryMap)")
 #' @export
 vgaIsovist <- function(pointMap, boundaryMap) {
   Rcpp_VGA_isovist(pointMap@ptr, boundaryMap@ptr)

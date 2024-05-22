@@ -22,3 +22,15 @@ Returns a list with:
 \description{
 Runs axial analysis to get the local metrics Control and Controllability
 }
+\examples{
+mifFile = system.file(
+  "extdata", "testdata", "barnsbury",
+  "barnsbury_small_axial.mif",
+  package = "alcyon"
+)
+sfMap <- st_read(mifFile,
+  geometry_column = 1L, quiet = TRUE
+)
+shapeGraph <- as(sfMap, "AxialShapeGraph")
+axialAnalysisLocal(shapeGraph)
+}

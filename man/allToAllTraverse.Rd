@@ -60,3 +60,67 @@ Runs all-to-all traversal on a map with a graph. This is applicable to:
   \item{Segment ShapeGraphs (Segment analysis)}
 }
 }
+\examples{
+# Pointmap analysis (VGA)
+mifFile = system.file(
+  "extdata", "testdata", "gallery",
+  "gallery_lines.mif",
+  package = "alcyon"
+)
+sfMap <- st_read(mifFile,
+  geometry_column = 1L, quiet = TRUE
+)
+pointMap <- makeVGAPointMap(
+  sfMap,
+  gridSize = 0.04,
+  fillX = 3.01,
+  fillY = 6.7,
+  maxVisibility = NA,
+  boundaryGraph = FALSE,
+  verbose = FALSE
+)
+allToAllTraverse(pointMap,
+  traversalType = TraversalType$Angular,
+  radii = -1L,
+  radiusTraversalType = TraversalType$None
+)
+
+# Axial analysis
+mifFile = system.file(
+  "extdata", "testdata", "barnsbury",
+  "barnsbury_small_axial.mif",
+  package = "alcyon"
+)
+sfMap <- st_read(mifFile,
+  geometry_column = 1L, quiet = TRUE
+)
+shapeGraph <- as(sfMap, "AxialShapeGraph")
+allToAllTraverse(
+  shapeGraph,
+  traversalType = TraversalType$Topological,
+  radii = c("n", "3"),
+  includeBetweenness = TRUE
+)
+
+# Segment analysis
+mifFile = system.file(
+  "extdata", "testdata", "barnsbury",
+  "barnsbury_small_segment.mif",
+  package = "alcyon"
+)
+sfMap <- st_read(mifFile,
+  geometry_column = 1L, quiet = TRUE
+)
+shapeGraph <- as(sfMap, "SegmentShapeGraph")
+allToAllTraverse(
+  shapeGraph,
+  radii = c("n", "100"),
+  radiusTraversalType = TraversalType$Metric,
+  traversalType = TraversalType$Angular,
+  weightByAttribute = "Segment Length",
+  includeBetweenness = TRUE,
+  quantizationWidth = pi / 1024L,
+  verbose = FALSE,
+  progress = FALSE
+)
+}

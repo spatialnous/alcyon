@@ -15,6 +15,9 @@ setClass("AxialShapeGraph", contains = "ShapeGraph")
 #' @returns A matrix with the connected refs
 #' @docType methods
 #' @importFrom methods setMethod
+#' @eval c("@examples",
+#' rxgn_loadSmallAxialLines(),
+#' "connections(shapeGraph)")
 #' @export
 setMethod(
   "connections",
@@ -30,6 +33,12 @@ setMethod(
 #' @returns A matrix with the linked refs
 #' @docType methods
 #' @importFrom methods setMethod
+#' @eval c("@examples",
+#' "# links of an axial map",
+#' rxgn_loadSmallAxialLines(),
+#' "linkRefs(shapeGraph, 0L, 9L)",
+#' "unlinkCoords(shapeGraph, 530923.0, 184041.0, 530956.0, 183887.0)",
+#' "links(shapeGraph)")
 #' @export
 setMethod(
   "links",
@@ -48,8 +57,12 @@ setMethod(
 #' @param fromY Y coordinate of the first link point
 #' @param toX X coordinate of the second link point
 #' @param toY Y coordinate of the second link point
+#' @returns None
 #' @docType methods
 #' @importFrom methods setMethod
+#' @eval c("@examples",
+#' rxgn_loadSmallAxialLines(),
+#' "linkCoords(shapeGraph, 530684.0, 184100.3, 530807.5, 183969.3)")
 #' @export
 setMethod(
   "linkCoords",
@@ -71,8 +84,12 @@ setMethod(
 #' @param fromY Y coordinate of the first unlink point
 #' @param toX X coordinate of the second unlink point
 #' @param toY Y coordinate of the second unlink point
+#' @returns None
 #' @docType methods
 #' @importFrom methods setMethod
+#' @eval c("@examples",
+#' rxgn_loadSmallAxialLines(),
+#' "unlinkCoords(shapeGraph, 530923.0, 184041.0, 530956.0, 183887.0)")
 #' @export
 setMethod(
   "unlinkCoords",
@@ -92,8 +109,12 @@ setMethod(
 #' @param map An Axial ShapeGraph
 #' @param fromRef Ref of the first link line
 #' @param toRef Ref of the second link line
+#' @returns None
 #' @docType methods
 #' @importFrom methods setMethod
+#' @eval c("@examples",
+#' rxgn_loadSmallAxialLines(),
+#' "linkRefs(shapeGraph, 0L, 9L)")
 #' @export
 setMethod(
   "linkRefs",
@@ -113,8 +134,12 @@ setMethod(
 #' @param map An Axial ShapeGraph
 #' @param fromRef Ref of the first unlink line
 #' @param toRef Ref of the second unlink line
+#' @returns None
 #' @docType methods
 #' @importFrom methods setMethod
+#' @eval c("@examples",
+#' rxgn_loadSmallAxialLines(),
+#' "unlinkRefs(shapeGraph, 12L, 34L)")
 #' @export
 setMethod(
   "unlinkRefs",
@@ -135,8 +160,12 @@ setMethod(
 #' @param map An Axial ShapeGraph
 #' @param x X coordinate of the unlink crossing point
 #' @param y Y coordinate of the unlink crossing point
+#' @returns None
 #' @docType methods
 #' @importFrom methods setMethod
+#' @eval c("@examples",
+#' rxgn_loadSmallAxialLines(),
+#' "unlinkAtCrossPoint(shapeGraph, 530925.0, 184119.0)")
 #' @export
 setMethod(
   "unlinkAtCrossPoint",

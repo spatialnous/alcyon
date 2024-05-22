@@ -15,3 +15,15 @@ The name of the ShapeMap as a string
 \description{
 Get the ShapeMap name
 }
+\examples{
+mifFile = system.file(
+  "extdata", "testdata", "gallery",
+  "gallery_lines.mif",
+  package = "alcyon"
+)
+sfMap <- st_read(mifFile,
+  geometry_column = 1L, quiet = TRUE
+)
+shapeMap <- as(sfMap[, c()], "ShapeMap")
+name(shapeMap)
+}

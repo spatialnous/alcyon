@@ -34,12 +34,15 @@ axialAnalysis <- function(shapeGraph,
 #' @param shapeGraph An Axial ShapeGraph
 #' @param verbose Optional. Show more information of the process.
 #'
-#' @return Returns a list with:
+#' @returns Returns a list with:
 #' \itemize{
 #'   \item{completed: Whether the analysis completed}
 #'   \item{newAttributes: The new attributes that were created during the
 #'   process}
 #' }
+#' @eval c("@examples",
+#' rxgn_loadSmallAxialLines(),
+#' "axialAnalysisLocal(shapeGraph)")
 #' @export
 axialAnalysisLocal <- function(
     shapeGraph,

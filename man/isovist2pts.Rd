@@ -28,3 +28,23 @@ A ShapeMap with the isovist polygons
 Create one or more isovists at particular points, given another point for
 direction and an angle for field of view
 }
+\examples{
+mifFile = system.file(
+  "extdata", "testdata", "gallery",
+  "gallery_lines.mif",
+  package = "alcyon"
+)
+sfMap <- st_read(mifFile,
+  geometry_column = 1L, quiet = TRUE
+)
+shapeMap <- as(sfMap[, c()], "ShapeMap")
+isovist2pts(
+  shapeMap,
+  x = c(3.01, 1.3),
+  y = c(6.70, 5.2),
+  toX = c(3.40, 1.1),
+  toY = c(6.50, 5.6),
+  viewAngle = 3.14,
+  FALSE
+)
+}

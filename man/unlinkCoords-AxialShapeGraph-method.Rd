@@ -18,6 +18,21 @@
 
 \item{toY}{Y coordinate of the second unlink point}
 }
+\value{
+None
+}
 \description{
 Unlink two locations on an Axial ShapeGraph using the point coordinates
+}
+\examples{
+mifFile = system.file(
+  "extdata", "testdata", "barnsbury",
+  "barnsbury_small_axial.mif",
+  package = "alcyon"
+)
+sfMap <- st_read(mifFile,
+  geometry_column = 1L, quiet = TRUE
+)
+shapeGraph <- as(sfMap, "AxialShapeGraph")
+unlinkCoords(shapeGraph, 530923.0, 184041.0, 530956.0, 183887.0)
 }

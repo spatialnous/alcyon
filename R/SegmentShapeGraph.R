@@ -15,6 +15,9 @@ setClass("SegmentShapeGraph", contains = "ShapeGraph")
 #' @returns A matrix with the connected refs
 #' @docType methods
 #' @importFrom methods setMethod
+#' @eval c("@examples",
+#' rxgn_loadSmallSegmentLines(),
+#' "connections(shapeGraph)")
 #' @export
 setMethod(
   "connections",
@@ -23,6 +26,31 @@ setMethod(
     Rcpp_ShapeGraph_getSegmentConnections(map@ptr)
   }
 )
+
+#' Axial to Segment ShapeGraph
+#'
+#' Convert an Axial ShapeGraph to a Segment ShapeGraph
+#'
+#' @param axialShapeGraph An Axial ShapeGraph
+#' @param stubRemoval Rremove stubs of axial lines shorter than this
+#' percentage (for example provide 0.4 for 40\%)
+#' @returns A new Segment ShapeGraph
+#' @importFrom methods new
+#' @eval c("@examples",
+#' rxgn_loadSmallAxialLines(),
+#' "axialToSegmentShapeGraph(shapeGraph, stubRemoval = 0.4)")
+#' @export
+axialToSegmentShapeGraph <- function(axialShapeGraph,
+                                     stubRemoval = NULL) {
+  shapeGraph <- new("SegmentShapeGraph")
+  shapeGraph@ptr <- Rcpp_axialToSegment(
+    axialShapeGraph@ptr,
+    "Segment Map",
+    TRUE,
+    stubRemoval
+  )
+  return(shapeGraph)
+}
 
 #' as("sf", "SegmentShapeGraph")
 #'

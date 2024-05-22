@@ -11,6 +11,30 @@ vgaVisualLocal(pointMap, gatesOnly = FALSE)
 
 \item{gatesOnly}{Optional. Only keep the values at specific gates}
 }
+\value{
+None
+}
 \description{
 Runs Visibility Graph Analysis to get visual local metrics
+}
+\examples{
+# Note: This example takes a while to run
+mifFile = system.file(
+  "extdata", "testdata", "gallery",
+  "gallery_lines.mif",
+  package = "alcyon"
+)
+sfMap <- st_read(mifFile,
+  geometry_column = 1L, quiet = TRUE
+)
+pointMap <- makeVGAPointMap(
+  sfMap,
+  gridSize = 0.04,
+  fillX = 3.01,
+  fillY = 6.7,
+  maxVisibility = NA,
+  boundaryGraph = FALSE,
+  verbose = FALSE
+)
+vgaVisualLocal(pointMap, FALSE)
 }

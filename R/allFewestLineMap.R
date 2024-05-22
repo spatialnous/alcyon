@@ -9,6 +9,13 @@
 #' @param seedY Y coordinate of the seed (the point that initiates the process)
 #' @param verbose Optional. Show more information of the process.
 #' @returns An All-line Axial ShapeGraph
+#' @eval c("@examples",
+#' rxgn_loadInteriorLinesAsShapeMap(),
+#' "makeAllLineMap(",
+#' "  shapeMap,",
+#' "  seedX = 3.01,",
+#' "  seedY = 6.7",
+#' ")")
 #' @export
 makeAllLineMap <- function(boundsMap,
                            seedX,
@@ -28,6 +35,15 @@ makeAllLineMap <- function(boundsMap,
 #'
 #' @param allLineMap An AllLineShapeGraph
 #' @returns A list with two fewest-line axial ShapeGraphs
+#' @eval c("@examples",
+#' "# Note: this example takes quite some time to run",
+#' rxgn_loadInteriorLinesAsShapeMap(),
+#' "allLineMap <- makeAllLineMap(",
+#' "  shapeMap,",
+#' "  seedX = 3.01,",
+#' "  seedY = 6.7",
+#' ")",
+#' "reduceToFewest(allLineMap)")
 #' @export
 reduceToFewest <- function(allLineMap) {
   result <- list()

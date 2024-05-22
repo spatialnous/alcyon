@@ -2,28 +2,6 @@
 #
 # SPDX-License-Identifier: GPL-3.0-only
 
-#' Axial to Segment ShapeGraph
-#'
-#' Convert an Axial ShapeGraph to a Segment ShapeGraph
-#'
-#' @param axialShapeGraph An Axial ShapeGraph
-#' @param stubRemoval Rremove stubs of axial lines shorter than this
-#' percentage (for example provide 0.4 for 40\%)
-#' @returns A new Segment ShapeGraph
-#' @importFrom methods new
-#' @export
-axialToSegmentShapeGraph <- function(axialShapeGraph,
-                                     stubRemoval = NULL) {
-  shapeGraph <- new("SegmentShapeGraph")
-  shapeGraph@ptr <- Rcpp_axialToSegment(
-    axialShapeGraph@ptr,
-    "Segment Map",
-    TRUE,
-    stubRemoval
-  )
-  return(shapeGraph)
-}
-
 #' ShapeMap to sf Polygon map
 #'
 #' Convert a ShapeMap to an sf Polygon map
@@ -31,6 +9,17 @@ axialToSegmentShapeGraph <- function(axialShapeGraph,
 #' @param shapeMap A ShapeMap
 #' @returns A new sf Polygon map
 #' @importFrom sf st_sf st_sfc
+#' @eval c("@examples",
+#' rxgn_loadInteriorLinesAsShapeMap(),
+#' "isovistMap <- isovist(",
+#' "  shapeMap,",
+#' "  x = c(3.01, 1.3),",
+#' "  y = c(6.70, 5.2),",
+#' "  angle = 0.01,",
+#' "  viewAngle = 3.14,",
+#' "  FALSE",
+#' ")",
+#' "shapeMapToPolygonSf(isovistMap)")
 #' @export
 shapeMapToPolygonSf <- function(shapeMap) {
   coords <- Rcpp_ShapeMap_getShapesAsPolygonCoords(shapeMap@ptr)

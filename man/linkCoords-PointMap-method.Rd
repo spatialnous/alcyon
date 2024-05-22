@@ -18,6 +18,29 @@
 
 \item{toY}{Y coordinate of the second link point}
 }
+\value{
+None
+}
 \description{
 Link two cells on a PointMap using the point coordinates
+}
+\examples{
+mifFile = system.file(
+  "extdata", "testdata", "gallery",
+  "gallery_lines.mif",
+  package = "alcyon"
+)
+sfMap <- st_read(mifFile,
+  geometry_column = 1L, quiet = TRUE
+)
+pointMap <- makeVGAPointMap(
+  sfMap,
+  gridSize = 0.04,
+  fillX = 3.01,
+  fillY = 6.7,
+  maxVisibility = NA,
+  boundaryGraph = FALSE,
+  verbose = FALSE
+)
+linkCoords(pointMap, 1.74, 6.7, 5.05, 5.24)
 }

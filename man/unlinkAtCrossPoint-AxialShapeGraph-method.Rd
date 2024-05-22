@@ -14,6 +14,21 @@
 
 \item{y}{Y coordinate of the unlink crossing point}
 }
+\value{
+None
+}
 \description{
 Unlink two crossing lines on an Axial ShapeGraph at the crossing point
+}
+\examples{
+mifFile = system.file(
+  "extdata", "testdata", "barnsbury",
+  "barnsbury_small_axial.mif",
+  package = "alcyon"
+)
+sfMap <- st_read(mifFile,
+  geometry_column = 1L, quiet = TRUE
+)
+shapeGraph <- as(sfMap, "AxialShapeGraph")
+unlinkAtCrossPoint(shapeGraph, 530925.0, 184119.0)
 }

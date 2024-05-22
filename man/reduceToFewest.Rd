@@ -15,3 +15,21 @@ A list with two fewest-line axial ShapeGraphs
 \description{
 Reduce an All-line Map to two types of fewest-line maps
 }
+\examples{
+# Note: this example takes quite some time to run
+mifFile = system.file(
+  "extdata", "testdata", "gallery",
+  "gallery_lines.mif",
+  package = "alcyon"
+)
+sfMap <- st_read(mifFile,
+  geometry_column = 1L, quiet = TRUE
+)
+shapeMap <- as(sfMap[, c()], "ShapeMap")
+allLineMap <- makeAllLineMap(
+  shapeMap,
+  seedX = 3.01,
+  seedY = 6.7
+)
+reduceToFewest(allLineMap)
+}

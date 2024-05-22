@@ -24,3 +24,24 @@ Finds the point closest to a line. One point is attached to one line, thus if
 fewer points than lines are given then some lines will have no point
 attached.
 }
+\examples{
+segmentsMif = system.file(
+  "extdata", "testdata", "barnsbury",
+  "barnsbury_small_segment_original.mif",
+  package = "alcyon"
+)
+segmentsSf <- st_read(
+  segmentsMif,
+  geometry_column = 1L, quiet = TRUE
+)
+gateCountsMif = system.file(
+  "extdata", "testdata", "barnsbury",
+  "barnsbury_ped_gatecounts.mif",
+  package = "alcyon"
+)
+gateCountsSf <- st_read(
+  gateCountsMif,
+  geometry_column = 1L, quiet = TRUE
+)
+matchPointsToLines(gateCountsSf, segmentsSf)
+}

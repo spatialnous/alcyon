@@ -13,7 +13,17 @@
 #' @param angle The angle (from the X axis) of the isovist look direction
 #' @param viewAngle The angle signifying the isovist's field of view
 #' @param verbose Optional. Show more information of the process.
-#' @return A ShapeMap with the isovist polygons
+#' @returns A ShapeMap with the isovist polygons
+#' @eval c("@examples",
+#' rxgn_loadInteriorLinesAsShapeMap(),
+#' "isovist(",
+#' "  shapeMap,",
+#' "  x = c(3.01, 1.3),",
+#' "  y = c(6.70, 5.2),",
+#' "  angle = 0.01,",
+#' "  viewAngle = 3.14,",
+#' "  FALSE",
+#' ")")
 #' @export
 isovist <- function(boundaryMap,
                     x,
@@ -45,7 +55,18 @@ isovist <- function(boundaryMap,
 #' @param toY Y coordinate of the taget points
 #' @param viewAngle The angle signifying the isovist's field of view
 #' @param verbose Optional. Show more information of the process.
-#' @return A ShapeMap with the isovist polygons
+#' @returns A ShapeMap with the isovist polygons
+#' @eval c("@examples",
+#' rxgn_loadInteriorLinesAsShapeMap(),
+#' "isovist2pts(",
+#' "  shapeMap,",
+#' "  x = c(3.01, 1.3),",
+#' "  y = c(6.70, 5.2),",
+#' "  toX = c(3.40, 1.1),",
+#' "  toY = c(6.50, 5.6),",
+#' "  viewAngle = 3.14,",
+#' "  FALSE",
+#' ")")
 #' @export
 isovist2pts <- function(boundaryMap,
                         x,

@@ -22,12 +22,29 @@
 #' record all, with max possible currently = 50).
 #' @param getGateCounts Get values at gates
 #' @param verbose Optional. Show more information of the process.
-#' @return Returns a list with:
+#' @returns Returns a list with:
 #' \itemize{
-#'   \item{completed: Whether the analysis completed}
 #'   \item{newAttributes: The new attributes that were created during the
 #'   process}
+#'   \item{trailMap: A ShapeMap with trails if numberOfTrails was set over 0}
 #' }
+#' @eval c("@examples",
+#' rxgn_loadInteriorLinesAsPointMap(),
+#' "agentAnalysis(",
+#' "  pointMap,",
+#' "  timesteps = 3000L,",
+#' "  releaseRate = 0.1,",
+#' "  agentStepsToDecision = 3L,",
+#' "  agentFov = 11L,",
+#' "  agentLife = 1000L,",
+#' "  agentLookMode = AgentLookMode$Standard,",
+#' "  originX = NA,",
+#' "  originY = NA,",
+#' "  locationSeed = 1L,",
+#' "  numberOfTrails = 50L,",
+#' "  getGateCounts = FALSE,",
+#' "  verbose = FALSE",
+#' ")")
 #' @export
 agentAnalysis <- function(pointMap,
                           timesteps,
@@ -45,7 +62,7 @@ agentAnalysis <- function(pointMap,
   if (!(agentLookMode %in% AgentLookMode)) {
     stop("Unknown agent look mode: ", agentLookMode)
   }
-  return(Rcpp_agentAnalysis(
+  agentAnalysis <- Rcpp_agentAnalysis(
     pointMapPtr = pointMap@ptr,
     systemTimesteps = timesteps,
     releaseRate = releaseRate,
@@ -58,5 +75,9 @@ agentAnalysis <- function(pointMap,
     recordTrailForAgents = numberOfTrails,
     getGateCounts = getGateCounts,
     verbose = verbose
-  ))
+  )
+  if (hasName(agentAnalysis, "trailMap")) {
+    agentAnalysis$trailMap <- new("ShapeMap", ptr = agentAnalysis$trailMap)
+  }
+  return(agentAnalysis)
 }

@@ -9,6 +9,29 @@ vgaThroughVision(pointMap)
 \arguments{
 \item{pointMap}{A PointMap}
 }
+\value{
+None
+}
 \description{
 Runs Visibility Graph Analysis to get the Through Vision metric
+}
+\examples{
+mifFile = system.file(
+  "extdata", "testdata", "gallery",
+  "gallery_lines.mif",
+  package = "alcyon"
+)
+sfMap <- st_read(mifFile,
+  geometry_column = 1L, quiet = TRUE
+)
+pointMap <- makeVGAPointMap(
+  sfMap,
+  gridSize = 0.04,
+  fillX = 3.01,
+  fillY = 6.7,
+  maxVisibility = NA,
+  boundaryGraph = FALSE,
+  verbose = FALSE
+)
+vgaThroughVision(pointMap)
 }

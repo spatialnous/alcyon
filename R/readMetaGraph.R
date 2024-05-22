@@ -7,7 +7,13 @@
 #' Reads a metagraph into a bunch of ShapeMaps/ShapeGraphs/PointMaps
 #'
 #' @param fileName The metagraph file
-#' @return A list of ShapeMaps, ShapeGraphs and PointMaps
+#' @returns A list of ShapeMaps, ShapeGraphs and PointMaps
+#' @examples
+#' fileName <- system.file(
+#'   "extdata", "testdata", "barnsbury", "barnsburySmall.graph",
+#'   package = "alcyon"
+#' )
+#' readMetaGraph(fileName)
 #' @export
 readMetaGraph <- function(fileName) {
   result <- list(

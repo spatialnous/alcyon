@@ -16,3 +16,15 @@ A matrix with the connected refs
 \description{
 Get the Segment ShapeGraph connections
 }
+\examples{
+mifFile = system.file(
+  "extdata", "testdata", "barnsbury",
+  "barnsbury_small_segment.mif",
+  package = "alcyon"
+)
+sfMap <- st_read(mifFile,
+  geometry_column = 1L, quiet = TRUE
+)
+shapeGraph <- as(sfMap, "SegmentShapeGraph")
+connections(shapeGraph)
+}

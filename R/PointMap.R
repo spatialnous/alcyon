@@ -25,6 +25,9 @@ PointMap <- function(name, gridSize) { # nolint: object_name_linter
 #' @returns The name of the PointMap as a string
 #' @docType methods
 #' @importFrom methods setMethod
+#' @eval c("@examples",
+#' rxgn_loadInteriorLinesAsPointMap(),
+#' "name(pointMap)")
 #' @export
 setMethod(
   "name",
@@ -40,6 +43,9 @@ setMethod(
 #' @returns A matrix with the connected refs
 #' @docType methods
 #' @importFrom methods setMethod
+#' @eval c("@examples",
+#' rxgn_loadInteriorLinesAsPointMap(),
+#' "connections(pointMap)")
 #' @export
 setMethod(
   "connections",
@@ -55,6 +61,10 @@ setMethod(
 #' @returns A matrix with the linked refs
 #' @docType methods
 #' @importFrom methods setMethod
+#' @eval c("@examples",
+#' rxgn_loadInteriorLinesAsPointMap(),
+#' "linkRefs(pointMap, 1835056L, 7208971L)",
+#' "links(pointMap)")
 #' @export
 setMethod(
   "links",
@@ -73,8 +83,12 @@ setMethod(
 #' @param fromY Y coordinate of the first link point
 #' @param toX X coordinate of the second link point
 #' @param toY Y coordinate of the second link point
+#' @returns None
 #' @docType methods
 #' @importFrom methods setMethod
+#' @eval c("@examples",
+#' rxgn_loadInteriorLinesAsPointMap(),
+#' "linkCoords(pointMap, 1.74, 6.7, 5.05, 5.24)")
 #' @export
 setMethod(
   "linkCoords",
@@ -96,8 +110,13 @@ setMethod(
 #' @param fromY Y coordinate of the first unlink point
 #' @param toX X coordinate of the second unlink point
 #' @param toY Y coordinate of the second unlink point
+#' @returns None
 #' @docType methods
 #' @importFrom methods setMethod
+#' @eval c("@examples",
+#' rxgn_loadInteriorLinesAsPointMap(),
+#' "linkCoords(pointMap, 1.74, 6.7, 5.05, 5.24)",
+#' "unlinkCoords(pointMap, 1.74, 6.7, 5.05, 5.24)")
 #' @export
 setMethod(
   "unlinkCoords",
@@ -110,15 +129,19 @@ setMethod(
   }
 )
 
-#' Link two Axial Lines (refs)
+#' Link two PointMap Cells (refs)
 #'
-#' Link two lines on an Axial ShapeGraph using their refs
+#' Link two cells on an PointMap using their refs
 #'
 #' @param map A PointMap
 #' @param fromRef Ref of the first link line
 #' @param toRef Ref of the second link line
+#' @returns None
 #' @docType methods
 #' @importFrom methods setMethod
+#' @eval c("@examples",
+#' rxgn_loadInteriorLinesAsPointMap(),
+#' "linkRefs(pointMap, 1835056L, 7208971L)")
 #' @export
 setMethod(
   "linkRefs",
@@ -131,15 +154,20 @@ setMethod(
   }
 )
 
-#' Unlink two Axial Lines (refs)
+#' Unlink two PointMap Cells (refs)
 #'
-#' Unlink two lines on an Axial ShapeGraph using their refs
+#' Unlink two cells on an PointMap using their refs
 #'
 #' @param map A PointMap
 #' @param fromRef Ref of the first unlink line
 #' @param toRef Ref of the second unlink line
+#' @returns None
 #' @docType methods
 #' @importFrom methods setMethod
+#' @eval c("@examples",
+#' rxgn_loadInteriorLinesAsPointMap(),
+#' "linkRefs(pointMap, 1835056L, 7208971L)",
+#' "unlinkRefs(pointMap, 1835056L, 7208971L)")
 #' @export
 setMethod(
   "unlinkRefs",

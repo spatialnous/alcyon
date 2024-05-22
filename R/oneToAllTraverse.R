@@ -21,12 +21,39 @@
 #' quantizationWidth). Only works for Segment ShapeGraphs
 #' @param verbose Optional. Show more information of the process.
 #'
-#' @return Returns a list with:
+#' @returns Returns a list with:
 #' \itemize{
 #'   \item{completed: Whether the analysis completed}
 #'   \item{newAttributes: The new attributes that were created during the
 #'   process}
 #' }
+#' @eval c("@examples",
+#' "# Pointmap analysis (VGA)",
+#' rxgn_loadInteriorLinesAsPointMap(),
+#' "oneToAllTraverse(",
+#' "  pointMap,",
+#' "  traversalType = TraversalType$Metric,",
+#' "  fromX = 3.01,",
+#' "  fromY = 6.7",
+#' ")",
+#' "",
+#' "# Axial analysis",
+#' rxgn_loadSmallAxialLines(),
+#' "oneToAllTraverse(",
+#' "  shapeGraph,",
+#' "  traversalType = TraversalType$Topological,",
+#' "  fromX = 530684,",
+#' "  fromY = 184100.3",
+#' ")",
+#' "",
+#' "# Segment analysis",
+#' rxgn_loadSmallSegmentLines(),
+#' "oneToAllTraverse(",
+#' "  shapeGraph,",
+#' "  traversalType = TraversalType$Topological,",
+#' "  fromX = 530684,",
+#' "  fromY = 184100.3",
+#' ")")
 #' @export
 oneToAllTraverse <- function(map,
                              traversalType,

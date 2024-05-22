@@ -53,11 +53,45 @@ record all, with max possible currently = 50).}
 \value{
 Returns a list with:
 \itemize{
-  \item{completed: Whether the analysis completed}
   \item{newAttributes: The new attributes that were created during the
   process}
+  \item{trailMap: A ShapeMap with trails if numberOfTrails was set over 0}
 }
 }
 \description{
 Runs Agent Analysis on the given PointMap
+}
+\examples{
+mifFile = system.file(
+  "extdata", "testdata", "gallery",
+  "gallery_lines.mif",
+  package = "alcyon"
+)
+sfMap <- st_read(mifFile,
+  geometry_column = 1L, quiet = TRUE
+)
+pointMap <- makeVGAPointMap(
+  sfMap,
+  gridSize = 0.04,
+  fillX = 3.01,
+  fillY = 6.7,
+  maxVisibility = NA,
+  boundaryGraph = FALSE,
+  verbose = FALSE
+)
+agentAnalysis(
+  pointMap,
+  timesteps = 3000L,
+  releaseRate = 0.1,
+  agentStepsToDecision = 3L,
+  agentFov = 11L,
+  agentLife = 1000L,
+  agentLookMode = AgentLookMode$Standard,
+  originX = NA,
+  originY = NA,
+  locationSeed = 1L,
+  numberOfTrails = 50L,
+  getGateCounts = FALSE,
+  verbose = FALSE
+)
 }

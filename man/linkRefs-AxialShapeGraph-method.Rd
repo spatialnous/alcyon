@@ -14,6 +14,21 @@
 
 \item{toRef}{Ref of the second link line}
 }
+\value{
+None
+}
 \description{
 Link two lines on an Axial ShapeGraph using their refs
+}
+\examples{
+mifFile = system.file(
+  "extdata", "testdata", "barnsbury",
+  "barnsbury_small_axial.mif",
+  package = "alcyon"
+)
+sfMap <- st_read(mifFile,
+  geometry_column = 1L, quiet = TRUE
+)
+shapeGraph <- as(sfMap, "AxialShapeGraph")
+linkRefs(shapeGraph, 0L, 9L)
 }

@@ -35,3 +35,11 @@ Returns a vector of colours.
 \description{
 Create n contiguous colours taken from depthmapX.
 }
+\examples{
+depthmap.classic.colour(100, 0, 1)
+depthmap.axmanesque.colour(100, 0, 1)
+depthmap.purpleorange.colour(100, 0, 1)
+depthmap.bluered.colour(100, 0, 1)
+depthmap.grayscale.colour(100, 0, 1)
+depthmap.nicehsb.colour(100, 0, 1)
+}

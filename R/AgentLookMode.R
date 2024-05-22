@@ -26,7 +26,7 @@
 #'   \item{AgentLookMode$BinMemory (Per bin memory)}
 #' }
 #'
-#' @return A list of numbers representing each agent look mode
+#' @returns A list of numbers representing each agent look mode
 #' @examples
 #' TraversalType$Angular
 #' TraversalType$Topological

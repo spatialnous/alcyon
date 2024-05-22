@@ -12,6 +12,13 @@
 #' @param rangeMin The min value of the range
 #' @param rangeMax The max value of the range
 #' @returns Returns a vector of colours.
+#' @examples
+#' depthmap.classic.colour(100, 0, 1)
+#' depthmap.axmanesque.colour(100, 0, 1)
+#' depthmap.purpleorange.colour(100, 0, 1)
+#' depthmap.bluered.colour(100, 0, 1)
+#' depthmap.grayscale.colour(100, 0, 1)
+#' depthmap.nicehsb.colour(100, 0, 1)
 #' @export
 #' @rdname palettes
 depthmap.classic.colour <- function(n,
@@ -77,6 +84,13 @@ depthmap.nicehsb.colour <- function(n,
 #' @param rangeMin The min value of the range
 #' @param rangeMax The max value of the range
 #' @returns Returns a single colour.
+#' @examples
+#' depthmap.classic.colour(0.2, 0, 1)
+#' depthmap.axmanesque.colour(0.2, 0, 1)
+#' depthmap.purpleorange.colour(0.2, 0, 1)
+#' depthmap.bluered.colour(0.2, 0, 1)
+#' depthmap.grayscale.colour(0.2, 0, 1)
+#' depthmap.nicehsb.colour(0.2, 0, 1)
 #' @export
 #' @rdname makeColour
 makeDepthmapClassicColour <- function(value,

@@ -10,8 +10,17 @@
 #' @param lineStringMap An sf lineString map
 #' @param column The column to use to extract the features from
 #' @param percent Percentage of features (to total) to extract
-#' @return The lineString map filtered and sorted
+#' @returns The lineString map filtered and sorted
 #' @importFrom utils tail
+#' @eval c("@examples",
+#' rxgn_loadSmallAxialLines(),
+#' "result <- allToAllTraverse(",
+#' "  shapeGraph,",
+#' "  traversalType = TraversalType$Topological,",
+#' "  radii = c(\"n\", \"3\"),",
+#' "  includeBetweenness = TRUE",
+#' ")",
+#' "getTopFeatures(as(shapeGraph, \"sf\"), \"df_5_Choice_Norm_\", 0.1)")
 #' @export
 getTopFeatures <- function(lineStringMap,
                            column,

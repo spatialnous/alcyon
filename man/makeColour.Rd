@@ -35,3 +35,11 @@ Returns a single colour.
 \description{
 Create a single colour from depthmapX's palettes.
 }
+\examples{
+depthmap.classic.colour(0.2, 0, 1)
+depthmap.axmanesque.colour(0.2, 0, 1)
+depthmap.purpleorange.colour(0.2, 0, 1)
+depthmap.bluered.colour(0.2, 0, 1)
+depthmap.grayscale.colour(0.2, 0, 1)
+depthmap.nicehsb.colour(0.2, 0, 1)
+}

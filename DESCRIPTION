@@ -36,6 +36,7 @@ VignetteBuilder: knitr
 Collate:
     'generics.R'
     'rcppRoxygen.R'
+    'helper-loadMapsRoxygen.R'
     'ShapeMap.R'
     'ShapeGraph.R'
     'AxialShapeGraph.R'
