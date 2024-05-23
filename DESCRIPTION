@@ -4,11 +4,41 @@ Title: Interface to the 'sala' Spatial Network Analysis Library
 Date: 2024-02-05
 Version: 0.2.0
 Authors@R: c(
-    person("Petros", "Koutsolampros", email = "petros.koutsolampros.11@ucl.ac.uk", role = c("cre", "aut", "cph")),
-    person("Fani", "Kostourou", role = c("aut", "ctb", "cph")),
-    person("Kimon", "Krenz", role = c("ctb", "cph")),
-    person("University College London", role = "fnd"),
-    person("Spacelab", role = "fnd"))
+    person(given = "Petros",
+           family = "Koutsolampros",
+           email = "petros.koutsolampros.11@ucl.ac.uk",
+           role = c("cre", "aut", "cph"),
+           comment = c(ORCID = "0000-0003-2842-9899",
+                       "'sala' library contributor through depthmapX")),
+    person(given = "Fani",
+           family = "Kostourou",
+           role = c("aut", "ctb", "cph"),
+           comment = c(ORCID = "0000-0002-6544-7693")),
+    person(given = "Kimon",
+           family = "Krenz",
+           role = c("ctb", "cph"),
+           comment = c(ORCID = "0000-0001-6077-7282")),
+    person(given = "Alasdair",
+           family = "Turner",
+           role = c("ctb", "cph"),
+           comment = c("'sala' library contributor through depthmapX")),
+    person(given = "Tasos",
+           family = "Varoudis",
+           role = c("ctb", "cph"),
+           comment = c(ORCID = "0000-0001-7790-5623",
+                       "'sala' library contributor through depthmapX")),
+    person(given = "Christian",
+           family = "Sailer",
+           role = c("ctb", "cph"),
+           comment = c("'sala' library contributor through depthmapX")),
+    person(given = "Eva",
+           family = "Friedrich",
+           role = c("ctb", "cph"),
+           comment = c("'sala' library contributor through depthmapX")),
+    person(given = "University College London",
+           role = "fnd"),
+    person(given = "Spacelab UK",
+           role = "fnd"))
 Description: Interface package for 'sala', the spatial network analysis library
     from the 'depthmapX' softwre application. The R parts of the code are based
     on the 'rdepthmap' package. Allows for the analysis of urban and
