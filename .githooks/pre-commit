@@ -6,5 +6,5 @@
 
 reuse lint
 echo "Running the linter..."
-Rscript -e 'if (length(lintr::lint_package()) != 0) q(status = 2)'
+Rscript -e 'if (length(lintr::lint_package(show_progress = T)) != 0) q(status = 2)'
 echo "Linter satisfied!"
