@@ -1,7 +1,6 @@
 Package: alcyon
 Type: Package
 Title: Interface to the 'sala' Spatial Network Analysis Library
-Date: 2024-05-23
 Version: 0.2.0
 Authors@R: c(
     person(given = "Petros",
