@@ -10,7 +10,7 @@
 #' @returns A new sf Polygon map
 #' @importFrom sf st_sf st_sfc
 #' @eval c("@examples",
-#' rxgn_loadInteriorLinesAsShapeMap(),
+#' rxLoadInteriorLinesAsShapeMap(),
 #' "isovistMap <- isovist(",
 #' "  shapeMap,",
 #' "  x = c(3.01, 1.3),",

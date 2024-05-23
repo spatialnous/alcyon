@@ -12,7 +12,7 @@
 #' @param verbose Optional. Show more information of the process.
 #' @returns A new PointMap
 #' @eval c("@examples",
-#' rxgn_loadInteriorLinesAsShapeMap(),
+#' rxLoadInteriorLinesAsShapeMap(),
 #' "lineStringMap <- as(sfMap, \"sf\")",
 #' "mapRegion <- sf::st_bbox(lineStringMap)",
 #' "createGrid(",
@@ -50,7 +50,7 @@ createGrid <- function(minX,
 #' @param verbose Optional. Show more information of the process.
 #' @returns None
 #' @eval c("@examples",
-#' rxgn_loadInteriorLinesAsShapeMap(),
+#' rxLoadInteriorLinesAsShapeMap(),
 #' "lineStringMap <- as(sfMap, \"sf\")",
 #' "mapRegion <- sf::st_bbox(lineStringMap)",
 #' "pointMap <- createGrid(",
@@ -86,7 +86,7 @@ blockLines <- function(pointMap,
 #' @param verbose Optional. Show more information of the process.
 #' @returns None
 #' @eval c("@examples",
-#' rxgn_loadInteriorLinesAsShapeMap(),
+#' rxLoadInteriorLinesAsShapeMap(),
 #' "lineStringMap <- as(sfMap, \"sf\")",
 #' "mapRegion <- sf::st_bbox(lineStringMap)",
 #' "pointMap <- createGrid(",
@@ -124,7 +124,7 @@ fillGrid <- function(pointMap,
 #' @param verbose Optional. Show more information of the process.
 #' @returns None
 #' @eval c("@examples",
-#' rxgn_loadInteriorLinesAsShapeMap(),
+#' rxLoadInteriorLinesAsShapeMap(),
 #' "lineStringMap <- as(sfMap, \"sf\")",
 #' "mapRegion <- sf::st_bbox(lineStringMap)",
 #' "pointMap <- createGrid(",
@@ -174,7 +174,7 @@ makeVGAGraph <- function(pointMap,
 #' @param verbose Optional. Show more information of the process.
 #' @returns A new PointMap
 #' @eval c("@examples",
-#' rxgn_loadInteriorLinesAsShapeMap(),
+#' rxLoadInteriorLinesAsShapeMap(),
 #' "makeVGAPointMap(",
 #' "  sfMap,",
 #' "  gridSize = 0.04,",
@@ -228,7 +228,7 @@ makeVGAPointMap <- function(lineStringMap,
 #' @param verbose Optional. Show more information of the process.
 #' @returns None
 #' @eval c("@examples",
-#' rxgn_loadInteriorLinesAsShapeMap(),
+#' rxLoadInteriorLinesAsShapeMap(),
 #' "pointMap <- makeVGAPointMap(",
 #' "  sfMap,",
 #' "  gridSize = 0.04,",

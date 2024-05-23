@@ -48,22 +48,22 @@ Runs one-to-all traversal on a map with a graph. This is applicable to:
 \examples{
 # Pointmap analysis (VGA)
 mifFile = system.file(
-  "extdata", "testdata", "gallery",
-  "gallery_lines.mif",
-  package = "alcyon"
-)
-sfMap <- st_read(mifFile,
-  geometry_column = 1L, quiet = TRUE
-)
-pointMap <- makeVGAPointMap(
-  sfMap,
-  gridSize = 0.04,
-  fillX = 3.01,
-  fillY = 6.7,
-  maxVisibility = NA,
-  boundaryGraph = FALSE,
-  verbose = FALSE
-)
+    "extdata", "testdata", "gallery",
+    "gallery_lines.mif",
+    package = "alcyon"
+  )
+  sfMap <- st_read(mifFile,
+    geometry_column = 1L, quiet = TRUE
+  )
+  pointMap <- makeVGAPointMap(
+    sfMap,
+    gridSize = 0.04,
+    fillX = 3.01,
+    fillY = 6.7,
+    maxVisibility = NA,
+    boundaryGraph = FALSE,
+    verbose = FALSE
+  )
 oneToAllTraverse(
   pointMap,
   traversalType = TraversalType$Metric,
@@ -73,14 +73,14 @@ oneToAllTraverse(
 
 # Axial analysis
 mifFile = system.file(
-  "extdata", "testdata", "barnsbury",
-  "barnsbury_small_axial.mif",
-  package = "alcyon"
-)
-sfMap <- st_read(mifFile,
-  geometry_column = 1L, quiet = TRUE
-)
-shapeGraph <- as(sfMap, "AxialShapeGraph")
+    "extdata", "testdata", "barnsbury",
+    "barnsbury_small_axial.mif",
+    package = "alcyon"
+  )
+  sfMap <- st_read(mifFile,
+    geometry_column = 1L, quiet = TRUE
+  )
+  shapeGraph <- as(sfMap, "AxialShapeGraph")
 oneToAllTraverse(
   shapeGraph,
   traversalType = TraversalType$Topological,
@@ -90,14 +90,14 @@ oneToAllTraverse(
 
 # Segment analysis
 mifFile = system.file(
-  "extdata", "testdata", "barnsbury",
-  "barnsbury_small_segment.mif",
-  package = "alcyon"
-)
-sfMap <- st_read(mifFile,
-  geometry_column = 1L, quiet = TRUE
-)
-shapeGraph <- as(sfMap, "SegmentShapeGraph")
+    "extdata", "testdata", "barnsbury",
+    "barnsbury_small_segment.mif",
+    package = "alcyon"
+  )
+  sfMap <- st_read(mifFile,
+    geometry_column = 1L, quiet = TRUE
+  )
+  shapeGraph <- as(sfMap, "SegmentShapeGraph")
 oneToAllTraverse(
   shapeGraph,
   traversalType = TraversalType$Topological,

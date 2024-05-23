@@ -5,3 +5,5 @@
 #!/bin/sh
 
 reuse lint
+
+Rscript -e 'if (length(lintr::lint_package()) != 0) q(status = 2)'

@@ -10,7 +10,7 @@
 #' @param verbose Optional. Show more information of the process.
 #' @returns An All-line Axial ShapeGraph
 #' @eval c("@examples",
-#' rxgn_loadInteriorLinesAsShapeMap(),
+#' rxLoadInteriorLinesAsShapeMap(),
 #' "makeAllLineMap(",
 #' "  shapeMap,",
 #' "  seedX = 3.01,",
@@ -36,8 +36,7 @@ makeAllLineMap <- function(boundsMap,
 #' @param allLineMap An AllLineShapeGraph
 #' @returns A list with two fewest-line axial ShapeGraphs
 #' @eval c("@examples",
-#' "# Note: this example takes quite some time to run",
-#' rxgn_loadInteriorLinesAsShapeMap(),
+#' rxLoadSimpleLinesAsShapeMap(),
 #' "allLineMap <- makeAllLineMap(",
 #' "  shapeMap,",
 #' "  seedX = 3.01,",

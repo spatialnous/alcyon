@@ -13,7 +13,7 @@
 #' @returns The lineString map filtered and sorted
 #' @importFrom utils tail
 #' @eval c("@examples",
-#' rxgn_loadSmallAxialLines(),
+#' rxLoadSmallAxialLines(),
 #' "result <- allToAllTraverse(",
 #' "  shapeGraph,",
 #' "  traversalType = TraversalType$Topological,",

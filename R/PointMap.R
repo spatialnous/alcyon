@@ -26,7 +26,7 @@ PointMap <- function(name, gridSize) { # nolint: object_name_linter
 #' @docType methods
 #' @importFrom methods setMethod
 #' @eval c("@examples",
-#' rxgn_loadInteriorLinesAsPointMap(),
+#' rxLoadInteriorLinesAsPointMap(),
 #' "name(pointMap)")
 #' @export
 setMethod(
@@ -44,7 +44,7 @@ setMethod(
 #' @docType methods
 #' @importFrom methods setMethod
 #' @eval c("@examples",
-#' rxgn_loadInteriorLinesAsPointMap(),
+#' rxLoadInteriorLinesAsPointMap(),
 #' "connections(pointMap)")
 #' @export
 setMethod(
@@ -62,7 +62,7 @@ setMethod(
 #' @docType methods
 #' @importFrom methods setMethod
 #' @eval c("@examples",
-#' rxgn_loadInteriorLinesAsPointMap(),
+#' rxLoadInteriorLinesAsPointMap(),
 #' "linkRefs(pointMap, 1835056L, 7208971L)",
 #' "links(pointMap)")
 #' @export
@@ -87,7 +87,7 @@ setMethod(
 #' @docType methods
 #' @importFrom methods setMethod
 #' @eval c("@examples",
-#' rxgn_loadInteriorLinesAsPointMap(),
+#' rxLoadInteriorLinesAsPointMap(),
 #' "linkCoords(pointMap, 1.74, 6.7, 5.05, 5.24)")
 #' @export
 setMethod(
@@ -114,7 +114,7 @@ setMethod(
 #' @docType methods
 #' @importFrom methods setMethod
 #' @eval c("@examples",
-#' rxgn_loadInteriorLinesAsPointMap(),
+#' rxLoadInteriorLinesAsPointMap(),
 #' "linkCoords(pointMap, 1.74, 6.7, 5.05, 5.24)",
 #' "unlinkCoords(pointMap, 1.74, 6.7, 5.05, 5.24)")
 #' @export
@@ -140,7 +140,7 @@ setMethod(
 #' @docType methods
 #' @importFrom methods setMethod
 #' @eval c("@examples",
-#' rxgn_loadInteriorLinesAsPointMap(),
+#' rxLoadInteriorLinesAsPointMap(),
 #' "linkRefs(pointMap, 1835056L, 7208971L)")
 #' @export
 setMethod(
@@ -165,7 +165,7 @@ setMethod(
 #' @docType methods
 #' @importFrom methods setMethod
 #' @eval c("@examples",
-#' rxgn_loadInteriorLinesAsPointMap(),
+#' rxLoadInteriorLinesAsPointMap(),
 #' "linkRefs(pointMap, 1835056L, 7208971L)",
 #' "unlinkRefs(pointMap, 1835056L, 7208971L)")
 #' @export

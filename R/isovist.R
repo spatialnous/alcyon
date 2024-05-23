@@ -15,7 +15,7 @@
 #' @param verbose Optional. Show more information of the process.
 #' @returns A ShapeMap with the isovist polygons
 #' @eval c("@examples",
-#' rxgn_loadInteriorLinesAsShapeMap(),
+#' rxLoadInteriorLinesAsShapeMap(),
 #' "isovist(",
 #' "  shapeMap,",
 #' "  x = c(3.01, 1.3),",
@@ -57,7 +57,7 @@ isovist <- function(boundaryMap,
 #' @param verbose Optional. Show more information of the process.
 #' @returns A ShapeMap with the isovist polygons
 #' @eval c("@examples",
-#' rxgn_loadInteriorLinesAsShapeMap(),
+#' rxLoadInteriorLinesAsShapeMap(),
 #' "isovist2pts(",
 #' "  shapeMap,",
 #' "  x = c(3.01, 1.3),",

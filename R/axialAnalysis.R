@@ -41,7 +41,7 @@ axialAnalysis <- function(shapeGraph,
 #'   process}
 #' }
 #' @eval c("@examples",
-#' rxgn_loadSmallAxialLines(),
+#' rxLoadSmallAxialLines(),
 #' "axialAnalysisLocal(shapeGraph)")
 #' @export
 axialAnalysisLocal <- function(

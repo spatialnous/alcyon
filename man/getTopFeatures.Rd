@@ -21,14 +21,14 @@ Sorts features by a specific column and extracts the top x percent
 }
 \examples{
 mifFile = system.file(
-  "extdata", "testdata", "barnsbury",
-  "barnsbury_small_axial.mif",
-  package = "alcyon"
-)
-sfMap <- st_read(mifFile,
-  geometry_column = 1L, quiet = TRUE
-)
-shapeGraph <- as(sfMap, "AxialShapeGraph")
+    "extdata", "testdata", "barnsbury",
+    "barnsbury_small_axial.mif",
+    package = "alcyon"
+  )
+  sfMap <- st_read(mifFile,
+    geometry_column = 1L, quiet = TRUE
+  )
+  shapeGraph <- as(sfMap, "AxialShapeGraph")
 result <- allToAllTraverse(
   shapeGraph,
   traversalType = TraversalType$Topological,

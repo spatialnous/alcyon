@@ -36,7 +36,7 @@
 #' }
 #' @eval c("@examples",
 #' "# Pointmap analysis (VGA)",
-#' rxgn_loadInteriorLinesAsPointMap(),
+#' rxLoadInteriorLinesAsPointMap(),
 #' "allToAllTraverse(pointMap,",
 #' "  traversalType = TraversalType$Angular,",
 #' "  radii = -1L,",
@@ -44,7 +44,7 @@
 #' ")",
 #' "",
 #' "# Axial analysis",
-#' rxgn_loadSmallAxialLines(),
+#' rxLoadSmallAxialLines(),
 #' "allToAllTraverse(",
 #' "  shapeGraph,",
 #' "  traversalType = TraversalType$Topological,",
@@ -53,7 +53,7 @@
 #' ")",
 #' "",
 #' "# Segment analysis",
-#' rxgn_loadSmallSegmentLines(),
+#' rxLoadSmallSegmentLines(),
 #' "allToAllTraverse(",
 #' "  shapeGraph,",
 #' "  radii = c(\"n\", \"100\"),",
@@ -208,7 +208,7 @@ allToAllTraversePointMap <- function(map,
 #' @param pointMap A PointMap
 #' @returns None
 #' @eval c("@examples",
-#' rxgn_loadInteriorLinesAsPointMap(),
+#' rxLoadInteriorLinesAsPointMap(),
 #' "vgaThroughVision(pointMap)")
 #' @export
 vgaThroughVision <- function(pointMap) {
@@ -223,8 +223,7 @@ vgaThroughVision <- function(pointMap) {
 #' @param gatesOnly Optional. Only keep the values at specific gates
 #' @returns None
 #' @eval c("@examples",
-#' "# Note: This example takes a while to run",
-#' rxgn_loadInteriorLinesAsPointMap(),
+#' rxLoadSimpleLinesAsPointMap(),
 #' "vgaVisualLocal(pointMap, FALSE)")
 #' @export
 vgaVisualLocal <- function(pointMap, gatesOnly = FALSE) {
@@ -239,7 +238,7 @@ vgaVisualLocal <- function(pointMap, gatesOnly = FALSE) {
 #' @param boundaryMap A ShapeMap of lines
 #' @returns None
 #' @eval c("@examples",
-#' rxgn_loadInteriorLinesAsPointMap(),
+#' rxLoadInteriorLinesAsPointMap(),
 #' "boundaryMap <- as(sfMap[, c()], \"ShapeMap\")",
 #' "vgaIsovist(pointMap, boundaryMap)")
 #' @export

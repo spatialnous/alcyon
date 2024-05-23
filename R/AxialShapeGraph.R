@@ -16,7 +16,7 @@ setClass("AxialShapeGraph", contains = "ShapeGraph")
 #' @docType methods
 #' @importFrom methods setMethod
 #' @eval c("@examples",
-#' rxgn_loadSmallAxialLines(),
+#' rxLoadSmallAxialLines(),
 #' "connections(shapeGraph)")
 #' @export
 setMethod(
@@ -35,7 +35,7 @@ setMethod(
 #' @importFrom methods setMethod
 #' @eval c("@examples",
 #' "# links of an axial map",
-#' rxgn_loadSmallAxialLines(),
+#' rxLoadSmallAxialLines(),
 #' "linkRefs(shapeGraph, 0L, 9L)",
 #' "unlinkCoords(shapeGraph, 530923.0, 184041.0, 530956.0, 183887.0)",
 #' "links(shapeGraph)")
@@ -61,7 +61,7 @@ setMethod(
 #' @docType methods
 #' @importFrom methods setMethod
 #' @eval c("@examples",
-#' rxgn_loadSmallAxialLines(),
+#' rxLoadSmallAxialLines(),
 #' "linkCoords(shapeGraph, 530684.0, 184100.3, 530807.5, 183969.3)")
 #' @export
 setMethod(
@@ -88,7 +88,7 @@ setMethod(
 #' @docType methods
 #' @importFrom methods setMethod
 #' @eval c("@examples",
-#' rxgn_loadSmallAxialLines(),
+#' rxLoadSmallAxialLines(),
 #' "unlinkCoords(shapeGraph, 530923.0, 184041.0, 530956.0, 183887.0)")
 #' @export
 setMethod(
@@ -113,7 +113,7 @@ setMethod(
 #' @docType methods
 #' @importFrom methods setMethod
 #' @eval c("@examples",
-#' rxgn_loadSmallAxialLines(),
+#' rxLoadSmallAxialLines(),
 #' "linkRefs(shapeGraph, 0L, 9L)")
 #' @export
 setMethod(
@@ -138,7 +138,7 @@ setMethod(
 #' @docType methods
 #' @importFrom methods setMethod
 #' @eval c("@examples",
-#' rxgn_loadSmallAxialLines(),
+#' rxLoadSmallAxialLines(),
 #' "unlinkRefs(shapeGraph, 12L, 34L)")
 #' @export
 setMethod(
@@ -164,7 +164,7 @@ setMethod(
 #' @docType methods
 #' @importFrom methods setMethod
 #' @eval c("@examples",
-#' rxgn_loadSmallAxialLines(),
+#' rxLoadSmallAxialLines(),
 #' "unlinkAtCrossPoint(shapeGraph, 530925.0, 184119.0)")
 #' @export
 setMethod(

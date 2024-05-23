@@ -16,7 +16,7 @@ setClass("SegmentShapeGraph", contains = "ShapeGraph")
 #' @docType methods
 #' @importFrom methods setMethod
 #' @eval c("@examples",
-#' rxgn_loadSmallSegmentLines(),
+#' rxLoadSmallSegmentLines(),
 #' "connections(shapeGraph)")
 #' @export
 setMethod(
@@ -37,7 +37,7 @@ setMethod(
 #' @returns A new Segment ShapeGraph
 #' @importFrom methods new
 #' @eval c("@examples",
-#' rxgn_loadSmallAxialLines(),
+#' rxLoadSmallAxialLines(),
 #' "axialToSegmentShapeGraph(shapeGraph, stubRemoval = 0.4)")
 #' @export
 axialToSegmentShapeGraph <- function(axialShapeGraph,

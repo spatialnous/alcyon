@@ -19,14 +19,14 @@ Get the Axial ShapeGraph links
 \examples{
 # links of an axial map
 mifFile = system.file(
-  "extdata", "testdata", "barnsbury",
-  "barnsbury_small_axial.mif",
-  package = "alcyon"
-)
-sfMap <- st_read(mifFile,
-  geometry_column = 1L, quiet = TRUE
-)
-shapeGraph <- as(sfMap, "AxialShapeGraph")
+    "extdata", "testdata", "barnsbury",
+    "barnsbury_small_axial.mif",
+    package = "alcyon"
+  )
+  sfMap <- st_read(mifFile,
+    geometry_column = 1L, quiet = TRUE
+  )
+  shapeGraph <- as(sfMap, "AxialShapeGraph")
 linkRefs(shapeGraph, 0L, 9L)
 unlinkCoords(shapeGraph, 530923.0, 184041.0, 530956.0, 183887.0)
 links(shapeGraph)

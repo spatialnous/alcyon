@@ -26,13 +26,13 @@ Link two locations on an Axial ShapeGraph using the point coordinates
 }
 \examples{
 mifFile = system.file(
-  "extdata", "testdata", "barnsbury",
-  "barnsbury_small_axial.mif",
-  package = "alcyon"
-)
-sfMap <- st_read(mifFile,
-  geometry_column = 1L, quiet = TRUE
-)
-shapeGraph <- as(sfMap, "AxialShapeGraph")
+    "extdata", "testdata", "barnsbury",
+    "barnsbury_small_axial.mif",
+    package = "alcyon"
+  )
+  sfMap <- st_read(mifFile,
+    geometry_column = 1L, quiet = TRUE
+  )
+  shapeGraph <- as(sfMap, "AxialShapeGraph")
 linkCoords(shapeGraph, 530684.0, 184100.3, 530807.5, 183969.3)
 }

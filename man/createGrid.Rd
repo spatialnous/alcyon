@@ -27,14 +27,14 @@ Create an emprt PointMap through a grid
 }
 \examples{
 mifFile = system.file(
-  "extdata", "testdata", "gallery",
-  "gallery_lines.mif",
-  package = "alcyon"
-)
-sfMap <- st_read(mifFile,
-  geometry_column = 1L, quiet = TRUE
-)
-shapeMap <- as(sfMap[, c()], "ShapeMap")
+    "extdata", "testdata", "gallery",
+    "gallery_lines.mif",
+    package = "alcyon"
+  )
+  sfMap <- st_read(mifFile,
+    geometry_column = 1L, quiet = TRUE
+  )
+  shapeMap <- as(sfMap[, c()], "ShapeMap")
 lineStringMap <- as(sfMap, "sf")
 mapRegion <- sf::st_bbox(lineStringMap)
 createGrid(

@@ -22,7 +22,7 @@ ShapeMap <- function(name) { # nolint: object_name_linter
 #' @returns The name of the ShapeMap as a string
 #' @importFrom methods setMethod
 #' @eval c("@examples",
-#' rxgn_loadInteriorLinesAsShapeMap(),
+#' rxLoadInteriorLinesAsShapeMap(),
 #' "name(shapeMap)")
 #' @export
 setMethod(

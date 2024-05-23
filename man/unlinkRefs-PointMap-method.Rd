@@ -22,22 +22,22 @@ Unlink two cells on an PointMap using their refs
 }
 \examples{
 mifFile = system.file(
-  "extdata", "testdata", "gallery",
-  "gallery_lines.mif",
-  package = "alcyon"
-)
-sfMap <- st_read(mifFile,
-  geometry_column = 1L, quiet = TRUE
-)
-pointMap <- makeVGAPointMap(
-  sfMap,
-  gridSize = 0.04,
-  fillX = 3.01,
-  fillY = 6.7,
-  maxVisibility = NA,
-  boundaryGraph = FALSE,
-  verbose = FALSE
-)
+    "extdata", "testdata", "gallery",
+    "gallery_lines.mif",
+    package = "alcyon"
+  )
+  sfMap <- st_read(mifFile,
+    geometry_column = 1L, quiet = TRUE
+  )
+  pointMap <- makeVGAPointMap(
+    sfMap,
+    gridSize = 0.04,
+    fillX = 3.01,
+    fillY = 6.7,
+    maxVisibility = NA,
+    boundaryGraph = FALSE,
+    verbose = FALSE
+  )
 linkRefs(pointMap, 1835056L, 7208971L)
 unlinkRefs(pointMap, 1835056L, 7208971L)
 }

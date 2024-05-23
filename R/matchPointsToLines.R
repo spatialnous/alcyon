@@ -14,21 +14,21 @@ getMatches <- function(d) {
   i <- 1L
   matches[i, ] <- arrayInd(which.min(d), dim(d))
   # for all other runs:
-  lapply(2L:mindim, function(i) {
+  for (i in 2L:mindim) {
     # filter the matrix based on the previous matches
     m <- d[
       !(rownames(d) %in% matches[1L:(i - 1L), 1L]),
       !(colnames(d) %in% matches[1L:(i - 1L), 2L]),
-      drop=FALSE
+      drop = FALSE
     ]
     # find the index of the smallest value (closest point to line)
     idcs <- arrayInd(which.min(m), dim(m))
     # add to matches, making sure to take row/column names
-    matches[i, ] <<- as.integer(c(
+    matches[i, ] <- as.integer(c(
       rownames(m)[idcs[, 1L]],
       colnames(m)[idcs[, 2L]]
     ))
-  })
+  }
   return(matches)
 }
 
