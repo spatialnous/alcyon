@@ -18,7 +18,7 @@ Get the Axial ShapeGraph links
 }
 \examples{
 # links of an axial map
-mifFile = system.file(
+mifFile <- system.file(
     "extdata", "testdata", "barnsbury",
     "barnsbury_small_axial.mif",
     package = "alcyon"

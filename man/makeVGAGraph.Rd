@@ -27,7 +27,7 @@ None
 Create a graph between visible cells in the PointMap
 }
 \examples{
-mifFile = system.file(
+mifFile <- system.file(
     "extdata", "testdata", "gallery",
     "gallery_lines.mif",
     package = "alcyon"
@@ -35,7 +35,7 @@ mifFile = system.file(
   sfMap <- st_read(mifFile,
     geometry_column = 1L, quiet = TRUE
   )
-  shapeMap <- as(sfMap[, c()], "ShapeMap")
+  shapeMap <- as(sfMap[, vector()], "ShapeMap")
 lineStringMap <- as(sfMap, "sf")
 mapRegion <- sf::st_bbox(lineStringMap)
 pointMap <- createGrid(

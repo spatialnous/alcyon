@@ -21,7 +21,7 @@ None
 Unlink two lines on an Axial ShapeGraph using their refs
 }
 \examples{
-mifFile = system.file(
+mifFile <- system.file(
     "extdata", "testdata", "barnsbury",
     "barnsbury_small_axial.mif",
     package = "alcyon"

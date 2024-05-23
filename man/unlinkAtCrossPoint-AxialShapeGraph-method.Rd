@@ -21,7 +21,7 @@ None
 Unlink two crossing lines on an Axial ShapeGraph at the crossing point
 }
 \examples{
-mifFile = system.file(
+mifFile <- system.file(
     "extdata", "testdata", "barnsbury",
     "barnsbury_small_axial.mif",
     package = "alcyon"

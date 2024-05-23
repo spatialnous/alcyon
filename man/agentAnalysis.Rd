@@ -62,7 +62,7 @@ Returns a list with:
 Runs Agent Analysis on the given PointMap
 }
 \examples{
-mifFile = system.file(
+mifFile <- system.file(
     "extdata", "testdata", "gallery",
     "gallery_lines.mif",
     package = "alcyon"

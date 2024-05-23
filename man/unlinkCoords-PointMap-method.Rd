@@ -25,7 +25,7 @@ None
 Unlink two cells on a PointMap using the point coordinates
 }
 \examples{
-mifFile = system.file(
+mifFile <- system.file(
     "extdata", "testdata", "gallery",
     "gallery_lines.mif",
     package = "alcyon"

@@ -22,7 +22,7 @@ An All-line Axial ShapeGraph
 Create an All-line Map
 }
 \examples{
-mifFile = system.file(
+mifFile <- system.file(
     "extdata", "testdata", "gallery",
     "gallery_lines.mif",
     package = "alcyon"
@@ -30,7 +30,7 @@ mifFile = system.file(
   sfMap <- st_read(mifFile,
     geometry_column = 1L, quiet = TRUE
   )
-  shapeMap <- as(sfMap[, c()], "ShapeMap")
+  shapeMap <- as(sfMap[, vector()], "ShapeMap")
 makeAllLineMap(
   shapeMap,
   seedX = 3.01,

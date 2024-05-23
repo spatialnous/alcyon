@@ -23,7 +23,7 @@ Returns a list with:
 Runs axial analysis to get the local metrics Control and Controllability
 }
 \examples{
-mifFile = system.file(
+mifFile <- system.file(
     "extdata", "testdata", "barnsbury",
     "barnsbury_small_axial.mif",
     package = "alcyon"

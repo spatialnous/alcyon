@@ -47,7 +47,7 @@ Runs one-to-all traversal on a map with a graph. This is applicable to:
 }
 \examples{
 # Pointmap analysis (VGA)
-mifFile = system.file(
+mifFile <- system.file(
     "extdata", "testdata", "gallery",
     "gallery_lines.mif",
     package = "alcyon"
@@ -72,7 +72,7 @@ oneToAllTraverse(
 )
 
 # Axial analysis
-mifFile = system.file(
+mifFile <- system.file(
     "extdata", "testdata", "barnsbury",
     "barnsbury_small_axial.mif",
     package = "alcyon"
@@ -89,7 +89,7 @@ oneToAllTraverse(
 )
 
 # Segment analysis
-mifFile = system.file(
+mifFile <- system.file(
     "extdata", "testdata", "barnsbury",
     "barnsbury_small_segment.mif",
     package = "alcyon"

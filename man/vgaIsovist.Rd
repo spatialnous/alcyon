@@ -18,7 +18,7 @@ None
 Runs axial analysis to get the local metrics Control and Controllability
 }
 \examples{
-mifFile = system.file(
+mifFile <- system.file(
     "extdata", "testdata", "gallery",
     "gallery_lines.mif",
     package = "alcyon"

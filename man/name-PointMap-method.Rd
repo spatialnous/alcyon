@@ -17,7 +17,7 @@ The name of the PointMap as a string
 Get the PointMap name
 }
 \examples{
-mifFile = system.file(
+mifFile <- system.file(
     "extdata", "testdata", "gallery",
     "gallery_lines.mif",
     package = "alcyon"

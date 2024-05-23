@@ -17,7 +17,7 @@ A matrix with the linked refs
 Get the PointMap links
 }
 \examples{
-mifFile = system.file(
+mifFile <- system.file(
     "extdata", "testdata", "gallery",
     "gallery_lines.mif",
     package = "alcyon"

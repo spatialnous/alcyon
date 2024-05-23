@@ -17,7 +17,7 @@ A matrix with the connected refs
 Get the Axial ShapeGraph connections
 }
 \examples{
-mifFile = system.file(
+mifFile <- system.file(
     "extdata", "testdata", "barnsbury",
     "barnsbury_small_axial.mif",
     package = "alcyon"

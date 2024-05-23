@@ -18,7 +18,7 @@ None
 Runs Visibility Graph Analysis to get visual local metrics
 }
 \examples{
-mifFile = system.file(
+mifFile <- system.file(
     "extdata", "testdata", "simple",
     "simple_interior.mif",
     package = "alcyon"

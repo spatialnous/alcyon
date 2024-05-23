@@ -16,7 +16,7 @@ None
 Runs Visibility Graph Analysis to get the Through Vision metric
 }
 \examples{
-mifFile = system.file(
+mifFile <- system.file(
     "extdata", "testdata", "gallery",
     "gallery_lines.mif",
     package = "alcyon"

@@ -19,7 +19,7 @@ A new Segment ShapeGraph
 Convert an Axial ShapeGraph to a Segment ShapeGraph
 }
 \examples{
-mifFile = system.file(
+mifFile <- system.file(
     "extdata", "testdata", "barnsbury",
     "barnsbury_small_axial.mif",
     package = "alcyon"

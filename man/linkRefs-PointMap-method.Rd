@@ -21,7 +21,7 @@ None
 Link two cells on an PointMap using their refs
 }
 \examples{
-mifFile = system.file(
+mifFile <- system.file(
     "extdata", "testdata", "gallery",
     "gallery_lines.mif",
     package = "alcyon"

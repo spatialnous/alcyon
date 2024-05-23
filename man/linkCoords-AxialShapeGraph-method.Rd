@@ -25,7 +25,7 @@ None
 Link two locations on an Axial ShapeGraph using the point coordinates
 }
 \examples{
-mifFile = system.file(
+mifFile <- system.file(
     "extdata", "testdata", "barnsbury",
     "barnsbury_small_axial.mif",
     package = "alcyon"

@@ -20,7 +20,7 @@ The lineString map filtered and sorted
 Sorts features by a specific column and extracts the top x percent
 }
 \examples{
-mifFile = system.file(
+mifFile <- system.file(
     "extdata", "testdata", "barnsbury",
     "barnsbury_small_axial.mif",
     package = "alcyon"
