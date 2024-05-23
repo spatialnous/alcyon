@@ -28,8 +28,8 @@ Create a graph between visible cells in the PointMap
 }
 \examples{
 mifFile <- system.file(
-    "extdata", "testdata", "gallery",
-    "gallery_lines.mif",
+    "extdata", "testdata", "simple",
+    "simple_interior.mif",
     package = "alcyon"
   )
   sfMap <- st_read(mifFile,
@@ -43,7 +43,7 @@ pointMap <- createGrid(
   minY = mapRegion[["ymin"]],
   maxX = mapRegion[["xmax"]],
   maxY = mapRegion[["ymax"]],
-  gridSize = 0.04
+  gridSize = 0.5
 )
 blockLines(
   pointMap = pointMap,

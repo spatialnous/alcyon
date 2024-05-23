@@ -29,7 +29,7 @@
 #' }
 #' @eval c("@examples",
 #' "# Pointmap analysis (VGA)",
-#' rxLoadInteriorLinesAsPointMap(),
+#' rxLoadSimpleLinesAsPointMap(),
 #' "oneToAllTraverse(",
 #' "  pointMap,",
 #' "  traversalType = TraversalType$Metric,",

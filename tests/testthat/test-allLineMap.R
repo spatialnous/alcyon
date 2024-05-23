@@ -5,7 +5,7 @@
 context("All-line Map tests")
 
 test_that("All-line Map in C++", {
-  shapeMap <- loadInteriorLinesAsShapeMap(vector())$shapeMap
+  shapeMap <- loadSimpleLinesAsShapeMap(vector())$shapeMap
 
   allLineMap <- Rcpp_makeAllLineMap(
     shapeMap@ptr,
@@ -21,24 +21,24 @@ test_that("All-line Map in C++", {
   expect_length(attrNames, 3L)
 
   attrData <- Rcpp_ShapeMap_getAttributeData(allLineMap, attrNames)
-  expect_length(attrData[[attrNames[[1L]]]], 1874L)
-  expect_length(attrData[[attrNames[[2L]]]], 1874L)
-  expect_length(attrData[[attrNames[[3L]]]], 1874L)
+  expect_length(attrData[[attrNames[[1L]]]], 7L)
+  expect_length(attrData[[attrNames[[2L]]]], 7L)
+  expect_length(attrData[[attrNames[[3L]]]], 7L)
 
   coords <- Rcpp_ShapeMap_getShapesAsLineCoords(allLineMap)
-  expect_identical(dim(coords), c(1874L, 4L))
+  expect_identical(dim(coords), c(7L, 4L))
 
 
   attrNames <- Rcpp_ShapeMap_getAttributeNames(fewestSubsets)
   expect_length(attrNames, 3L)
 
   attrData <- Rcpp_ShapeMap_getAttributeData(fewestSubsets, attrNames)
-  expect_length(attrData[[attrNames[[1L]]]], 46L)
-  expect_length(attrData[[attrNames[[2L]]]], 46L)
-  expect_length(attrData[[attrNames[[3L]]]], 46L)
+  expect_length(attrData[[attrNames[[1L]]]], 1L)
+  expect_length(attrData[[attrNames[[2L]]]], 1L)
+  expect_length(attrData[[attrNames[[3L]]]], 1L)
 
   coords <- Rcpp_ShapeMap_getShapesAsLineCoords(fewestSubsets)
-  expect_identical(dim(coords), c(46L, 4L))
+  expect_identical(dim(coords), c(1L, 4L))
 
 
   fewestMinimal <- fewestMaps[["Fewest-Line Map (Minimal)"]]
@@ -47,16 +47,16 @@ test_that("All-line Map in C++", {
   expect_length(attrNames, 3L)
 
   attrData <- Rcpp_ShapeMap_getAttributeData(fewestMinimal, attrNames)
-  expect_length(attrData[[attrNames[[1L]]]], 26L)
-  expect_length(attrData[[attrNames[[2L]]]], 26L)
-  expect_length(attrData[[attrNames[[3L]]]], 26L)
+  expect_length(attrData[[attrNames[[1L]]]], 1L)
+  expect_length(attrData[[attrNames[[2L]]]], 1L)
+  expect_length(attrData[[attrNames[[3L]]]], 1L)
 
   coords <- Rcpp_ShapeMap_getShapesAsLineCoords(fewestMinimal)
-  expect_identical(dim(coords), c(26L, 4L))
+  expect_identical(dim(coords), c(1L, 4L))
 })
 
 test_that("All-line Map in R", {
-  shapeMap <- loadInteriorLinesAsShapeMap(vector())$shapeMap
+  shapeMap <- loadSimpleLinesAsShapeMap(vector())$shapeMap
 
   allLineMap <- makeAllLineMap(
     shapeMap,
@@ -71,13 +71,13 @@ test_that("All-line Map in R", {
 
   # All line
   expect_length(colnames(allLineMapSf), 4L)
-  expect_identical(nrow(allLineMapSf), 1874L)
+  expect_identical(nrow(allLineMapSf), 7L)
 
   # Fewest (Subsets)
   expect_length(colnames(fewestSubsets), 4L)
-  expect_identical(nrow(fewestSubsets), 46L)
+  expect_identical(nrow(fewestSubsets), 1L)
 
   # Fewest (Minimal)
   expect_length(colnames(fewestMinimal), 4L)
-  expect_identical(nrow(fewestMinimal), 26L)
+  expect_identical(nrow(fewestMinimal), 1L)
 })

@@ -38,8 +38,8 @@ ready for analysis
 }
 \examples{
 mifFile <- system.file(
-    "extdata", "testdata", "gallery",
-    "gallery_lines.mif",
+    "extdata", "testdata", "simple",
+    "simple_interior.mif",
     package = "alcyon"
   )
   sfMap <- st_read(mifFile,
@@ -48,7 +48,7 @@ mifFile <- system.file(
   shapeMap <- as(sfMap[, vector()], "ShapeMap")
 makeVGAPointMap(
   sfMap,
-  gridSize = 0.04,
+  gridSize = 0.5,
   fillX = 3.01,
   fillY = 6.7,
   maxVisibility = NA,

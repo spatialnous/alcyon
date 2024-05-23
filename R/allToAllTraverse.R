@@ -208,7 +208,7 @@ allToAllTraversePointMap <- function(map,
 #' @param pointMap A PointMap
 #' @returns None
 #' @eval c("@examples",
-#' rxLoadInteriorLinesAsPointMap(),
+#' rxLoadSimpleLinesAsPointMap(),
 #' "vgaThroughVision(pointMap)")
 #' @export
 vgaThroughVision <- function(pointMap) {
@@ -238,7 +238,7 @@ vgaVisualLocal <- function(pointMap, gatesOnly = FALSE) {
 #' @param boundaryMap A ShapeMap of lines
 #' @returns None
 #' @eval c("@examples",
-#' rxLoadInteriorLinesAsPointMap(),
+#' rxLoadSimpleLinesAsPointMap(),
 #' "boundaryMap <- as(sfMap[, c()], \"ShapeMap\")",
 #' "vgaIsovist(pointMap, boundaryMap)")
 #' @export

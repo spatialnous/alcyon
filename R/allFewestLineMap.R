@@ -10,7 +10,7 @@
 #' @param verbose Optional. Show more information of the process.
 #' @returns An All-line Axial ShapeGraph
 #' @eval c("@examples",
-#' rxLoadInteriorLinesAsShapeMap(),
+#' rxLoadSimpleLinesAsShapeMap(),
 #' "makeAllLineMap(",
 #' "  shapeMap,",
 #' "  seedX = 3.01,",

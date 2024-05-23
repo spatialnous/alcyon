@@ -5,7 +5,7 @@
 context("VGA tests")
 
 test_that("VGA in C++", {
-  startData <- loadInteriorLinesAsPointMap(vector())
+  startData <- loadSimpleLinesAsPointMap(vector())
   lineStringMap <- startData$sf
   pointMap <- startData$pointMap
 
@@ -28,7 +28,7 @@ test_that("VGA in C++", {
   expect_identical(vgaResult$newAttributes, newExpectedCols)
 
   coords <- Rcpp_PointMap_getFilledPoints(pointMapPtr = pointMap@ptr)
-  expect_identical(dim(coords), c(4332L, 11L))
+  expect_identical(dim(coords), c(90L, 11L))
   expectedCols <- c(
     expectedCols,
     newExpectedCols
@@ -45,7 +45,7 @@ test_that("VGA in C++", {
   expect_identical(vgaResult$newAttributes, newExpectedCols)
 
   coords <- Rcpp_PointMap_getFilledPoints(pointMapPtr = pointMap@ptr)
-  expect_identical(dim(coords), c(4332L, 14L))
+  expect_identical(dim(coords), c(90L, 14L))
   expectedCols <- c(
     expectedCols,
     newExpectedCols
@@ -63,7 +63,7 @@ test_that("VGA in C++", {
   expect_identical(vgaResult$newAttributes, newExpectedCols)
 
   coords <- Rcpp_PointMap_getFilledPoints(pointMapPtr = pointMap@ptr)
-  expect_identical(dim(coords), c(4332L, 18L))
+  expect_identical(dim(coords), c(90L, 18L))
   expectedCols <- c(
     expectedCols,
     newExpectedCols
@@ -84,7 +84,7 @@ test_that("VGA in C++", {
   expect_identical(vgaResult$newAttributes, newExpectedCols)
 
   coords <- Rcpp_PointMap_getFilledPoints(pointMapPtr = pointMap@ptr)
-  expect_identical(dim(coords), c(4332L, 25L))
+  expect_identical(dim(coords), c(90L, 25L))
   expectedCols <- c(
     expectedCols,
     newExpectedCols
@@ -101,7 +101,7 @@ test_that("VGA in C++", {
   expect_identical(vgaResult$newAttributes, newExpectedCols)
 
   coords <- Rcpp_PointMap_getFilledPoints(pointMapPtr = pointMap@ptr)
-  expect_identical(dim(coords), c(4332L, 28L))
+  expect_identical(dim(coords), c(90L, 28L))
   expectedCols <- c(
     expectedCols,
     newExpectedCols
@@ -124,7 +124,7 @@ test_that("VGA in C++", {
   expect_identical(vgaResult$newAttributes, newExpectedCols)
 
   coords <- Rcpp_PointMap_getFilledPoints(pointMapPtr = pointMap@ptr)
-  expect_identical(dim(coords), c(4332L, 36L))
+  expect_identical(dim(coords), c(90L, 36L))
   expectedCols <- c(
     expectedCols,
     newExpectedCols
@@ -134,7 +134,7 @@ test_that("VGA in C++", {
 
 
 test_that("VGA in R", {
-  startData <- loadInteriorLinesAsPointMap(vector())
+  startData <- loadSimpleLinesAsPointMap(vector())
   lineStringMap <- startData$sf
   pointMap <- startData$pointMap
 
@@ -157,7 +157,7 @@ test_that("VGA in R", {
   expect_identical(vgaResult$newAttributes, newExpectedCols)
 
   coords <- Rcpp_PointMap_getFilledPoints(pointMapPtr = pointMap@ptr)
-  expect_identical(dim(coords), c(4332L, 11L))
+  expect_identical(dim(coords), c(90L, 11L))
   expectedCols <- c(
     expectedCols,
     newExpectedCols
@@ -178,7 +178,7 @@ test_that("VGA in R", {
   expect_identical(vgaResult$newAttributes, newExpectedCols)
 
   coords <- Rcpp_PointMap_getFilledPoints(pointMapPtr = pointMap@ptr)
-  expect_identical(dim(coords), c(4332L, 14L))
+  expect_identical(dim(coords), c(90L, 14L))
   expectedCols <- c(
     expectedCols,
     newExpectedCols
@@ -200,7 +200,7 @@ test_that("VGA in R", {
   expect_identical(vgaResult$newAttributes, newExpectedCols)
 
   coords <- Rcpp_PointMap_getFilledPoints(pointMapPtr = pointMap@ptr)
-  expect_identical(dim(coords), c(4332L, 18L))
+  expect_identical(dim(coords), c(90L, 18L))
   expectedCols <- c(
     expectedCols,
     newExpectedCols
@@ -225,7 +225,7 @@ test_that("VGA in R", {
   expect_identical(vgaResult$newAttributes, newExpectedCols)
 
   coords <- Rcpp_PointMap_getFilledPoints(pointMapPtr = pointMap@ptr)
-  expect_identical(dim(coords), c(4332L, 25L))
+  expect_identical(dim(coords), c(90L, 25L))
   expectedCols <- c(
     expectedCols,
     newExpectedCols
@@ -242,7 +242,7 @@ test_that("VGA in R", {
   expect_identical(vgaResult$newAttributes, newExpectedCols)
 
   coords <- Rcpp_PointMap_getFilledPoints(pointMapPtr = pointMap@ptr)
-  expect_identical(dim(coords), c(4332L, 28L))
+  expect_identical(dim(coords), c(90L, 28L))
   expectedCols <- c(
     expectedCols,
     newExpectedCols
@@ -265,7 +265,7 @@ test_that("VGA in R", {
   expect_identical(vgaResult$newAttributes, newExpectedCols)
 
   coords <- Rcpp_PointMap_getFilledPoints(pointMapPtr = pointMap@ptr)
-  expect_identical(dim(coords), c(4332L, 36L))
+  expect_identical(dim(coords), c(90L, 36L))
   expectedCols <- c(
     expectedCols,
     newExpectedCols

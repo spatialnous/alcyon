@@ -29,7 +29,7 @@
 #'   \item{trailMap: A ShapeMap with trails if numberOfTrails was set over 0}
 #' }
 #' @eval c("@examples",
-#' rxLoadInteriorLinesAsPointMap(),
+#' rxLoadSimpleLinesAsPointMap(),
 #' "agentAnalysis(",
 #' "  pointMap,",
 #' "  timesteps = 3000L,",

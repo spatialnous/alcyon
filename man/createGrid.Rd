@@ -27,8 +27,8 @@ Create a PointMap through a grid
 }
 \examples{
 mifFile <- system.file(
-    "extdata", "testdata", "gallery",
-    "gallery_lines.mif",
+    "extdata", "testdata", "simple",
+    "simple_interior.mif",
     package = "alcyon"
   )
   sfMap <- st_read(mifFile,

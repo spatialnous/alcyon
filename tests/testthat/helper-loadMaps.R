@@ -47,6 +47,36 @@ loadInteriorLinesAsPointMap <- function(keepAttributeIdx = NULL) {
   return(map)
 }
 
+loadSimpleLinesAsSf <- function(keepAttributeIdx = NULL) {
+  return(list(
+    sf = loadTestDataMap(
+      "simple",
+      "simple_interior.mif",
+      keepAttributeIdx
+    )
+  ))
+}
+
+loadSimpleLinesAsShapeMap <- function(keepAttributeIdx = NULL) {
+  map <- loadSimpleLinesAsSf(keepAttributeIdx)
+  map[["shapeMap"]] <- as(map$sf, "ShapeMap")
+  return(map)
+}
+
+loadSimpleLinesAsPointMap <- function(keepAttributeIdx = NULL) {
+  map <- loadSimpleLinesAsSf(keepAttributeIdx)
+  map[["pointMap"]] <- makeVGAPointMap(
+    map$sf,
+    gridSize = 0.5,
+    fillX = 3.0,
+    fillY = 6.0,
+    maxVisibility = NA,
+    boundaryGraph = FALSE,
+    verbose = FALSE
+  )
+  return(map)
+}
+
 loadSmallAxialLinesAsSf <- function(keepAttributeIdx = NULL) {
   return(list(
     sf = loadTestDataMap(
