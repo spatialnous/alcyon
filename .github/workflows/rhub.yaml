@@ -54,7 +54,7 @@ jobs:
       - name: Install git on container
         run: |
           apt update
-          apt install -y git
+          apt install -y cmake git
       - uses: r-hub/actions/checkout@v1
         with:
           submodules: recursive
