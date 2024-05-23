@@ -47,7 +47,7 @@ Description: Interface package for 'sala', the spatial network analysis library
     methodology", and also by A. Turner (2004)
     <https://discovery.ucl.ac.uk/id/eprint/2651> "Depthmap 4: a researcher's
     handbook"
-License: GPL (>= 3)
+License: `use_gpl3_license()`
 Encoding: UTF-8
 LazyData: true
 LinkingTo:
