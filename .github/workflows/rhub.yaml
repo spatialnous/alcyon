@@ -51,6 +51,10 @@ jobs:
       image: ${{ matrix.config.container }}
 
     steps:
+      - name: Install git on container
+        run: |
+          apt update
+          apt install -y git
       - uses: r-hub/actions/checkout@v1
         with:
           submodules: recursive
