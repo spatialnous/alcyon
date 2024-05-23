@@ -1,6 +1,6 @@
 Package: alcyon
 Type: Package
-Title: An R package for spatial network analysis
+Title: An R package for Spatial Network Analysis
 Version: 0.2.0
 Authors@R: c(
     person(given = "Petros",
@@ -46,8 +46,8 @@ Description: Interface package for 'sala', the spatial network analysis library
     Al-Sayed, A. Turner, B. Hillier, S. Iida and A. Penn (2014) "Space Syntax
     methodology", and also by A. Turner (2004)
     <https://discovery.ucl.ac.uk/id/eprint/2651> "Depthmap 4: a researcher's
-    handbook"
-License: `use_gpl3_license()`
+    handbook".
+License: GPL-3
 Encoding: UTF-8
 LazyData: true
 LinkingTo:

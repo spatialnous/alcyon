@@ -7,7 +7,7 @@ citableAuthors = authors[unlist(lapply(authors, function(author) {
 }))]
 
 bibentry(bibtype = "Misc",
-         title = "{alcyon}: An R package for spatial network analysis",
+         title = "{alcyon}: An R package for Spatial Network Analysis",
          author = citableAuthors,
          year = year,
          note = note,

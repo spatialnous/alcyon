@@ -36,7 +36,7 @@
 #' }
 #' @eval c("@examples",
 #' "# Pointmap analysis (VGA)",
-#' rxLoadInteriorLinesAsPointMap(),
+#' rxLoadSimpleLinesAsPointMap(),
 #' "allToAllTraverse(pointMap,",
 #' "  traversalType = TraversalType$Angular,",
 #' "  radii = -1L,",

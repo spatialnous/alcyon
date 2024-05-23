@@ -63,8 +63,8 @@ Runs all-to-all traversal on a map with a graph. This is applicable to:
 \examples{
 # Pointmap analysis (VGA)
 mifFile <- system.file(
-    "extdata", "testdata", "gallery",
-    "gallery_lines.mif",
+    "extdata", "testdata", "simple",
+    "simple_interior.mif",
     package = "alcyon"
   )
   sfMap <- st_read(mifFile,
@@ -72,9 +72,9 @@ mifFile <- system.file(
   )
   pointMap <- makeVGAPointMap(
     sfMap,
-    gridSize = 0.04,
-    fillX = 3.01,
-    fillY = 6.7,
+    gridSize = 0.5,
+    fillX = 3.0,
+    fillY = 6.0,
     maxVisibility = NA,
     boundaryGraph = FALSE,
     verbose = FALSE
