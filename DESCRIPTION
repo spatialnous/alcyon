@@ -6,7 +6,7 @@ Version: 0.2.0
 Authors@R: c(
     person(given = "Petros",
            family = "Koutsolampros",
-           email = "petros.koutsolampros.11@ucl.ac.uk",
+           email = "r-devel@pklampros.net",
            role = c("cre", "aut", "cph"),
            comment = c(ORCID = "0000-0003-2842-9899",
                        "'sala' library contributor through 'depthmapX'")),
