@@ -45,6 +45,7 @@
 #' "  getGateCounts = FALSE,",
 #' "  verbose = FALSE",
 #' ")")
+#' @importFrom utils hasName
 #' @export
 agentAnalysis <- function(pointMap,
                           timesteps,

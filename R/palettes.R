@@ -19,8 +19,8 @@
 #' depthmap.bluered.colour(100, 0, 1)
 #' depthmap.grayscale.colour(100, 0, 1)
 #' depthmap.nicehsb.colour(100, 0, 1)
-#' @export
 #' @rdname palettes
+#' @export
 depthmap.classic.colour <- function(n,
                                     rangeMin = 0.0,
                                     rangeMax = 1.0) {
@@ -30,6 +30,7 @@ depthmap.classic.colour <- function(n,
 }
 
 #' @rdname palettes
+#' @export
 depthmap.axmanesque.colour <- function(n,
                                        rangeMin = 0.0,
                                        rangeMax = 1.0) {
@@ -39,6 +40,7 @@ depthmap.axmanesque.colour <- function(n,
 }
 
 #' @rdname palettes
+#' @export
 depthmap.purpleorange.colour <- function(n,
                                          rangeMin = 0.0,
                                          rangeMax = 1.0) {
@@ -48,6 +50,7 @@ depthmap.purpleorange.colour <- function(n,
 }
 
 #' @rdname palettes
+#' @export
 depthmap.bluered.colour <- function(n,
                                     rangeMin = 0.0,
                                     rangeMax = 1.0) {
@@ -57,6 +60,7 @@ depthmap.bluered.colour <- function(n,
 }
 
 #' @rdname palettes
+#' @export
 depthmap.grayscale.colour <- function(n,
                                       rangeMin = 0.0,
                                       rangeMax = 1.0) {
@@ -66,6 +70,7 @@ depthmap.grayscale.colour <- function(n,
 }
 
 #' @rdname palettes
+#' @export
 depthmap.nicehsb.colour <- function(n,
                                     rangeMin = 0.0,
                                     rangeMax = 1.0) {
@@ -85,12 +90,12 @@ depthmap.nicehsb.colour <- function(n,
 #' @param rangeMax The max value of the range
 #' @returns Returns a single colour.
 #' @examples
-#' depthmap.classic.colour(0.2, 0, 1)
-#' depthmap.axmanesque.colour(0.2, 0, 1)
-#' depthmap.purpleorange.colour(0.2, 0, 1)
-#' depthmap.bluered.colour(0.2, 0, 1)
-#' depthmap.grayscale.colour(0.2, 0, 1)
-#' depthmap.nicehsb.colour(0.2, 0, 1)
+#' makeDepthmapClassicColour(0.2, 0, 1)
+#' makeAxmanesqueColour(0.2, 0, 1)
+#' makePurpleOrangeColour(0.2, 0, 1)
+#' makeBlueRedColour(0.2, 0, 1)
+#' makeGreyScaleColour(0.2, 0, 1)
+#' makeNiceHSBColour(0.2, 0, 1)
 #' @export
 #' @rdname makeColour
 makeDepthmapClassicColour <- function(value,
@@ -152,6 +157,7 @@ makeDepthmapClassicColour <- function(value,
 }
 
 #' @rdname makeColour
+#' @export
 makeAxmanesqueColour <- function(value,
                                  rangeMin = 0.0,
                                  rangeMax = 1.0) {
@@ -175,6 +181,7 @@ makeAxmanesqueColour <- function(value,
 }
 
 #' @rdname makeColour
+#' @export
 makePurpleOrangeColour <- function(value,
                                    rangeMin = 0.0,
                                    rangeMax = 1.0) {
@@ -195,6 +202,7 @@ makePurpleOrangeColour <- function(value,
 }
 
 #' @rdname makeColour
+#' @export
 makeBlueRedColour <- function(value,
                               rangeMin = 0.0,
                               rangeMax = 1.0) {
@@ -215,6 +223,7 @@ makeBlueRedColour <- function(value,
 }
 
 #' @rdname makeColour
+#' @export
 makeGreyScaleColour <- function(value,
                                 rangeMin = 0.0,
                                 rangeMax = 1.0) {
@@ -235,6 +244,7 @@ makeGreyScaleColour <- function(value,
 }
 
 #' @rdname makeColour
+#' @export
 makeNiceHSBColour <- function(value,
                               rangeMin = 0.0,
                               rangeMax = 1.0) {

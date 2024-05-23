@@ -1,6 +1,7 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^\.github$
+^\.githooks$
 ^\.reuse$
 ^src/build-Release$
 ^src/libs/genlib/\.git$

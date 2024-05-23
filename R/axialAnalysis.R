@@ -49,6 +49,6 @@ axialAnalysisLocal <- function(
     verbose = FALSE) {
   return(Rcpp_runAxialLocalAnalysis(
     shapeGraph@ptr,
-    verbose = verbose
+    verbose
   ))
 }
