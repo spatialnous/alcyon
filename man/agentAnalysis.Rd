@@ -26,7 +26,7 @@ take exploratory information}
 
 \item{timesteps}{Number of total system timesteps.}
 
-\item{releaseRate}{Agent release rate (likelyhood of release per timestep).}
+\item{releaseRate}{Agent release rate (likelihood of release per timestep).}
 
 \item{agentLifeTimesteps}{Agent total lifetime (in timesteps)}
 

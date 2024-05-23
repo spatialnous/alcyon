@@ -52,7 +52,7 @@ isovist <- function(boundaryMap,
 #' @param x X coordinate of the origin points
 #' @param y Y coordinate of the origin points
 #' @param toX X coordinate of the target points
-#' @param toY Y coordinate of the taget points
+#' @param toY Y coordinate of the target points
 #' @param viewAngle The angle signifying the isovist's field of view
 #' @param verbose Optional. Show more information of the process.
 #' @returns A ShapeMap with the isovist polygons

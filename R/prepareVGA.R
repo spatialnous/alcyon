@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: GPL-3.0-only
 
-#' Create an emprt PointMap through a grid
+#' Create a PointMap through a grid
 #'
 #' @param minX Minimum X of the bounding region
 #' @param minY Minimum Y of the bounding region

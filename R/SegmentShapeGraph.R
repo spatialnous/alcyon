@@ -32,7 +32,7 @@ setMethod(
 #' Convert an Axial ShapeGraph to a Segment ShapeGraph
 #'
 #' @param axialShapeGraph An Axial ShapeGraph
-#' @param stubRemoval Rremove stubs of axial lines shorter than this
+#' @param stubRemoval Remove stubs of axial lines shorter than this
 #' percentage (for example provide 0.4 for 40\%)
 #' @returns A new Segment ShapeGraph
 #' @importFrom methods new

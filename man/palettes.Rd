@@ -23,7 +23,7 @@ depthmap.grayscale.colour(n, rangeMin = 0, rangeMax = 1)
 depthmap.nicehsb.colour(n, rangeMin = 0, rangeMax = 1)
 }
 \arguments{
-\item{n}{Numer of colours to generate}
+\item{n}{Number of colours to generate}
 
 \item{rangeMin}{The min value of the range}
 

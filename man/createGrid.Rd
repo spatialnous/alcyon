@@ -2,7 +2,7 @@
 % Please edit documentation in R/prepareVGA.R
 \name{createGrid}
 \alias{createGrid}
-\title{Create an emprt PointMap through a grid}
+\title{Create a PointMap through a grid}
 \usage{
 createGrid(minX, minY, maxX, maxY, gridSize, verbose = FALSE)
 }
@@ -23,7 +23,7 @@ createGrid(minX, minY, maxX, maxY, gridSize, verbose = FALSE)
 A new PointMap
 }
 \description{
-Create an emprt PointMap through a grid
+Create a PointMap through a grid
 }
 \examples{
 mifFile <- system.file(

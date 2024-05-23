@@ -15,7 +15,7 @@ isovist2pts(boundaryMap, x, y, toX, toY, viewAngle, verbose = FALSE)
 
 \item{toX}{X coordinate of the target points}
 
-\item{toY}{Y coordinate of the taget points}
+\item{toY}{Y coordinate of the target points}
 
 \item{viewAngle}{The angle signifying the isovist's field of view}
 

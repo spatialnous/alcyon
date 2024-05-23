@@ -7,19 +7,19 @@
 #'
 #' Creates igraph based on the connections and the x,y coordinates of the
 #' centroids of shapes in a shapegraph (axial,segment, convex). Specify
-#' weightcolumn to assign weight to graph edges.
+#' weightColumn to assign weight to graph edges.
 #'
-#' If weightcolumn is provided, edge connections weight is calculated by taking
+#' If weightColumn is provided, edge connections weight is calculated by taking
 #' the average of the variable of the connected nodes.
 #'
 #' @param shapeGraph A ShapeGraph
-#' @param weightcolumn Optional.The variable used to assign weight to graph
+#' @param weightColumn Optional.The variable used to assign weight to graph
 #' edges
 #' @importFrom igraph graph.data.frame E E<-
 #' @importFrom sf st_drop_geometry
 #' @returns Returns graph.data.frame.
 shapegraphToIGraph <- function(shapeGraph,
-                               weightcolumn = NA) {
+                               weightColumn = NA) {
   ogr <- shapeGraph
   linksunlinks <- links(shapeGraph)
   links <- linksunlinks[linksunlinks$link == 1L, ]
@@ -45,9 +45,9 @@ shapegraphToIGraph <- function(shapeGraph,
   refB <- edges$refB
   depthRef <- ogr$Depthmap_Ref
   ogr <- ogr[, c("Depthmap_Ref", names(ogr)[names(ogr) != "Depthmap_Ref"])]
-  if (!is.na(weightcolumn)) {
-    edges$weight <- ((ogr[[match(refA, depthRef), weightcolumn]])
-                     + (ogr[[match(refB, depthRef), weightcolumn]])) / 2.0
+  if (!is.na(weightColumn)) {
+    edges$weight <- ((ogr[[match(refA, depthRef), weightColumn]])
+                     + (ogr[[match(refB, depthRef), weightColumn]])) / 2.0
     graph <- graph.data.frame(
       edges,
       directed = FALSE,

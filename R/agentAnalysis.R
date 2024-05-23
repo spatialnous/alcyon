@@ -9,7 +9,7 @@
 #' @param pointMap A PointMap, used as an exosomatic visual map for agents to
 #' take exploratory information
 #' @param timesteps Number of total system timesteps.
-#' @param releaseRate Agent release rate (likelyhood of release per timestep).
+#' @param releaseRate Agent release rate (likelihood of release per timestep).
 #' @param agentLifeTimesteps Agent total lifetime (in timesteps)
 #' @param agentFov Agent field-of-view (out of 32 bins = 360).
 #' @param agentStepsToDecision Agent steps before turn decision.

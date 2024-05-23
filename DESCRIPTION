@@ -39,10 +39,10 @@ Authors@R: c(
     person(given = "Spacelab UK",
            role = "fnd"))
 Description: Interface package for 'sala', the spatial network analysis library
-    from the 'depthmapX' softwre application. The R parts of the code are based
+    from the 'depthmapX' software application. The R parts of the code are based
     on the 'rdepthmap' package. Allows for the analysis of urban and
-    bulding-scale networks and provides metrics and methods usually found within
-    the Space Syntax domain. Methods in this package are described by K.
+    building-scale networks and provides metrics and methods usually found
+    within the Space Syntax domain. Methods in this package are described by K.
     Al-Sayed, A. Turner, B. Hillier, S. Iida and A. Penn (2014) "Space Syntax
     methodology", and also by A. Turner (2004)
     <https://discovery.ucl.ac.uk/id/eprint/2651> "Depthmap 4: a researcher's
@@ -92,3 +92,4 @@ Collate:
     'oneToAllTraverse.R'
     'allToAllTraverse.R'
 RoxygenNote: 7.3.1
+Language: en-GB

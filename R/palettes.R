@@ -8,7 +8,7 @@
 #' Create n contiguous colours taken from depthmapX.
 #'
 #' @name palettes
-#' @param n Numer of colours to generate
+#' @param n Number of colours to generate
 #' @param rangeMin The min value of the range
 #' @param rangeMax The max value of the range
 #' @returns Returns a vector of colours.

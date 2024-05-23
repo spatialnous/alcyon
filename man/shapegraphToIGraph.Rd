@@ -4,12 +4,12 @@
 \alias{shapegraphToIGraph}
 \title{Conversion of shapegraph to igraph}
 \usage{
-shapegraphToIGraph(shapeGraph, weightcolumn = NA)
+shapegraphToIGraph(shapeGraph, weightColumn = NA)
 }
 \arguments{
 \item{shapeGraph}{A ShapeGraph}
 
-\item{weightcolumn}{Optional.The variable used to assign weight to graph
+\item{weightColumn}{Optional.The variable used to assign weight to graph
 edges}
 }
 \value{
@@ -18,9 +18,9 @@ Returns graph.data.frame.
 \description{
 Creates igraph based on the connections and the x,y coordinates of the
 centroids of shapes in a shapegraph (axial,segment, convex). Specify
-weightcolumn to assign weight to graph edges.
+weightColumn to assign weight to graph edges.
 }
 \details{
-If weightcolumn is provided, edge connections weight is calculated by taking
+If weightColumn is provided, edge connections weight is calculated by taking
 the average of the variable of the connected nodes.
 }

@@ -9,7 +9,7 @@ axialToSegmentShapeGraph(axialShapeGraph, stubRemoval = NULL)
 \arguments{
 \item{axialShapeGraph}{An Axial ShapeGraph}
 
-\item{stubRemoval}{Rremove stubs of axial lines shorter than this
+\item{stubRemoval}{Remove stubs of axial lines shorter than this
 percentage (for example provide 0.4 for 40\%)}
 }
 \value{
