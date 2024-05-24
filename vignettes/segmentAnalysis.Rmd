@@ -39,9 +39,7 @@ shapeGraph <- axialToSegmentShapeGraph(
 
 ```{r}
 segMap <- as(shapeGraph, "sf")
-for (column in names(segMap)) {
-  plot(segMap[, column])
-}
+plot(segMap[, "Connectivity"])
 ```
 
 ```{r}
@@ -54,9 +52,7 @@ segmentResult <- allToAllTraverse(
   includeBetweenness = FALSE
 )
 segMap <- as(shapeGraph, "sf")
-for (column in segmentResult$newAttributes) {
-  plot(segMap[, column])
-}
+plot(segMap[, "T1024 Total Depth"])
 ```
 
 ```{r}
@@ -68,9 +64,7 @@ segmentResult <- allToAllTraverse(
   includeBetweenness = FALSE
 )
 segMap <- as(shapeGraph, "sf")
-for (column in segmentResult$newAttributes) {
-  plot(segMap[, column])
-}
+plot(segMap[, "Topological Total Length R100 metric"])
 ```
 
 ```{r}
@@ -82,9 +76,7 @@ segmentResult <- allToAllTraverse(
   includeBetweenness = FALSE
 )
 segMap <- as(shapeGraph, "sf")
-for (column in segmentResult$newAttributes) {
-  plot(segMap[, column])
-}
+plot(segMap[, "Metric Total Length R200 metric"])
 ```
 
 ```{r}

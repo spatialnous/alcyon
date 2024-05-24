@@ -35,9 +35,7 @@ shapeGraph <- as(lineStringMap, "AxialShapeGraph")
 
 ```{r}
 axMap <- as(shapeGraph, "sf")
-for (column in names(axMap)) {
-  plot(axMap[, column])
-}
+plot(axMap[, "Connectivity"])
 ```
 
 ```{r}
@@ -48,8 +46,9 @@ axialResult <- allToAllTraverse(
   includeBetweenness = TRUE
 )
 axMap <- as(shapeGraph, "sf")
+plot(axMap[, "Choice [Norm] R3"])
 for (column in axialResult$newAttributes) {
-  plot(axMap[, column])
+  
 }
 ```
 ```{r}
