@@ -20,7 +20,7 @@
 #' "  radii = c(\"n\", \"3\"),",
 #' "  includeBetweenness = TRUE",
 #' ")",
-#' "getTopFeatures(as(shapeGraph, \"sf\"), \"df_5_Choice_Norm_\", 0.1)")
+#' "getTopFeatures(as(shapeGraph, \"sf\"), \"df_2_Connectivity\", 0.1)")
 #' @export
 getTopFeatures <- function(lineStringMap,
                            column,

@@ -32,7 +32,7 @@ test_that("Load axial data from MetaGraph in R", {
 
 test_that("Load pointmap data from MetaGraph in C++", {
   fileName <- system.file(
-    "extdata", "testdata", "gallery", "gallery.graph",
+    "extdata", "testdata", "simple", "simple_interior.graph",
     package = "alcyon"
   )
   metaGraphData <- Rcpp_MetaGraph_read(fileName)
@@ -44,7 +44,7 @@ test_that("Load pointmap data from MetaGraph in C++", {
 
 test_that("Load pointmap data from MetaGraph in R", {
   fileName <- system.file(
-    "extdata", "testdata", "gallery", "gallery.graph",
+    "extdata", "testdata", "simple", "simple_interior.graph",
     package = "alcyon"
   )
   metaGraphData <- readMetaGraph(fileName)

@@ -4,6 +4,3 @@
 [submodule "src/genlib"]
 	path = src/libs/genlib
 	url = git@github.com:spatialnous/genlib.git
-[submodule "inst/extdata/testdata"]
-	path = inst/extdata/testdata
-	url = git@github.com:spatialnous/testdata.git

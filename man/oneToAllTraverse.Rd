@@ -74,7 +74,7 @@ oneToAllTraverse(
 # Axial analysis
 mifFile <- system.file(
     "extdata", "testdata", "barnsbury",
-    "barnsbury_small_axial.mif",
+    "barnsbury_small_axial_original.mif",
     package = "alcyon"
   )
   sfMap <- st_read(mifFile,
@@ -84,14 +84,14 @@ mifFile <- system.file(
 oneToAllTraverse(
   shapeGraph,
   traversalType = TraversalType$Topological,
-  fromX = 530684,
-  fromY = 184100.3
+  fromX = 1217.1,
+  fromY = -1977.3
 )
 
 # Segment analysis
 mifFile <- system.file(
     "extdata", "testdata", "barnsbury",
-    "barnsbury_small_segment.mif",
+    "barnsbury_small_segment_original.mif",
     package = "alcyon"
   )
   sfMap <- st_read(mifFile,
@@ -101,7 +101,7 @@ mifFile <- system.file(
 oneToAllTraverse(
   shapeGraph,
   traversalType = TraversalType$Topological,
-  fromX = 530684,
-  fromY = 184100.3
+  fromX = 1217.1,
+  fromY = -1977.3
 )
 }

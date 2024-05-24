@@ -20,7 +20,7 @@ test_that("Segment Analysis in C++", {
     "Axial Data Map Ref",
     "Axial df_row_name",
     "Axial df_1_Depthmap_Ref",
-    "Axial df_2_Choice"
+    "Axial df_2_Connectivity"
   )
   attrNameBefore <- Rcpp_ShapeMap_getAttributeNames(segmentGraph@ptr)
   expect_identical(expectedColNameBefore, attrNameBefore)
@@ -43,7 +43,7 @@ test_that("Segment Analysis in C++", {
 
   expect_identical(
     dim(Rcpp_ShapeMap_getShapesAsLineCoords(segmentGraph@ptr)),
-    c(171L, 4L)
+    c(178L, 4L)
   )
 
   expectedColNameAfter <- c(
@@ -61,13 +61,13 @@ test_that("Segment Analysis in C++", {
   expect_identical(expectedColNameAfter, attrNameBefore)
 
   connections <- Rcpp_ShapeGraph_getSegmentConnections(segmentGraph@ptr)
-  expect_length(connections$from, 720L)
-  expect_length(connections$to, 720L)
+  expect_length(connections$from, 770L)
+  expect_length(connections$to, 770L)
 })
 
 
 test_that("Segment Analysis in R (non user-visible)", {
-  startData <- loadSmallSegmLinesAsSegmMap(5L)
+  startData <- loadSmallSegmLinesAsSegmMap(6L)
   lineStringMap <- startData$sf
   segmentGraph <- startData$segmentMap
 
@@ -120,7 +120,7 @@ test_that("Segment Analysis in R (non user-visible)", {
 })
 
 test_that("Segment Analysis in R (user-visible)", {
-  startData <- loadSmallAxialLinesAsSegmMap(8L)
+  startData <- loadSmallAxialLinesAsSegmMap(4L)
   lineStringMap <- startData$sf
   segmentGraph <- startData$segmentMap
 

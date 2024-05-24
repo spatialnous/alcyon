@@ -20,7 +20,7 @@ Get the Axial ShapeGraph links
 # links of an axial map
 mifFile <- system.file(
     "extdata", "testdata", "barnsbury",
-    "barnsbury_small_axial.mif",
+    "barnsbury_small_axial_original.mif",
     package = "alcyon"
   )
   sfMap <- st_read(mifFile,

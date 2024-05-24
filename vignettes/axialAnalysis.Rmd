@@ -25,7 +25,7 @@ library(alcyon)
 
 lineStringMap <- st_read(
   system.file(
-    "extdata", "testdata", "barnsbury", "barnsbury_small_axial.mif",
+    "extdata", "testdata", "barnsbury", "barnsbury_small_axial_original.mif",
     package = "alcyon"
   ),
   geometry_column = 1L, quiet = TRUE
@@ -56,8 +56,8 @@ for (column in axialResult$newAttributes) {
 depthResult <- oneToAllTraverse(
   shapeGraph,
   traversalType = TraversalType$Topological,
-  fromX = 530684,
-  fromY = 184100.3
+  fromX = 0982.8,
+  fromY = -1620.3,
 )
 
 axMap <- as(shapeGraph, "sf")

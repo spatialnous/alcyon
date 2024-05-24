@@ -25,7 +25,7 @@ library(alcyon)
 
 lineStringMap <- st_read(
   system.file(
-    "extdata", "testdata", "barnsbury", "barnsbury_small_axial.mif",
+    "extdata", "testdata", "barnsbury", "barnsbury_small_axial_original.mif",
     package = "alcyon"
   ),
   geometry_column = 1L, quiet = TRUE
@@ -91,8 +91,8 @@ for (column in segmentResult$newAttributes) {
 depthResult <- oneToAllTraverse(
   shapeGraph,
   traversalType = TraversalType$Topological,
-  fromX = 530684,
-  fromY = 184100.3
+  fromX = 1217.1,
+  fromY = -1977.3
 )
 
 segMap <- as(shapeGraph, "sf")
@@ -105,8 +105,8 @@ for (column in depthResult$newAttributes) {
 depthResult <- oneToAllTraverse(
   shapeGraph,
   traversalType = TraversalType$Metric,
-  fromX = 530684,
-  fromY = 184100.3
+  fromX = 1217.1,
+  fromY = -1977.3
 )
 
 segMap <- as(shapeGraph, "sf")
@@ -119,8 +119,8 @@ for (column in depthResult$newAttributes) {
 depthResult <- oneToAllTraverse(
   shapeGraph,
   traversalType = TraversalType$Angular,
-  fromX = 530684,
-  fromY = 184100.3,
+  fromX = 1217.1,
+  fromY = -1977.3,
   quantizationWidth = pi / 1024
 )
 

@@ -19,7 +19,7 @@ Get the Segment ShapeGraph connections
 \examples{
 mifFile <- system.file(
     "extdata", "testdata", "barnsbury",
-    "barnsbury_small_segment.mif",
+    "barnsbury_small_segment_original.mif",
     package = "alcyon"
   )
   sfMap <- st_read(mifFile,

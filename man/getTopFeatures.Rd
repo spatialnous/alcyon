@@ -22,7 +22,7 @@ Sorts features by a specific column and extracts the top x percent
 \examples{
 mifFile <- system.file(
     "extdata", "testdata", "barnsbury",
-    "barnsbury_small_axial.mif",
+    "barnsbury_small_axial_original.mif",
     package = "alcyon"
   )
   sfMap <- st_read(mifFile,
@@ -35,5 +35,5 @@ result <- allToAllTraverse(
   radii = c("n", "3"),
   includeBetweenness = TRUE
 )
-getTopFeatures(as(shapeGraph, "sf"), "df_5_Choice_Norm_", 0.1)
+getTopFeatures(as(shapeGraph, "sf"), "df_2_Connectivity", 0.1)
 }

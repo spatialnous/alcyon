@@ -16,7 +16,7 @@ test_that("Axial Analysis in C++", {
     "Data Map Ref",
     "df_row_name",
     "df_1_Depthmap_Ref",
-    "df_2_Choice"
+    "df_2_Connectivity"
   )
   attrNameBefore <- Rcpp_ShapeMap_getAttributeNames(shapeGraph@ptr)
   expect_identical(expectedColNameBefore, attrNameBefore)
@@ -66,7 +66,7 @@ test_that("Axial Analysis in R (non user-visible)", {
     "Data Map Ref",
     "df_row_name",
     "df_1_Depthmap_Ref",
-    "df_2_Choice",
+    "df_2_Connectivity",
     "Choice R3",
     "Choice [Norm] R3",
     "Entropy R3",
@@ -142,7 +142,7 @@ test_that("Axial Analysis in R (user-visible)", {
     "Data Map Ref",
     "df_row_name",
     "df_1_Depthmap_Ref",
-    "df_2_Choice",
+    "df_2_Connectivity",
     newExpectedCols
   )
 
@@ -175,7 +175,7 @@ test_that("Local Axial Analysis in R (user-visible)", {
     "Data Map Ref",
     "df_row_name",
     "df_1_Depthmap_Ref",
-    "df_2_Choice",
+    "df_2_Connectivity",
     newExpectedCols
   )
 

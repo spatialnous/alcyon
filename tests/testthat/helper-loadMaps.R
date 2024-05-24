@@ -81,7 +81,7 @@ loadSmallAxialLinesAsSf <- function(keepAttributeIdx = NULL) {
   return(list(
     sf = loadTestDataMap(
       "barnsbury",
-      "barnsbury_small_axial.mif",
+      "barnsbury_small_axial_original.mif",
       keepAttributeIdx
     )
   ))
@@ -112,7 +112,7 @@ loadSmallSegmentLinesAsSf <- function(keepAttributeIdx = NULL) {
   return(list(
     sf = loadTestDataMap(
       "barnsbury",
-      "barnsbury_small_segment.mif",
+      "barnsbury_small_segment_original.mif",
       keepAttributeIdx
     )
   ))

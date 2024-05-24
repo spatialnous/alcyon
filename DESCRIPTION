@@ -1,6 +1,6 @@
 Package: alcyon
 Type: Package
-Title: An R Package for Spatial Network Analysis
+Title: Spatial Network Analysis
 Version: 0.2.0
 Authors@R: c(
     person(given = "Petros",

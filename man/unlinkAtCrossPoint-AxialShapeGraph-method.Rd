@@ -23,7 +23,7 @@ Unlink two crossing lines on an Axial ShapeGraph at the crossing point
 \examples{
 mifFile <- system.file(
     "extdata", "testdata", "barnsbury",
-    "barnsbury_small_axial.mif",
+    "barnsbury_small_axial_original.mif",
     package = "alcyon"
   )
   sfMap <- st_read(mifFile,

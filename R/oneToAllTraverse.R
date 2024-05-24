@@ -42,8 +42,8 @@
 #' "oneToAllTraverse(",
 #' "  shapeGraph,",
 #' "  traversalType = TraversalType$Topological,",
-#' "  fromX = 530684,",
-#' "  fromY = 184100.3",
+#' "  fromX = 1217.1,",
+#' "  fromY = -1977.3",
 #' ")",
 #' "",
 #' "# Segment analysis",
@@ -51,8 +51,8 @@
 #' "oneToAllTraverse(",
 #' "  shapeGraph,",
 #' "  traversalType = TraversalType$Topological,",
-#' "  fromX = 530684,",
-#' "  fromY = 184100.3",
+#' "  fromX = 1217.1,",
+#' "  fromY = -1977.3",
 #' ")")
 #' @export
 oneToAllTraverse <- function(map,
