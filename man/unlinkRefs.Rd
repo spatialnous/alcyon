@@ -13,6 +13,9 @@ unlinkRefs(map, fromRef, toRef)
 
 \item{toRef}{The ref of the target element}
 }
+\value{
+None
+}
 \description{
 Unlink map cells/lines using their refs
 }

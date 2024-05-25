@@ -17,6 +17,9 @@ linkCoords(map, fromX, fromY, toX, toY)
 
 \item{toY}{Y coordinate of the target point}
 }
+\value{
+None
+}
 \description{
 Link map cells/lines as if selecting them using points
 }

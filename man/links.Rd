@@ -9,6 +9,9 @@ links(map)
 \arguments{
 \item{map}{A sala map}
 }
+\value{
+A matrix with the linked refs
+}
 \description{
 Get map links
 }

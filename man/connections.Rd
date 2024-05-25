@@ -9,6 +9,9 @@ connections(map)
 \arguments{
 \item{map}{A sala map}
 }
+\value{
+A matrix with the connected refs
+}
 \description{
 Get map connections
 }

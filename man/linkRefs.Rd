@@ -13,6 +13,9 @@ linkRefs(map, fromRef, toRef)
 
 \item{toRef}{The ref of the target element}
 }
+\value{
+None
+}
 \description{
 Link map cells/lines using their refs
 }

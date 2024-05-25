@@ -9,6 +9,9 @@ name(map)
 \arguments{
 \item{map}{A sala map}
 }
+\value{
+The name of the object as a string
+}
 \description{
 Get map name
 }

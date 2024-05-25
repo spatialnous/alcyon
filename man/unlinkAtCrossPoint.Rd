@@ -13,6 +13,9 @@ unlinkAtCrossPoint(map, x, y)
 
 \item{y}{Y coordinate of the crossing point}
 }
+\value{
+None
+}
 \description{
 Unlink map lines at their crossing point
 }
