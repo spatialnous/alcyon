@@ -10,3 +10,4 @@ src/build-Release
 *.so
 *.dll
 inst/doc
+scratch/
