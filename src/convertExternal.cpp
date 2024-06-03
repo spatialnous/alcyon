@@ -63,10 +63,17 @@ Rcpp::XPtr<ShapeMap> toShapeMap(
 
     Rcpp::XPtr<ShapeMap> shp(new ShapeMap("tmp_df_shp"));
 
-    std::vector<std::pair<const int, Rcpp::IntegerVector::const_iterator>> iIts;
-    std::vector<std::pair<const int, Rcpp::NumericVector::const_iterator>> rIts;
+    // Rcpp vectors are pointers to the actual vectors, so we store
+    // them here along with the column index and the iterator (useful
+    // later for going through the vector)
+    std::vector<std::tuple<const int,
+                           Rcpp::IntegerVector,
+                           Rcpp::IntegerVector::const_iterator>> iIts;
+    std::vector<std::tuple<const int,
+                           Rcpp::NumericVector,
+                           Rcpp::NumericVector::const_iterator>> rIts;
 
-    { // create the row-names column in the shapemap
+    { // create the row-names column in the ShapeMap
         const int rowNameColIdx = shp->addAttribute("df_row_name");
         if (rowNameColIdx == -1) {
             // error adding column (e.g., duplicate column names)
@@ -75,19 +82,25 @@ Rcpp::XPtr<ShapeMap> toShapeMap(
 
         switch( TYPEOF(dfrn) ) {
         case INTSXP: {
-            const auto &rowNames = Rcpp::as<const Rcpp::IntegerVector>(dfrn);
-            iIts.emplace_back(std::make_pair(rowNameColIdx, rowNames.begin()));
+            auto &newItem = iIts.emplace_back(
+                rowNameColIdx,
+                Rcpp::as<const Rcpp::IntegerVector>(dfrn),
+                nullptr);
+            std::get<2>(newItem) = std::get<1>(newItem).begin();
             break;
         }
         case REALSXP: {
-            const auto &rowNames = Rcpp::as<const Rcpp::NumericVector>(dfrn);
-            rIts.emplace_back(std::make_pair(rowNameColIdx, rowNames.begin()));
+            auto &newItem = rIts.emplace_back(
+                rowNameColIdx,
+                Rcpp::as<const Rcpp::NumericVector>(dfrn),
+                nullptr);
+            std::get<2>(newItem) = std::get<1>(newItem).begin();
             break;
         }
         }
     }
 
-    // for any other columns it has been requested, create in ShapeMa
+    // for any other columns it has been requested, create in ShapeMap
     for (const int rColIdx: keepColumnIdxs) {
         // R indexes start from 1
         const int colIdx = rColIdx - 1;
@@ -106,8 +119,11 @@ Rcpp::XPtr<ShapeMap> toShapeMap(
                 Rcpp::stop("Error creating df column (%d: %s)",
                            colIdx, colName);
             }
-            const auto &tmp = Rcpp::as<const Rcpp::IntegerVector>(col);
-            iIts.emplace_back(std::make_pair(newColIdx, tmp.begin()));
+            auto &newItem = iIts.emplace_back(
+                newColIdx,
+                Rcpp::as<const Rcpp::IntegerVector>(col),
+                nullptr);
+            std::get<2>(newItem) = std::get<1>(newItem).begin();
             break;
         }
         case REALSXP: {
@@ -119,8 +135,11 @@ Rcpp::XPtr<ShapeMap> toShapeMap(
                 Rcpp::stop("Error creating df column (%d: %s)",
                            colIdx, colName);
             }
-            const auto &tmp = Rcpp::as<const Rcpp::NumericVector>(col);
-            rIts.emplace_back(std::make_pair(newColIdx, tmp.begin()));
+            auto &newItem = rIts.emplace_back(
+                newColIdx,
+                Rcpp::as<const Rcpp::NumericVector>(col),
+                nullptr);
+            std::get<2>(newItem) = std::get<1>(newItem).begin();
             break;
         }
         case STRSXP: {
@@ -156,10 +175,10 @@ Rcpp::XPtr<ShapeMap> toShapeMap(
         std::map<int, float> extraAttributes;
 
         for (auto &idxiit: iIts) {
-            extraAttributes.emplace(idxiit.first, *idxiit.second);
+            extraAttributes.emplace(std::get<0>(idxiit), *std::get<2>(idxiit));
         }
         for (auto &idxrit: rIts) {
-            extraAttributes.emplace(idxrit.first, *idxrit.second);
+            extraAttributes.emplace(std::get<0>(idxrit), *std::get<2>(idxrit));
         }
 
         if (coords.rows() == 1) {
@@ -196,10 +215,10 @@ Rcpp::XPtr<ShapeMap> toShapeMap(
                     extraAttributes);
         }
         for (auto &idxiit: iIts) {
-            ++idxiit.second;
+            ++std::get<2>(idxiit);
         }
         for (auto &idxrit: rIts) {
-            ++idxrit.second;
+            ++std::get<2>(idxrit);
         }
     }
     return shp;
