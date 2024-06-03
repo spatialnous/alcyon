@@ -45,7 +45,8 @@ setMethod(
 #' @importFrom methods setMethod
 #' @eval c("@examples",
 #' rxLoadInteriorLinesAsPointMap(),
-#' "connections(pointMap)")
+#' "# plot the first 100 connections only",
+#' "head(connections(pointMap), 100)")
 #' @export
 setMethod(
   "connections",

@@ -34,5 +34,6 @@ mifFile <- system.file(
     boundaryGraph = FALSE,
     verbose = FALSE
   )
-connections(pointMap)
+# plot the first 100 connections only
+head(connections(pointMap), 100)
 }
