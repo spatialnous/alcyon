@@ -18,7 +18,17 @@ podman run -it --volume=../:/alcyon/ \
 # RDsan -e 'testthat::test_file("/alcyon/tests/testthat/test-isovist.R", package="alcyon")'
 # RDsan -e 'testthat::test_file("/alcyon/tests/testthat/test-agentanalysis.R", package="alcyon")'
 # RDsan -e 'testthat::test_file("/alcyon/tests/testthat/test-MetaGraph.R", package="alcyon")'
+# RDsan -e 'testthat::test_file("/alcyon/tests/testthat/test-prepareVGA.R", package="alcyon")'
 # RDsan -e 'testthat::test_dir("/alcyon/tests")'
+
+# To test with clang
+
+# RDcsan -e 'install.packages("/alcyon", repos=NULL)'
+# RDcsan -e 'testthat::test_file("/alcyon/tests/testthat/test-isovist.R", package="alcyon")'
+# RDcsan -e 'testthat::test_file("/alcyon/tests/testthat/test-agentanalysis.R", package="alcyon")'
+# RDcsan -e 'testthat::test_file("/alcyon/tests/testthat/test-MetaGraph.R", package="alcyon")'
+# RDcsan -e 'testthat::test_file("/alcyon/tests/testthat/test-prepareVGA.R", package="alcyon")'
+# RDcsan -e 'testthat::test_dir("/alcyon/tests")'
 
 
 # Or, inside RDsan inside the container:
