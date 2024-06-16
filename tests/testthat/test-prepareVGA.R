@@ -11,8 +11,7 @@ test_that("PointMaps in C++", {
 
   mapRegion <- sf::st_bbox(lineStringMap)
 
-  pointMap <- new("PointMap")
-  pointMap@ptr <- Rcpp_PointMap_createFromGrid(
+  pointMapPtr <- Rcpp_PointMap_createFromGrid(
     mapRegion[["xmin"]],
     mapRegion[["ymin"]],
     mapRegion[["xmax"]],
@@ -21,23 +20,23 @@ test_that("PointMaps in C++", {
   )
 
 
-  Rcpp_PointMap_blockLines(
-    pointMapPtr = pointMap@ptr,
-    boundaryMap = boundaryMap@ptr
-  )
+  pointMapPtr <- Rcpp_PointMap_blockLines(
+    pointMapPtr = pointMapPtr,
+    boundaryMap = attr(boundaryMap, "sala_map")
+  )$mapPtr
 
-  Rcpp_PointMap_fill(
-    pointMapPtr = pointMap@ptr,
+  pointMapPtr <- Rcpp_PointMap_fill(
+    pointMapPtr = pointMapPtr,
     pointCoords = matrix(c(3.01, 6.7), nrow = 1L)
-  )
+  )$mapPtr
 
-  Rcpp_PointMap_makeGraph(
-    pointMapPtr = pointMap@ptr,
+  pointMapPtr <- Rcpp_PointMap_makeGraph(
+    pointMapPtr = pointMapPtr,
     boundaryGraph = FALSE,
     maxVisibility = -1.0
-  )
+  )$mapPtr
 
-  coords <- Rcpp_PointMap_getFilledPoints(pointMapPtr = pointMap@ptr)
+  coords <- Rcpp_PointMap_getFilledPoints(pointMapPtr = pointMapPtr)
   expect_identical(dim(coords), c(4332L, 10L))
   expect_identical(colnames(coords), c(
     "x", "y", "filled", "blocked",
@@ -50,7 +49,8 @@ test_that("PointMaps in C++", {
 test_that("PointMaps in R", {
   lineStringMap <- loadInteriorLinesAsSf()$sf
 
-  pointMap <- makeVGAPointMap(lineStringMap,
+  pointMap <- makeVGAPointMap(
+    lineStringMap,
     gridSize = 0.04,
     fillX = 3.01,
     fillY = 6.7,
@@ -59,7 +59,9 @@ test_that("PointMaps in R", {
     verbose = FALSE
   )
 
-  coords <- Rcpp_PointMap_getFilledPoints(pointMapPtr = pointMap@ptr)
+  coords <- Rcpp_PointMap_getFilledPoints(
+    pointMapPtr = attr(pointMap, "sala_map")
+  )
 
   expect_identical(dim(coords), c(4332L, 10L))
   expect_identical(colnames(coords), c(

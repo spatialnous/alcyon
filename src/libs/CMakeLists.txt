@@ -9,19 +9,19 @@ set(CMAKE_CXX_STANDARD 17)
 
 set(CMAKE_COMPILE_WARNING_AS_ERROR OFF)
 
+set (FORCE_GLOBAL_COMPILE_WARNINGS ON)
+
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR
     "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-    set(warnings "-Wall -Wextra -Wpedantic -Weverything")
+    set(COMPILE_WARNINGS -Wall -Wextra)
 elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
-    set(warnings "/W4 /EHsc")
-    execute_process(COMMAND make_version_header.bat WORKING_DIRECTORY depthmapX)
+    set(COMPILE_WARNINGS /W4 /EHsc)
 endif()
 
 # policy for target sources - we don't expect any old CMakes
 cmake_policy(SET CMP0076 NEW)
 
 include_directories(".")
-
 
 add_subdirectory(genlib)
 add_subdirectory(salalib)

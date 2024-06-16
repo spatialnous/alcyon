@@ -10,8 +10,9 @@ segmentAnalysis <- function(segmentGraph,
                             weightWithColumn = NULL,
                             includeChoice = FALSE,
                             tulipBins = 0L,
-                            verbose = FALSE,
                             selOnly = FALSE,
+                            copyMap = TRUE,
+                            verbose = FALSE,
                             progress = FALSE) {
   if (!(analysisStepType %in% as.list(TraversalType))) {
     stop("Unknown segment analysis type: ", analysisStepType)
@@ -28,16 +29,18 @@ segmentAnalysis <- function(segmentGraph,
     }
   }, FUN.VALUE = 1L)
 
-  return(Rcpp_runSegmentAnalysis(
-    segmentGraph@ptr,
+  result <- Rcpp_runSegmentAnalysis(
+    attr(segmentGraph, "sala_map"),
     numRadii,
     radiusStepType,
     analysisStepType,
     weightWithColumn,
     includeChoice,
     tulipBins,
-    verbose,
-    selOnly,
-    progress
-  ))
+    selOnlyNV = selOnly,
+    copyMapNV = copyMap,
+    verboseNV = verbose,
+    progressNV = progress
+  )
+  return(processShapeMapResult(segmentGraph, result))
 }

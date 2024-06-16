@@ -4,13 +4,15 @@
 \alias{vgaThroughVision}
 \title{Visibility Graph Analysis - Through Vision}
 \usage{
-vgaThroughVision(pointMap)
+vgaThroughVision(pointMap, copyMap = TRUE)
 }
 \arguments{
 \item{pointMap}{A PointMap}
+
+\item{copyMap}{Optional. Copy the internal sala map}
 }
 \value{
-None
+A new PointMap with the results included
 }
 \description{
 Runs Visibility Graph Analysis to get the Through Vision metric

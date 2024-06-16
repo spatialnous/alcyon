@@ -11,3 +11,5 @@ src/build-Release
 *.dll
 inst/doc
 scratch/
+/doc/
+/Meta/

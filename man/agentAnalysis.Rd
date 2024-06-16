@@ -17,7 +17,9 @@ agentAnalysis(
   locationSeed = 0L,
   numberOfTrails = NA,
   getGateCounts = FALSE,
-  verbose = FALSE
+  copyMap = TRUE,
+  verbose = FALSE,
+  progress = FALSE
 )
 }
 \arguments{
@@ -48,7 +50,11 @@ record all, with max possible currently = 50).}
 
 \item{getGateCounts}{Get values at gates}
 
+\item{copyMap}{Optional. Copy the internal sala map}
+
 \item{verbose}{Optional. Show more information of the process.}
+
+\item{progress}{Optional. Show process progress.}
 }
 \value{
 Returns a list with:

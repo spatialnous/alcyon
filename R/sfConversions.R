@@ -22,14 +22,5 @@
 #' "shapeMapToPolygonSf(isovistMap)")
 #' @export
 shapeMapToPolygonSf <- function(shapeMap) {
-  coords <- Rcpp_ShapeMap_getShapesAsPolygonCoords(shapeMap@ptr)
-  sfGeom <- st_sfc(lapply(coords, function(polyCoords) {
-    sf::st_polygon(list(polyCoords), dim = "XY")
-  }))
-
-  attrNames <- Rcpp_ShapeMap_getAttributeNames(shapeMap@ptr)
-  result <- st_sf(Rcpp_ShapeMap_getAttributeData(shapeMap@ptr, attrNames),
-    geometry = sfGeom
-  )
-  return(result[c(attrNames, "geometry")])
+  return(processPtrAsNewPolyMap(attr(shapeMap, "sala_map"), "ShapeMap"))
 }

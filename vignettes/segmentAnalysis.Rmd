@@ -31,95 +31,82 @@ lineStringMap <- st_read(
   geometry_column = 1L, quiet = TRUE
 )
 axialShapeGraph <- as(lineStringMap, "AxialShapeGraph")
-shapeGraph <- axialToSegmentShapeGraph(
+segMap <- axialToSegmentShapeGraph(
   axialShapeGraph,
   stubRemoval = 0.4
 )
 ```
 
 ```{r}
-segMap <- as(shapeGraph, "sf")
 plot(segMap[, "Connectivity"])
 ```
 
 ```{r}
-segmentResult <- allToAllTraverse(
-  shapeGraph,
+segmentAnalysed <- allToAllTraverse(
+  segMap,
   radii = c("n", "200"),
   radiusTraversalType = TraversalType$Metric,
   traversalType = TraversalType$Angular,
   quantizationWidth = pi / 1024,
   includeBetweenness = FALSE
 )
-segMap <- as(shapeGraph, "sf")
-plot(segMap[, "T1024 Total Depth"])
+plot(segmentAnalysed[, "T1024.Total.Depth"])
 ```
 
 ```{r}
-segmentResult <- allToAllTraverse(
-  shapeGraph,
+segmentAnalysed <- allToAllTraverse(
+  segmentAnalysed,
   radii = c("n", "100"),
   radiusTraversalType = TraversalType$Topological,
   traversalType = TraversalType$Topological,
   includeBetweenness = FALSE
 )
-segMap <- as(shapeGraph, "sf")
-plot(segMap[, "Topological Total Length R100 metric"])
+plot(segmentAnalysed[, "Topological.Total.Length.R100.metric"])
 ```
 
 ```{r}
 segmentResult <- allToAllTraverse(
-  shapeGraph,
+  segmentAnalysed,
   radii = c("n", "200"),
   radiusTraversalType = TraversalType$Metric,
   traversalType = TraversalType$Metric,
   includeBetweenness = FALSE
 )
-segMap <- as(shapeGraph, "sf")
-plot(segMap[, "Metric Total Length R200 metric"])
+plot(segmentResult[, "Metric.Total.Length.R200.metric"])
 ```
 
 ```{r}
-depthResult <- oneToAllTraverse(
-  shapeGraph,
+segmentAnalysed <- oneToAllTraverse(
+  segmentAnalysed,
   traversalType = TraversalType$Topological,
   fromX = 1217.1,
   fromY = -1977.3
 )
 
-segMap <- as(shapeGraph, "sf")
-for (column in depthResult$newAttributes) {
-  plot(segMap[, column])
-}
+plot(segmentAnalysed[ ,"Topological.Step.Depth"])
 ```
 
 ```{r}
-depthResult <- oneToAllTraverse(
-  shapeGraph,
+segmentAnalysed <- oneToAllTraverse(
+  segmentAnalysed,
   traversalType = TraversalType$Metric,
   fromX = 1217.1,
   fromY = -1977.3
 )
 
-segMap <- as(shapeGraph, "sf")
-for (column in depthResult$newAttributes) {
-  plot(segMap[, column])
-}
+plot(segmentAnalysed[, "Metric.Step.Depth"])
 ```
 
 ```{r}
-depthResult <- oneToAllTraverse(
-  shapeGraph,
+segmentAnalysed <- oneToAllTraverse(
+  segmentAnalysed,
   traversalType = TraversalType$Angular,
   fromX = 1217.1,
   fromY = -1977.3,
   quantizationWidth = pi / 1024
 )
 
-segMap <- as(shapeGraph, "sf")
-for (column in depthResult$newAttributes) {
-  plot(segMap[, column])
-}
+plot(segmentAnalysed[, "Angular.Step.Depth"])
 ```
 
 

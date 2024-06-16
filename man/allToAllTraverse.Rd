@@ -13,6 +13,7 @@ allToAllTraverse(
   includeBetweenness = FALSE,
   quantizationWidth = NA,
   gatesOnly = FALSE,
+  copyMap = TRUE,
   verbose = FALSE,
   progress = FALSE
 )
@@ -40,17 +41,14 @@ quantizationWidth). Only works for Segment ShapeGraphs}
 \item{gatesOnly}{Optional. Only calculate results at particular gate pixels.
 Only works for PointMaps}
 
+\item{copyMap}{Optional. Copy the internal sala map}
+
 \item{verbose}{Optional. Show more information of the process.}
 
 \item{progress}{Optional. Enable progress display}
 }
 \value{
-Returns a list with:
-\itemize{
-  \item{completed: Whether the analysis completed}
-  \item{newAttributes: The new attributes that were created during the
-  process}
-}
+A new map with the results included
 }
 \description{
 Runs all-to-all traversal on a map with a graph. This is applicable to:

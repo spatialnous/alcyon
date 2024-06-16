@@ -2,9 +2,9 @@
 % Please edit documentation in R/generics.R
 \name{unlinkRefs}
 \alias{unlinkRefs}
-\title{Unlink map cells/lines using their refs}
+\title{Unlink map points/lines using their refs}
 \usage{
-unlinkRefs(map, fromRef, toRef)
+unlinkRefs(map, fromRef, toRef, copyMap = TRUE)
 }
 \arguments{
 \item{map}{A sala map}
@@ -12,10 +12,12 @@ unlinkRefs(map, fromRef, toRef)
 \item{fromRef}{The ref of the origin element}
 
 \item{toRef}{The ref of the target element}
+
+\item{copyMap}{Optional. Copy the internal sala map}
 }
 \value{
-None
+A new map with unlinked points/lines
 }
 \description{
-Unlink map cells/lines using their refs
+Unlink map points/lines using their refs
 }

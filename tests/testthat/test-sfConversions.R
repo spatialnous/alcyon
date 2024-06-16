@@ -19,7 +19,7 @@ test_that("sf linestrings to ShapeMap and back", {
     paste0("df_", numericCols, "_", names(lineStringMap)[numericCols])
   )
   expect_identical(
-    Rcpp_ShapeMap_getAttributeNames(shapeMap@ptr),
+    Rcpp_ShapeMap_getAttributeNames(attr(shapeMap, "sala_map")),
     expectedColNames
   )
 
@@ -45,13 +45,22 @@ test_that("sf linestrings to Axial Map", {
     "Line Length",
     "Data Map Ref",
     "df_row_name",
-    paste0("df_", numericCols, "_", names(lineStringMap)[numericCols])
+    "df_1_Depthmap_Ref",
+    "df_2_Connectivity"
   )
-  attrNames <- Rcpp_ShapeMap_getAttributeNames(shapeGraph@ptr)
-  expect_identical(expectedColNames, attrNames)
 
+  attrNames <- Rcpp_ShapeMap_getAttributeNames(attr(shapeGraph, "sala_map"))
+  expect_identical(attrNames, expectedColNames)
+
+  expectedColNames <- c(
+    "Depthmap_Ref",
+    "Connectivity",
+    "geometry",
+    "Data Map Ref",
+    "Line Length"
+  )
   newLineStringMap <- as(shapeGraph, "sf")
-  expect_named(newLineStringMap, c(expectedColNames, "geometry"))
+  expect_named(newLineStringMap, expectedColNames)
 })
 
 test_that("sf linestrings to Segment Map through Axial Map and back", {
@@ -81,9 +90,22 @@ test_that("sf linestrings to Segment Map through Axial Map and back", {
     "Axial df_row_name",
     paste0("Axial df_", numericCols, "_", names(lineStringMap)[numericCols])
   )
-  attrNames <- Rcpp_ShapeMap_getAttributeNames(segmentGraph@ptr)
+  attrNames <- Rcpp_ShapeMap_getAttributeNames(attr(segmentGraph, "sala_map"))
   expect_identical(expectedColNames, attrNames)
 
+  expectedColNames <- c(
+    "Angular Connectivity",
+    "Axial Connectivity",
+    "Axial Data Map Ref",
+    "Axial Line Length",
+    "Axial Line Ref",
+    "Axial df_1_Depthmap_Ref",
+    "Axial df_2_Connectivity",
+    "Axial df_row_name",
+    "Connectivity",
+    "Ref",
+    "Segment Length"
+  )
   newLineStringMap <- as(segmentGraph, "sf")
   expect_named(newLineStringMap, c(expectedColNames, "geometry"))
 })
@@ -109,11 +131,22 @@ test_that("sf linestrings to Segment Map and back", {
     "Angular Connectivity",
     "Connectivity"
   )
-  attrNames <- Rcpp_ShapeMap_getAttributeNames(segmentGraph@ptr)
+  attrNames <- Rcpp_ShapeMap_getAttributeNames(attr(segmentGraph, "sala_map"))
   expect_identical(expectedColNames, attrNames)
 
+  expectedColNames <- c(
+    "Depthmap_Ref",
+    "Angular_Connectivity",
+    "Axial_Line_Ref",
+    "geometry",
+    "Angular Connectivity",
+    "Axial Line Ref",
+    "Connectivity",
+    "Data Map Ref",
+    "Segment Length"
+  )
   newLineStringMap <- as(segmentGraph, "sf")
-  expect_named(newLineStringMap, c(expectedColNames, "geometry"))
+  expect_named(newLineStringMap, expectedColNames)
 })
 
 test_that("sf polygons to Shape Map and back", {

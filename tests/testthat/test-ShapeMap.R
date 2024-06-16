@@ -4,12 +4,6 @@
 
 context("ShapeMap tests")
 
-test_that("Create ShapeMap", {
-  shapeMapName <- "Test ShapeMap"
-  shp <- ShapeMap(shapeMapName)
-  expect_identical(shapeMapName, name(shp))
-})
-
 test_that("Non-numeric columns in conversion", {
   lineStringMap <- loadSmallAxialLinesAsSf()$sf
   lineStringMap$nonn1 <- "a"

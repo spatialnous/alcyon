@@ -27,8 +27,9 @@ Rcpp::List runSegmentAnalysis(
         const Rcpp::Nullable<std::string> weightedMeasureColNameNV = R_NilValue,
         const Rcpp::Nullable<bool> includeChoiceNV = R_NilValue,
         const Rcpp::Nullable<int> tulipBinsNV = R_NilValue,
-        const Rcpp::Nullable<bool> verboseNV = R_NilValue,
         const Rcpp::Nullable<bool> selOnlyNV = R_NilValue,
+        const Rcpp::Nullable<bool> copyMapNV = R_NilValue,
+        const Rcpp::Nullable<bool> verboseNV = R_NilValue,
         const Rcpp::Nullable<bool> progressNV = R_NilValue) {
 
     std::string weightedMeasureColName = "";
@@ -49,6 +50,10 @@ Rcpp::List runSegmentAnalysis(
     if (selOnlyNV.isNotNull()) {
         selOnly = Rcpp::as<bool>(selOnlyNV);
     }
+    bool copyMap = true;
+    if (copyMapNV.isNotNull()) {
+        copyMap = Rcpp::as<bool>(copyMapNV);
+    }
     bool verbose = false;
     if (verboseNV.isNotNull()) {
         verbose = Rcpp::as<bool>(verboseNV);
@@ -62,6 +67,11 @@ Rcpp::List runSegmentAnalysis(
         Rcpp::Rcout << "Running segment analysis... " << '\n';
     }
 
+    if (copyMap) {
+        auto prevShapeGraph = shapeGraph;
+        shapeGraph = Rcpp::XPtr(new ShapeGraph());
+        shapeGraph->copy(*prevShapeGraph, ShapeMap::COPY_ALL, true);
+    }
 
     std::set<double> radius_set;
     radius_set.insert(radii.begin(), radii.end());
@@ -146,29 +156,41 @@ Rcpp::List runSegmentAnalysis(
         break;
         }
         case TraversalType::Topological: {
+            bool first = true;
             for (auto radius: radius_set) {
-            auto radiusAnalysisResult =
-                SegmentTopological(radius, selOnly).run(
-                        getCommunicator(progress).get(),
-                        *shapeGraph, false /* unused */);
-            analysisResult.completed = analysisResult.completed &
-            radiusAnalysisResult.completed;
-            for (auto column: radiusAnalysisResult.getAttributes())
-                analysisResult.addAttribute(column);
-        }
+                auto radiusAnalysisResult =
+                    SegmentTopological(radius, selOnly).run(
+                            getCommunicator(progress).get(),
+                            *shapeGraph, false /* unused */);
+                if (first) {
+                    analysisResult.completed = radiusAnalysisResult.completed;
+                    first = false;
+                } else {
+                    analysisResult.completed = analysisResult.completed &
+                        radiusAnalysisResult.completed;
+                }
+                for (auto column: radiusAnalysisResult.getAttributes())
+                    analysisResult.addAttribute(column);
+            }
             break;
         }
         case TraversalType::Metric: {
+            bool first = true;
             for (auto radius: radius_set) {
-            auto radiusAnalysisResult =
-                SegmentMetric(radius, selOnly).run(
-                        getCommunicator(progress).get(),
-                        *shapeGraph, false /* unused */);
-            analysisResult.completed = analysisResult.completed &
-            radiusAnalysisResult.completed;
-            for (auto column: radiusAnalysisResult.getAttributes())
-                analysisResult.addAttribute(column);
-        }
+                auto radiusAnalysisResult =
+                    SegmentMetric(radius, selOnly).run(
+                            getCommunicator(progress).get(),
+                            *shapeGraph, false /* unused */);
+                if (first) {
+                    analysisResult.completed = radiusAnalysisResult.completed;
+                    first = false;
+                } else {
+                    analysisResult.completed = analysisResult.completed &
+                        radiusAnalysisResult.completed;
+                }
+                for (auto column: radiusAnalysisResult.getAttributes())
+                    analysisResult.addAttribute(column);
+            }
             break;
         }
         default:
@@ -176,8 +198,9 @@ Rcpp::List runSegmentAnalysis(
         }
         result["completed"] = analysisResult.completed;
         result["newAttributes"] = analysisResult.getAttributes();
+        result["mapPtr"] = shapeGraph;
     } catch (Communicator::CancelledException) {
-        // result["completed"] = false;
+        Rcpp::stop("Analysis cancelled");
     }
     if (verbose) {
         Rcpp::Rcout << "ok" << '\n';
@@ -195,11 +218,16 @@ Rcpp::List segmentStepDepth(
         const std::vector<double> stepDepthPointsX,
         const std::vector<double> stepDepthPointsY,
         const Rcpp::Nullable<int> tulipBinsNV = R_NilValue,
+        const Rcpp::Nullable<bool> copyMapNV = R_NilValue,
         const Rcpp::Nullable<bool> verboseNV = R_NilValue,
         const Rcpp::Nullable<bool> progressNV = R_NilValue) {
     int tulipBins = 0;
     if (tulipBinsNV.isNotNull()) {
         tulipBins = Rcpp::as<int>(tulipBinsNV);
+    }
+    bool copyMap = true;
+    if (copyMapNV.isNotNull()) {
+        copyMap = Rcpp::as<bool>(copyMapNV);
     }
     bool verbose = false;
     if (verboseNV.isNotNull()) {
@@ -212,6 +240,12 @@ Rcpp::List segmentStepDepth(
 
     if (verbose) {
         Rcpp::Rcout << "ok\nSelecting cells... " << '\n';
+    }
+
+    if (copyMap) {
+        auto prevShapeGraph = shapeGraph;
+        shapeGraph = Rcpp::XPtr(new ShapeGraph());
+        shapeGraph->copy(*prevShapeGraph, ShapeMap::COPY_ALL, true);
     }
 
     for (int i = 0; i < stepDepthPointsX.size(); ++i) {
@@ -271,7 +305,7 @@ Rcpp::List segmentStepDepth(
         }
         result["completed"] = analysisResult.completed;
         result["newAttributes"] = analysisResult.getAttributes();
-
+        result["mapPtr"] = shapeGraph;
     } catch (Communicator::CancelledException) {
         // result["completed"] = false;
     }

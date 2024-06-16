@@ -5,7 +5,7 @@
 \alias{linkRefs,AxialShapeGraph-method}
 \title{Link two Axial Lines (refs)}
 \usage{
-\S4method{linkRefs}{AxialShapeGraph}(map, fromRef, toRef)
+\S4method{linkRefs}{AxialShapeGraph}(map, fromRef, toRef, copyMap = TRUE)
 }
 \arguments{
 \item{map}{An Axial ShapeGraph}
@@ -13,9 +13,11 @@
 \item{fromRef}{Ref of the first link line}
 
 \item{toRef}{Ref of the second link line}
+
+\item{copyMap}{Optional. Copy the internal sala map}
 }
 \value{
-None
+A new Axial ShapeGraph with linked lines
 }
 \description{
 Link two lines on an Axial ShapeGraph using their refs

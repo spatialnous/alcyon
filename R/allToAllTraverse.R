@@ -25,15 +25,11 @@
 #' quantizationWidth). Only works for Segment ShapeGraphs
 #' @param gatesOnly Optional. Only calculate results at particular gate pixels.
 #' Only works for PointMaps
+#' @param copyMap Optional. Copy the internal sala map
 #' @param verbose Optional. Show more information of the process.
 #' @param progress Optional. Enable progress display
 #'
-#' @returns Returns a list with:
-#' \itemize{
-#'   \item{completed: Whether the analysis completed}
-#'   \item{newAttributes: The new attributes that were created during the
-#'   process}
-#' }
+#' @returns A new map with the results included
 #' @eval c("@examples",
 #' "# Pointmap analysis (VGA)",
 #' rxLoadSimpleLinesAsPointMap(),
@@ -74,6 +70,7 @@ allToAllTraverse <- function(map,
                              includeBetweenness = FALSE,
                              quantizationWidth = NA,
                              gatesOnly = FALSE,
+                             copyMap = TRUE,
                              verbose = FALSE,
                              progress = FALSE) {
   if (!(traversalType %in% as.list(TraversalType))) {
@@ -81,6 +78,9 @@ allToAllTraverse <- function(map,
   }
   if (!is.na(quantizationWidth) && !inherits(map, "SegmentShapeGraph")) {
     stop("quantizationWidth can only be used with Segment ShapeGraphs")
+  }
+  if (length(radii) < 1L) {
+    stop("At least one radius is required")
   }
 
   if (inherits(map, "PointMap")) {
@@ -93,6 +93,7 @@ allToAllTraverse <- function(map,
       includeBetweenness,
       quantizationWidth,
       gatesOnly,
+      copyMap,
       verbose,
       progress
     ))
@@ -103,6 +104,7 @@ allToAllTraverse <- function(map,
       weightByAttribute = weightByAttribute,
       includeChoice = includeBetweenness,
       includeIntermediateMetrics = FALSE,
+      copyMap = copyMap,
       verbose = verbose
     ))
   } else if (inherits(map, "SegmentShapeGraph")) {
@@ -119,8 +121,9 @@ allToAllTraverse <- function(map,
       weightWithColumn = weightByAttribute,
       includeChoice = includeBetweenness,
       tulipBins = tulipBins,
-      verbose = verbose,
       selOnly = FALSE,
+      copyMap = copyMap,
+      verbose = verbose,
       progress = progress
     ))
   } else {
@@ -139,18 +142,22 @@ allToAllTraversePointMap <- function(map,
                                      includeBetweenness = FALSE,
                                      quantizationWidth = NA,
                                      gatesOnly = FALSE,
+                                     copyMap = TRUE,
                                      verbose = FALSE,
                                      progress = FALSE) {
   if (traversalType == TraversalType$Metric) {
-    analysisResult <- list(
-      completed = FALSE,
-      newAttributes = vector(mode = "character")
+    analysisResult <- Rcpp_VGA_metric(
+      attr(map, "sala_map"),
+      radii[1L],
+      gatesOnly,
+      copyMapNV = copyMap
     )
-    for (radius in radii) {
+    for (radius in radii[-1L]) {
       radiusAnalysisResult <- Rcpp_VGA_metric(
-        map@ptr,
+        attr(map, "sala_map"),
         radius,
-        gatesOnly
+        gatesOnly,
+        copyMapNV = FALSE
       )
       analysisResult$completed <- analysisResult$completed &
         radiusAnalysisResult$completed
@@ -159,17 +166,20 @@ allToAllTraversePointMap <- function(map,
         radiusAnalysisResult$newAttributes
       )
     }
-    return(analysisResult)
+    return(processPointMapResult(map, analysisResult))
   } else if (traversalType == TraversalType$Topological) {
-    analysisResult <- list(
-      completed = FALSE,
-      newAttributes = vector(mode = "character")
+    analysisResult <- Rcpp_VGA_visualGlobal(
+      attr(map, "sala_map"),
+      radii[1L],
+      gatesOnly,
+      copyMapNV = copyMap
     )
-    for (radius in radii) {
+    for (radius in radii[-1L]) {
       radiusAnalysisResult <- Rcpp_VGA_visualGlobal(
-        map@ptr,
+        attr(map, "sala_map"),
         radius,
-        gatesOnly
+        gatesOnly,
+        copyMapNV = FALSE
       )
       analysisResult$completed <- analysisResult$completed &
         radiusAnalysisResult$completed
@@ -178,17 +188,20 @@ allToAllTraversePointMap <- function(map,
         radiusAnalysisResult$newAttributes
       )
     }
-    return(analysisResult)
+    return(processPointMapResult(map, analysisResult))
   } else if (traversalType == TraversalType$Angular) {
-    analysisResult <- list(
-      completed = FALSE,
-      newAttributes = vector(mode = "character")
+    analysisResult <- Rcpp_VGA_angular(
+      attr(map, "sala_map"),
+      radii[1L],
+      gatesOnly,
+      copyMapNV = copyMap
     )
-    for (radius in radii) {
+    for (radius in radii[-1L]) {
       radiusAnalysisResult <- Rcpp_VGA_angular(
-        map@ptr,
+        attr(map, "sala_map"),
         radius,
-        gatesOnly
+        gatesOnly,
+        copyMapNV = FALSE
       )
       analysisResult$completed <- analysisResult$completed &
         radiusAnalysisResult$completed
@@ -197,7 +210,7 @@ allToAllTraversePointMap <- function(map,
         radiusAnalysisResult$newAttributes
       )
     }
-    return(analysisResult)
+    return(processPointMapResult(map, analysisResult))
   }
 }
 
@@ -206,13 +219,19 @@ allToAllTraversePointMap <- function(map,
 #' Runs Visibility Graph Analysis to get the Through Vision metric
 #'
 #' @param pointMap A PointMap
-#' @returns None
+#' @param copyMap Optional. Copy the internal sala map
+#' @returns A new PointMap with the results included
 #' @eval c("@examples",
 #' rxLoadSimpleLinesAsPointMap(),
 #' "vgaThroughVision(pointMap)")
 #' @export
-vgaThroughVision <- function(pointMap) {
-  Rcpp_VGA_throughVision(pointMap@ptr)
+vgaThroughVision <- function(pointMap,
+                             copyMap = TRUE) {
+  result <- Rcpp_VGA_throughVision(
+    attr(pointMap, "sala_map"),
+    copyMapNV = copyMap
+  )
+  return(processPointMapResult(pointMap, result))
 }
 
 #' Visibility Graph Analysis - Visual local metrics
@@ -220,14 +239,22 @@ vgaThroughVision <- function(pointMap) {
 #' Runs Visibility Graph Analysis to get visual local metrics
 #'
 #' @param pointMap A PointMap
+#' @param copyMap Optional. Copy the internal sala map
 #' @param gatesOnly Optional. Only keep the values at specific gates
-#' @returns None
+#' @returns A new PointMap with the results included
 #' @eval c("@examples",
 #' rxLoadSimpleLinesAsPointMap(),
 #' "vgaVisualLocal(pointMap, FALSE)")
 #' @export
-vgaVisualLocal <- function(pointMap, gatesOnly = FALSE) {
-  Rcpp_VGA_visualLocal(pointMap@ptr, gatesOnly)
+vgaVisualLocal <- function(pointMap,
+                           copyMap = TRUE,
+                           gatesOnly = FALSE) {
+  result <- Rcpp_VGA_visualLocal(
+    attr(pointMap, "sala_map"),
+    gatesOnly,
+    copyMapNV = copyMap
+  )
+  return(processPointMapResult(pointMap, result))
 }
 
 #' Visibility Graph Analysis - isovist metrics
@@ -236,12 +263,20 @@ vgaVisualLocal <- function(pointMap, gatesOnly = FALSE) {
 #'
 #' @param pointMap A PointMap
 #' @param boundaryMap A ShapeMap of lines
-#' @returns None
+#' @param copyMap Optional. Copy the internal sala map
+#' @returns A new PointMap with the results included
 #' @eval c("@examples",
 #' rxLoadSimpleLinesAsPointMap(),
 #' "boundaryMap <- as(sfMap[, c()], \"ShapeMap\")",
 #' "vgaIsovist(pointMap, boundaryMap)")
 #' @export
-vgaIsovist <- function(pointMap, boundaryMap) {
-  Rcpp_VGA_isovist(pointMap@ptr, boundaryMap@ptr)
+vgaIsovist <- function(pointMap,
+                       boundaryMap,
+                       copyMap = TRUE) {
+  result <- Rcpp_VGA_isovist(
+    attr(pointMap, "sala_map"),
+    attr(boundaryMap, "sala_map"),
+    copyMapNV = copyMap
+  )
+  return(processPointMapResult(pointMap, result))
 }

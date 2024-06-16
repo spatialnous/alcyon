@@ -29,11 +29,11 @@ mifFile <- system.file(
     geometry_column = 1L, quiet = TRUE
   )
   shapeGraph <- as(sfMap, "AxialShapeGraph")
-result <- allToAllTraverse(
+shapeGraph <- allToAllTraverse(
   shapeGraph,
   traversalType = TraversalType$Topological,
   radii = c("n", "3"),
   includeBetweenness = TRUE
 )
-getTopFeatures(as(shapeGraph, "sf"), "df_2_Connectivity", 0.1)
+getTopFeatures(shapeGraph, "Connectivity.1", 0.1)
 }

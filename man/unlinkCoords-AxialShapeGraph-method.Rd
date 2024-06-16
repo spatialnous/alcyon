@@ -5,7 +5,7 @@
 \alias{unlinkCoords,AxialShapeGraph-method}
 \title{Unlink two Axial Lines (coordinates)}
 \usage{
-\S4method{unlinkCoords}{AxialShapeGraph}(map, fromX, fromY, toX, toY)
+\S4method{unlinkCoords}{AxialShapeGraph}(map, fromX, fromY, toX, toY, copyMap = TRUE)
 }
 \arguments{
 \item{map}{An Axial ShapeGraph}
@@ -17,9 +17,11 @@
 \item{toX}{X coordinate of the second unlink point}
 
 \item{toY}{Y coordinate of the second unlink point}
+
+\item{copyMap}{Optional. Copy the internal sala map}
 }
 \value{
-None
+A new Axial ShapeGraph with unlinked lines
 }
 \description{
 Unlink two locations on an Axial ShapeGraph using the point coordinates
@@ -34,5 +36,5 @@ mifFile <- system.file(
     geometry_column = 1L, quiet = TRUE
   )
   shapeGraph <- as(sfMap, "AxialShapeGraph")
-unlinkCoords(shapeGraph, 530923.0, 184041.0, 530956.0, 183887.0)
+unlinkCoords(shapeGraph, 982.8, -1620.3, 1080.4, -1873.5)
 }

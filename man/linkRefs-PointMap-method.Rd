@@ -5,7 +5,7 @@
 \alias{linkRefs,PointMap-method}
 \title{Link two PointMap Cells (refs)}
 \usage{
-\S4method{linkRefs}{PointMap}(map, fromRef, toRef)
+\S4method{linkRefs}{PointMap}(map, fromRef, toRef, copyMap = TRUE)
 }
 \arguments{
 \item{map}{A PointMap}
@@ -13,9 +13,11 @@
 \item{fromRef}{Ref of the first link line}
 
 \item{toRef}{Ref of the second link line}
+
+\item{copyMap}{Optional. Copy the internal sala map}
 }
 \value{
-None
+A new PointMap with linked points
 }
 \description{
 Link two cells on an PointMap using their refs
@@ -38,5 +40,5 @@ mifFile <- system.file(
     boundaryGraph = FALSE,
     verbose = FALSE
   )
-linkRefs(pointMap, 1835056L, 7208971L)
+pointMap <- linkRefs(pointMap, 1835056L, 7208971L)
 }

@@ -8,7 +8,7 @@ test_that("Isovists in C++", {
   shapeMap <- loadInteriorLinesAsShapeMap(vector())$shapeMap
 
   isovistMap <- Rcpp_makeIsovists(
-    shapeMap@ptr,
+    attr(shapeMap, "sala_map"),
     matrix(c(3.01, 6.7), nrow = 1L),
     0.01,
     3.14,

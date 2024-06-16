@@ -14,13 +14,13 @@
 #' @importFrom utils tail
 #' @eval c("@examples",
 #' rxLoadSmallAxialLines(),
-#' "result <- allToAllTraverse(",
+#' "shapeGraph <- allToAllTraverse(",
 #' "  shapeGraph,",
 #' "  traversalType = TraversalType$Topological,",
 #' "  radii = c(\"n\", \"3\"),",
 #' "  includeBetweenness = TRUE",
 #' ")",
-#' "getTopFeatures(as(shapeGraph, \"sf\"), \"df_2_Connectivity\", 0.1)")
+#' "getTopFeatures(shapeGraph, \"Connectivity.1\", 0.1)")
 #' @export
 getTopFeatures <- function(lineStringMap,
                            column,

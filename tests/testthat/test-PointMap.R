@@ -10,22 +10,22 @@ test_that("PointMap linking", {
   expect_identical(colnames(linkData), c("from", "to"))
   expect_identical(dim(linkData), c(0L, 2L))
 
-  linkCoords(pointMap, 1.74, 6.7, 5.05, 5.24)
+  pointMap <- linkCoords(pointMap, 1.74, 6.7, 5.05, 5.24)
   linkData <- links(pointMap)
   expect_identical(colnames(linkData), c("from", "to"))
   expect_identical(dim(linkData), c(1L, 2L))
 
-  unlinkCoords(pointMap, 1.74, 6.7, 5.05, 5.24)
+  pointMap <- unlinkCoords(pointMap, 1.74, 6.7, 5.05, 5.24)
   linkData <- links(pointMap)
   expect_identical(colnames(linkData), c("from", "to"))
   expect_identical(dim(linkData), c(0L, 2L))
 
-  linkRefs(pointMap, 1835056L, 7208971L)
+  pointMap <- linkRefs(pointMap, 1835056L, 7208971L)
   linkData <- links(pointMap)
   expect_identical(colnames(linkData), c("from", "to"))
   expect_identical(dim(linkData), c(1L, 2L))
 
-  unlinkRefs(pointMap, 1835056L, 7208971L)
+  pointMap <- unlinkRefs(pointMap, 1835056L, 7208971L)
   linkData <- links(pointMap)
   expect_identical(colnames(linkData), c("from", "to"))
   expect_identical(dim(linkData), c(0L, 2L))

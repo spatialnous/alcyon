@@ -19,7 +19,18 @@
 #include <Rcpp.h>
 
 // [[Rcpp::export("Rcpp_VGA_throughVision")]]
-Rcpp::List vgaThroughVision(Rcpp::XPtr<PointMap> pointMapPtr) {
+Rcpp::List vgaThroughVision(Rcpp::XPtr<PointMap> pointMapPtr,
+                            const Rcpp::Nullable<bool> copyMapNV = R_NilValue) {
+  bool copyMap = true;
+  if (copyMapNV.isNotNull()) {
+    copyMap = Rcpp::as<bool>(copyMapNV);
+  }
+  if (copyMap) {
+    auto prevPointMap = pointMapPtr;
+    const auto &prevRegion = prevPointMap->getRegion();
+    pointMapPtr = Rcpp::XPtr(new PointMap(prevRegion));
+    pointMapPtr->copy(*prevPointMap, true, true);
+  }
   Rcpp::List result = Rcpp::List::create(
     Rcpp::Named("completed") = false
   );
@@ -29,13 +40,26 @@ Rcpp::List vgaThroughVision(Rcpp::XPtr<PointMap> pointMapPtr) {
     false);
   result["completed"] = analysisResult.completed;
   result["newAttributes"] = analysisResult.getAttributes();
+  result["mapPtr"] = pointMapPtr;
   return result;
 }
 
 // [[Rcpp::export("Rcpp_VGA_angular")]]
 Rcpp::List vgaAngular(Rcpp::XPtr<PointMap> pointMapPtr,
-                      double radius, bool gatesOnly) {
+                      double radius,
+                      bool gatesOnly,
+                      const Rcpp::Nullable<bool> copyMapNV = R_NilValue) {
 
+  bool copyMap = true;
+  if (copyMapNV.isNotNull()) {
+    copyMap = Rcpp::as<bool>(copyMapNV);
+  }
+  if (copyMap) {
+    auto prevPointMap = pointMapPtr;
+    const auto &prevRegion = prevPointMap->getRegion();
+    pointMapPtr = Rcpp::XPtr(new PointMap(prevRegion));
+    pointMapPtr->copy(*prevPointMap, true, true);
+  }
   Rcpp::List result = Rcpp::List::create(
     Rcpp::Named("completed") = false
   );
@@ -43,16 +67,29 @@ Rcpp::List vgaAngular(Rcpp::XPtr<PointMap> pointMapPtr,
     .run(getCommunicator(true).get(), *pointMapPtr, false);
   result["completed"] = analysisResult.completed;
   result["newAttributes"] = analysisResult.getAttributes();
+  result["mapPtr"] = pointMapPtr;
   return result;
 }
 
 // [[Rcpp::export("Rcpp_VGA_metric")]]
 Rcpp::List vgaMetric(Rcpp::XPtr<PointMap> pointMapPtr,
-                     double radius, bool gatesOnly) {
+                     double radius,
+                     bool gatesOnly,
+                     const Rcpp::Nullable<bool> copyMapNV = R_NilValue) {
 
   if (radius != -1.0 && radius <= 0) {
     Rcpp::stop("Radius for metric vga must be n (-1) for the whole range or a "
                  "positive number. Got %d", radius);
+  }
+  bool copyMap = true;
+  if (copyMapNV.isNotNull()) {
+    copyMap = Rcpp::as<bool>(copyMapNV);
+  }
+  if (copyMap) {
+    auto prevPointMap = pointMapPtr;
+    const auto &prevRegion = prevPointMap->getRegion();
+    pointMapPtr = Rcpp::XPtr(new PointMap(prevRegion));
+    pointMapPtr->copy(*prevPointMap, true, true);
   }
   Rcpp::List result = Rcpp::List::create(
     Rcpp::Named("completed") = false
@@ -61,17 +98,31 @@ Rcpp::List vgaMetric(Rcpp::XPtr<PointMap> pointMapPtr,
     .run(getCommunicator(true).get(), *pointMapPtr, false);
   result["completed"] = analysisResult.completed;
   result["newAttributes"] = analysisResult.getAttributes();
+  result["mapPtr"] = pointMapPtr;
   return result;
 }
 
 // [[Rcpp::export("Rcpp_VGA_visualGlobal")]]
 Rcpp::List vgaVisualGlobal(Rcpp::XPtr<PointMap> pointMapPtr,
-                           int radius, bool gatesOnly) {
+                           int radius,
+                           bool gatesOnly,
+                           const Rcpp::Nullable<bool> copyMapNV = R_NilValue) {
 
   if (radius != -1 && (radius < 1 || radius > 99)) {
     Rcpp::stop("Radius for visibility analysis must be n (-1) for the whole "
                  "range or an integer between 1 and 99 inclusive. Got %i",
                  radius);
+  }
+
+  bool copyMap = true;
+  if (copyMapNV.isNotNull()) {
+    copyMap = Rcpp::as<bool>(copyMapNV);
+  }
+  if (copyMap) {
+    auto prevPointMap = pointMapPtr;
+    const auto &prevRegion = prevPointMap->getRegion();
+    pointMapPtr = Rcpp::XPtr(new PointMap(prevRegion));
+    pointMapPtr->copy(*prevPointMap, true, true);
   }
 
   Rcpp::List result = Rcpp::List::create(
@@ -81,11 +132,24 @@ Rcpp::List vgaVisualGlobal(Rcpp::XPtr<PointMap> pointMapPtr,
     .run(getCommunicator(true).get(), *pointMapPtr, false);
   result["completed"] = analysisResult.completed;
   result["newAttributes"] = analysisResult.getAttributes();
+  result["mapPtr"] = pointMapPtr;
   return result;
 }
 
 // [[Rcpp::export("Rcpp_VGA_visualLocal")]]
-Rcpp::List vgaVisualLocal(Rcpp::XPtr<PointMap> pointMapPtr, bool gatesOnly) {
+Rcpp::List vgaVisualLocal(Rcpp::XPtr<PointMap> pointMapPtr,
+                          bool gatesOnly,
+                          const Rcpp::Nullable<bool> copyMapNV = R_NilValue) {
+  bool copyMap = true;
+  if (copyMapNV.isNotNull()) {
+    copyMap = Rcpp::as<bool>(copyMapNV);
+  }
+  if (copyMap) {
+    auto prevPointMap = pointMapPtr;
+    const auto &prevRegion = prevPointMap->getRegion();
+    pointMapPtr = Rcpp::XPtr(new PointMap(prevRegion));
+    pointMapPtr->copy(*prevPointMap, true, true);
+  }
 
   Rcpp::List result = Rcpp::List::create(
     Rcpp::Named("completed") = false
@@ -94,12 +158,24 @@ Rcpp::List vgaVisualLocal(Rcpp::XPtr<PointMap> pointMapPtr, bool gatesOnly) {
     .run(getCommunicator(true).get(), *pointMapPtr, false);
   result["completed"] = analysisResult.completed;
   result["newAttributes"] = analysisResult.getAttributes();
+  result["mapPtr"] = pointMapPtr;
   return result;
 }
 
 // [[Rcpp::export("Rcpp_VGA_isovist")]]
 Rcpp::List vgaIsovist(Rcpp::XPtr<PointMap> pointMapPtr,
-                      Rcpp::XPtr<ShapeMap> shapeMapPtr) {
+                      Rcpp::XPtr<ShapeMap> shapeMapPtr,
+                      const Rcpp::Nullable<bool> copyMapNV = R_NilValue) {
+  bool copyMap = true;
+  if (copyMapNV.isNotNull()) {
+    copyMap = Rcpp::as<bool>(copyMapNV);
+  }
+  if (copyMap) {
+    auto prevPointMap = pointMapPtr;
+    const auto &prevRegion = prevPointMap->getRegion();
+    pointMapPtr = Rcpp::XPtr(new PointMap(prevRegion));
+    pointMapPtr->copy(*prevPointMap, true, true);
+  }
 
   Rcpp::List result = Rcpp::List::create(
     Rcpp::Named("completed") = false
@@ -116,12 +192,24 @@ Rcpp::List vgaIsovist(Rcpp::XPtr<PointMap> pointMapPtr,
     .run(getCommunicator(true).get(), *pointMapPtr, false);
   result["completed"] = analysisResult.completed;
   result["newAttributes"] = analysisResult.getAttributes();
+  result["mapPtr"] = pointMapPtr;
   return result;
 }
 
 // [[Rcpp::export("Rcpp_VGA_visualDepth")]]
 Rcpp::List vgaVisualDepth(Rcpp::XPtr<PointMap> pointMapPtr,
-                            Rcpp::NumericMatrix stepDepthPoints) {
+                          Rcpp::NumericMatrix stepDepthPoints,
+                          const Rcpp::Nullable<bool> copyMapNV = R_NilValue) {
+  bool copyMap = true;
+  if (copyMapNV.isNotNull()) {
+    copyMap = Rcpp::as<bool>(copyMapNV);
+  }
+  if (copyMap) {
+    auto prevPointMap = pointMapPtr;
+    const auto &prevRegion = prevPointMap->getRegion();
+    pointMapPtr = Rcpp::XPtr(new PointMap(prevRegion));
+    pointMapPtr->copy(*prevPointMap, true, true);
+  }
   Rcpp::List result = Rcpp::List::create(
     Rcpp::Named("completed") = false
   );
@@ -138,12 +226,24 @@ Rcpp::List vgaVisualDepth(Rcpp::XPtr<PointMap> pointMapPtr,
   pointMapPtr->clearSel();
   result["completed"] = analysisResult.completed;
   result["newAttributes"] = analysisResult.getAttributes();
+  result["mapPtr"] = pointMapPtr;
   return result;
 }
 
 // [[Rcpp::export("Rcpp_VGA_metricDepth")]]
 Rcpp::List vgaMetricDepth(Rcpp::XPtr<PointMap> pointMapPtr,
-                          Rcpp::NumericMatrix stepDepthPoints) {
+                          Rcpp::NumericMatrix stepDepthPoints,
+                          const Rcpp::Nullable<bool> copyMapNV = R_NilValue) {
+  bool copyMap = true;
+  if (copyMapNV.isNotNull()) {
+    copyMap = Rcpp::as<bool>(copyMapNV);
+  }
+  if (copyMap) {
+    auto prevPointMap = pointMapPtr;
+    const auto &prevRegion = prevPointMap->getRegion();
+    pointMapPtr = Rcpp::XPtr(new PointMap(prevRegion));
+    pointMapPtr->copy(*prevPointMap, true, true);
+  }
   Rcpp::List result = Rcpp::List::create(
     Rcpp::Named("completed") = false
   );
@@ -160,12 +260,24 @@ Rcpp::List vgaMetricDepth(Rcpp::XPtr<PointMap> pointMapPtr,
   pointMapPtr->clearSel();
   result["completed"] = analysisResult.completed;
   result["newAttributes"] = analysisResult.getAttributes();
+  result["mapPtr"] = pointMapPtr;
   return result;
 }
 
 // [[Rcpp::export("Rcpp_VGA_angularDepth")]]
 Rcpp::List vgaAngularDepth(Rcpp::XPtr<PointMap> pointMapPtr,
-                           Rcpp::NumericMatrix stepDepthPoints) {
+                           Rcpp::NumericMatrix stepDepthPoints,
+                           const Rcpp::Nullable<bool> copyMapNV = R_NilValue) {
+  bool copyMap = true;
+  if (copyMapNV.isNotNull()) {
+    copyMap = Rcpp::as<bool>(copyMapNV);
+  }
+  if (copyMap) {
+    auto prevPointMap = pointMapPtr;
+    const auto &prevRegion = prevPointMap->getRegion();
+    pointMapPtr = Rcpp::XPtr(new PointMap(prevRegion));
+    pointMapPtr->copy(*prevPointMap, true, true);
+  }
   Rcpp::List result = Rcpp::List::create(
     Rcpp::Named("completed") = false
   );
@@ -182,6 +294,7 @@ Rcpp::List vgaAngularDepth(Rcpp::XPtr<PointMap> pointMapPtr,
   pointMapPtr->clearSel();
   result["completed"] = analysisResult.completed;
   result["newAttributes"] = analysisResult.getAttributes();
+  result["mapPtr"] = pointMapPtr;
   return result;
 }
 

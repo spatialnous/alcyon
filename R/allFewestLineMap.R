@@ -21,13 +21,15 @@ makeAllLineMap <- function(boundsMap,
                            seedX,
                            seedY,
                            verbose = FALSE) {
-  allLineMap <- new("AllLineShapeGraph")
-  allLineMap@ptr <- Rcpp_makeAllLineMap(
-    boundsMap@ptr,
+  allLineMapPtr <- Rcpp_makeAllLineMap(
+    attr(boundsMap, "sala_map"),
     seedX = seedX,
     seedY = seedY
   )
-  return(allLineMap)
+  return(processPtrAsNewLineMap(allLineMapPtr,
+                                c("AllLineShapeGraph",
+                                  "AxialShapeGraph",
+                                  "ShapeMap")))
 }
 
 
@@ -46,12 +48,12 @@ makeAllLineMap <- function(boundsMap,
 #' @export
 reduceToFewest <- function(allLineMap) {
   result <- list()
-  fewestMaps <- Rcpp_extractFewestLineMaps(allLineMap@ptr)
-  fewestSubsets <- new("AxialShapeGraph")
-  fewestSubsets@ptr <- fewestMaps[["Fewest-Line Map (Subsets)"]]
-  fewestMinimal <- new("AxialShapeGraph")
-  fewestMinimal@ptr <- fewestMaps[["Fewest-Line Map (Minimal)"]]
-  result[["Fewest-Line Map (Subsets)"]] <- fewestSubsets
-  result[["Fewest-Line Map (Minimal)"]] <- fewestMinimal
+  fewestMaps <- Rcpp_extractFewestLineMaps(attr(allLineMap, "sala_map"))
+  result[["Fewest-Line Map (Subsets)"]] <-
+    processPtrAsNewLineMap(fewestMaps[["Fewest-Line Map (Subsets)"]],
+                           c("AxialShapeGraph", "ShapeMap"))
+  result[["Fewest-Line Map (Minimal)"]] <-
+    processPtrAsNewLineMap(fewestMaps[["Fewest-Line Map (Minimal)"]],
+                           c("AxialShapeGraph", "ShapeMap"))
   return(result)
 }

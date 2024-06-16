@@ -11,6 +11,7 @@
 #' @param gridSize Size of the cells
 #' @param verbose Optional. Show more information of the process.
 #' @returns A new PointMap
+#' @importFrom stars st_as_stars
 #' @eval c("@examples",
 #' rxLoadSimpleLinesAsShapeMap(),
 #' "lineStringMap <- as(sfMap, \"sf\")",
@@ -29,15 +30,18 @@ createGrid <- function(minX,
                        maxY,
                        gridSize,
                        verbose = FALSE) {
-  pointMap <- new("PointMap")
-  pointMap@ptr <- Rcpp_PointMap_createFromGrid(
+  pointMapPtr <- Rcpp_PointMap_createFromGrid(
     minX,
     minY,
     maxX,
     maxY,
     gridSize
   )
-  return(pointMap)
+  coordData <- Rcpp_PointMap_getGridCoordinates(pointMapPtr)
+  starsObj <- st_as_stars(as.data.frame(coordData))
+  attr(starsObj, "sala_map") <- pointMapPtr
+  class(starsObj) <- c("PointMap", class(starsObj))
+  return(starsObj)
 }
 
 #' Block lines on a PointMap
@@ -47,8 +51,9 @@ createGrid <- function(minX,
 #'
 #' @param pointMap The input PointMap
 #' @param lineStringMap Map of lines, either a ShapeMap, or an sf lineString map
+#' @param copyMap Optional. Copy the internal sala map
 #' @param verbose Optional. Show more information of the process.
-#' @returns None
+#' @returns A new PointMap with points as they have been blocked by the lines
 #' @eval c("@examples",
 #' rxLoadSimpleLinesAsShapeMap(),
 #' "lineStringMap <- as(sfMap, \"sf\")",
@@ -67,15 +72,18 @@ createGrid <- function(minX,
 #' @export
 blockLines <- function(pointMap,
                        lineStringMap,
+                       copyMap = TRUE,
                        verbose = FALSE) {
   boundaryMap <- lineStringMap
   if (!inherits(lineStringMap, "ShapeMap")) {
     boundaryMap <- as(lineStringMap, "ShapeMap")
   }
-  Rcpp_PointMap_blockLines(
-    pointMapPtr = pointMap@ptr,
-    boundaryMapPtr = boundaryMap@ptr
+  result <- Rcpp_PointMap_blockLines(
+    pointMapPtr = attr(pointMap, "sala_map"),
+    boundaryMapPtr = attr(boundaryMap, "sala_map"),
+    copyMapNV = copyMap
   )
+  return(processPointMapResult(pointMap, result))
 }
 
 #' Fill a PointMap's grid starting from one or more points
@@ -83,8 +91,9 @@ blockLines <- function(pointMap,
 #' @param pointMap The input PointMap
 #' @param fillX X coordinate of the fill points
 #' @param fillY Y coordinate of the fill points
+#' @param copyMap Optional. Copy the internal sala map
 #' @param verbose Optional. Show more information of the process.
-#' @returns None
+#' @returns A new PointMap with filled points
 #' @eval c("@examples",
 #' rxLoadSimpleLinesAsShapeMap(),
 #' "lineStringMap <- as(sfMap, \"sf\")",
@@ -96,7 +105,7 @@ blockLines <- function(pointMap,
 #' "  maxY = mapRegion[[\"ymax\"]],",
 #' "  gridSize = 0.04",
 #' ")",
-#' "blockLines(",
+#' "pointMap <- blockLines(",
 #' "  pointMap = pointMap,",
 #' "  lineStringMap = lineStringMap[vector()]",
 #' ")",
@@ -109,11 +118,14 @@ blockLines <- function(pointMap,
 fillGrid <- function(pointMap,
                      fillX,
                      fillY,
+                     copyMap = TRUE,
                      verbose = FALSE) {
-  Rcpp_PointMap_fill(
-    pointMapPtr = pointMap@ptr,
-    pointCoords = cbind(fillX, fillY)
+  result <- Rcpp_PointMap_fill(
+    pointMapPtr = attr(pointMap, "sala_map"),
+    pointCoords = cbind(fillX, fillY),
+    copyMapNV = copyMap
   )
+  return(processPointMapResult(pointMap, result))
 }
 
 #' Create a graph between visible cells in the PointMap
@@ -121,8 +133,9 @@ fillGrid <- function(pointMap,
 #' @param pointMap The input PointMap
 #' @param boundaryGraph Only create a graph on the boundary cells
 #' @param maxVisibility Limit how far two cells can be to be connected
+#' @param copyMap Optional. Copy the internal sala map
 #' @param verbose Optional. Show more information of the process.
-#' @returns None
+#' @returns A new PointMap with a graph between points
 #' @eval c("@examples",
 #' rxLoadSimpleLinesAsShapeMap(),
 #' "lineStringMap <- as(sfMap, \"sf\")",
@@ -134,11 +147,11 @@ fillGrid <- function(pointMap,
 #' "  maxY = mapRegion[[\"ymax\"]],",
 #' "  gridSize = 0.5",
 #' ")",
-#' "blockLines(",
+#' "pointMap <- blockLines(",
 #' "  pointMap = pointMap,",
 #' "  lineStringMap = lineStringMap[vector()]",
 #' ")",
-#' "fillGrid(",
+#' "pointMap <- fillGrid(",
 #' "  pointMap = pointMap,",
 #' "  fillX = 3.01,",
 #' "  fillY = 6.7",
@@ -152,12 +165,15 @@ fillGrid <- function(pointMap,
 makeVGAGraph <- function(pointMap,
                          boundaryGraph = FALSE,
                          maxVisibility = NA,
+                         copyMap = TRUE,
                          verbose = FALSE) {
-  Rcpp_PointMap_makeGraph(
-    pointMapPtr = pointMap@ptr,
+  result <- Rcpp_PointMap_makeGraph(
+    pointMapPtr = attr(pointMap, "sala_map"),
     boundaryGraph = boundaryGraph,
-    maxVisibility = maxVisibility
+    maxVisibility = maxVisibility,
+    copyMapNV = copyMap
   )
+  return(processPointMapResult(pointMap, result))
 }
 
 #' Create a PointMap grid, fill it and make the graph
@@ -202,31 +218,51 @@ makeVGAPointMap <- function(lineStringMap,
     gridSize
   )
 
-  blockLines(
-    pointMap = pointMap,
-    lineStringMap = lineStringMap[vector()]
+  boundaryMap <- lineStringMap[, vector()]
+  if (!inherits(lineStringMap, "ShapeMap")) {
+    boundaryMap <- as(lineStringMap[, vector()], "ShapeMap")
+  }
+  finalResult <- Rcpp_PointMap_blockLines(
+    pointMapPtr = attr(pointMap, "sala_map"),
+    boundaryMapPtr = attr(boundaryMap, "sala_map"),
+    copyMapNV = FALSE
   )
 
-  fillGrid(
-    pointMap = pointMap,
-    fillX,
-    fillY
+  result <- Rcpp_PointMap_fill(
+    pointMapPtr = attr(pointMap, "sala_map"),
+    pointCoords = cbind(fillX, fillY),
+    copyMapNV = FALSE
   )
 
-  makeVGAGraph(
-    pointMap = pointMap,
+  finalResult$newAttributes <- c(finalResult$newAttributes,
+                                 result$newAttributes)
+  finalResult$newProperties <- c(finalResult$newProperties,
+                                 result$newProperties)
+  finalResult$completed <- finalResult$completed && result$completed
+
+  result <- Rcpp_PointMap_makeGraph(
+    pointMapPtr = attr(pointMap, "sala_map"),
     boundaryGraph = boundaryGraph,
-    maxVisibility = maxVisibility
+    maxVisibility = maxVisibility,
+    copyMapNV = FALSE
   )
-  return(pointMap)
+
+  finalResult$newAttributes <- c(finalResult$newAttributes,
+                                 result$newAttributes)
+  finalResult$newProperties <- c(finalResult$newProperties,
+                                 result$newProperties)
+  finalResult$completed <- finalResult$completed && result$completed
+
+  return(processPointMapResult(pointMap, finalResult))
 }
 
 #' Unmake the graph in a PointMap
 #'
 #' @param pointMap The input PointMap
 #' @param removeLinks Also remove the links
+#' @param copyMap Optional. Copy the internal sala map
 #' @param verbose Optional. Show more information of the process.
-#' @returns None
+#' @returns A new PointMap without the points graph
 #' @eval c("@examples",
 #' rxLoadSimpleLinesAsShapeMap(),
 #' "pointMap <- makeVGAPointMap(",
@@ -245,9 +281,12 @@ makeVGAPointMap <- function(lineStringMap,
 #' @export
 unmakeVGAGraph <- function(pointMap,
                            removeLinks = FALSE,
+                           copyMap = TRUE,
                            verbose = FALSE) {
-  Rcpp_PointMap_unmakeGraph(
-    pointMapPtr = pointMap@ptr,
-    removeLinksWhenUnmaking = removeLinks
+  result <- Rcpp_PointMap_unmakeGraph(
+    pointMapPtr = attr(pointMap, "sala_map"),
+    removeLinksWhenUnmaking = removeLinks,
+    copyMapNV = copyMap
   )
+  return(processPointMapResult(pointMap, result))
 }

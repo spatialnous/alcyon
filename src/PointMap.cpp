@@ -2,12 +2,11 @@
 //
 // SPDX-License-Identifier: GPL-3.0-only
 
-#include "salalib/pointdata.h"
+#include "PointMap.h"
+
 #include "salalib/gridproperties.h"
 
 #include "communicator.h"
-
-#include <Rcpp.h>
 
 RCPP_EXPOSED_CLASS(PointMap);
 
@@ -42,23 +41,52 @@ Rcpp::XPtr<PointMap> createFromGrid(double minX,
 }
 
 // [[Rcpp::export("Rcpp_PointMap_blockLines")]]
-void blockLines(Rcpp::XPtr<PointMap> pointMapPtr,
-                Rcpp::XPtr<ShapeMap> boundaryMapPtr) {
+Rcpp::List blockLines(Rcpp::XPtr<PointMap> pointMapPtr,
+                      Rcpp::XPtr<ShapeMap> boundaryMapPtr,
+                      const Rcpp::Nullable<bool> copyMapNV = R_NilValue) {
 
+  bool copyMap = true;
+  if (copyMapNV.isNotNull()) {
+    copyMap = Rcpp::as<bool>(copyMapNV);
+  }
+  if (copyMap) {
+    auto prevPointMap = pointMapPtr;
+    const auto &prevRegion = prevPointMap->getRegion();
+    pointMapPtr = Rcpp::XPtr(new PointMap(prevRegion));
+    pointMapPtr->copy(*prevPointMap, true, true);
+  }
   std::vector<Line> lines;
   for (auto line: boundaryMapPtr->getAllShapesAsLines()) {
     lines.emplace_back(line.start(), line.end());
   }
   pointMapPtr->blockLines(lines);
+
+  return Rcpp::List::create(
+    Rcpp::Named("completed") = true,
+    Rcpp::Named("newAttributes") = std::vector<std::string>(),
+    Rcpp::Named("newProperties") = std::vector<std::string>{"blocked"},
+    Rcpp::Named("mapPtr") = pointMapPtr
+  );
 }
 
 // [[Rcpp::export("Rcpp_PointMap_fill")]]
-void fill(Rcpp::XPtr<PointMap> pointMapPtr,
-          Rcpp::NumericMatrix pointCoords) {
+Rcpp::List fill(Rcpp::XPtr<PointMap> pointMapPtr,
+                Rcpp::NumericMatrix pointCoords,
+                const Rcpp::Nullable<bool> copyMapNV = R_NilValue) {
   if (pointCoords.rows() == 0) {
     Rcpp::stop("No data provided in point coordinates matrix");
   }
 
+  bool copyMap = true;
+  if (copyMapNV.isNotNull()) {
+    copyMap = Rcpp::as<bool>(copyMapNV);
+  }
+  if (copyMap) {
+    auto prevPointMap = pointMapPtr;
+    const auto &prevRegion = prevPointMap->getRegion();
+    pointMapPtr = Rcpp::XPtr(new PointMap(prevRegion));
+    pointMapPtr->copy(*prevPointMap, true, true);
+  }
   auto region = pointMapPtr->getRegion();
   for (int r = 0; r < pointCoords.rows(); ++r) {
     auto coordRow = pointCoords.row(r);
@@ -73,32 +101,87 @@ void fill(Rcpp::XPtr<PointMap> pointMapPtr,
     Point2f p(coordRow[0], coordRow[1]);
     pointMapPtr->makePoints(p, 0, getCommunicator(true).get());
   }
+
+  return Rcpp::List::create(
+    Rcpp::Named("completed") = true,
+    Rcpp::Named("newAttributes") = std::vector<std::string>(),
+    Rcpp::Named("newProperties") = std::vector<std::string>{
+      "filled", "contextfilled"},
+      Rcpp::Named("mapPtr") = pointMapPtr
+  );
 }
 
 // [[Rcpp::export("Rcpp_PointMap_makeGraph")]]
-bool makeGraph(Rcpp::XPtr<PointMap> pointMapPtr,
-               bool boundaryGraph,
-               double maxVisibility) {
-  bool graphMade = false;
+Rcpp::List makeGraph(Rcpp::XPtr<PointMap> pointMapPtr,
+                     bool boundaryGraph,
+                     double maxVisibility,
+                     const Rcpp::Nullable<bool> copyMapNV = R_NilValue) {
+  bool copyMap = true;
+  if (copyMapNV.isNotNull()) {
+    copyMap = Rcpp::as<bool>(copyMapNV);
+  }
+  if (copyMap) {
+    auto prevPointMap = pointMapPtr;
+    const auto &prevRegion = prevPointMap->getRegion();
+    pointMapPtr = Rcpp::XPtr(new PointMap(prevRegion));
+    pointMapPtr->copy(*prevPointMap, true, true);
+  }
+  auto prevAttributes = getPointMapAttributeNames(pointMapPtr);
   try {
-    graphMade = pointMapPtr->sparkGraph2(getCommunicator(true).get(),
+    pointMapPtr->sparkGraph2(getCommunicator(true).get(),
                                          boundaryGraph,
                                          maxVisibility);
   } catch (Communicator::CancelledException) {
-    graphMade = false;
+    return Rcpp::List::create(
+      Rcpp::Named("completed") = false
+    );
   }
-  return graphMade;
+
+  auto newAttributes = getPointMapAttributeNames(pointMapPtr);
+
+  for (auto prevAttribute: prevAttributes) {
+    auto it = std::find(newAttributes.begin(),
+                        newAttributes.end(),
+                        prevAttribute);
+    if (it != newAttributes.end()) {
+      newAttributes.erase(it);
+    }
+  }
+
+  return Rcpp::List::create(
+    Rcpp::Named("completed") = true,
+    Rcpp::Named("newAttributes") = newAttributes,
+    Rcpp::Named("newProperties") = std::vector<std::string>{},
+    Rcpp::Named("mapPtr") = pointMapPtr
+  );
 }
 
 // [[Rcpp::export("Rcpp_PointMap_unmakeGraph")]]
-void unmakeGraph(Rcpp::XPtr<PointMap> pointMapPtr,
-                 bool removeLinksWhenUnmaking) {
+Rcpp::List unmakeGraph(Rcpp::XPtr<PointMap> pointMapPtr,
+                       bool removeLinksWhenUnmaking,
+                       const Rcpp::Nullable<bool> copyMapNV = R_NilValue) {
+  bool copyMap = true;
+  if (copyMapNV.isNotNull()) {
+    copyMap = Rcpp::as<bool>(copyMapNV);
+  }
+  if (copyMap) {
+    auto prevPointMap = pointMapPtr;
+    const auto &prevRegion = prevPointMap->getRegion();
+    pointMapPtr = Rcpp::XPtr(new PointMap(prevRegion));
+    pointMapPtr->copy(*prevPointMap, true, true);
+  }
   if (!pointMapPtr->isProcessed()) {
     Rcpp::stop("Current map has not had its graph "
-               "made so there's nothing to unmake");
+                 "made so there's nothing to unmake");
   }
 
-  pointMapPtr->unmake(removeLinksWhenUnmaking);
+  bool unmade = pointMapPtr->unmake(removeLinksWhenUnmaking);
+  return Rcpp::List::create(
+    Rcpp::Named("completed") = unmade,
+    Rcpp::Named("newAttributes") = std::vector<std::string>{},
+    Rcpp::Named("newProperties") = std::vector<std::string>{},
+    Rcpp::Named("mapPtr") = pointMapPtr
+  );
 }
 
 // [[Rcpp::export("Rcpp_PointMap_getName")]]
@@ -165,6 +248,141 @@ Rcpp::IntegerMatrix pointMapGetConnections(Rcpp::XPtr<PointMap> pointMapPtr) {
     }
   }
   return connectionData;
+}
+
+// [[Rcpp::export("Rcpp_PointMap_getGridCoordinates")]]
+Rcpp::NumericMatrix getGridCoordinates(Rcpp::XPtr<PointMap> pointMapPtr) {
+  Rcpp::NumericMatrix coords(
+      pointMapPtr->getRows() * pointMapPtr->getCols(), 3);
+  Rcpp::CharacterVector colNames(3);
+  colNames[0] = "x";
+  colNames[1] = "y";
+  colNames[2] = "Ref";
+  Rcpp::colnames(coords) = colNames;
+  int rowIdx = 0;
+  for(int i = 0; i < pointMapPtr->getRows(); i++) {
+    for(int j = 0; j < pointMapPtr->getCols(); j++) {
+      PixelRef ref(j, i);
+      const auto &point = pointMapPtr->getPoint(ref);
+      const Rcpp::NumericMatrix::Row &row = coords( rowIdx , Rcpp::_ );
+      row[0] = point.getLocation().x;
+      row[1] = point.getLocation().y;
+      row[2] = static_cast<int>(ref);
+      rowIdx++;
+    }
+  }
+  return coords;
+}
+
+
+std::vector<std::string> getPointMapAttributeNames(PointMap* pointMap) {
+  std::vector<std::string> names;
+  auto &attributes = pointMap->getAttributeTable();
+  int numCols = attributes.getNumColumns();
+  // + 1 for the key column
+  names.reserve(1 + numCols);
+  names.push_back(attributes.getColumnName(size_t(-1)));
+  for(int i = 0; i < attributes.getNumColumns(); ++i) {
+    names.push_back(attributes.getColumnName(i));
+  }
+  return names;
+}
+
+// [[Rcpp::export("Rcpp_PointMap_getAttributeNames")]]
+std::vector<std::string> getPointMapAttributeNames(
+    Rcpp::XPtr<PointMap> pointMap) {
+  return getPointMapAttributeNames(pointMap.get());
+}
+
+// [[Rcpp::export("Rcpp_PointMap_getAttributeData")]]
+std::map<std::string, std::vector<double>> getPointMapAttributeData(
+    Rcpp::XPtr<PointMap> pointMap,
+    std::vector<std::string> attributeNames) {
+  auto &attrbs = pointMap->getAttributeTable();
+  std::map<std::string, std::vector<double>> data;
+  for (auto &attributeName: attributeNames) {
+    auto& attributeData = data[attributeName];
+    attributeData.reserve(pointMap->getRows() * pointMap->getCols());
+    if (attributeName == attrbs.getColumnName(size_t(-1))) {
+      for(int i = 0; i < pointMap->getRows(); i++) {
+        for(int j = 0; j < pointMap->getCols(); j++) {
+          PixelRef ref(j, i);
+          const auto &point = pointMap->getPoint(ref);
+          if (point.filled()) {
+            attributeData.push_back(ref);
+          } else {
+            attributeData.push_back(nan(""));
+          }
+        }
+      }
+    } else {
+      size_t colIdx = attrbs.getColumnIndex(attributeName);
+
+      for(int i = 0; i < pointMap->getRows(); i++) {
+        for(int j = 0; j < pointMap->getCols(); j++) {
+          PixelRef ref(j, i);
+          const auto &point = pointMap->getPoint(ref);
+          if (point.filled()) {
+            const auto &row = pointMap->getAttributeTable().getRow(
+              AttributeKey(ref));
+            attributeData.push_back(row.getValue(colIdx));
+          } else {
+            attributeData.push_back(nan(""));
+          }
+        }
+      }
+    }
+  }
+  return data;
+}
+
+// [[Rcpp::export("Rcpp_PointMap_getPropertyData")]]
+std::map<std::string, std::vector<double>> getPointMapPropertyData(
+    Rcpp::XPtr<PointMap> pointMap,
+    std::vector<std::string> propertyNames) {
+  std::vector<std::string> cellProperties {
+    "x", "y", "filled", "blocked", "contextfilled", "edge", "Ref"
+  };
+
+  for (auto &propertyName: propertyNames) {
+    if (std::find(cellProperties.begin(), cellProperties.end(), propertyName) ==
+        cellProperties.end()) {
+      Rcpp::Rcerr << "Property \"" << propertyName << "\" is not known\n";
+    }
+  }
+  std::map<std::string, std::vector<double>> data;
+  for (auto &propertyName: propertyNames) {
+    auto& propertyData = data[propertyName];
+    propertyData.reserve(pointMap->getCols() * pointMap->getRows());
+    for(int i = 0; i < pointMap->getRows(); i++) {
+      for(int j = 0; j < pointMap->getCols(); j++) {
+        PixelRef ref(j, i);
+        double propertyValue = -1;
+        if (propertyName == "Ref") {
+          propertyValue = ref;
+        } else {
+          const auto & p = pointMap->getPoint(ref);
+          if(propertyName == "x") {
+            propertyValue = p.getLocation().x;
+          } else if (propertyName == "y") {
+            propertyValue = p.getLocation().y;
+          } else if (propertyName == "filled") {
+            propertyValue = p.filled();
+          } else if (propertyName == "blocked") {
+            propertyValue = p.blocked();
+          } else if (propertyName == "contextfilled") {
+            propertyValue = p.contextfilled();
+          } else if (propertyName == "edge") {
+            propertyValue = p.edge();
+          } else if (propertyName == "augmented") {
+            propertyValue = p.augmented();
+          }
+        }
+        propertyData.push_back(propertyValue);
+      }
+    }
+  }
+  return data;
 }
 
 // [[Rcpp::export("Rcpp_PointMap_getFilledPoints")]]

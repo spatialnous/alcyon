@@ -10,6 +10,7 @@ oneToAllTraverse(
   fromX,
   fromY,
   quantizationWidth = NA,
+  copyMap = TRUE,
   verbose = FALSE
 )
 }
@@ -26,6 +27,8 @@ oneToAllTraverse(
 continuous values for the cost of traversal. This is equivalent to the "tulip
 bins" for depthmapX's tulip analysis (1024 tulip bins = pi/1024
 quantizationWidth). Only works for Segment ShapeGraphs}
+
+\item{copyMap}{Optional. Copy the internal sala map}
 
 \item{verbose}{Optional. Show more information of the process.}
 }

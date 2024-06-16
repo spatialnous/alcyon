@@ -2,7 +2,8 @@
 //
 // SPDX-License-Identifier: GPL-3.0-only
 
-#include "salalib/shapemap.h"
+#include "ShapeMap.h"
+
 #include "genlib/p2dpoly.h"
 
 #include <Rcpp.h>
@@ -19,8 +20,7 @@ std::string getName(Rcpp::XPtr<ShapeMap> shapeMap) {
   return shapeMap->getName();
 }
 
-// [[Rcpp::export("Rcpp_ShapeMap_getAttributeNames")]]
-std::vector<std::string> getAttributeNames(Rcpp::XPtr<ShapeMap> shapeMap) {
+std::vector<std::string> getShapeMapAttributeNames(ShapeMap* shapeMap) {
   std::vector<std::string> names;
   auto &attributes = shapeMap->getAttributeTable();
   int numCols = attributes.getNumColumns();
@@ -33,8 +33,14 @@ std::vector<std::string> getAttributeNames(Rcpp::XPtr<ShapeMap> shapeMap) {
   return names;
 }
 
+// [[Rcpp::export("Rcpp_ShapeMap_getAttributeNames")]]
+std::vector<std::string> getShapeMapAttributeNames(
+    Rcpp::XPtr<ShapeMap> shapeMap) {
+  return getShapeMapAttributeNames(shapeMap.get());
+}
+
 // [[Rcpp::export("Rcpp_ShapeMap_getAttributeData")]]
-std::map<std::string, std::vector<double>> getAttributeData(
+std::map<std::string, std::vector<double>> getShapeMapAttributeData(
     Rcpp::XPtr<ShapeMap> shapeMap,
     std::vector<std::string> attributeNames) {
   auto &attrbs = shapeMap->getAttributeTable();
@@ -105,6 +111,33 @@ Rcpp::GenericVector getShapesAsPolygonCoords(Rcpp::XPtr<ShapeMap> shapeMap) {
       const Rcpp::NumericMatrix::Row &row = poly( rowIdx , Rcpp::_ );
       row[0] = firstPoint.x;
       row[1] = firstPoint.y;
+    }
+    coords.push_back(poly);
+  }
+  return coords;
+}
+
+// [[Rcpp::export("Rcpp_ShapeMap_getShapesAsPolylineCoords")]]
+Rcpp::GenericVector getShapesAsPolylineCoords(Rcpp::XPtr<ShapeMap> shapeMap) {
+  float TOLERANCE = 0.0001;
+  std::vector<std::string> names;
+  Rcpp::GenericVector coords;
+  const auto &shapes = shapeMap->getAllShapes();
+
+  for (const auto &shape: shapes) {
+    if(!shape.second.isPolyLine()) continue;
+    const auto &firstPoint = *shape.second.m_points.begin();
+    const auto &lastPoint = *shape.second.m_points.rbegin();
+    Rcpp::NumericMatrix poly(shape.second.m_points.size(), 2);
+    Rcpp::colnames(poly) = Rcpp::CharacterVector({
+      "x", "y"
+    });
+    int rowIdx = 0;
+    for (const auto &point: shape.second.m_points) {
+      const Rcpp::NumericMatrix::Row &row = poly( rowIdx , Rcpp::_ );
+      row[0] = point.x;
+      row[1] = point.y;
+      rowIdx++;
     }
     coords.push_back(poly);
   }

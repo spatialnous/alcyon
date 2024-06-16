@@ -7,17 +7,12 @@
 #'
 #' A representation of sala's PointMap in R. Holds onto a sala PointMap pointer
 #' and operates on that
-#' @importFrom methods setClass setMethod
-setClass("PointMap", slots = c(
-  ptr = "externalptr"
-))
-
-# lintr seems unable to understand this as a constructor
-# thus we have to exclude it from the particular linter
-#' @importFrom methods new
-PointMap <- function(name, gridSize) { # nolint: object_name_linter
-  new("PointMap", ptr = Rcpp_PointMap_createFromGrid(name, gridSize))
-}
+#' @name PointMap-class
+#' @aliases PointMap
+#' @family PointMap
+#' @importFrom methods setOldClass
+#' @exportClass PointMap
+setOldClass(c("PointMap", "stars"))
 
 #' Get the PointMap name
 #'
@@ -33,7 +28,7 @@ setMethod(
   "name",
   signature = c(map = "PointMap"),
   function(map) {
-    Rcpp_PointMap_getName(map@ptr)
+    Rcpp_PointMap_getName(attr(map, "sala_map"))
   }
 )
 
@@ -52,7 +47,7 @@ setMethod(
   "connections",
   signature = c(map = "PointMap"),
   function(map) {
-    return(Rcpp_PointMap_getConnections(map@ptr))
+    return(Rcpp_PointMap_getConnections(attr(map, "sala_map")))
   }
 )
 
@@ -71,7 +66,7 @@ setMethod(
   "links",
   signature = c(map = "PointMap"),
   function(map) {
-    return(Rcpp_PointMap_getLinks(map@ptr))
+    return(Rcpp_PointMap_getLinks(attr(map, "sala_map")))
   }
 )
 
@@ -84,7 +79,8 @@ setMethod(
 #' @param fromY Y coordinate of the first link point
 #' @param toX X coordinate of the second link point
 #' @param toY Y coordinate of the second link point
-#' @returns None
+#' @param copyMap Optional. Copy the internal sala map
+#' @returns A new PointMap with linked points
 #' @docType methods
 #' @importFrom methods setMethod
 #' @eval c("@examples",
@@ -94,11 +90,13 @@ setMethod(
 setMethod(
   "linkCoords",
   signature = c(map = "PointMap"),
-  function(map, fromX, fromY, toX, toY) {
-    Rcpp_PointMap_linkCoords(
-      map@ptr,
-      cbind(fromX, fromY, toX, toY)
+  function(map, fromX, fromY, toX, toY, copyMap = TRUE) {
+    result <- Rcpp_PointMap_linkCoords(
+      attr(map, "sala_map"),
+      cbind(fromX, fromY, toX, toY),
+      copyMapNV = copyMap
     )
+    return(processPointMapResult(map, result))
   }
 )
 
@@ -111,22 +109,25 @@ setMethod(
 #' @param fromY Y coordinate of the first unlink point
 #' @param toX X coordinate of the second unlink point
 #' @param toY Y coordinate of the second unlink point
-#' @returns None
+#' @param copyMap Optional. Copy the internal sala map
+#' @returns A new PointMap with unlinked points
 #' @docType methods
 #' @importFrom methods setMethod
 #' @eval c("@examples",
 #' rxLoadInteriorLinesAsPointMap(),
-#' "linkCoords(pointMap, 1.74, 6.7, 5.05, 5.24)",
-#' "unlinkCoords(pointMap, 1.74, 6.7, 5.05, 5.24)")
+#' "pointMap <- linkCoords(pointMap, 1.74, 6.7, 5.05, 5.24)",
+#' "pointMap <- unlinkCoords(pointMap, 1.74, 6.7, 5.05, 5.24)")
 #' @export
 setMethod(
   "unlinkCoords",
   signature = c(map = "PointMap"),
-  function(map, fromX, fromY, toX, toY) {
-    Rcpp_PointMap_unlinkCoords(
-      map@ptr,
-      cbind(fromX, fromY, toX, toY)
+  function(map, fromX, fromY, toX, toY, copyMap = TRUE) {
+    result <- Rcpp_PointMap_unlinkCoords(
+      attr(map, "sala_map"),
+      cbind(fromX, fromY, toX, toY),
+      copyMapNV = copyMap
     )
+    return(processPointMapResult(map, result))
   }
 )
 
@@ -137,21 +138,24 @@ setMethod(
 #' @param map A PointMap
 #' @param fromRef Ref of the first link line
 #' @param toRef Ref of the second link line
-#' @returns None
+#' @param copyMap Optional. Copy the internal sala map
+#' @returns A new PointMap with linked points
 #' @docType methods
 #' @importFrom methods setMethod
 #' @eval c("@examples",
 #' rxLoadInteriorLinesAsPointMap(),
-#' "linkRefs(pointMap, 1835056L, 7208971L)")
+#' "pointMap <- linkRefs(pointMap, 1835056L, 7208971L)")
 #' @export
 setMethod(
   "linkRefs",
   signature = c(map = "PointMap"),
-  function(map, fromRef, toRef) {
-    Rcpp_PointMap_linkRefs(
-      map@ptr,
-      cbind(fromRef, toRef)
+  function(map, fromRef, toRef, copyMap = TRUE) {
+    result <- Rcpp_PointMap_linkRefs(
+      attr(map, "sala_map"),
+      cbind(fromRef, toRef),
+      copyMapNV = copyMap
     )
+    return(processPointMapResult(map, result))
   }
 )
 
@@ -162,41 +166,64 @@ setMethod(
 #' @param map A PointMap
 #' @param fromRef Ref of the first unlink line
 #' @param toRef Ref of the second unlink line
-#' @returns None
+#' @param copyMap Optional. Copy the internal sala map
+#' @returns A new PointMap with unlinked points
 #' @docType methods
 #' @importFrom methods setMethod
 #' @eval c("@examples",
 #' rxLoadInteriorLinesAsPointMap(),
-#' "linkRefs(pointMap, 1835056L, 7208971L)",
-#' "unlinkRefs(pointMap, 1835056L, 7208971L)")
+#' "pointMap <- linkRefs(pointMap, 1835056L, 7208971L)",
+#' "pointMap <- unlinkRefs(pointMap, 1835056L, 7208971L)")
 #' @export
 setMethod(
   "unlinkRefs",
   signature = c(map = "PointMap"),
-  function(map, fromRef, toRef) {
-    Rcpp_PointMap_unlinkRefs(
-      map@ptr,
-      cbind(fromRef, toRef)
+  function(map, fromRef, toRef, copyMap = TRUE) {
+    result <- Rcpp_PointMap_unlinkRefs(
+      attr(map, "sala_map"),
+      cbind(fromRef, toRef),
+      copyMapNV = copyMap
     )
+    return(processPointMapResult(map, result))
   }
 )
 
-#' as("PointMap", "SpatialPointsDataFrame")
+#' Subset PointMap objects
 #'
-#' @name as
-#' @family PointMap
+#' Subsetting PointMap objects essentially passes the data to stars
+#' See \link[stars]{stars_subset}
 #'
-#' @importFrom methods as
-#' @importClassesFrom sp SpatialPixelsDataFrame
-#' @importFrom sp SpatialPointsDataFrame
-#' @importMethodsFrom sp gridded<-
-setAs("PointMap", "SpatialPixelsDataFrame", function(from) {
-  coords <- Rcpp_PointMap_getFilledPoints(pointMapPtr = from@ptr)
-  map <- SpatialPointsDataFrame(coords[, c(1L, 2L)],
-    data = data.frame(coords,
-      check.names = FALSE
-    )
-  )
-  gridded(map) <- TRUE
-  return(map)
-})
+#' @name PointMap_subset
+#' @param x object of class \code{PointMap} passed to \code{stars[]}
+#' @param ... other parameters passed to \code{stars[]}
+#' @export
+`[.PointMap` <- function(x, ...) {
+  class(x) <- setdiff(class(x), "PointMap")
+  x <- NextMethod()
+  class(x) <- c("PointMap", class(x))
+  return(x)
+}
+
+#' @name PointMap_subset
+#' @param x object of class \code{PointMap} passed to \code{stars[]}
+#' @param ... other parameters passed to \code{stars[] <- }
+#' @param value value to be passed to \code{stars[] <- }
+#' @export
+`[<-.PointMap` <- function(x, ..., value) {
+  class(x) <- setdiff(class(x), "PointMap")
+  x <- NextMethod()
+  class(x) <- c("PointMap", class(x))
+  return(x)
+}
+
+#' plot a PointMap
+#'
+#' Calls a standard plot.stars, but flips the first argument around the x axis
+#' @param x object of class \code{PointMap}
+#' @param ... other parameters passed to \code{stars[]}
+#' @importFrom stars st_flip
+#' @export
+plot.PointMap <- function(x, ...) {
+  x <- st_flip(x, which = 2L)
+  NextMethod(...)
+}

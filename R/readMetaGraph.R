@@ -18,7 +18,6 @@
 readMetaGraph <- function(fileName) {
   result <- list(
     shapeMaps = list(),
-    shapeGraphs = list(),
     axialShapeGraphs = list(),
     alllineShapeGraphs = list(),
     segmentShapeGraphs = list(),
@@ -27,35 +26,33 @@ readMetaGraph <- function(fileName) {
   mgraphData <- Rcpp_MetaGraph_read(fileName)
   if (length(mgraphData$shapeMaps) > 0L) {
     result$shapeMaps <- lapply(mgraphData$shapeMaps, function(mapData) {
-      outMap <- new("ShapeMap")
-      outMap@ptr <- mapData$ptr
-      outMap
+      return(processPtrAsNewLineMap(mapData$ptr, "ShapeMap"))
     })
   }
   if (length(mgraphData$pointMaps) > 0L) {
-    result$pointMaps <- lapply(mgraphData$pointMaps, function(mapData) {
-      outMap <- new("PointMap")
-      outMap@ptr <- mapData$ptr
-      outMap
-    })
+    for (mapData in mgraphData$pointMaps) {
+      result$pointMaps <-
+        c(result$pointMaps,
+          list(processPtrAsNewPointMap(mapData$ptr)))
+    }
   }
   for (mapData in mgraphData$shapeGraphs) {
     if (mapData$type == "axial") {
-      outMap <- new("AxialShapeGraph")
-      outMap@ptr <- mapData$ptr
-      result$axialShapeGraphs <- c(result$axialShapeGraphs, outMap)
+      result$axialShapeGraphs <-
+        c(result$axialShapeGraphs,
+          list(processPtrAsNewLineMap(mapData$ptr, c("AxialShapeGraph",
+                                                     "ShapeMap"))))
     } else if (mapData$type == "allline") {
-      outMap <- new("AllLineShapeGraph")
-      outMap@ptr <- mapData$ptr
-      result$alllineShapeGraphs <- c(result$alllineShapeGraphs, outMap)
+      result$alllineShapeGraphs <-
+        c(result$alllineShapeGraphs,
+          list(processPtrAsNewLineMap(mapData$ptr, c("AllLineShapeGraph",
+                                                     "AxialShapeGraph",
+                                                     "ShapeMap"))))
     } else if (mapData$type == "segment") {
-      outMap <- new("SegmentShapeGraph")
-      outMap@ptr <- mapData$ptr
-      result$segmentShapeGraphs <- c(result$segmentShapeGraphs, outMap)
-    } else {
-      outMap <- new("ShapeGraph")
-      outMap@ptr <- mapData$ptr
-      result$shapeGraphs <- c(result$shapeGraphs, outMap)
+      result$segmentShapeGraphs <-
+        c(result$segmentShapeGraphs,
+          list(processPtrAsNewLineMap(mapData$ptr, c("SegmentShapeGraph",
+                                                     "ShapeMap"))))
     }
   }
   return(result)

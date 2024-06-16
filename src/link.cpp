@@ -12,37 +12,79 @@
 #include <Rcpp.h>
 
 // [[Rcpp::export("Rcpp_ShapeGraph_linkCoords")]]
-void shapeGraphLinkCoords(Rcpp::XPtr<ShapeGraph> shapeGraphPtr,
-                          Rcpp::NumericMatrix coords) {
+Rcpp::List shapeGraphLinkCoords(Rcpp::XPtr<ShapeGraph> shapeGraphPtr,
+                                Rcpp::NumericMatrix coords,
+                                const Rcpp::Nullable<bool> copyMapNV = R_NilValue) {
   if (coords.cols() != 4) {
     Rcpp::stop("The coords matrix needs to have 4 columns: x1, y1, x2, y2");
   }
+  bool copyMap = true;
+  if (copyMapNV.isNotNull()) {
+    copyMap = Rcpp::as<bool>(copyMapNV);
+  }
+  if (copyMap) {
+    auto prevShapeGraph = shapeGraphPtr;
+    shapeGraphPtr = Rcpp::XPtr(new ShapeGraph());
+    shapeGraphPtr->copy(*prevShapeGraph, ShapeMap::COPY_ALL, true);
+  }
+  bool completed = true;
   for (int i = 0; i < coords.rows(); ++i) {
     const Rcpp::NumericMatrix::Row &row = coords( i , Rcpp::_ );
     QtRegion region(Point2f(row[0], row[1]),
                     Point2f(row[0], row[1]));
     shapeGraphPtr->setCurSel(region);
-    shapeGraphPtr->linkShapes(Point2f(row[2], row[3]));
+    completed &= shapeGraphPtr->linkShapes(Point2f(row[2], row[3]));
   }
+  return Rcpp::List::create(
+    Rcpp::Named("completed") = completed,
+    Rcpp::Named("newAttributes") = std::vector<std::string>(),
+    Rcpp::Named("mapPtr") = shapeGraphPtr
+  );
 }
 
 // [[Rcpp::export("Rcpp_ShapeGraph_linkRefs")]]
-void shapeGraphLinkRefs(Rcpp::XPtr<ShapeGraph> shapeGraphPtr,
-                        Rcpp::IntegerMatrix refs) {
+Rcpp::List shapeGraphLinkRefs(Rcpp::XPtr<ShapeGraph> shapeGraphPtr,
+                              Rcpp::IntegerMatrix refs,
+                              const Rcpp::Nullable<bool> copyMapNV = R_NilValue) {
   if (refs.cols() != 2) {
     Rcpp::stop("The refs matrix needs to have 2 columns: fromRef, toRef");
+  }
+  bool copyMap = true;
+  if (copyMapNV.isNotNull()) {
+    copyMap = Rcpp::as<bool>(copyMapNV);
+  }
+  if (copyMap) {
+    auto prevShapeGraph = shapeGraphPtr;
+    shapeGraphPtr = Rcpp::XPtr(new ShapeGraph());
+    shapeGraphPtr->copy(*prevShapeGraph, ShapeMap::COPY_ALL, true);
   }
   for (int i = 0; i < refs.rows(); ++i) {
     const Rcpp::IntegerMatrix::Row &row = refs( i , Rcpp::_ );
     shapeGraphPtr->linkShapesFromRefs(row[0], row[1]);
   }
+  return Rcpp::List::create(
+    Rcpp::Named("completed") = true,
+    Rcpp::Named("newAttributes") = std::vector<std::string>(),
+    Rcpp::Named("mapPtr") = shapeGraphPtr
+  );
 }
 
 // [[Rcpp::export("Rcpp_PointMap_linkCoords")]]
-void pointMapLinkCoords(Rcpp::XPtr<PointMap> pointMapPtr,
-                        Rcpp::NumericMatrix coords) {
+Rcpp::List pointMapLinkCoords(Rcpp::XPtr<PointMap> pointMapPtr,
+                              Rcpp::NumericMatrix coords,
+                              const Rcpp::Nullable<bool> copyMapNV = R_NilValue) {
   if (coords.cols() != 4) {
     Rcpp::stop("The coords matrix needs to have 4 columns: x1, y1, x2, y2");
+  }
+  bool copyMap = true;
+  if (copyMapNV.isNotNull()) {
+    copyMap = Rcpp::as<bool>(copyMapNV);
+  }
+  if (copyMap) {
+    auto prevPointMap = pointMapPtr;
+    const auto &prevRegion = prevPointMap->getRegion();
+    pointMapPtr = Rcpp::XPtr(new PointMap(prevRegion));
+    pointMapPtr->copy(*prevPointMap, true, true);
   }
   for (int i = 0; i < coords.rows(); ++i) {
     const Rcpp::NumericMatrix::Row &row = coords( i , Rcpp::_ );
@@ -71,13 +113,30 @@ void pointMapLinkCoords(Rcpp::XPtr<PointMap> pointMapPtr,
 
     pointMapPtr->mergePixels(a, b);
   }
+  return Rcpp::List::create(
+    Rcpp::Named("completed") = true,
+    Rcpp::Named("newAttributes") = std::vector<std::string>(),
+    Rcpp::Named("newProperties") = std::vector<std::string>(),
+    Rcpp::Named("mapPtr") = pointMapPtr
+  );
 }
 
 // [[Rcpp::export("Rcpp_PointMap_linkRefs")]]
-void pointMapLinkRefs(Rcpp::XPtr<PointMap> pointMapPtr,
-                      Rcpp::IntegerMatrix refs) {
+Rcpp::List pointMapLinkRefs(Rcpp::XPtr<PointMap> pointMapPtr,
+                            Rcpp::IntegerMatrix refs,
+                            const Rcpp::Nullable<bool> copyMapNV = R_NilValue) {
   if (refs.cols() != 2) {
     Rcpp::stop("The refs matrix needs to have 2 columns: fromRef, toRef");
+  }
+  bool copyMap = true;
+  if (copyMapNV.isNotNull()) {
+    copyMap = Rcpp::as<bool>(copyMapNV);
+  }
+  if (copyMap) {
+    auto prevPointMap = pointMapPtr;
+    const auto &prevRegion = prevPointMap->getRegion();
+    pointMapPtr = Rcpp::XPtr(new PointMap(prevRegion));
+    pointMapPtr->copy(*prevPointMap, true, true);
   }
   for (int i = 0; i < refs.rows(); ++i) {
     const Rcpp::IntegerMatrix::Row &row = refs( i , Rcpp::_ );
@@ -107,51 +166,114 @@ void pointMapLinkRefs(Rcpp::XPtr<PointMap> pointMapPtr,
 
     pointMapPtr->mergePixels(row[0], row[1]);
   }
+  return Rcpp::List::create(
+    Rcpp::Named("completed") = true,
+    Rcpp::Named("newAttributes") = std::vector<std::string>(),
+    Rcpp::Named("newProperties") = std::vector<std::string>(),
+    Rcpp::Named("mapPtr") = pointMapPtr
+  );
 }
 
 // [[Rcpp::export("Rcpp_ShapeGraph_unlinkCoords")]]
-void shapeMapUnlinkCoords(Rcpp::XPtr<ShapeGraph> shapeGraphPtr,
-                          Rcpp::NumericMatrix coords) {
+Rcpp::List shapeMapUnlinkCoords(Rcpp::XPtr<ShapeGraph> shapeGraphPtr,
+                                Rcpp::NumericMatrix coords,
+                                const Rcpp::Nullable<bool> copyMapNV = R_NilValue) {
   if (coords.cols() != 4) {
     Rcpp::stop("The coords matrix needs to have 4 columns: x1, y1, x2, y2");
   }
+  bool copyMap = true;
+  if (copyMapNV.isNotNull()) {
+    copyMap = Rcpp::as<bool>(copyMapNV);
+  }
+  if (copyMap) {
+    auto prevShapeGraph = shapeGraphPtr;
+    shapeGraphPtr = Rcpp::XPtr(new ShapeGraph());
+    shapeGraphPtr->copy(*prevShapeGraph, ShapeMap::COPY_ALL, true);
+  }
   for (int i = 0; i < coords.rows(); ++i) {
     const Rcpp::NumericMatrix::Row &row = coords( i , Rcpp::_ );
-    auto ref1 = shapeGraphPtr->getClosestLine(Point2f(row[0], row[1]));
-    auto ref2 = shapeGraphPtr->getClosestLine(Point2f(row[2], row[3]));
-    shapeGraphPtr->unlinkShapesFromRefs(ref1, ref2);
+    QtRegion region(Point2f(row[0], row[1]),
+                    Point2f(row[0], row[1]));
+    shapeGraphPtr->setCurSel(region);
+    shapeGraphPtr->unlinkShapes(Point2f(row[2], row[3]));
   }
+  return Rcpp::List::create(
+    Rcpp::Named("completed") = true,
+    Rcpp::Named("newAttributes") = std::vector<std::string>(),
+    Rcpp::Named("mapPtr") = shapeGraphPtr
+  );
 }
 
 // [[Rcpp::export("Rcpp_ShapeGraph_unlinkAtCrossPoint")]]
-void shapeGraphUnlinkAtCrossPoint(Rcpp::XPtr<ShapeGraph> shapeGraphPtr,
-                                  Rcpp::NumericMatrix coords) {
+Rcpp::List shapeGraphUnlinkAtCrossPoint(Rcpp::XPtr<ShapeGraph> shapeGraphPtr,
+                                        Rcpp::NumericMatrix coords,
+                                        const Rcpp::Nullable<bool> copyMapNV = R_NilValue) {
   if (coords.cols() != 2) {
     Rcpp::stop("The coords matrix needs to have 2 columns: x, y");
+  }
+  bool copyMap = true;
+  if (copyMapNV.isNotNull()) {
+    copyMap = Rcpp::as<bool>(copyMapNV);
+  }
+  if (copyMap) {
+    auto prevShapeGraph = shapeGraphPtr;
+    shapeGraphPtr = Rcpp::XPtr(new ShapeGraph());
+    shapeGraphPtr->copy(*prevShapeGraph, ShapeMap::COPY_ALL, true);
   }
   for (int i = 0; i < coords.rows(); ++i) {
     const Rcpp::NumericMatrix::Row &row = coords( i , Rcpp::_ );
     shapeGraphPtr->unlinkAtPoint(Point2f(row[0], row[1]));
   }
+  return Rcpp::List::create(
+    Rcpp::Named("completed") = true,
+    Rcpp::Named("newAttributes") = std::vector<std::string>(),
+    Rcpp::Named("mapPtr") = shapeGraphPtr
+  );
 }
 
 // [[Rcpp::export("Rcpp_ShapeGraph_unlinkRefs")]]
-void shapeMapUnlinkRefs(Rcpp::XPtr<ShapeGraph> shapeGraphPtr,
-                        Rcpp::IntegerMatrix refs) {
+Rcpp::List shapeMapUnlinkRefs(Rcpp::XPtr<ShapeGraph> shapeGraphPtr,
+                              Rcpp::IntegerMatrix refs,
+                              const Rcpp::Nullable<bool> copyMapNV = R_NilValue) {
   if (refs.cols() != 2) {
     Rcpp::stop("The refs matrix needs to have 2 columns: fromRef, toRef");
+  }
+  bool copyMap = true;
+  if (copyMapNV.isNotNull()) {
+    copyMap = Rcpp::as<bool>(copyMapNV);
+  }
+  if (copyMap) {
+    auto prevShapeGraph = shapeGraphPtr;
+    shapeGraphPtr = Rcpp::XPtr(new ShapeGraph());
+    shapeGraphPtr->copy(*prevShapeGraph, ShapeMap::COPY_ALL, true);
   }
   for (int i = 0; i < refs.rows(); ++i) {
     const Rcpp::IntegerMatrix::Row &row = refs( i , Rcpp::_ );
     shapeGraphPtr->unlinkShapesFromRefs(row[0], row[1]);
   }
+  return Rcpp::List::create(
+    Rcpp::Named("completed") = true,
+    Rcpp::Named("newAttributes") = std::vector<std::string>(),
+    Rcpp::Named("mapPtr") = shapeGraphPtr
+  );
 }
 
 // [[Rcpp::export("Rcpp_PointMap_unlinkCoords")]]
-void pointMapUnlinkCoords(Rcpp::XPtr<PointMap> pointMapPtr,
-                          Rcpp::NumericMatrix coords) {
+Rcpp::List pointMapUnlinkCoords(Rcpp::XPtr<PointMap> pointMapPtr,
+                                Rcpp::NumericMatrix coords,
+                                const Rcpp::Nullable<bool> copyMapNV = R_NilValue) {
   if (coords.cols() != 4) {
     Rcpp::stop("The coords matrix needs to have 4 columns: x1, y1, x2, y2");
+  }
+  bool copyMap = true;
+  if (copyMapNV.isNotNull()) {
+    copyMap = Rcpp::as<bool>(copyMapNV);
+  }
+  if (copyMap) {
+    auto prevPointMap = pointMapPtr;
+    const auto &prevRegion = prevPointMap->getRegion();
+    pointMapPtr = Rcpp::XPtr(new PointMap(prevRegion));
+    pointMapPtr->copy(*prevPointMap, true, true);
   }
   for (int i = 0; i < coords.rows(); ++i) {
     const Rcpp::NumericMatrix::Row &row = coords( i , Rcpp::_ );
@@ -180,13 +302,30 @@ void pointMapUnlinkCoords(Rcpp::XPtr<PointMap> pointMapPtr,
 
     pointMapPtr->unmergePixel(a);
   }
+  return Rcpp::List::create(
+    Rcpp::Named("completed") = true,
+    Rcpp::Named("newAttributes") = std::vector<std::string>(),
+    Rcpp::Named("newProperties") = std::vector<std::string>(),
+    Rcpp::Named("mapPtr") = pointMapPtr
+  );
 }
 
 // [[Rcpp::export("Rcpp_PointMap_unlinkRefs")]]
-void pointMapUnlinkRefs(Rcpp::XPtr<PointMap> pointMapPtr,
-                        Rcpp::IntegerMatrix refs) {
+Rcpp::List pointMapUnlinkRefs(Rcpp::XPtr<PointMap> pointMapPtr,
+                              Rcpp::IntegerMatrix refs,
+                              const Rcpp::Nullable<bool> copyMapNV = R_NilValue) {
   if (refs.cols() != 2) {
     Rcpp::stop("The refs matrix needs to have 2 columns: fromRef, toRef");
+  }
+  bool copyMap = true;
+  if (copyMapNV.isNotNull()) {
+    copyMap = Rcpp::as<bool>(copyMapNV);
+  }
+  if (copyMap) {
+    auto prevPointMap = pointMapPtr;
+    const auto &prevRegion = prevPointMap->getRegion();
+    pointMapPtr = Rcpp::XPtr(new PointMap(prevRegion));
+    pointMapPtr->copy(*prevPointMap, true, true);
   }
   for (int i = 0; i < refs.rows(); ++i) {
     const Rcpp::IntegerMatrix::Row &row = refs( i , Rcpp::_ );
@@ -216,4 +355,10 @@ void pointMapUnlinkRefs(Rcpp::XPtr<PointMap> pointMapPtr,
 
     pointMapPtr->unmergePixel(a);
   }
+  return Rcpp::List::create(
+    Rcpp::Named("completed") = true,
+    Rcpp::Named("newAttributes") = std::vector<std::string>(),
+    Rcpp::Named("newProperties") = std::vector<std::string>(),
+    Rcpp::Named("mapPtr") = pointMapPtr
+  );
 }

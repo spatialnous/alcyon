@@ -5,7 +5,13 @@
 ^\.reuse$
 ^src/build-Release$
 ^src/libs/genlib/\.git$
+^src/libs/genlib/\.clang-format$
+^src/libs/genlib/\.githooks$
+^src/libs/genlib/\.reuse$
 ^src/libs/salalib/\.git$
+^src/libs/salalib/\.clang-format$
+^src/libs/salalib/\.githooks$
+^src/libs/salalib/\.reuse$
 ^inst/extdata/testdata/\.git$
 ^\.lintr$
 ^LICENSE\.md$
@@ -14,3 +20,5 @@
 ^CRAN-SUBMISSION$
 ^scratch
 ^scripts
+^doc$
+^Meta$

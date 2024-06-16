@@ -5,7 +5,7 @@
 \alias{unlinkAtCrossPoint,AxialShapeGraph-method}
 \title{Unlink two Axial Lines (crosspoint)}
 \usage{
-\S4method{unlinkAtCrossPoint}{AxialShapeGraph}(map, x, y)
+\S4method{unlinkAtCrossPoint}{AxialShapeGraph}(map, x, y, copyMap = TRUE)
 }
 \arguments{
 \item{map}{An Axial ShapeGraph}
@@ -13,9 +13,11 @@
 \item{x}{X coordinate of the unlink crossing point}
 
 \item{y}{Y coordinate of the unlink crossing point}
+
+\item{copyMap}{Optional. Copy the internal sala map}
 }
 \value{
-None
+A new Axial ShapeGraph with unlinked lines
 }
 \description{
 Unlink two crossing lines on an Axial ShapeGraph at the crossing point

@@ -5,7 +5,7 @@
 \alias{unlinkCoords,PointMap-method}
 \title{Unlink two PointMap Cells (coordinates)}
 \usage{
-\S4method{unlinkCoords}{PointMap}(map, fromX, fromY, toX, toY)
+\S4method{unlinkCoords}{PointMap}(map, fromX, fromY, toX, toY, copyMap = TRUE)
 }
 \arguments{
 \item{map}{A PointMap}
@@ -17,9 +17,11 @@
 \item{toX}{X coordinate of the second unlink point}
 
 \item{toY}{Y coordinate of the second unlink point}
+
+\item{copyMap}{Optional. Copy the internal sala map}
 }
 \value{
-None
+A new PointMap with unlinked points
 }
 \description{
 Unlink two cells on a PointMap using the point coordinates
@@ -42,6 +44,6 @@ mifFile <- system.file(
     boundaryGraph = FALSE,
     verbose = FALSE
   )
-linkCoords(pointMap, 1.74, 6.7, 5.05, 5.24)
-unlinkCoords(pointMap, 1.74, 6.7, 5.05, 5.24)
+pointMap <- linkCoords(pointMap, 1.74, 6.7, 5.05, 5.24)
+pointMap <- unlinkCoords(pointMap, 1.74, 6.7, 5.05, 5.24)
 }

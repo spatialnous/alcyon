@@ -4,15 +4,17 @@
 \alias{vgaVisualLocal}
 \title{Visibility Graph Analysis - Visual local metrics}
 \usage{
-vgaVisualLocal(pointMap, gatesOnly = FALSE)
+vgaVisualLocal(pointMap, copyMap = TRUE, gatesOnly = FALSE)
 }
 \arguments{
 \item{pointMap}{A PointMap}
 
+\item{copyMap}{Optional. Copy the internal sala map}
+
 \item{gatesOnly}{Optional. Only keep the values at specific gates}
 }
 \value{
-None
+A new PointMap with the results included
 }
 \description{
 Runs Visibility Graph Analysis to get visual local metrics

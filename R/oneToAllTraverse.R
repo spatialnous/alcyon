@@ -19,6 +19,7 @@
 #' continuous values for the cost of traversal. This is equivalent to the "tulip
 #' bins" for depthmapX's tulip analysis (1024 tulip bins = pi/1024
 #' quantizationWidth). Only works for Segment ShapeGraphs
+#' @param copyMap Optional. Copy the internal sala map
 #' @param verbose Optional. Show more information of the process.
 #'
 #' @returns Returns a list with:
@@ -60,6 +61,7 @@ oneToAllTraverse <- function(map,
                              fromX,
                              fromY,
                              quantizationWidth = NA,
+                             copyMap = TRUE,
                              verbose = FALSE) {
   if (!(traversalType %in% as.list(TraversalType))) {
     stop("Unknown traversalType: ", traversalType)
@@ -80,7 +82,8 @@ oneToAllTraverse <- function(map,
     fromX,
     fromY,
     quantizationWidth,
-    verbose
+    copyMap = copyMap,
+    verbose = verbose
   ))
 }
 oneToAllTraversePerMapType <- function(map,
@@ -88,6 +91,7 @@ oneToAllTraversePerMapType <- function(map,
                                        fromX,
                                        fromY,
                                        quantizationWidth = NA,
+                                       copyMap = TRUE,
                                        verbose = FALSE) {
 
   if (inherits(map, "PointMap")) {
@@ -97,20 +101,29 @@ oneToAllTraversePerMapType <- function(map,
       fromX,
       fromY,
       quantizationWidth,
+      copyMap = copyMap,
       verbose
     ))
   } else if (inherits(map, "AxialShapeGraph")) {
-    return(Rcpp_axialStepDepth(map@ptr, traversalType, fromX, fromY))
+    result <- Rcpp_axialStepDepth(attr(map, "sala_map"),
+                                  traversalType,
+                                  fromX,
+                                  fromY,
+                                  copyMapNV = copyMap)
+    return(processShapeMapResult(map, result))
   } else if (inherits(map, "SegmentShapeGraph")) {
     tulipBins <- 0L
     if (traversalType == TraversalType$Angular
         && !is.na(quantizationWidth)) {
       tulipBins <- as.integer(pi / quantizationWidth)
     }
-    return(Rcpp_segmentStepDepth(
-      map@ptr, traversalType,
-      fromX, fromY, tulipBins
-    ))
+    result <- Rcpp_segmentStepDepth(attr(map, "sala_map"),
+                                    traversalType,
+                                    fromX,
+                                    fromY,
+                                    tulipBins,
+                                    copyMapNV = copyMap)
+    return(processShapeMapResult(map, result))
   } else {
     stop("Can only run depth on Axial or Segment ShapeGraphs and PointMaps")
   }
@@ -121,12 +134,28 @@ oneToAllTraversePointMap <- function(map,
                                      fromX,
                                      fromY,
                                      quantizationWidth = NA,
+                                     copyMap = TRUE,
                                      verbose = FALSE) {
   if (traversalType == TraversalType$Topological) {
-    return(Rcpp_VGA_visualDepth(map@ptr, cbind(fromX, fromY)))
+    result <- Rcpp_VGA_visualDepth(
+      attr(map, "sala_map"),
+      cbind(fromX, fromY),
+      copyMapNV = copyMap
+    )
+    return(processPointMapResult(map, result))
   } else if (traversalType == TraversalType$Metric) {
-    return(Rcpp_VGA_metricDepth(map@ptr, cbind(fromX, fromY)))
+    result <- Rcpp_VGA_metricDepth(
+      attr(map, "sala_map"),
+      cbind(fromX, fromY),
+      copyMapNV = copyMap
+    )
+    return(processPointMapResult(map, result))
   } else if (traversalType == TraversalType$Angular) {
-    return(Rcpp_VGA_angularDepth(map@ptr, cbind(fromX, fromY)))
+    result <- Rcpp_VGA_angularDepth(
+      attr(map, "sala_map"),
+      cbind(fromX, fromY),
+      copyMapNV = copyMap
+    )
+    return(processPointMapResult(map, result))
   }
 }

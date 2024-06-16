@@ -8,6 +8,7 @@ axialAnalysis <- function(shapeGraph,
                           weightByAttribute = "",
                           includeChoice = FALSE,
                           includeIntermediateMetrics = FALSE,
+                          copyMap = TRUE,
                           keepGraph = FALSE,
                           verbose = FALSE) {
   numRadii <- vapply(radii, function(r) {
@@ -18,13 +19,16 @@ axialAnalysis <- function(shapeGraph,
     }
   }, FUN.VALUE = 1L)
 
-  return(Rcpp_runAxialAnalysis(
-    shapeGraph@ptr,
+  result <- Rcpp_runAxialAnalysis(
+    attr(shapeGraph, "sala_map"),
     numRadii,
     weightByAttribute,
     includeChoice,
-    includeIntermediateMetrics
-  ))
+    includeIntermediateMetrics,
+    copyMapNV = copyMap
+  )
+
+  return(processShapeMapResult(shapeGraph, result))
 }
 
 #' Axial analysis - local metrics
@@ -32,6 +36,7 @@ axialAnalysis <- function(shapeGraph,
 #' Runs axial analysis to get the local metrics Control and Controllability
 #'
 #' @param shapeGraph An Axial ShapeGraph
+#' @param copyMap Optional. Copy the internal sala map
 #' @param verbose Optional. Show more information of the process.
 #'
 #' @returns Returns a list with:
@@ -46,9 +51,12 @@ axialAnalysis <- function(shapeGraph,
 #' @export
 axialAnalysisLocal <- function(
     shapeGraph,
+    copyMap = TRUE,
     verbose = FALSE) {
-  return(Rcpp_runAxialLocalAnalysis(
-    shapeGraph@ptr,
+  result <- Rcpp_runAxialLocalAnalysis(
+    attr(shapeGraph, "sala_map"),
+    copyMapNV = copyMap,
     verbose
-  ))
+  )
+  return(processShapeMapResult(shapeGraph, result))
 }

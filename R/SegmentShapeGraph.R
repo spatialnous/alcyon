@@ -6,8 +6,12 @@
 #'
 #' A representation of sala's Segment ShapeGraph in R. Holds onto a sala Segment
 #' ShapeGraph pointer and operates on that
-#' @importFrom methods setClass
-setClass("SegmentShapeGraph", contains = "ShapeGraph")
+#' @name SegmentShapeGraph-class
+#' @aliases SegmentShapeGraph
+#' @family SegmentShapeGraph
+#' @importFrom methods setOldClass
+#' @exportClass SegmentShapeGraph
+setOldClass(c("SegmentShapeGraph", "ShapeMap", "sf"))
 
 #' Get the Segment ShapeGraph connections
 #'
@@ -23,7 +27,7 @@ setMethod(
   "connections",
   signature(map = "SegmentShapeGraph"),
   function(map) {
-    Rcpp_ShapeGraph_getSegmentConnections(map@ptr)
+    Rcpp_ShapeGraph_getSegmentConnections(attr(map, "sala_map"))
   }
 )
 
@@ -42,15 +46,31 @@ setMethod(
 #' @export
 axialToSegmentShapeGraph <- function(axialShapeGraph,
                                      stubRemoval = NULL) {
-  shapeGraph <- new("SegmentShapeGraph")
-  shapeGraph@ptr <- Rcpp_axialToSegment(
-    axialShapeGraph@ptr,
+  newSegmentMapPtr <- Rcpp_axialToSegment(
+    attr(axialShapeGraph, "sala_map"),
     "Segment Map",
     TRUE,
     stubRemoval
   )
-  return(shapeGraph)
+
+  return(processPtrAsNewLineMap(newSegmentMapPtr,
+                                c("SegmentShapeGraph", "ShapeMap")))
 }
+
+#' as("ShapeMap", "SegmentShapeGraph")
+#'
+#' This is a direct conversion, for ShapeMap -> Axial -> Segment see
+#' \link{axialToSegmentShapeGraph}
+#'
+#' @name as
+#' @family SegmentShapeGraph
+#'
+#' @importFrom methods as
+setAs("ShapeMap", "SegmentShapeGraph", function(from) {
+  class(from) <- c("SegmentShapeGraph", class(from))
+  result <- Rcpp_shapeMapToSegment(attr(from, "sala_map"))
+  return(processShapeMapResult(from, result))
+})
 
 #' as("sf", "SegmentShapeGraph")
 #'
@@ -62,8 +82,33 @@ axialToSegmentShapeGraph <- function(axialShapeGraph,
 #'
 #' @importFrom methods as
 setAs("sf", "SegmentShapeGraph", function(from) {
-  shapeGraph <- new("SegmentShapeGraph")
-  shapeMap <- as(from, "ShapeMap")
-  shapeGraph@ptr <- Rcpp_shapeMapToSegment(shapeMap@ptr)
-  return(shapeGraph)
+  return(as(as(from, "ShapeMap"), "SegmentShapeGraph"))
 })
+
+#' Subset SegmentShapeGraph objects
+#'
+#' Subsetting SegmentShapeGraph objects essentially passes the data to sf.
+#' See \link[sf]{sf}
+#'
+#' @name SegmentShapeGraph_subset
+#' @param x object of class \code{SegmentShapeGraph} passed to \code{stars[]}
+#' @param ... other parameters passed to \code{stars[]}
+#' @export
+`[.SegmentShapeGraph` <- function(x, ...) {
+  class(x) <- setdiff(class(x), "SegmentShapeGraph")
+  x <- NextMethod()
+  class(x) <- c("SegmentShapeGraph", class(x))
+  return(x)
+}
+
+#' @name SegmentShapeGraph_subset
+#' @param x object of class \code{SegmentShapeGraph} passed to \code{stars[]}
+#' @param ... other parameters passed to \code{stars[] <- }
+#' @param value value to be passed to \code{sf[] <- }
+#' @export
+`[<-.SegmentShapeGraph` <- function(x, ..., value) {
+  class(x) <- setdiff(class(x), "SegmentShapeGraph")
+  x <- NextMethod()
+  class(x) <- c("SegmentShapeGraph", class(x))
+  return(x)
+}

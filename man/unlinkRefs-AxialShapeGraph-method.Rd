@@ -5,7 +5,7 @@
 \alias{unlinkRefs,AxialShapeGraph-method}
 \title{Unlink two Axial Lines (refs)}
 \usage{
-\S4method{unlinkRefs}{AxialShapeGraph}(map, fromRef, toRef)
+\S4method{unlinkRefs}{AxialShapeGraph}(map, fromRef, toRef, copyMap = TRUE)
 }
 \arguments{
 \item{map}{An Axial ShapeGraph}
@@ -13,9 +13,11 @@
 \item{fromRef}{Ref of the first unlink line}
 
 \item{toRef}{Ref of the second unlink line}
+
+\item{copyMap}{Optional. Copy the internal sala map}
 }
 \value{
-None
+A new Axial ShapeGraph with unlinked lines
 }
 \description{
 Unlink two lines on an Axial ShapeGraph using their refs

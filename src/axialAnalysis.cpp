@@ -22,6 +22,7 @@ Rcpp::List runAxialAnalysis(
         const Rcpp::Nullable<std::string> weightedMeasureColNameNV = R_NilValue,
         const Rcpp::Nullable<bool> includeChoiceNV = R_NilValue,
         const Rcpp::Nullable<bool> includeIntermediateMetricsNV = R_NilValue,
+        const Rcpp::Nullable<bool> copyMapNV = R_NilValue,
         const Rcpp::Nullable<bool> verboseNV = R_NilValue,
         const Rcpp::Nullable<bool> progressNV = R_NilValue) {
     std::string weightedMeasureColName = "";
@@ -36,6 +37,15 @@ Rcpp::List runAxialAnalysis(
     if (includeIntermediateMetricsNV.isNotNull()) {
         includeIntermediateMetrics = Rcpp::as<bool>(includeIntermediateMetricsNV);
     }
+    // The normal behaviour of R is to copy objects wholesale when applying a
+    // function to them. In C++ this is to be avoided unless absolutely
+    // necessary. However, since this function is to be used in R and for it to
+    // have the same effects as any other R function, we will copy the given map
+    // and provide a new pointer if instructed to do so.
+    bool copyMap = true;
+    if (copyMapNV.isNotNull()) {
+        copyMap = Rcpp::as<bool>(copyMapNV);
+    }
     bool verbose = false;
     if (verboseNV.isNotNull()) {
         verbose = Rcpp::as<bool>(verboseNV);
@@ -47,6 +57,12 @@ Rcpp::List runAxialAnalysis(
 
     if (verbose)
         Rcpp::Rcout << "Running axial analysis... " << '\n';
+
+    if (copyMap) {
+        auto prevShapeGraph = shapeGraph;
+        shapeGraph = Rcpp::XPtr(new ShapeGraph());
+        shapeGraph->copy(*prevShapeGraph, ShapeMap::COPY_ALL, true);
+    }
 
     int weightedMeasureColIdx = -1;
 
@@ -70,7 +86,6 @@ Rcpp::List runAxialAnalysis(
     );
 
     try {
-
         std::set<double> radius_set;
         radius_set.insert(radii.begin(), radii.end());
         auto analysis = AxialIntegration(radius_set,
@@ -84,6 +99,7 @@ Rcpp::List runAxialAnalysis(
         );
         result["completed"] = analysisResult.completed;
         result["newAttributes"] = analysisResult.getAttributes();
+        result["mapPtr"] = shapeGraph;
     } catch (Communicator::CancelledException) {
         // result["completed"] = false;
     }
@@ -93,8 +109,13 @@ Rcpp::List runAxialAnalysis(
 // [[Rcpp::export("Rcpp_runAxialLocalAnalysis")]]
 Rcpp::List runAxialLocalAnalysis(
         Rcpp::XPtr<ShapeGraph> shapeGraph,
+        const Rcpp::Nullable<bool> copyMapNV = R_NilValue,
         const Rcpp::Nullable<bool> verboseNV = R_NilValue,
         const Rcpp::Nullable<bool> progressNV = R_NilValue) {
+    bool copyMap = true;
+    if (copyMapNV.isNotNull()) {
+        copyMap = Rcpp::as<bool>(copyMapNV);
+    }
     bool verbose = false;
     if (verboseNV.isNotNull()) {
         verbose = Rcpp::as<bool>(verboseNV);
@@ -106,6 +127,12 @@ Rcpp::List runAxialLocalAnalysis(
 
     if (verbose)
         Rcpp::Rcout << "Running axial analysis... " << '\n';
+
+    if (copyMap) {
+        auto prevShapeGraph = shapeGraph;
+        shapeGraph = Rcpp::XPtr(new ShapeGraph());
+        shapeGraph->copy(*prevShapeGraph, ShapeMap::COPY_ALL, true);
+    }
 
     Rcpp::List result = Rcpp::List::create(
         Rcpp::Named("completed") = false
@@ -121,6 +148,7 @@ Rcpp::List runAxialLocalAnalysis(
         );
         result["completed"] = analysisResult.completed;
         result["newAttributes"] = analysisResult.getAttributes();
+        result["mapPtr"] = shapeGraph;
     } catch (Communicator::CancelledException) {
         // result["completed"] = false;
     }
@@ -133,8 +161,13 @@ Rcpp::List axialStepDepth(
         const int stepType,
         const std::vector<double> stepDepthPointsX,
         const std::vector<double> stepDepthPointsY,
+        const Rcpp::Nullable<bool> copyMapNV = R_NilValue,
         const Rcpp::Nullable<bool> verboseNV = R_NilValue,
         const Rcpp::Nullable<bool> progressNV = R_NilValue) {
+    bool copyMap = true;
+    if (copyMapNV.isNotNull()) {
+        copyMap = Rcpp::as<bool>(copyMapNV);
+    }
     bool verbose = false;
     if (verboseNV.isNotNull()) {
         verbose = Rcpp::as<bool>(verboseNV);
@@ -144,7 +177,14 @@ Rcpp::List axialStepDepth(
         progress = Rcpp::as<bool>(progressNV);
     }
 
-    Rcpp::Rcout << "ok\nSelecting cells... " << '\n';
+    if (verbose)
+        Rcpp::Rcout << "ok\nSelecting cells... " << '\n';
+
+    if (copyMap) {
+        auto prevShapeGraph = shapeGraph;
+        shapeGraph = Rcpp::XPtr(new ShapeGraph());
+        shapeGraph->copy(*prevShapeGraph, ShapeMap::COPY_ALL, true);
+    }
 
     for (int i = 0; i < stepDepthPointsX.size(); ++i) {
         Point2f p2f(stepDepthPointsX[i], stepDepthPointsY[i]);
@@ -156,7 +196,8 @@ Rcpp::List axialStepDepth(
         shapeGraph->setCurSel(r, true);
     }
 
-    Rcpp::Rcout << "ok\nCalculating step-depth... " << '\n';
+    if (verbose)
+        Rcpp::Rcout << "ok\nCalculating step-depth... " << '\n';
 
     Rcpp::List result = Rcpp::List::create(
         Rcpp::Named("completed") = false
@@ -186,6 +227,7 @@ Rcpp::List axialStepDepth(
         }
         result["completed"] = analysisResult.completed;
         result["newAttributes"] = analysisResult.getAttributes();
+        result["mapPtr"] = shapeGraph;
 
     } catch (Communicator::CancelledException) {
         //

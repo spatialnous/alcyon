@@ -27,7 +27,8 @@ test_that("sf line map to Axial ShapeGraph", {
   lineStringMap <- loadSmallAxialLinesAsSf()$sf
 
   shapeMap <- Rcpp_toShapeMap(lineStringMap, c(1L, 2L))
-  shapeGraph <- Rcpp_toAxialShapeGraph(shapeMap)
+  result <- Rcpp_toAxialShapeGraph(shapeMap)
+  shapeGraph <- result$mapPtr
 
   expectedColNames <- c(
     "Ref",
@@ -56,7 +57,8 @@ test_that("sf line map to Segment ShapeGraph", {
   lineStringMap <- loadSmallAxialLinesAsSf()$sf
 
   shapeMap <- Rcpp_toShapeMap(lineStringMap, c(1L, 2L))
-  shapeGraph <- Rcpp_toAxialShapeGraph(shapeMap)
+  result <- Rcpp_toAxialShapeGraph(shapeMap)
+  shapeGraph <- result$mapPtr
 
   segmentMap <- Rcpp_axialToSegment(shapeGraph)
 

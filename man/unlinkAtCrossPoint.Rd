@@ -4,7 +4,7 @@
 \alias{unlinkAtCrossPoint}
 \title{Unlink map lines at their crossing point}
 \usage{
-unlinkAtCrossPoint(map, x, y)
+unlinkAtCrossPoint(map, x, y, copyMap = TRUE)
 }
 \arguments{
 \item{map}{A sala map}
@@ -12,9 +12,11 @@ unlinkAtCrossPoint(map, x, y)
 \item{x}{X coordinate of the crossing point}
 
 \item{y}{Y coordinate of the crossing point}
+
+\item{copyMap}{Optional. Copy the internal sala map}
 }
 \value{
-None
+A new map with linked lines
 }
 \description{
 Unlink map lines at their crossing point

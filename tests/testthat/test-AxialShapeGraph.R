@@ -8,7 +8,7 @@ test_that("ShapeGraph Links and Unlinks", {
   shapeGraph <- loadSmallAxialLinesAsAxialMap()$axialMap
 
   # link two non-crossing lines using coordinates
-  linkCoords(
+  shapeGraph <- linkCoords(
     shapeGraph,
     0982.8, -1620.3,
     1217.1, -1977.3
@@ -26,7 +26,7 @@ test_that("ShapeGraph Links and Unlinks", {
   )
 
   # unlink the two linked non-crossing lines using coordinates
-  unlinkCoords(
+  shapeGraph <- unlinkCoords(
     shapeGraph,
     0982.8, -1620.3,
     1217.1, -1977.3
@@ -35,7 +35,7 @@ test_that("ShapeGraph Links and Unlinks", {
   expect_identical(dim(linkUnlinks), c(0L, 3L))
 
   # unlink two crossing lines using coordinates
-  unlinkCoords(
+  shapeGraph <- unlinkCoords(
     shapeGraph,
     0982.8, -1620.3,
     1080.4, -1873.5
@@ -53,7 +53,7 @@ test_that("ShapeGraph Links and Unlinks", {
   )
 
   # link the two unlinked crossing lines using coordinates
-  linkCoords(
+  shapeGraph <- linkCoords(
     shapeGraph,
     0982.8, -1620.3,
     1080.4, -1873.5
@@ -63,7 +63,7 @@ test_that("ShapeGraph Links and Unlinks", {
 
 
   # link two non-crossing lines using refs
-  linkRefs(shapeGraph, 6L, 11L)
+  shapeGraph <- linkRefs(shapeGraph, 6L, 11L)
   linkUnlinks <- links(shapeGraph)
   expect_identical(dim(linkUnlinks), c(1L, 3L))
   expect_identical(
@@ -77,12 +77,12 @@ test_that("ShapeGraph Links and Unlinks", {
   )
 
   # unlink the two linked non-crossing lines using refs
-  unlinkRefs(shapeGraph, 6L, 11L)
+  shapeGraph <- unlinkRefs(shapeGraph, 6L, 11L)
   linkUnlinks <- links(shapeGraph)
   expect_identical(dim(linkUnlinks), c(0L, 3L))
 
   # unlink two crossing lines using refs
-  unlinkRefs(shapeGraph, 12L, 34L)
+  shapeGraph <- unlinkRefs(shapeGraph, 12L, 34L)
   linkUnlinks <- links(shapeGraph)
   expect_identical(dim(linkUnlinks), c(1L, 3L))
   expect_identical(
@@ -96,13 +96,13 @@ test_that("ShapeGraph Links and Unlinks", {
   )
 
   # link the two unlinked crossing lines using refs
-  linkRefs(shapeGraph, 12L, 34L)
+  shapeGraph <- linkRefs(shapeGraph, 12L, 34L)
   linkUnlinks <- links(shapeGraph)
   expect_identical(dim(linkUnlinks), c(0L, 3L))
 
 
   # unlink two crossing lines using coordinates of the crossing point
-  unlinkAtCrossPoint(
+  shapeGraph <- unlinkAtCrossPoint(
     shapeGraph,
     1017.3, -1875.1
   )

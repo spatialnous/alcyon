@@ -17,7 +17,7 @@ std::map<std::string, std::vector<int>> getAxialConnections(
   std::vector<int> &axialConnectionsFrom = axialConnections["from"];
   std::vector<int> &axialConnectionsTo = axialConnections["to"];
   for (int i = 0; i < connectors.size(); i++) {
-    const std::vector<int> &connections = connectors[i].m_connections;
+    const auto &connections = connectors[i].m_connections;
     for (int connection : connections) {
       axialConnectionsFrom.push_back(i);
       axialConnectionsTo.push_back(connection);

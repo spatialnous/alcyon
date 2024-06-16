@@ -8,7 +8,7 @@ test_that("All-line Map in C++", {
   shapeMap <- loadSimpleLinesAsShapeMap(vector())$shapeMap
 
   allLineMap <- Rcpp_makeAllLineMap(
-    shapeMap@ptr,
+    attr(shapeMap, "sala_map"),
     seedX = 3.01,
     seedY = 6.7
   )

@@ -1,7 +1,7 @@
 Package: alcyon
 Type: Package
 Title: Spatial Network Analysis
-Version: 0.2.0
+Version: 0.3.0
 Authors@R: c(
     person(given = "Petros",
            family = "Koutsolampros",
@@ -51,11 +51,11 @@ License: GPL-3
 Encoding: UTF-8
 LazyData: true
 LinkingTo:
-    Rcpp, sp
+    Rcpp
 Imports:
     Rcpp, methods
 Depends:
-    sp, sf, igraph
+    sf, stars, igraph
 Suggests: 
     knitr,
     rmarkdown,
@@ -66,8 +66,8 @@ Collate:
     'generics.R'
     'rcppRoxygen.R'
     'helper-loadMapsRoxygen.R'
+    'helper-processResult.R'
     'ShapeMap.R'
-    'ShapeGraph.R'
     'AxialShapeGraph.R'
     'AllLineShapeGraph.R'
     'SegmentShapeGraph.R'

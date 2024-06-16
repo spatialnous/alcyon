@@ -2,6 +2,8 @@
 //
 // SPDX-License-Identifier: GPL-3.0-only
 
+#include "ShapeMap.h"
+
 #include "salalib/shapemap.h"
 #include "salalib/shapegraph.h"
 #include "salalib/mapconverter.h"
@@ -9,7 +11,7 @@
 #include <Rcpp.h>
 
 // [[Rcpp::export("Rcpp_toAxialShapeGraph")]]
-Rcpp::XPtr<ShapeGraph> toAxialShapeGraph(
+Rcpp::List toAxialShapeGraph(
         Rcpp::XPtr<ShapeMap> shapeMap,
         Rcpp::Nullable<std::string> nameNV = R_NilValue,
         Rcpp::Nullable<bool> copydataNV = R_NilValue) {
@@ -26,10 +28,24 @@ Rcpp::XPtr<ShapeGraph> toAxialShapeGraph(
     std::unique_ptr<ShapeGraph> axMap(MapConverter::convertDataToAxial(
             nullptr, name, *(shapeMap.get()), copydata));
 
-    // release the unique_ptr so that it's not deleted on scope close
-    ShapeGraph *shpgp = axMap.release();
+    auto shapeMapNames = getShapeMapAttributeNames(shapeMap.get());
+    auto newNames = getShapeMapAttributeNames(axMap.get());
 
-    return Rcpp::XPtr<ShapeGraph>(shpgp);
+    for(const auto &name: shapeMapNames) {
+        auto axIt = std::find(newNames.begin(), newNames.end(), name);
+        if (axIt != newNames.end()) {
+          newNames.erase(axIt);
+        }
+    }
+
+    Rcpp::List result = Rcpp::List::create(
+        Rcpp::Named("completed") = true,
+        Rcpp::Named("newAttributes") = newNames,
+        // release the unique_ptr so that it's not deleted on scope close
+        Rcpp::Named("mapPtr") = Rcpp::XPtr<ShapeGraph>(axMap.release())
+    );
+
+    return result;
 }
 
 
@@ -65,15 +81,12 @@ Rcpp::XPtr<ShapeGraph> axialToSegment(
             copydata,
             stubremoval));
 
-    // release the unique_ptr so that it's not deleted on scope close
-    ShapeGraph *shpgp = segMap.release();
-
-    return Rcpp::XPtr<ShapeGraph>(shpgp);
+    return Rcpp::XPtr<ShapeGraph>(segMap.release());
 }
 
 
 // [[Rcpp::export("Rcpp_shapeMapToSegment")]]
-Rcpp::XPtr<ShapeGraph> shapeMapToSegment(
+Rcpp::List shapeMapToSegment(
         Rcpp::XPtr<ShapeMap> shapeMap,
         Rcpp::Nullable<std::string> nameNV = R_NilValue,
         Rcpp::Nullable<bool> keeporiginalNV = R_NilValue,
@@ -105,8 +118,21 @@ Rcpp::XPtr<ShapeGraph> shapeMapToSegment(
             copydata
         );
 
-    // release the unique_ptr so that it's not deleted on scope close
-    ShapeGraph *shpgp = segMap.release();
+    auto shapeMapNames = getShapeMapAttributeNames(shapeMap.get());
+    auto newNames = getShapeMapAttributeNames(segMap.get());
+    for(const auto &name: shapeMapNames) {
+      auto axIt = std::find(newNames.begin(), newNames.end(), name);
+      if (axIt != newNames.end()) {
+        newNames.erase(axIt);
+      }
+    }
 
-    return Rcpp::XPtr<ShapeGraph>(shpgp);;
+    Rcpp::List result = Rcpp::List::create(
+        Rcpp::Named("completed") = true,
+        Rcpp::Named("newAttributes") = newNames,
+        // release the unique_ptr so that it's not deleted on scope close
+        Rcpp::Named("mapPtr") = Rcpp::XPtr<ShapeGraph>(segMap.release())
+    );
+
+    return result;
 }

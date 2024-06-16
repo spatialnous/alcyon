@@ -2,9 +2,9 @@
 % Please edit documentation in R/generics.R
 \name{linkCoords}
 \alias{linkCoords}
-\title{Link map cells/lines as if selecting them using points}
+\title{Link map points/lines as if selecting them using points}
 \usage{
-linkCoords(map, fromX, fromY, toX, toY)
+linkCoords(map, fromX, fromY, toX, toY, copyMap = TRUE)
 }
 \arguments{
 \item{map}{A sala map}
@@ -16,10 +16,12 @@ linkCoords(map, fromX, fromY, toX, toY)
 \item{toX}{X coordinate of the target point}
 
 \item{toY}{Y coordinate of the target point}
+
+\item{copyMap}{Optional. Copy the internal sala map}
 }
 \value{
-None
+A new map with linked points/lines
 }
 \description{
-Link map cells/lines as if selecting them using points
+Link map points/lines as if selecting them using points
 }

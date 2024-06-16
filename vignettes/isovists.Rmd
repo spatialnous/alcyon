@@ -46,11 +46,10 @@ isovistMap <- isovist(
   FALSE
 )
 
-isovists <- shapeMapToPolygonSf(isovistMap)
 ```
 
 ```{r}
-plot(isovists$geometry)
+plot(isovistMap[1, 1])
 ```
 
 

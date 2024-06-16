@@ -7,8 +7,8 @@ context("Agent Analysis tests")
 test_that("Agent Analysis in C++", {
   pointMap <- loadInteriorLinesAsPointMap()$pointMap
 
-  Rcpp_agentAnalysis(
-    pointMap@ptr,
+  result <- Rcpp_agentAnalysis(
+    attr(pointMap, "sala_map"),
     systemTimesteps = 3000L,
     releaseRate = 0.1,
     agentStepsToDecision = 3L,
@@ -36,7 +36,7 @@ test_that("Agent Analysis in C++", {
     "Gate Counts"
   )
 
-  coords <- Rcpp_PointMap_getFilledPoints(pointMapPtr = pointMap@ptr)
+  coords <- Rcpp_PointMap_getFilledPoints(pointMapPtr = result$mapPtr)
   expect_identical(dim(coords), c(4332L, length(expectedCols)))
   expect_identical(colnames(coords), expectedCols)
 })
@@ -44,7 +44,7 @@ test_that("Agent Analysis in C++", {
 test_that("Agent Analysis in R", {
   pointMap <- loadInteriorLinesAsPointMap()$pointMap
 
-  agentAnalysis(
+  agentAnalysis <- agentAnalysis(
     pointMap,
     timesteps = 3000L,
     releaseRate = 0.1,
@@ -74,7 +74,9 @@ test_that("Agent Analysis in R", {
     "Gate Counts"
   )
 
-  coords <- Rcpp_PointMap_getFilledPoints(pointMapPtr = pointMap@ptr)
+  coords <- Rcpp_PointMap_getFilledPoints(
+    pointMapPtr = attr(agentAnalysis$pointMap, "sala_map")
+  )
   expect_identical(dim(coords), c(4332L, length(expectedCols)))
 
   expect_identical(colnames(coords), expectedCols)

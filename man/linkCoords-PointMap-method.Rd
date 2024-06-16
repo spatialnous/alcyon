@@ -5,7 +5,7 @@
 \alias{linkCoords,PointMap-method}
 \title{Link two PointMap Cells (coordinates)}
 \usage{
-\S4method{linkCoords}{PointMap}(map, fromX, fromY, toX, toY)
+\S4method{linkCoords}{PointMap}(map, fromX, fromY, toX, toY, copyMap = TRUE)
 }
 \arguments{
 \item{map}{A PointMap}
@@ -17,9 +17,11 @@
 \item{toX}{X coordinate of the second link point}
 
 \item{toY}{Y coordinate of the second link point}
+
+\item{copyMap}{Optional. Copy the internal sala map}
 }
 \value{
-None
+A new PointMap with linked points
 }
 \description{
 Link two cells on a PointMap using the point coordinates

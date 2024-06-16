@@ -2,19 +2,16 @@
 #
 # SPDX-License-Identifier: GPL-3.0-only
 
-# A representation of sala's ShapeMap in R. Holds onto a sala Shapemap
-# pointer and operates on that
-#' @importFrom methods setClass
-setClass("ShapeMap", slots = c(
-  ptr = "externalptr"
-))
-
-# lintr seems unable to understand this as a contstructor
-# thus we have to exclude it from the particular linter
-#' @importFrom methods new
-ShapeMap <- function(name) { # nolint: object_name_linter
-  new("ShapeMap", ptr = Rcpp_ShapeMap_make(name))
-}
+#' ShapeMap class
+#'
+#' A representation of sala's ShapeMap in R. Holds onto a sala Shapemap
+#' pointer and operates on that
+#' @name ShapeMap-class
+#' @aliases ShapeMap
+#' @family ShapeMap
+#' @importFrom methods setOldClass
+#' @exportClass ShapeMap
+setOldClass(c("ShapeMap", "sf"))
 
 #' Get the ShapeMap name
 #'
@@ -29,7 +26,7 @@ setMethod(
   "name",
   signature(map = "ShapeMap"),
   function(map) {
-    Rcpp_ShapeMap_getName(map@ptr)
+    Rcpp_ShapeMap_getName(attr(map, "sala_map"))
   }
 )
 
@@ -38,9 +35,10 @@ setMethod(
 #' @name as
 #' @family ShapeMap
 #'
-#' @importFrom methods as
+#' @importFrom methods as S3Part<-
 setAs("sf", "ShapeMap", function(from) {
-  shapeMap <- new("ShapeMap")
+  shapeMap <- from
+  class(shapeMap) <- c("ShapeMap", class(shapeMap))
   cols <- names(from)[names(from) != "geometry"]
   if (length(cols) != 0L) {
     numericCols <- unlist(lapply(cols, function(col) {
@@ -53,9 +51,9 @@ setAs("sf", "ShapeMap", function(from) {
         do.call(paste, as.list(cols[!numericCols]))
       )
     }
-    shapeMap@ptr <- Rcpp_toShapeMap(from, which(numericCols))
+    attr(shapeMap, "sala_map") <- Rcpp_toShapeMap(from, which(numericCols))
   } else {
-    shapeMap@ptr <- Rcpp_toShapeMap(from)
+    attr(shapeMap, "sala_map") <- Rcpp_toShapeMap(from)
   }
   return(shapeMap)
 })
@@ -67,17 +65,46 @@ setAs("sf", "ShapeMap", function(from) {
 #' @importFrom sf st_sf st_sfc
 #' @importFrom methods as
 setAs("ShapeMap", "sf", function(from) {
-  coords <- Rcpp_ShapeMap_getShapesAsLineCoords(from@ptr)
+  fromPtr <- attr(from, "sala_map")
+  coords <- Rcpp_ShapeMap_getShapesAsLineCoords(fromPtr)
   sfGeom <- st_sfc(lapply(seq_len(nrow(coords)), function(rowIdx) {
     sf::st_linestring(
       matrix(coords[rowIdx, ], ncol = 2L, byrow = TRUE),
       dim = "XY"
     )
   }))
-  attrNames <- Rcpp_ShapeMap_getAttributeNames(from@ptr)
+  attrNames <- Rcpp_ShapeMap_getAttributeNames(fromPtr)
   result <- st_sf(
-    Rcpp_ShapeMap_getAttributeData(from@ptr, attrNames),
+    Rcpp_ShapeMap_getAttributeData(fromPtr, attrNames),
     geometry = sfGeom
   )
   return(result[c(attrNames, "geometry")])
 })
+
+#' Subset ShapeMap objects
+#'
+#' Subsetting ShapeMap objects essentially passes the data to sf.
+#' See \link[sf]{sf}
+#'
+#' @name ShapeMap_subset
+#' @param x object of class \code{ShapeMap} passed to \code{sf[]}
+#' @param ... other parameters passed to \code{sf[]}
+#' @export
+`[.ShapeMap` <- function(x, ...) {
+  class(x) <- setdiff(class(x), "ShapeMap")
+  x <- NextMethod()
+  class(x) <- c("ShapeMap", class(x))
+  return(x)
+}
+
+#' @name ShapeMap_subset
+#' @param x object of class \code{ShapeMap} passed to \code{sf[]}
+#' @param ... other parameters passed to \code{sf[] <- }
+#' @param value value to be passed to \code{sf[] <- }
+#' @export
+`[<-.ShapeMap` <- function(x, ..., value) {
+  class(x) <- setdiff(class(x), "ShapeMap")
+  x <- NextMethod()
+  class(x) <- c("ShapeMap", class(x))
+  return(x)
+}

@@ -21,7 +21,9 @@
 #' @param numberOfTrails Record trails for this amount of agents (set to 0 to
 #' record all, with max possible currently = 50).
 #' @param getGateCounts Get values at gates
+#' @param copyMap Optional. Copy the internal sala map
 #' @param verbose Optional. Show more information of the process.
+#' @param progress Optional. Show process progress.
 #' @returns Returns a list with:
 #' \itemize{
 #'   \item{newAttributes: The new attributes that were created during the
@@ -59,12 +61,14 @@ agentAnalysis <- function(pointMap,
                           locationSeed = 0L,
                           numberOfTrails = NA,
                           getGateCounts = FALSE,
-                          verbose = FALSE) {
+                          copyMap = TRUE,
+                          verbose = FALSE,
+                          progress = FALSE) {
   if (!(agentLookMode %in% AgentLookMode)) {
     stop("Unknown agent look mode: ", agentLookMode)
   }
   agentAnalysis <- Rcpp_agentAnalysis(
-    pointMapPtr = pointMap@ptr,
+    pointMapPtr = attr(pointMap, "sala_map"),
     systemTimesteps = timesteps,
     releaseRate = releaseRate,
     agentLifeTimesteps = agentLifeTimesteps,
@@ -75,10 +79,17 @@ agentAnalysis <- function(pointMap,
     randomReleaseLocationSeed = locationSeed,
     recordTrailForAgents = numberOfTrails,
     getGateCounts = getGateCounts,
-    verbose = verbose
+    copyMapNV = copyMap,
+    verboseNV = verbose
   )
-  if (hasName(agentAnalysis, "trailMap")) {
-    agentAnalysis$trailMap <- new("ShapeMap", ptr = agentAnalysis$trailMap)
+  finalResult <- list(
+    pointMap = processPointMapResult(pointMap, agentAnalysis)
+  )
+  if (hasName(agentAnalysis, "newShapeMaps")
+      && hasName(agentAnalysis$newShapeMaps, "trailMap")) {
+    finalResult$trailMap <- processPtrAsNewPolylineMap(
+      agentAnalysis$newShapeMaps$trailMap, "ShapeMap"
+    )
   }
-  return(agentAnalysis)
+  return(finalResult)
 }

@@ -6,7 +6,7 @@ context("Axial Analysis tests")
 
 test_that("Axial Analysis in C++", {
   startData <- loadSmallAxialLinesAsAxialMap(c(1L, 2L))
-  shapeGraph <- startData$axialMap
+  shapeGraph <- attr(startData$axialMap, "sala_map")
   lineStringMap <- startData$sf
 
   expectedColNameBefore <- c(
@@ -18,14 +18,21 @@ test_that("Axial Analysis in C++", {
     "df_1_Depthmap_Ref",
     "df_2_Connectivity"
   )
-  attrNameBefore <- Rcpp_ShapeMap_getAttributeNames(shapeGraph@ptr)
+  attrNameBefore <- Rcpp_ShapeMap_getAttributeNames(shapeGraph)
   expect_identical(expectedColNameBefore, attrNameBefore)
 
   weightBy <- Rcpp_getSfShapeMapExpectedColName(lineStringMap, 1L)
-  Rcpp_runAxialAnalysis(shapeGraph@ptr, c(-1.0), weightBy)
+  result <- Rcpp_runAxialAnalysis(shapeGraph, c(-1.0), weightBy)
+  shapeGraph <- result$mapPtr
 
   expectedColNameAfter <- c(
-    expectedColNameBefore,
+    "Ref",
+    "Connectivity",
+    "Data Map Ref",
+    "Line Length",
+    "df_1_Depthmap_Ref",
+    "df_2_Connectivity",
+    "df_row_name",
     "Entropy",
     "Integration [HH]",
     "Integration [P-value]",
@@ -38,7 +45,7 @@ test_that("Axial Analysis in C++", {
     "Mean Depth [df_1_Depthmap_Ref Wgt]",
     "Total df_1_Depthmap_Ref"
   )
-  attrNameBefore <- Rcpp_ShapeMap_getAttributeNames(shapeGraph@ptr)
+  attrNameBefore <- Rcpp_ShapeMap_getAttributeNames(shapeGraph)
   expect_identical(expectedColNameAfter, attrNameBefore)
 })
 
@@ -50,7 +57,7 @@ test_that("Axial Analysis in R (non user-visible)", {
 
   weightBy <- Rcpp_getSfShapeMapExpectedColName(lineStringMap, 1L)
 
-  axialAnalysis(
+  shapeGraph <- axialAnalysis(
     shapeGraph,
     radii = c("n", "3"),
     includeChoice = TRUE,
@@ -60,38 +67,36 @@ test_that("Axial Analysis in R (non user-visible)", {
   result <- as(shapeGraph, "sf")
 
   expectedCols <- c(
-    "Ref",
+    "Depthmap_Ref",
     "Connectivity",
-    "Line Length",
+    "geometry",
     "Data Map Ref",
-    "df_row_name",
-    "df_1_Depthmap_Ref",
-    "df_2_Connectivity",
-    "Choice R3",
-    "Choice [Norm] R3",
-    "Entropy R3",
-    "Integration [HH] R3",
-    "Integration [P-value] R3",
-    "Integration [Tekl] R3",
-    "Intensity R3",
-    "Harmonic Mean Depth R3",
-    "Mean Depth R3",
-    "Node Count R3",
-    "Relativised Entropy R3",
+    "Line Length",
     "Choice",
+    "Choice R3",
     "Choice [Norm]",
+    "Choice [Norm] R3",
     "Entropy",
-    "Integration [HH]",
-    "Integration [P-value]",
-    "Integration [Tekl]",
-    "Intensity",
+    "Entropy R3",
     "Harmonic Mean Depth",
+    "Harmonic Mean Depth R3",
+    "Integration [HH]",
+    "Integration [HH] R3",
+    "Integration [P-value]",
+    "Integration [P-value] R3",
+    "Integration [Tekl]",
+    "Integration [Tekl] R3",
+    "Intensity",
+    "Intensity R3",
     "Mean Depth",
+    "Mean Depth R3",
     "Node Count",
-    "Relativised Entropy"
+    "Node Count R3",
+    "Relativised Entropy",
+    "Relativised Entropy R3"
   )
 
-  expect_named(result, c(expectedCols, "geometry"))
+  expect_named(result, expectedCols)
 })
 
 test_that("Axial Analysis in R (user-visible)", {
@@ -99,54 +104,44 @@ test_that("Axial Analysis in R (user-visible)", {
   shapeGraph <- startData$axialMap
   lineStringMap <- startData$sf
 
-  axialResult <- allToAllTraverse(
+  shapeGraphAnalysed <- allToAllTraverse(
     shapeGraph,
     traversalType = TraversalType$Topological,
     radii = c("n", "3"),
     includeBetweenness = TRUE
   )
 
-  newExpectedCols <- c(
-    "Choice R3",
-    "Choice [Norm] R3",
-    "Entropy R3",
-    "Integration [HH] R3",
-    "Integration [P-value] R3",
-    "Integration [Tekl] R3",
-    "Intensity R3",
-    "Harmonic Mean Depth R3",
-    "Mean Depth R3",
-    "Node Count R3",
-    "Relativised Entropy R3",
-    "Choice",
-    "Choice [Norm]",
-    "Entropy",
-    "Integration [HH]",
-    "Integration [P-value]",
-    "Integration [Tekl]",
-    "Intensity",
-    "Harmonic Mean Depth",
-    "Mean Depth",
-    "Node Count",
-    "Relativised Entropy"
-  )
-
-  expect_identical(axialResult$newAttributes, newExpectedCols)
-
-  result <- as(shapeGraph, "sf")
-
   expectedCols <- c(
-    "Ref",
+    "Depthmap_Ref",
     "Connectivity",
-    "Line Length",
+    "geometry",
     "Data Map Ref",
-    "df_row_name",
-    "df_1_Depthmap_Ref",
-    "df_2_Connectivity",
-    newExpectedCols
+    "Line Length",
+    "Choice",
+    "Choice R3",
+    "Choice [Norm]",
+    "Choice [Norm] R3",
+    "Entropy",
+    "Entropy R3",
+    "Harmonic Mean Depth",
+    "Harmonic Mean Depth R3",
+    "Integration [HH]",
+    "Integration [HH] R3",
+    "Integration [P-value]",
+    "Integration [P-value] R3",
+    "Integration [Tekl]",
+    "Integration [Tekl] R3",
+    "Intensity",
+    "Intensity R3",
+    "Mean Depth",
+    "Mean Depth R3",
+    "Node Count",
+    "Node Count R3",
+    "Relativised Entropy",
+    "Relativised Entropy R3"
   )
 
-  expect_named(result, c(expectedCols, "geometry"))
+  expect_named(shapeGraphAnalysed, expectedCols)
 })
 
 
@@ -155,29 +150,19 @@ test_that("Local Axial Analysis in R (user-visible)", {
   shapeGraph <- startData$axialMap
   lineStringMap <- startData$sf
 
-  axialResult <- axialAnalysisLocal(
+  shapeGraphAnalysed <- axialAnalysisLocal(
     shapeGraph
   )
 
-  newExpectedCols <- c(
+  expectedCols <- c(
+    "Depthmap_Ref",
+    "Connectivity",
+    "geometry",
+    "Data Map Ref",
+    "Line Length",
     "Control",
     "Controllability"
   )
 
-  expect_identical(axialResult$newAttributes, newExpectedCols)
-
-  axialMap <- as(shapeGraph, "sf")
-
-  expectedCols <- c(
-    "Ref",
-    "Connectivity",
-    "Line Length",
-    "Data Map Ref",
-    "df_row_name",
-    "df_1_Depthmap_Ref",
-    "df_2_Connectivity",
-    newExpectedCols
-  )
-
-  expect_named(axialMap, c(expectedCols, "geometry"))
+  expect_named(shapeGraphAnalysed, expectedCols)
 })

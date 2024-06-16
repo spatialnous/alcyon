@@ -4,17 +4,19 @@
 \alias{unmakeVGAGraph}
 \title{Unmake the graph in a PointMap}
 \usage{
-unmakeVGAGraph(pointMap, removeLinks = FALSE, verbose = FALSE)
+unmakeVGAGraph(pointMap, removeLinks = FALSE, copyMap = TRUE, verbose = FALSE)
 }
 \arguments{
 \item{pointMap}{The input PointMap}
 
 \item{removeLinks}{Also remove the links}
 
+\item{copyMap}{Optional. Copy the internal sala map}
+
 \item{verbose}{Optional. Show more information of the process.}
 }
 \value{
-None
+A new PointMap without the points graph
 }
 \description{
 Unmake the graph in a PointMap

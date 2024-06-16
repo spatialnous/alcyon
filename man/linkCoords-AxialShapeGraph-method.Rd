@@ -5,7 +5,7 @@
 \alias{linkCoords,AxialShapeGraph-method}
 \title{Link two Axial Lines (coordinates)}
 \usage{
-\S4method{linkCoords}{AxialShapeGraph}(map, fromX, fromY, toX, toY)
+\S4method{linkCoords}{AxialShapeGraph}(map, fromX, fromY, toX, toY, copyMap = TRUE)
 }
 \arguments{
 \item{map}{An Axial ShapeGraph}
@@ -17,9 +17,11 @@
 \item{toX}{X coordinate of the second link point}
 
 \item{toY}{Y coordinate of the second link point}
+
+\item{copyMap}{Optional. Copy the internal sala map}
 }
 \value{
-None
+A new Axial ShapeGraph with linked lines
 }
 \description{
 Link two locations on an Axial ShapeGraph using the point coordinates
@@ -34,5 +36,5 @@ mifFile <- system.file(
     geometry_column = 1L, quiet = TRUE
   )
   shapeGraph <- as(sfMap, "AxialShapeGraph")
-linkCoords(shapeGraph, 530684.0, 184100.3, 530807.5, 183969.3)
+linkCoords(shapeGraph, 982.8, -1620.3, 1217.1, -1977.3)
 }

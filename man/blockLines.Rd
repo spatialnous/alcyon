@@ -4,17 +4,19 @@
 \alias{blockLines}
 \title{Block lines on a PointMap}
 \usage{
-blockLines(pointMap, lineStringMap, verbose = FALSE)
+blockLines(pointMap, lineStringMap, copyMap = TRUE, verbose = FALSE)
 }
 \arguments{
 \item{pointMap}{The input PointMap}
 
 \item{lineStringMap}{Map of lines, either a ShapeMap, or an sf lineString map}
 
+\item{copyMap}{Optional. Copy the internal sala map}
+
 \item{verbose}{Optional. Show more information of the process.}
 }
 \value{
-None
+A new PointMap with points as they have been blocked by the lines
 }
 \description{
 Takes a PointMap and a ShapeMap with lines and blocks the cells on the

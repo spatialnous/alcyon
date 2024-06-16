@@ -1,7 +1,7 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: alcyon
 Upstream-Contact: Petros Koutsolampros <r-devel@pklampros.net>
-Source: https://github.com/acanth-id/alcyon
+Source: https://github.com/spatialnous/alcyon
 
 Files: .Rbuildignore .gitignore .gitmodules .lintr DESCRIPTION README.md alcyon.Rproj inst/CITATION inst/WORDLIST man/*.Rd NAMESPACE vignettes/.gitignore NEWS.md cran-comments.md .github/workflows/rhub.yaml CRAN-SUBMISSION
 Copyright: Petros Koutsolampros <r-devel@pklampros.net>

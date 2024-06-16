@@ -5,7 +5,7 @@
 \alias{unlinkRefs,PointMap-method}
 \title{Unlink two PointMap Cells (refs)}
 \usage{
-\S4method{unlinkRefs}{PointMap}(map, fromRef, toRef)
+\S4method{unlinkRefs}{PointMap}(map, fromRef, toRef, copyMap = TRUE)
 }
 \arguments{
 \item{map}{A PointMap}
@@ -13,9 +13,11 @@
 \item{fromRef}{Ref of the first unlink line}
 
 \item{toRef}{Ref of the second unlink line}
+
+\item{copyMap}{Optional. Copy the internal sala map}
 }
 \value{
-None
+A new PointMap with unlinked points
 }
 \description{
 Unlink two cells on an PointMap using their refs
@@ -38,6 +40,6 @@ mifFile <- system.file(
     boundaryGraph = FALSE,
     verbose = FALSE
   )
-linkRefs(pointMap, 1835056L, 7208971L)
-unlinkRefs(pointMap, 1835056L, 7208971L)
+pointMap <- linkRefs(pointMap, 1835056L, 7208971L)
+pointMap <- unlinkRefs(pointMap, 1835056L, 7208971L)
 }

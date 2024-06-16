@@ -4,15 +4,17 @@
 \alias{vgaIsovist}
 \title{Visibility Graph Analysis - isovist metrics}
 \usage{
-vgaIsovist(pointMap, boundaryMap)
+vgaIsovist(pointMap, boundaryMap, copyMap = TRUE)
 }
 \arguments{
 \item{pointMap}{A PointMap}
 
 \item{boundaryMap}{A ShapeMap of lines}
+
+\item{copyMap}{Optional. Copy the internal sala map}
 }
 \value{
-None
+A new PointMap with the results included
 }
 \description{
 Runs axial analysis to get the local metrics Control and Controllability

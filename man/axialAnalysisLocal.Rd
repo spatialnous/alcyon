@@ -4,10 +4,12 @@
 \alias{axialAnalysisLocal}
 \title{Axial analysis - local metrics}
 \usage{
-axialAnalysisLocal(shapeGraph, verbose = FALSE)
+axialAnalysisLocal(shapeGraph, copyMap = TRUE, verbose = FALSE)
 }
 \arguments{
 \item{shapeGraph}{An Axial ShapeGraph}
+
+\item{copyMap}{Optional. Copy the internal sala map}
 
 \item{verbose}{Optional. Show more information of the process.}
 }

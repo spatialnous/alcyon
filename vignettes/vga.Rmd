@@ -38,110 +38,92 @@ pointMap <- makeVGAPointMap(
   galleryMap,
   fillX = 3.01,
   fillY = 6.7,
-  gridSize = 0.04
+  gridSize = 0.06
 )
-vgaMap <- as(pointMap, "SpatialPixelsDataFrame")
-plot(vgaMap["Connectivity"])
+plot(pointMap["Connectivity"])
 ```
 
 ```{r}
-linkCoords(pointMap, 1.74, 6.7, 5.05, 5.24)
+linkedPointMap = linkCoords(pointMap, 1.74, 6.7, 5.05, 5.24)
 ```
 
 
 ```{r}
-vgaResult <- allToAllTraverse(
+vgaMap <- allToAllTraverse(
   pointMap,
   traversalType = TraversalType$Metric,
   radii = -1,
   radiusTraversalType = TraversalType$None
 )
-vgaMap <- as(pointMap, "SpatialPixelsDataFrame")
-plot(vgaMap[vgaResult$newAttributes[[1]]],
-     main = vgaResult$newAttributes[[1]])
+plot(vgaMap["Metric Mean Shortest-Path Angle"])
 ```
 
 ```{r}
-vgaResult <- allToAllTraverse(
-  pointMap,
+vgaMap <- allToAllTraverse(
+  vgaMap,
   traversalType = TraversalType$Angular,
   radii = -1,
   radiusTraversalType = TraversalType$None
 )
-vgaMap <- as(pointMap, "SpatialPixelsDataFrame")
-plot(vgaMap[vgaResult$newAttributes[[1]]],
-     main = vgaResult$newAttributes[[1]])
+
+plot(vgaMap["Angular Mean Depth"])
 ```
 
 
 ```{r}
-vgaResult <- allToAllTraverse(
-  pointMap,
+vgaMap <- allToAllTraverse(
+  vgaMap,
   traversalType = TraversalType$Topological,
   radii = -1,
   radiusTraversalType = TraversalType$None
 )
-vgaMap <- as(pointMap, "SpatialPixelsDataFrame")
-plot(vgaMap[vgaResult$newAttributes[[1]]],
-     main = vgaResult$newAttributes[[1]])
+plot(vgaMap["Visual Integration [HH]"])
 ```
 
 ```{r}
-vgaResult <- vgaThroughVision(pointMap)
-vgaMap <- as(pointMap, "SpatialPixelsDataFrame")
-plot(vgaMap[vgaResult$newAttributes[[1]]],
-     main = vgaResult$newAttributes[[1]])
+vgaMap <- vgaThroughVision(vgaMap)
+plot(vgaMap["Through vision"])
 ```
 
 ```{r}
-vgaResult <- vgaVisualLocal(pointMap, FALSE)
-vgaMap <- as(pointMap, "SpatialPixelsDataFrame")
-plot(vgaMap[vgaResult$newAttributes[[1]]],
-     main = vgaResult$newAttributes[[1]])
+vgaMap <- vgaVisualLocal(vgaMap, FALSE)
+plot(vgaMap["Visual Control"])
 ```
 
 ```{r}
-boundaryMap <- as(galleryMap, "ShapeMap")
-vgaResult <- vgaIsovist(pointMap, boundaryMap)
-vgaMap <- as(pointMap, "SpatialPixelsDataFrame")
-plot(vgaMap[vgaResult$newAttributes[[1]]],
-     main = vgaResult$newAttributes[[1]])
+boundaryMap <- as(galleryMap[, vector()], "ShapeMap")
+vgaMap <- vgaIsovist(vgaMap, boundaryMap)
+plot(vgaMap["Isovist Area"])
 ```
 
 ```{r}
-vgaResult <- oneToAllTraverse(
-  pointMap,
+vgaMap <- oneToAllTraverse(
+  vgaMap,
   traversalType = TraversalType$Metric,
   fromX = 3.01,
   fromY = 6.7
 )
-vgaMap <- as(pointMap, "SpatialPixelsDataFrame")
-plot(vgaMap[vgaResult$newAttributes[[1]]],
-     main = vgaResult$newAttributes[[1]])
+plot(vgaMap["Metric Step Shortest-Path Angle"])
 ```
 
 
 ```{r}
-vgaResult <- oneToAllTraverse(
-  pointMap,
+vgaMap <- oneToAllTraverse(
+  vgaMap,
   traversalType = TraversalType$Angular,
   fromX = 3.01,
   fromY = 6.7
 )
-vgaMap <- as(pointMap, "SpatialPixelsDataFrame")
-plot(vgaMap[vgaResult$newAttributes[[1]]],
-     main = vgaResult$newAttributes[[1]])
+plot(vgaMap["Angular Step Depth"])
 ```
 
 
 ```{r}
-vgaResult <- oneToAllTraverse(
-  pointMap,
+vgaMap <- oneToAllTraverse(
+  vgaMap,
   traversalType = TraversalType$Topological,
   fromX = 3.01,
   fromY = 6.7
 )
-vgaMap <- as(pointMap, "SpatialPixelsDataFrame")
-plot(vgaMap[vgaResult$newAttributes[[1]]],
-     main = vgaResult$newAttributes[[1]])
+plot(vgaMap["Visual Step Depth"])
 ```

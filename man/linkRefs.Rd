@@ -2,9 +2,9 @@
 % Please edit documentation in R/generics.R
 \name{linkRefs}
 \alias{linkRefs}
-\title{Link map cells/lines using their refs}
+\title{Link map points/lines using their refs}
 \usage{
-linkRefs(map, fromRef, toRef)
+linkRefs(map, fromRef, toRef, copyMap = TRUE)
 }
 \arguments{
 \item{map}{A sala map}
@@ -12,10 +12,12 @@ linkRefs(map, fromRef, toRef)
 \item{fromRef}{The ref of the origin element}
 
 \item{toRef}{The ref of the target element}
+
+\item{copyMap}{Optional. Copy the internal sala map}
 }
 \value{
-None
+A new map with linked points/lines
 }
 \description{
-Link map cells/lines using their refs
+Link map points/lines using their refs
 }

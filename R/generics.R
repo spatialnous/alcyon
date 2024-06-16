@@ -25,63 +25,68 @@ setGeneric(
 #' @returns A matrix with the linked refs
 #' @importFrom methods setGeneric
 #' @importFrom methods .valueClassTest
-setGeneric("links",
+setGeneric(
+  "links",
   function(map) standardGeneric("links"),
   valueClass = "matrix"
 )
 
-#' Link map cells/lines as if selecting them using points
+#' Link map points/lines as if selecting them using points
 #' @param map A sala map
 #' @param fromX X coordinate of the origin point
 #' @param fromY Y coordinate of the origin point
 #' @param toX X coordinate of the target point
 #' @param toY Y coordinate of the target point
-#' @returns None
+#' @param copyMap Optional. Copy the internal sala map
+#' @returns A new map with linked points/lines
 #' @importFrom methods setGeneric
 setGeneric(
   "linkCoords",
-  function(map, fromX, fromY, toX, toY) {
+  function(map, fromX, fromY, toX, toY, copyMap = TRUE) {
     standardGeneric("linkCoords")
   }
 )
 
-#' Unlink map cells/lines as if selecting them using points
+#' Unlink map points/lines as if selecting them using points
 #' @param map A sala map
 #' @param fromX X coordinate of the origin point
 #' @param fromY Y coordinate of the origin point
 #' @param toX X coordinate of the target point
 #' @param toY Y coordinate of the target point
-#' @returns None
+#' @param copyMap Optional. Copy the internal sala map
+#' @returns A new map with unlinked points/lines
 #' @importFrom methods setGeneric
 setGeneric(
   "unlinkCoords",
-  function(map, fromX, fromY, toX, toY) {
+  function(map, fromX, fromY, toX, toY, copyMap = TRUE) {
     standardGeneric("unlinkCoords")
   }
 )
 
-#' Link map cells/lines using their refs
+#' Link map points/lines using their refs
 #' @param map A sala map
 #' @param fromRef The ref of the origin element
 #' @param toRef The ref of the target element
-#' @returns None
+#' @param copyMap Optional. Copy the internal sala map
+#' @returns A new map with linked points/lines
 #' @importFrom methods setGeneric
 setGeneric(
   "linkRefs",
-  function(map, fromRef, toRef) {
+  function(map, fromRef, toRef, copyMap = TRUE) {
     standardGeneric("linkRefs")
   }
 )
 
-#' Unlink map cells/lines using their refs
+#' Unlink map points/lines using their refs
 #' @param map A sala map
 #' @param fromRef The ref of the origin element
 #' @param toRef The ref of the target element
-#' @returns None
+#' @param copyMap Optional. Copy the internal sala map
+#' @returns A new map with unlinked points/lines
 #' @importFrom methods setGeneric
 setGeneric(
   "unlinkRefs",
-  function(map, fromRef, toRef) {
+  function(map, fromRef, toRef, copyMap = TRUE) {
     standardGeneric("unlinkRefs")
   }
 )
@@ -90,11 +95,12 @@ setGeneric(
 #' @param map A sala map
 #' @param x X coordinate of the crossing point
 #' @param y Y coordinate of the crossing point
-#' @returns None
+#' @param copyMap Optional. Copy the internal sala map
+#' @returns A new map with linked lines
 #' @importFrom methods setGeneric
 setGeneric(
   "unlinkAtCrossPoint",
-  function(map, x, y) {
+  function(map, x, y, copyMap = TRUE) {
     standardGeneric("unlinkAtCrossPoint")
   }
 )

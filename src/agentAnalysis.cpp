@@ -21,8 +21,29 @@ Rcpp::List agentAnalysis(Rcpp::XPtr<PointMap> pointMapPtr,
                          int randomReleaseLocationSeed,
                          int recordTrailForAgents,
                          bool getGateCounts,
-                         bool verbose) {
+                         const Rcpp::Nullable<bool> copyMapNV = R_NilValue,
+                         const Rcpp::Nullable<bool> verboseNV = R_NilValue,
+                         const Rcpp::Nullable<bool> progressNV = R_NilValue) {
 
+  bool copyMap = true;
+  if (copyMapNV.isNotNull()) {
+    copyMap = Rcpp::as<bool>(copyMapNV);
+  }
+  bool verbose = false;
+  if (verboseNV.isNotNull()) {
+    verbose = Rcpp::as<bool>(verboseNV);
+  }
+  bool progress = false;
+  if (progressNV.isNotNull()) {
+    progress = Rcpp::as<bool>(progressNV);
+  }
+
+  if (copyMap) {
+    auto prevPointMap = pointMapPtr;
+    const auto &prevRegion = prevPointMap->getRegion();
+    pointMapPtr = Rcpp::XPtr(new PointMap(prevRegion));
+    pointMapPtr->copy(*prevPointMap, true, true);
+  }
 
   AgentEngine eng;
 
@@ -109,15 +130,17 @@ Rcpp::List agentAnalysis(Rcpp::XPtr<PointMap> pointMapPtr,
   eng.run(getCommunicator(true).get(), pointMapPtr);
 
   Rcpp::List result = Rcpp::List::create(
-  Rcpp::Named("newAttributes") = Rcpp::CharacterVector(
-    "Gate Counts"
-  )
+    Rcpp::Named("completed") = true,
+    Rcpp::Named("newAttributes") = Rcpp::CharacterVector("Gate Counts"),
+    Rcpp::Named("mapPtr") = pointMapPtr
   );
   if (recordTrailForAgents > 0) {
     ShapeMap trailMap("Agent Trails");
     eng.insertTrailsInMap(trailMap);
-    result["trailMap"] = Rcpp::XPtr<ShapeMap>(
-      new ShapeMap(std::move(trailMap))
+    result["newShapeMaps"] = Rcpp::List::create(
+      Rcpp::Named("trailMap") = Rcpp::XPtr<ShapeMap>(
+        new ShapeMap(std::move(trailMap))
+      )
     );
   }
   return result;

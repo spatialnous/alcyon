@@ -2,9 +2,9 @@
 % Please edit documentation in R/generics.R
 \name{unlinkCoords}
 \alias{unlinkCoords}
-\title{Unlink map cells/lines as if selecting them using points}
+\title{Unlink map points/lines as if selecting them using points}
 \usage{
-unlinkCoords(map, fromX, fromY, toX, toY)
+unlinkCoords(map, fromX, fromY, toX, toY, copyMap = TRUE)
 }
 \arguments{
 \item{map}{A sala map}
@@ -16,10 +16,12 @@ unlinkCoords(map, fromX, fromY, toX, toY)
 \item{toX}{X coordinate of the target point}
 
 \item{toY}{Y coordinate of the target point}
+
+\item{copyMap}{Optional. Copy the internal sala map}
 }
 \value{
-None
+A new map with unlinked points/lines
 }
 \description{
-Unlink map cells/lines as if selecting them using points
+Unlink map points/lines as if selecting them using points
 }

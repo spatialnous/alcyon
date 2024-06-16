@@ -4,7 +4,7 @@
 \alias{fillGrid}
 \title{Fill a PointMap's grid starting from one or more points}
 \usage{
-fillGrid(pointMap, fillX, fillY, verbose = FALSE)
+fillGrid(pointMap, fillX, fillY, copyMap = TRUE, verbose = FALSE)
 }
 \arguments{
 \item{pointMap}{The input PointMap}
@@ -13,10 +13,12 @@ fillGrid(pointMap, fillX, fillY, verbose = FALSE)
 
 \item{fillY}{Y coordinate of the fill points}
 
+\item{copyMap}{Optional. Copy the internal sala map}
+
 \item{verbose}{Optional. Show more information of the process.}
 }
 \value{
-None
+A new PointMap with filled points
 }
 \description{
 Fill a PointMap's grid starting from one or more points
@@ -40,7 +42,7 @@ pointMap <- createGrid(
   maxY = mapRegion[["ymax"]],
   gridSize = 0.04
 )
-blockLines(
+pointMap <- blockLines(
   pointMap = pointMap,
   lineStringMap = lineStringMap[vector()]
 )

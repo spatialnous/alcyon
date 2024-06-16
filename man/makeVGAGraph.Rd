@@ -8,6 +8,7 @@ makeVGAGraph(
   pointMap,
   boundaryGraph = FALSE,
   maxVisibility = NA,
+  copyMap = TRUE,
   verbose = FALSE
 )
 }
@@ -18,10 +19,12 @@ makeVGAGraph(
 
 \item{maxVisibility}{Limit how far two cells can be to be connected}
 
+\item{copyMap}{Optional. Copy the internal sala map}
+
 \item{verbose}{Optional. Show more information of the process.}
 }
 \value{
-None
+A new PointMap with a graph between points
 }
 \description{
 Create a graph between visible cells in the PointMap
@@ -45,11 +48,11 @@ pointMap <- createGrid(
   maxY = mapRegion[["ymax"]],
   gridSize = 0.5
 )
-blockLines(
+pointMap <- blockLines(
   pointMap = pointMap,
   lineStringMap = lineStringMap[vector()]
 )
-fillGrid(
+pointMap <- fillGrid(
   pointMap = pointMap,
   fillX = 3.01,
   fillY = 6.7
