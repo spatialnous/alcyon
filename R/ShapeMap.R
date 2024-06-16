@@ -4,7 +4,7 @@
 
 #' ShapeMap class
 #'
-#' A representation of sala's ShapeMap in R. Holds onto a sala Shapemap
+#' A representation of sala's ShapeMap in R. Holds onto a sala ShapeMap
 #' pointer and operates on that
 #' @name ShapeMap-class
 #' @aliases ShapeMap

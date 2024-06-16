@@ -5,6 +5,7 @@ BinAngle
 BinFarDistance
 BinFarDistanceAngle
 BinMemory
+CMake
 Depthmap
 Iida
 Isovists
@@ -37,6 +38,7 @@ isovist's
 isovists
 knitr
 lineString
+macOS
 metagraph
 newAttributes
 numberOfTrails
