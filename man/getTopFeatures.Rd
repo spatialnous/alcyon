@@ -35,5 +35,5 @@ shapeGraph <- allToAllTraverse(
   radii = c("n", "3"),
   includeBetweenness = TRUE
 )
-getTopFeatures(shapeGraph, "Connectivity.1", 0.1)
+getTopFeatures(shapeGraph, "Connectivity", 0.1)
 }
