@@ -50,7 +50,7 @@ segmentAnalysed <- allToAllTraverse(
   quantizationWidth = pi / 1024,
   includeBetweenness = FALSE
 )
-plot(segmentAnalysed[, "T1024.Total.Depth"])
+plot(segmentAnalysed[, "T1024 Total Depth"])
 ```
 
 ```{r}
@@ -61,7 +61,7 @@ segmentAnalysed <- allToAllTraverse(
   traversalType = TraversalType$Topological,
   includeBetweenness = FALSE
 )
-plot(segmentAnalysed[, "Topological.Total.Length.R100.metric"])
+plot(segmentAnalysed[, "Topological Total Length R100 metric"])
 ```
 
 ```{r}
@@ -72,7 +72,7 @@ segmentResult <- allToAllTraverse(
   traversalType = TraversalType$Metric,
   includeBetweenness = FALSE
 )
-plot(segmentResult[, "Metric.Total.Length.R200.metric"])
+plot(segmentResult[, "Metric Total Length R200 metric"])
 ```
 
 ```{r}
@@ -83,7 +83,7 @@ segmentAnalysed <- oneToAllTraverse(
   fromY = -1977.3
 )
 
-plot(segmentAnalysed[ ,"Topological.Step.Depth"])
+plot(segmentAnalysed[ ,"Topological Step Depth"])
 ```
 
 ```{r}
@@ -94,7 +94,7 @@ segmentAnalysed <- oneToAllTraverse(
   fromY = -1977.3
 )
 
-plot(segmentAnalysed[, "Metric.Step.Depth"])
+plot(segmentAnalysed[, "Metric Step Depth"])
 ```
 
 ```{r}
@@ -106,7 +106,7 @@ segmentAnalysed <- oneToAllTraverse(
   quantizationWidth = pi / 1024
 )
 
-plot(segmentAnalysed[, "Angular.Step.Depth"])
+plot(segmentAnalysed[, "Angular Step Depth"])
 ```
 
 

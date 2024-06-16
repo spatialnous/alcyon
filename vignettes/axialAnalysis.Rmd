@@ -44,7 +44,7 @@ axAnalysed <- allToAllTraverse(
   radii = c("n", "3"),
   includeBetweenness = TRUE
 )
-plot(axAnalysed[, "Choice..Norm..R3"])
+plot(axAnalysed[, "Choice [Norm] R3"])
 ```
 
 ```{r}
@@ -54,5 +54,5 @@ axAnalysed <- oneToAllTraverse(
   fromX = 0982.8,
   fromY = -1620.3,
 )
-plot(axAnalysed["Step.Depth"])
+plot(axAnalysed["Step Depth"])
 ```

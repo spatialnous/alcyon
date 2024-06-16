@@ -32,7 +32,7 @@ lineStringMap <- st_read(
   geometry_column = 1L, quiet = TRUE
 )
 
-shapeMap <- as(lineStringMap, "ShapeMap")
+shapeMap <- as(lineStringMap[, vector()], "ShapeMap")
 ```
 
 
