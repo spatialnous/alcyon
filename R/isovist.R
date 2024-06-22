@@ -74,7 +74,7 @@ isovist2pts <- function(boundaryMap,
                         toY,
                         viewAngle,
                         verbose = FALSE) {
-  angles <- 180.0 * atan2(toY - y, toX - x) / pi
-  angles <- ifelse(angles < 0.0, 360.0 + angles, angles)
+  angles <- atan2(toY - y, toX - x)
+  angles <- ifelse(angles < 0.0, (2.0 * pi) + angles, angles)
   isovist(boundaryMap, x, y, angles, viewAngle, verbose)
 }
