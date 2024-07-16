@@ -12,19 +12,17 @@ bool makeBSPtree(Communicator *communicator,
                  BSPNode *bspRoot,
                  ShapeMap &boundsMap) {
 
-  std::vector<TaggedLine> partitionlines;
+  std::vector<Line> partitionlines;
 
   auto refShapes = boundsMap.getAllShapes();
-  int k = -1;
   for (const auto &refShape : refShapes) {
-    k++;
     std::vector<Line> newLines = refShape.second.getAsLines();
     // I'm not sure what the tagging was meant for any more,
     // tagging at the moment tags the *polygon* it was original attached to
     // must check it is not a zero length line:
     for (const Line &line : newLines) {
       if (line.length() > 0.0) {
-        partitionlines.push_back(TaggedLine(line, k));
+        partitionlines.push_back(line);
       }
     }
   }

@@ -186,6 +186,7 @@ Rcpp::List axialStepDepth(
         shapeGraph->copy(*prevShapeGraph, ShapeMap::COPY_ALL, true);
     }
 
+    std::set<int> origins;
     for (int i = 0; i < stepDepthPointsX.size(); ++i) {
         Point2f p2f(stepDepthPointsX[i], stepDepthPointsY[i]);
         auto graphRegion = shapeGraph->getRegion();
@@ -193,7 +194,7 @@ Rcpp::List axialStepDepth(
             throw depthmapX::RuntimeException("Point outside of target region");
         }
         QtRegion r(p2f, p2f);
-        shapeGraph->setCurSel(r, true);
+        origins.insert(shapeGraph->getShapesInRegion(r).begin()->first);
     }
 
     if (verbose)
@@ -215,7 +216,7 @@ Rcpp::List axialStepDepth(
         //     break;
         case TraversalType::Topological:
             // currently axial only allows for topological analysis
-            analysisResult = AxialStepDepth().run(
+            analysisResult = AxialStepDepth(origins).run(
                 getCommunicator(progress).get(),
                 *shapeGraph,
                 false /* simple mode */

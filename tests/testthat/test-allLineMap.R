@@ -13,19 +13,20 @@ test_that("All-line Map in C++", {
     seedY = 6.7
   )
 
-  fewestMaps <- Rcpp_extractFewestLineMaps(allLineMap)
+  fewestMaps <- Rcpp_extractFewestLineMaps(allLineMap$allLineMap,
+                                           allLineMap$mapData)
 
   fewestSubsets <- fewestMaps[["Fewest-Line Map (Subsets)"]]
 
-  attrNames <- Rcpp_ShapeMap_getAttributeNames(allLineMap)
+  attrNames <- Rcpp_ShapeMap_getAttributeNames(allLineMap$allLineMap)
   expect_length(attrNames, 3L)
 
-  attrData <- Rcpp_ShapeMap_getAttributeData(allLineMap, attrNames)
+  attrData <- Rcpp_ShapeMap_getAttributeData(allLineMap$allLineMap, attrNames)
   expect_length(attrData[[attrNames[[1L]]]], 7L)
   expect_length(attrData[[attrNames[[2L]]]], 7L)
   expect_length(attrData[[attrNames[[3L]]]], 7L)
 
-  coords <- Rcpp_ShapeMap_getShapesAsLineCoords(allLineMap)
+  coords <- Rcpp_ShapeMap_getShapesAsLineCoords(allLineMap$allLineMap)
   expect_identical(dim(coords), c(7L, 4L))
 
 

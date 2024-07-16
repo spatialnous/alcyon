@@ -11,11 +11,11 @@
 #include <memory>
 
 // [[Rcpp::export("Rcpp_makeAllLineMap")]]
-Rcpp::XPtr<AllLineMap> makeAllLineMap(Rcpp::XPtr<ShapeMap> boundsMap,
+Rcpp::List makeAllLineMap(Rcpp::XPtr<ShapeMap> boundsMap,
                                       double seedX,
                                       double seedY) {
 
-    Rcpp::XPtr<AllLineMap> map(new AllLineMap);
+    Rcpp::XPtr<ShapeGraph> map(new ShapeGraph(AllLine::createAllLineMap()));
     std::vector<Line> lines;
 
     for (const auto &line : boundsMap->getAllShapesAsLines()) {
@@ -24,24 +24,31 @@ Rcpp::XPtr<AllLineMap> makeAllLineMap(Rcpp::XPtr<ShapeMap> boundsMap,
 
     QtRegion region(boundsMap->getRegion());
 
-    map->generate(getCommunicator(true).get(),
-                  lines,
-                  region,
-                  Point2f(seedX, seedY));
-    return map;
+    auto mapData = Rcpp::XPtr<AllLine::MapData>(new AllLine::MapData(
+        AllLine::generate(getCommunicator(true).get(),
+                          *map.get(),
+                          lines,
+                          region,
+                          Point2f(seedX, seedY))));
+
+    return Rcpp::List::create(Rcpp::Named("allLineMap") = map,
+                              Rcpp::Named("mapData") = mapData);
 }
 
 // [[Rcpp::export("Rcpp_extractFewestLineMaps")]]
-Rcpp::List extractFewestLineMaps(Rcpp::XPtr<AllLineMap> allLineMap) {
+Rcpp::List extractFewestLineMaps(Rcpp::XPtr<ShapeGraph> allLineMap,
+                                 Rcpp::XPtr<AllLine::MapData> mapData) {
     auto [fewestlinemap_subsets, fewestlinemap_minimal] =
-        allLineMap->extractFewestLineMaps(getCommunicator(true).get());
+        AllLine::extractFewestLineMaps(getCommunicator(true).get(),
+                                       *allLineMap,
+                                       *mapData);
 
     return Rcpp::List::create(
         Rcpp::Named("Fewest-Line Map (Subsets)") =
             Rcpp::XPtr<ShapeGraph>(
-                fewestlinemap_subsets.release(), true),
+                new ShapeGraph(std::move(fewestlinemap_subsets)), true),
         Rcpp::Named("Fewest-Line Map (Minimal)") =
             Rcpp::XPtr<ShapeGraph>(
-                fewestlinemap_minimal.release(), true)
+                new ShapeGraph(std::move(fewestlinemap_minimal)), true)
     );
 }

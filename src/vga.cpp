@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: GPL-3.0-only
 
-#include "salalib/pointdata.h"
+#include "salalib/pointmap.h"
 #include "salalib/vgamodules/vgametric.h"
 #include "salalib/vgamodules/vgavisualglobal.h"
 #include "salalib/vgamodules/vgavisuallocal.h"
@@ -214,16 +214,14 @@ Rcpp::List vgaVisualDepth(Rcpp::XPtr<PointMap> pointMapPtr,
     Rcpp::Named("completed") = false
   );
 
-  pointMapPtr->clearSel();
+  std::set<PixelRef> origins;
   for (int r = 0; r < stepDepthPoints.rows(); ++r) {
     auto coordRow = stepDepthPoints.row(r);
     Point2f p(coordRow[0], coordRow[1]);
-    QtRegion region(p, p);
-    pointMapPtr->setCurSel(region, true);
+    origins.insert(pointMapPtr->pixelate(p));
   }
-  auto analysisResult = VGAVisualGlobalDepth()
+  auto analysisResult = VGAVisualGlobalDepth(origins)
     .run(getCommunicator(true).get(), *pointMapPtr, false);
-  pointMapPtr->clearSel();
   result["completed"] = analysisResult.completed;
   result["newAttributes"] = analysisResult.getAttributes();
   result["mapPtr"] = pointMapPtr;
@@ -248,16 +246,14 @@ Rcpp::List vgaMetricDepth(Rcpp::XPtr<PointMap> pointMapPtr,
     Rcpp::Named("completed") = false
   );
 
-  pointMapPtr->clearSel();
+  std::set<PixelRef> origins;
   for (int r = 0; r < stepDepthPoints.rows(); ++r) {
     auto coordRow = stepDepthPoints.row(r);
     Point2f p(coordRow[0], coordRow[1]);
-    QtRegion region(p, p);
-    pointMapPtr->setCurSel(region, true);
+    origins.insert(pointMapPtr->pixelate(p));
   }
-  auto analysisResult = VGAMetricDepth()
+  auto analysisResult = VGAMetricDepth(origins)
     .run(getCommunicator(true).get(), *pointMapPtr, false);
-  pointMapPtr->clearSel();
   result["completed"] = analysisResult.completed;
   result["newAttributes"] = analysisResult.getAttributes();
   result["mapPtr"] = pointMapPtr;
@@ -282,16 +278,14 @@ Rcpp::List vgaAngularDepth(Rcpp::XPtr<PointMap> pointMapPtr,
     Rcpp::Named("completed") = false
   );
 
-  pointMapPtr->clearSel();
+  std::set<PixelRef> origins;
   for (int r = 0; r < stepDepthPoints.rows(); ++r) {
     auto coordRow = stepDepthPoints.row(r);
     Point2f p(coordRow[0], coordRow[1]);
-    QtRegion region(p, p);
-    pointMapPtr->setCurSel(region, true);
+    origins.insert(pointMapPtr->pixelate(p));
   }
-  auto analysisResult = VGAAngularDepth()
+  auto analysisResult = VGAAngularDepth(origins)
     .run(getCommunicator(true).get(), *pointMapPtr, false);
-  pointMapPtr->clearSel();
   result["completed"] = analysisResult.completed;
   result["newAttributes"] = analysisResult.getAttributes();
   result["mapPtr"] = pointMapPtr;

@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 #include "salalib/shapegraph.h"
-#include "salalib/pointdata.h"
+#include "salalib/pointmap.h"
 
 #include "genlib/p2dpoly.h"
 
@@ -32,8 +32,9 @@ Rcpp::List shapeGraphLinkCoords(Rcpp::XPtr<ShapeGraph> shapeGraphPtr,
     const Rcpp::NumericMatrix::Row &row = coords( i , Rcpp::_ );
     QtRegion region(Point2f(row[0], row[1]),
                     Point2f(row[0], row[1]));
-    shapeGraphPtr->setCurSel(region);
-    completed &= shapeGraphPtr->linkShapes(Point2f(row[2], row[3]));
+    auto shapesInRegion = shapeGraphPtr->getShapesInRegion(region);
+    completed &= shapeGraphPtr->linkShapes(Point2f(row[2], row[3]),
+                                           shapesInRegion.begin()->first);
   }
   return Rcpp::List::create(
     Rcpp::Named("completed") = completed,
@@ -194,8 +195,9 @@ Rcpp::List shapeMapUnlinkCoords(Rcpp::XPtr<ShapeGraph> shapeGraphPtr,
     const Rcpp::NumericMatrix::Row &row = coords( i , Rcpp::_ );
     QtRegion region(Point2f(row[0], row[1]),
                     Point2f(row[0], row[1]));
-    shapeGraphPtr->setCurSel(region);
-    shapeGraphPtr->unlinkShapes(Point2f(row[2], row[3]));
+    auto shapesInRegion = shapeGraphPtr->getShapesInRegion(region);
+    shapeGraphPtr->unlinkShapes(Point2f(row[2], row[3]),
+                                           shapesInRegion.begin()->first);
   }
   return Rcpp::List::create(
     Rcpp::Named("completed") = true,

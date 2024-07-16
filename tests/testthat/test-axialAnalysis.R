@@ -33,17 +33,17 @@ test_that("Axial Analysis in C++", {
     "df_1_Depthmap_Ref",
     "df_2_Connectivity",
     "df_row_name",
-    "Entropy",
+    "Mean Depth",
+    "Node Count",
     "Integration [HH]",
+    "Mean Depth [df_1_Depthmap_Ref Wgt]",
+    "Total df_1_Depthmap_Ref",
+    "Entropy",
     "Integration [P-value]",
     "Integration [Tekl]",
     "Intensity",
     "Harmonic Mean Depth",
-    "Mean Depth",
-    "Node Count",
-    "Relativised Entropy",
-    "Mean Depth [df_1_Depthmap_Ref Wgt]",
-    "Total df_1_Depthmap_Ref"
+    "Relativised Entropy"
   )
   attrNameBefore <- Rcpp_ShapeMap_getAttributeNames(shapeGraph)
   expect_identical(expectedColNameAfter, attrNameBefore)

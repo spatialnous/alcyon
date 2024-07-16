@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "salalib/pointdata.h"
+#include "salalib/pointmap.h"
 
 #include <Rcpp.h>
 

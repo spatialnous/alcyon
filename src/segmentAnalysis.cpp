@@ -3,8 +3,8 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 #include "salalib/shapegraph.h"
-#include "salalib/options.h"
 
+#include "salalib/radiustype.h"
 #include "salalib/segmmodules/segmtopological.h"
 #include "salalib/segmmodules/segmtulip.h"
 #include "salalib/segmmodules/segmmetric.h"
@@ -32,7 +32,7 @@ Rcpp::List runSegmentAnalysis(
         const Rcpp::Nullable<bool> verboseNV = R_NilValue,
         const Rcpp::Nullable<bool> progressNV = R_NilValue) {
 
-    std::string weightedMeasureColName = "";
+    std::optional<std::string> weightedMeasureColName = std::nullopt;
     if (weightedMeasureColNameNV.isNotNull()) {
         weightedMeasureColName = Rcpp::as<std::string>(weightedMeasureColNameNV);
     }
@@ -78,7 +78,7 @@ Rcpp::List runSegmentAnalysis(
 
     int weightedMeasureColIdx = -1;
 
-    if (!weightedMeasureColName.empty()) {
+    if (weightedMeasureColName.has_value()) {
         const AttributeTable &table = shapeGraph->getAttributeTable();
         for (int i = 0; i < table.getNumColumns(); i++) {
             if (weightedMeasureColName == table.getColumnName(i).c_str()) {
@@ -87,19 +87,19 @@ Rcpp::List runSegmentAnalysis(
         }
         if (weightedMeasureColIdx == -1) {
             Rcpp::stop("Given attribute (" +
-                weightedMeasureColName +
+                weightedMeasureColName.value() +
                 ") does not exist in " +
                 "currently selected map");
         }
     }
 
-    int radiusType = -1;
+    RadiusType radiusType = RadiusType::NONE;
     std::map<double, std::string> radiusSuffixes;
     radiusSuffixes[-1] = "";
 
     switch (static_cast<TraversalType>(radiusStepType)) {
     case TraversalType::Topological: {
-        int radiusType = Options::RADIUS_STEPS;
+        radiusType = RadiusType::TOPOLOGICAL;
         for (auto radius: radii) {
             if (radius != -1) {
                 radiusSuffixes[radius] = " R" + std::to_string(int(radius));
@@ -108,7 +108,7 @@ Rcpp::List runSegmentAnalysis(
         break;
     }
     case TraversalType::Metric: {
-        radiusType = Options::RADIUS_METRIC;
+        radiusType = RadiusType::METRIC;
         for (auto radius: radii) {
             if (radius != -1) {
                 radiusSuffixes[radius] = " R" + std::to_string(radius) +
@@ -118,7 +118,7 @@ Rcpp::List runSegmentAnalysis(
         break;
     }
     case TraversalType::Angular: {
-        radiusType = Options::RADIUS_ANGULAR;
+        radiusType = RadiusType::ANGULAR;
         for (auto radius: radii) {
             if (radius != -1) {
                 radiusSuffixes[radius] = " R" + std::to_string(radius);
@@ -141,7 +141,7 @@ Rcpp::List runSegmentAnalysis(
         case TraversalType::Angular: {
             if (tulipBins > 0) {
                 analysisResult =
-                    SegmentTulip(radius_set, selOnly,
+                    SegmentTulip(radius_set, std::nullopt,
                                  tulipBins, weightedMeasureColIdx,
                                  radiusType, includeChoice).run(
                                          getCommunicator(progress).get(),
@@ -159,7 +159,7 @@ Rcpp::List runSegmentAnalysis(
             bool first = true;
             for (auto radius: radius_set) {
                 auto radiusAnalysisResult =
-                    SegmentTopological(radius, selOnly).run(
+                    SegmentTopological(radius, std::nullopt).run(
                             getCommunicator(progress).get(),
                             *shapeGraph, false /* unused */);
                 if (first) {
@@ -178,7 +178,7 @@ Rcpp::List runSegmentAnalysis(
             bool first = true;
             for (auto radius: radius_set) {
                 auto radiusAnalysisResult =
-                    SegmentMetric(radius, selOnly).run(
+                    SegmentMetric(radius, std::nullopt).run(
                             getCommunicator(progress).get(),
                             *shapeGraph, false /* unused */);
                 if (first) {
@@ -248,6 +248,7 @@ Rcpp::List segmentStepDepth(
         shapeGraph->copy(*prevShapeGraph, ShapeMap::COPY_ALL, true);
     }
 
+    std::set<int> origins;
     for (int i = 0; i < stepDepthPointsX.size(); ++i) {
         Point2f p2f(stepDepthPointsX[i], stepDepthPointsY[i]);
         auto graphRegion = shapeGraph->getRegion();
@@ -255,7 +256,7 @@ Rcpp::List segmentStepDepth(
             Rcpp::stop("Point outside of target region");
         }
         QtRegion r(p2f, p2f);
-        shapeGraph->setCurSel(r, true);
+        origins.insert(shapeGraph->getShapesInRegion(r).begin()->first);
     }
 
     if (verbose) {
@@ -271,7 +272,7 @@ Rcpp::List segmentStepDepth(
         switch (static_cast<TraversalType>(stepType)) {
         case TraversalType::Angular:
             if (tulipBins != 0) {
-                analysisResult = SegmentTulipDepth(tulipBins).run(
+                analysisResult = SegmentTulipDepth(tulipBins, origins).run(
                     getCommunicator(progress).get(),
                     *shapeGraph,
                     false /* simple mode */
@@ -284,7 +285,7 @@ Rcpp::List segmentStepDepth(
             }
             break;
         case TraversalType::Metric: {
-            analysisResult = SegmentMetricPD().run(
+            analysisResult = SegmentMetricPD(origins).run(
                 getCommunicator(progress).get(),
                 *shapeGraph,
                 false /* simple mode */
@@ -292,7 +293,7 @@ Rcpp::List segmentStepDepth(
             break;
         }
         case TraversalType::Topological: {
-            analysisResult = SegmentTopologicalPD().run(
+            analysisResult = SegmentTopologicalPD(origins).run(
                 getCommunicator(progress).get(),
                 *shapeGraph,
                 false /* simple mode */
