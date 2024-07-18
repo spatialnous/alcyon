@@ -25,6 +25,7 @@ SOURCES = main.cpp \
           isovist.cpp \
           allFewest.cpp \
           vga.cpp \
+          vgaDepth.cpp \
           agentAnalysis.cpp \
           link.cpp \
           RcppExports.cpp
