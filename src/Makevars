@@ -21,11 +21,14 @@ SOURCES = main.cpp \
           convertExternal.cpp \
           axialAnalysis.cpp \
           segmentAnalysis.cpp \
+          segmentDepth.cpp \
+          segmentShortestPath.cpp \
           metagraphdata.cpp \
           isovist.cpp \
           allFewest.cpp \
           vga.cpp \
           vgaDepth.cpp \
+          vgaShortestPath.cpp \
           agentAnalysis.cpp \
           link.cpp \
           RcppExports.cpp

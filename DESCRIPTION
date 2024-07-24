@@ -89,6 +89,7 @@ Collate:
     'segmentAnalysis.R'
     'sfConversions.R'
     'shapegraphToIGraph.R'
+    'oneToOneTraverse.R'
     'oneToAllTraverse.R'
     'allToAllTraverse.R'
 RoxygenNote: 7.3.1

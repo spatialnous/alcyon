@@ -9,7 +9,7 @@
 #include <Rcpp.h>
 
 enum class AgentLookMode {
-  None = 0,
+    None = 0,
     Standard = 1,
     LineOfSightLength = 2,
     OcclusionLength = 3,

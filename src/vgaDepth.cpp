@@ -33,7 +33,14 @@ Rcpp::List vgaVisualDepth(Rcpp::XPtr<PointMap> pointMapPtr,
   for (int r = 0; r < stepDepthPoints.rows(); ++r) {
     auto coordRow = stepDepthPoints.row(r);
     Point2f p(coordRow[0], coordRow[1]);
-    origins.insert(pointMapPtr->pixelate(p));
+    auto pixref = pointMapPtr->pixelate(p);
+    if (!pointMapPtr->includes(pixref)) {
+      Rcpp::stop("Origin point (%d %d) outside of target pointmap region.", p.x, p.y);
+    }
+    if (!pointMapPtr->getPoint(pixref).filled()) {
+      Rcpp::stop("Origin point (%d %d) not pointing to a filled cell.", p.x, p.y);
+    }
+    origins.insert(pixref);
   }
   auto analysisResult = VGAVisualGlobalDepth(origins)
     .run(getCommunicator(true).get(), *pointMapPtr, false);
@@ -65,7 +72,14 @@ Rcpp::List vgaMetricDepth(Rcpp::XPtr<PointMap> pointMapPtr,
   for (int r = 0; r < stepDepthPoints.rows(); ++r) {
     auto coordRow = stepDepthPoints.row(r);
     Point2f p(coordRow[0], coordRow[1]);
-    origins.insert(pointMapPtr->pixelate(p));
+    auto pixref = pointMapPtr->pixelate(p);
+    if (!pointMapPtr->includes(pixref)) {
+      Rcpp::stop("Origin point (%d %d) outside of target pointmap region.", p.x, p.y);
+    }
+    if (!pointMapPtr->getPoint(pixref).filled()) {
+      Rcpp::stop("Origin point (%d %d) not pointing to a filled cell.", p.x, p.y);
+    }
+    origins.insert(pixref);
   }
   auto analysisResult = VGAMetricDepth(origins)
     .run(getCommunicator(true).get(), *pointMapPtr, false);
@@ -97,7 +111,14 @@ Rcpp::List vgaAngularDepth(Rcpp::XPtr<PointMap> pointMapPtr,
   for (int r = 0; r < stepDepthPoints.rows(); ++r) {
     auto coordRow = stepDepthPoints.row(r);
     Point2f p(coordRow[0], coordRow[1]);
-    origins.insert(pointMapPtr->pixelate(p));
+    auto pixref = pointMapPtr->pixelate(p);
+    if (!pointMapPtr->includes(pixref)) {
+      Rcpp::stop("Origin point (%d %d) outside of target pointmap region.", p.x, p.y);
+    }
+    if (!pointMapPtr->getPoint(pixref).filled()) {
+      Rcpp::stop("Origin point (%d %d) not pointing to a filled cell.", p.x, p.y);
+    }
+    origins.insert(pixref);
   }
   auto analysisResult = VGAAngularDepth(origins)
     .run(getCommunicator(true).get(), *pointMapPtr, false);

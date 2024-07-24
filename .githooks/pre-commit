@@ -8,5 +8,5 @@ set -e
 
 reuse lint
 echo "Running the linter..."
-Rscript -e 'res <- lintr::lint_package(show_progress = T); if (length(res) != 0) {print("Linter failed!"); q(status = 2)}'
+Rscript -e 'devtools::load_all(); res <- lintr::lint_package(show_progress = T); if (length(res) != 0) {print("Linter failed!"); q(status = 2)}'
 echo "Linter satisfied!"
