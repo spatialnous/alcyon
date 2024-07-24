@@ -11,3 +11,4 @@
 # alcyon {next version}
 
 * Fix isovist 2-point generation
+* Allow one-to-one traversal for pointmaps and segment maps

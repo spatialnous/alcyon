@@ -127,3 +127,78 @@ vgaMap <- oneToAllTraverse(
 )
 plot(vgaMap["Visual Step Depth"])
 ```
+
+```{r}
+vgaMap <- oneToOneTraverse(
+  vgaMap,
+  traversalType = TraversalType$Topological,
+  fromX = 4.86,
+  fromY = 5.25,
+  toX = 1.27,
+  toY = 7.60
+)
+plot(vgaMap["Visual Shortest Path"],
+     breaks = "equal",
+     nbreaks = 80,
+     col = c("gray", depthmap.axmanesque.colour(78)))
+```
+
+```{r}
+vgaMap <- oneToOneTraverse(
+  vgaMap,
+  traversalType = TraversalType$Topological,
+  fromX = 4.86,
+  fromY = 5.25,
+  toX = 1.27,
+  toY = 7.60
+)
+plot(vgaMap["Visual Shortest Path Zone"],
+     breaks = "equal",
+     nbreaks = 80,
+     col = c("gray", depthmap.axmanesque.colour(78)))
+```
+
+```{r}
+vgaMap <- oneToOneTraverse(
+  vgaMap,
+  traversalType = TraversalType$Metric,
+  fromX = 4.86,
+  fromY = 5.25,
+  toX = 1.27,
+  toY = 7.60
+)
+plot(vgaMap["Metric Shortest Path"],
+     breaks = "equal",
+     nbreaks = 80,
+     col = c("gray", depthmap.axmanesque.colour(78)))
+```
+
+```{r}
+vgaMap <- oneToOneTraverse(
+  vgaMap,
+  traversalType = TraversalType$Angular,
+  fromX = 4.86,
+  fromY = 5.25,
+  toX = 1.27,
+  toY = 7.60
+)
+plot(vgaMap["Angular Shortest Path"],
+     breaks = "equal",
+     nbreaks = 80,
+     col = c("gray", depthmap.axmanesque.colour(78)))
+```
+
+```{r}
+vgaMap <- oneToOneTraverse(
+  vgaMap,
+  traversalType = TraversalType$Angular,
+  fromX = 4.86,
+  fromY = 5.25,
+  toX = 1.27,
+  toY = 7.60
+)
+plot(vgaMap["Angular Shortest Path Zone"],
+     breaks = "equal",
+     nbreaks = 80,
+     col = c("gray", depthmap.axmanesque.colour(78)))
+```
