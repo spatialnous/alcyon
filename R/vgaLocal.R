@@ -46,6 +46,8 @@ vgaVisualLocal <- function(pointMap,
   result <- Rcpp_VGA_visualLocal(
     attr(pointMap, "sala_map"),
     gatesOnly,
+    nthreadsNV = nthreads,
+    algorithmNV = algorithm,
     copyMapNV = copyMap
   )
   return(processPointMapResult(pointMap, result))

@@ -26,9 +26,9 @@ Rcpp::List vgaAngular(Rcpp::XPtr<PointMap> pointMapPtr,
   if (gatesOnlyNV.isNotNull()) {
     gatesOnly = Rcpp::as<bool>(gatesOnlyNV);
   }
-  int nthreads = 0;
+  int nthreads = 1;
   if (nthreadsNV.isNotNull()) {
-    nthreads = Rcpp::as<bool>(nthreadsNV);
+    nthreads = Rcpp::as<int>(nthreadsNV);
   }
   bool copyMap = true;
   if (copyMapNV.isNotNull()) {
@@ -76,9 +76,9 @@ Rcpp::List vgaMetric(Rcpp::XPtr<PointMap> pointMapPtr,
   if (gatesOnlyNV.isNotNull()) {
     gatesOnly = Rcpp::as<bool>(gatesOnlyNV);
   }
-  int nthreads = 0;
+  int nthreads = 1;
   if (nthreadsNV.isNotNull()) {
-    nthreads = Rcpp::as<bool>(nthreadsNV);
+    nthreads = Rcpp::as<int>(nthreadsNV);
   }
   bool copyMap = true;
   if (copyMapNV.isNotNull()) {
@@ -127,9 +127,9 @@ Rcpp::List vgaVisualGlobal(Rcpp::XPtr<PointMap> pointMapPtr,
   if (gatesOnlyNV.isNotNull()) {
     gatesOnly = Rcpp::as<bool>(gatesOnlyNV);
   }
-  int nthreads = 0;
+  int nthreads = 1;
   if (nthreadsNV.isNotNull()) {
-    nthreads = Rcpp::as<bool>(nthreadsNV);
+    nthreads = Rcpp::as<int>(nthreadsNV);
   }
   bool copyMap = true;
   if (copyMapNV.isNotNull()) {

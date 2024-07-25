@@ -25,9 +25,9 @@ Rcpp::List vgaVisualLocal(Rcpp::XPtr<PointMap> pointMapPtr,
   if (gatesOnlyNV.isNotNull()) {
     gatesOnly = Rcpp::as<bool>(gatesOnlyNV);
   }
-  int nthreads = 0;
+  int nthreads = 1;
   if (nthreadsNV.isNotNull()) {
-    nthreads = Rcpp::as<bool>(nthreadsNV);
+    nthreads = Rcpp::as<int>(nthreadsNV);
   }
   if (nthreads < 0) {
     Rcpp::stop("Number of threads has to be >= 1 or 0 for all (" +

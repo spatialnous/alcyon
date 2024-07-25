@@ -13,6 +13,7 @@ allToAllTraverse(
   includeBetweenness = FALSE,
   quantizationWidth = NA,
   gatesOnly = FALSE,
+  nthreads = 1L,
   copyMap = TRUE,
   verbose = FALSE,
   progress = FALSE
@@ -40,6 +41,9 @@ quantizationWidth). Only works for Segment ShapeGraphs}
 
 \item{gatesOnly}{Optional. Only calculate results at particular gate pixels.
 Only works for PointMaps}
+
+\item{nthreads}{Optional. Use more than one threads. 1 by default, set to 0
+to use all available. Only available for PointMaps.}
 
 \item{copyMap}{Optional. Copy the internal sala map}
 

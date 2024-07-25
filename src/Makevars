@@ -8,7 +8,8 @@ CXX_STD = CXX17
 BLDDIR = build-Release
 
 # Make sure libraries are included so that they can refer to each other
-PKG_CPPFLAGS = $(SHLIB_OPENMP_CXXFLAGS) -I../src/libs -I../../inst/include/ -I..
+PKG_CXXFLAGS = $(SHLIB_OPENMP_CXXFLAGS)
+PKG_CPPFLAGS = -I../src/libs -I../../inst/include/ -I..
 PKG_LIBS = $(SHLIB_OPENMP_CXXFLAGS) $(BLDDIR)/libalcyon_gensala.a
 
 SOURCES = main.cpp \
