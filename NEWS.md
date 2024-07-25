@@ -8,7 +8,7 @@
 * Overhaul the package to use and extend sf and stars S3 classes
 * Add agent-analysis vignette
 
-# alcyon {next version}
+# alcyon 0.4.0
 
 * Fix isovist 2-point generation
 * Allow one-to-one traversal for pointmaps and segment maps
