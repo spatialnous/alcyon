@@ -119,6 +119,44 @@ segmentAnalysed <- oneToOneTraverse(
   toY = -1699.3,
   quantizationWidth = pi / 1024
 )
+column = "Angular Shortest Path Angle"
+plot(segmentAnalysed[, column],
+     col = "lightgray", reset = FALSE)
+plot(segmentAnalysed[unlist(segmentAnalysed[column]) >= 0,
+                     column], lwd = 3, add = TRUE)
+```
 
-plot(segmentAnalysed[, "Angular Shortest Path Angle"])
+```{r}
+segmentAnalysed <- oneToOneTraverse(
+  segmentAnalysed,
+  traversalType = TraversalType$Metric,
+  fromX = 1217.1,
+  fromY = -1977.3,
+  toX = 1017.8,
+  toY = -1699.3,
+  quantizationWidth = pi / 1024
+)
+column = "Metric Shortest Path Distance"
+plot(segmentAnalysed[, column],
+     col = "lightgray", reset = FALSE)
+plot(segmentAnalysed[unlist(segmentAnalysed[column]) >= 0,
+                     column], lwd = 3, add = TRUE)
+```
+
+
+```{r}
+segmentAnalysed <- oneToOneTraverse(
+  segmentAnalysed,
+  traversalType = TraversalType$Topological,
+  fromX = 1217.1,
+  fromY = -1977.3,
+  toX = 1017.8,
+  toY = -1699.3,
+  quantizationWidth = pi / 1024
+)
+column = "Topological Shortest Path Depth"
+plot(segmentAnalysed[, column],
+     col = "lightgray", reset = FALSE)
+plot(segmentAnalysed[unlist(segmentAnalysed[column]) >= 0,
+                     column], lwd = 3, add = TRUE)
 ```
