@@ -9,7 +9,8 @@
 #include "salalib/segmmodules/segmtopologicalpd.h"
 #include "salalib/segmmodules/segmtulipdepth.h"
 
-#include "TraversalType.h"
+#include "enum_TraversalType.h"
+
 #include "communicator.h"
 
 #include <Rcpp.h>

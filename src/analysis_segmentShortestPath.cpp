@@ -9,7 +9,8 @@
 #include "salalib/segmmodules/segmtopologicalshortestpath.h"
 #include "salalib/segmmodules/segmtulipshortestpath.h"
 
-#include "TraversalType.h"
+#include "enum_TraversalType.h"
+
 #include "communicator.h"
 
 #include <Rcpp.h>

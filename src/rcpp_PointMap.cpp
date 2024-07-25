@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: GPL-3.0-only
 
-#include "PointMap.h"
+#include "rcpp_PointMap.h"
 
 #include "salalib/gridproperties.h"
 

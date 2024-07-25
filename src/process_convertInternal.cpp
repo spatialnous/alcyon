@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: GPL-3.0-only
 
-#include "ShapeMap.h"
+#include "rcpp_ShapeMap.h"
 
 #include "salalib/shapemap.h"
 #include "salalib/shapegraph.h"

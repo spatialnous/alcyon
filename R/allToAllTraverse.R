@@ -25,6 +25,8 @@
 #' quantizationWidth). Only works for Segment ShapeGraphs
 #' @param gatesOnly Optional. Only calculate results at particular gate pixels.
 #' Only works for PointMaps
+#' @param nthreads Optional. Use more than one threads. 1 by default, set to 0
+#' to use all available. Only available for PointMaps.
 #' @param copyMap Optional. Copy the internal sala map
 #' @param verbose Optional. Show more information of the process.
 #' @param progress Optional. Enable progress display
@@ -70,6 +72,7 @@ allToAllTraverse <- function(map,
                              includeBetweenness = FALSE,
                              quantizationWidth = NA,
                              gatesOnly = FALSE,
+                             nthreads = 1L,
                              copyMap = TRUE,
                              verbose = FALSE,
                              progress = FALSE) {
@@ -83,6 +86,10 @@ allToAllTraverse <- function(map,
     stop("At least one radius is required")
   }
 
+  if (!inherits(map, "PointMap") && nthreads != 1L) {
+    stop("Setting the number of threads is only possible for PointMaps (VGA)")
+  }
+
   if (inherits(map, "PointMap")) {
     return(allToAllTraversePointMap(
       map,
@@ -93,6 +100,7 @@ allToAllTraverse <- function(map,
       includeBetweenness,
       quantizationWidth,
       gatesOnly,
+      nthreads,
       copyMap,
       verbose,
       progress
@@ -142,6 +150,7 @@ allToAllTraversePointMap <- function(map,
                                      includeBetweenness = FALSE,
                                      quantizationWidth = NA,
                                      gatesOnly = FALSE,
+                                     nthreads = 1L,
                                      copyMap = TRUE,
                                      verbose = FALSE,
                                      progress = FALSE) {
@@ -150,6 +159,7 @@ allToAllTraversePointMap <- function(map,
       attr(map, "sala_map"),
       radii[1L],
       gatesOnly,
+      nthreadsNV = nthreads,
       copyMapNV = copyMap
     )
     for (radius in radii[-1L]) {
@@ -157,6 +167,7 @@ allToAllTraversePointMap <- function(map,
         attr(map, "sala_map"),
         radius,
         gatesOnly,
+        nthreadsNV = nthreads,
         copyMapNV = FALSE
       )
       analysisResult$completed <- analysisResult$completed &
@@ -172,6 +183,7 @@ allToAllTraversePointMap <- function(map,
       attr(map, "sala_map"),
       radii[1L],
       gatesOnly,
+      nthreadsNV = nthreads,
       copyMapNV = copyMap
     )
     for (radius in radii[-1L]) {
@@ -179,6 +191,7 @@ allToAllTraversePointMap <- function(map,
         attr(map, "sala_map"),
         radius,
         gatesOnly,
+        nthreadsNV = nthreads,
         copyMapNV = FALSE
       )
       analysisResult$completed <- analysisResult$completed &
@@ -194,6 +207,7 @@ allToAllTraversePointMap <- function(map,
       attr(map, "sala_map"),
       radii[1L],
       gatesOnly,
+      nthreadsNV = nthreads,
       copyMapNV = copyMap
     )
     for (radius in radii[-1L]) {
@@ -201,6 +215,7 @@ allToAllTraversePointMap <- function(map,
         attr(map, "sala_map"),
         radius,
         gatesOnly,
+        nthreadsNV = nthreads,
         copyMapNV = FALSE
       )
       analysisResult$completed <- analysisResult$completed &
@@ -229,29 +244,6 @@ vgaThroughVision <- function(pointMap,
                              copyMap = TRUE) {
   result <- Rcpp_VGA_throughVision(
     attr(pointMap, "sala_map"),
-    copyMapNV = copyMap
-  )
-  return(processPointMapResult(pointMap, result))
-}
-
-#' Visibility Graph Analysis - Visual local metrics
-#'
-#' Runs Visibility Graph Analysis to get visual local metrics
-#'
-#' @param pointMap A PointMap
-#' @param copyMap Optional. Copy the internal sala map
-#' @param gatesOnly Optional. Only keep the values at specific gates
-#' @returns A new PointMap with the results included
-#' @eval c("@examples",
-#' rxLoadSimpleLinesAsPointMap(),
-#' "vgaVisualLocal(pointMap, FALSE)")
-#' @export
-vgaVisualLocal <- function(pointMap,
-                           copyMap = TRUE,
-                           gatesOnly = FALSE) {
-  result <- Rcpp_VGA_visualLocal(
-    attr(pointMap, "sala_map"),
-    gatesOnly,
     copyMapNV = copyMap
   )
   return(processPointMapResult(pointMap, result))

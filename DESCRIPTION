@@ -92,6 +92,7 @@ Collate:
     'oneToOneTraverse.R'
     'oneToAllTraverse.R'
     'allToAllTraverse.R'
+    'vgaLocal.R'
 RoxygenNote: 7.3.1
 Language: en-GB
 URL: https://github.com/spatialnous/alcyon

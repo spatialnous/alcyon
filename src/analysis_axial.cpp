@@ -10,8 +10,9 @@
 #include "salalib/shapegraph.h"
 #include "genlib/p2dpoly.h"
 
+#include "enum_TraversalType.h"
+
 #include "communicator.h"
-#include "TraversalType.h"
 
 #include <Rcpp.h>
 

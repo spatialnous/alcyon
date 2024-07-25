@@ -12,3 +12,10 @@
 
 * Fix isovist 2-point generation
 * Allow one-to-one traversal for pointmaps and segment maps
+
+# alcyon {next_version}
+
+* Add multi-threaded analysis for Global VGA (Metric, Topological, Tulip), and
+for VGA Local analysis (generating the metrics Control, Controllability and
+Clustering Coefficient), as well as a new algorithm for Local analysis using
+an adjacency matrix.

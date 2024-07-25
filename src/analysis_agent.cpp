@@ -4,7 +4,7 @@
 
 #include "salalib/agents/agentanalysis.h"
 
-#include "AgentLookMode.h"
+#include "enum_AgentLookMode.h"
 #include "communicator.h"
 
 #include <Rcpp.h>

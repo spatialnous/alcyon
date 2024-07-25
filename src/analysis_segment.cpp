@@ -10,8 +10,9 @@
 #include "salalib/segmmodules/segmmetric.h"
 #include "salalib/segmmodules/segmangular.h"
 
+#include "enum_TraversalType.h"
+
 #include "communicator.h"
-#include "TraversalType.h"
 
 #include <Rcpp.h>
 

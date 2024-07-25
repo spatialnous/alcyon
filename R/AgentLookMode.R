@@ -28,9 +28,9 @@
 #'
 #' @returns A list of numbers representing each agent look mode
 #' @examples
-#' TraversalType$Angular
-#' TraversalType$Topological
-#' TraversalType$Metric
+#' AgentLookMode$Standard
+#' AgentLookMode$LineOfSightLength
+#' AgentLookMode$OcclusionAny
 #' @export
 AgentLookMode <- list(
   None = 0L,

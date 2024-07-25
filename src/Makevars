@@ -8,29 +8,31 @@ CXX_STD = CXX17
 BLDDIR = build-Release
 
 # Make sure libraries are included so that they can refer to each other
-PKG_CPPFLAGS = -I../src/libs -I../../inst/include/ -I..
-PKG_LIBS = $(BLDDIR)/libalcyon_gensala.a
+PKG_CPPFLAGS = $(SHLIB_OPENMP_CXXFLAGS) -I../src/libs -I../../inst/include/ -I..
+PKG_LIBS = $(SHLIB_OPENMP_CXXFLAGS) $(BLDDIR)/libalcyon_gensala.a
 
 SOURCES = main.cpp \
           communicator.cpp \
-          ShapeMap.cpp \
-          ShapeGraph.cpp \
-          AllLineMap.cpp \
-          PointMap.cpp \
-          convertInternal.cpp \
-          convertExternal.cpp \
-          axialAnalysis.cpp \
-          segmentAnalysis.cpp \
-          segmentDepth.cpp \
-          segmentShortestPath.cpp \
-          metagraphdata.cpp \
-          isovist.cpp \
-          allFewest.cpp \
-          vga.cpp \
-          vgaDepth.cpp \
-          vgaShortestPath.cpp \
-          agentAnalysis.cpp \
-          link.cpp \
+          rcpp_ShapeMap.cpp \
+          rcpp_ShapeGraph.cpp \
+          rcpp_AllLineMap.cpp \
+          rcpp_PointMap.cpp \
+          rcpp_metagraphdata.cpp \
+          process_convertInternal.cpp \
+          process_convertExternal.cpp \
+          process_link.cpp \
+          process_isovist.cpp \
+          analysis_axial.cpp \
+          analysis_segment.cpp \
+          analysis_segmentDepth.cpp \
+          analysis_segmentShortestPath.cpp \
+          analysis_allFewest.cpp \
+          analysis_vgaGlobal.cpp \
+          analysis_vgaLocal.cpp \
+          analysis_vgaIsovist.cpp \
+          analysis_vgaDepth.cpp \
+          analysis_vgaShortestPath.cpp \
+          analysis_agent.cpp \
           RcppExports.cpp
 
 # Obtain the object files in the build directory
