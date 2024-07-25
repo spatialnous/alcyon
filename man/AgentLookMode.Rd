@@ -33,8 +33,8 @@ the agents use to look around and decide where to go next. Possible values:
 }
 }
 \examples{
-TraversalType$Angular
-TraversalType$Topological
-TraversalType$Metric
+AgentLookMode$Standard
+AgentLookMode$LineOfSightLength
+AgentLookMode$OcclusionAny
 }
 \keyword{datasets}
