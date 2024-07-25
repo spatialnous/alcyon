@@ -137,10 +137,11 @@ vgaMap <- oneToOneTraverse(
   toX = 1.27,
   toY = 7.60
 )
+nuv = length(unique(unlist(vgaMap["Visual Shortest Path"])))
 plot(vgaMap["Visual Shortest Path"],
      breaks = "equal",
-     nbreaks = 80,
-     col = c("gray", depthmap.axmanesque.colour(78)))
+     nbreaks = nuv,
+     col = c("lightgray", depthmap.axmanesque.colour(nuv - 2)))
 ```
 
 ```{r}
@@ -152,10 +153,11 @@ vgaMap <- oneToOneTraverse(
   toX = 1.27,
   toY = 7.60
 )
+nuv = length(unique(unlist(vgaMap["Visual Shortest Path Zone"])))
 plot(vgaMap["Visual Shortest Path Zone"],
      breaks = "equal",
-     nbreaks = 80,
-     col = c("gray", depthmap.axmanesque.colour(78)))
+     nbreaks = nuv,
+     col = c("lightgray", depthmap.axmanesque.colour(nuv - 2)))
 ```
 
 ```{r}
@@ -167,10 +169,11 @@ vgaMap <- oneToOneTraverse(
   toX = 1.27,
   toY = 7.60
 )
+nuv = length(unique(unlist(vgaMap["Metric Shortest Path"])))
 plot(vgaMap["Metric Shortest Path"],
      breaks = "equal",
-     nbreaks = 80,
-     col = c("gray", depthmap.axmanesque.colour(78)))
+     nbreaks = nuv,
+     col = c("lightgray", depthmap.axmanesque.colour(nuv - 2)))
 ```
 
 ```{r}
@@ -182,10 +185,11 @@ vgaMap <- oneToOneTraverse(
   toX = 1.27,
   toY = 7.60
 )
+nuv = length(unique(unlist(vgaMap["Angular Shortest Path"])))
 plot(vgaMap["Angular Shortest Path"],
      breaks = "equal",
-     nbreaks = 80,
-     col = c("gray", depthmap.axmanesque.colour(78)))
+     nbreaks = nuv,
+     col = c("lightgray", depthmap.axmanesque.colour(nuv - 2)))
 ```
 
 ```{r}
@@ -197,8 +201,9 @@ vgaMap <- oneToOneTraverse(
   toX = 1.27,
   toY = 7.60
 )
+nuv = length(unique(unlist(vgaMap["Angular Shortest Path"])))
 plot(vgaMap["Angular Shortest Path Zone"],
      breaks = "equal",
-     nbreaks = 80,
-     col = c("gray", depthmap.axmanesque.colour(78)))
+     nbreaks = nuv,
+     col = c("lightgray", depthmap.axmanesque.colour(nuv - 2)))
 ```
