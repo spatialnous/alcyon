@@ -109,4 +109,16 @@ segmentAnalysed <- oneToAllTraverse(
 plot(segmentAnalysed[, "Angular Step Depth"])
 ```
 
+```{r}
+segmentAnalysed <- oneToOneTraverse(
+  segmentAnalysed,
+  traversalType = TraversalType$Angular,
+  fromX = 1217.1,
+  fromY = -1977.3,
+  toX = 1017.8,
+  toY = -1699.3,
+  quantizationWidth = pi / 1024
+)
 
+plot(segmentAnalysed[, "Angular Shortest Path Angle"])
+```
