@@ -53,7 +53,7 @@ LazyData: true
 LinkingTo:
     Rcpp, cli
 Imports:
-    Rcpp, methods, cli
+    Rcpp, methods
 Depends:
     sf, stars, igraph
 Suggests: 
