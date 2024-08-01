@@ -23,6 +23,8 @@ vgaVisualLocal(
 \item{copyMap}{Optional. Copy the internal sala map}
 
 \item{gatesOnly}{Optional. Only keep the values at specific gates}
+
+\item{progress}{Optional. Enable progress display}
 }
 \value{
 A new PointMap with the results included
