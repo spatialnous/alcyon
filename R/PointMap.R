@@ -25,11 +25,11 @@ setOldClass(c("PointMap", "stars"))
 #' "name(pointMap)")
 #' @export
 setMethod(
-  "name",
-  signature = c(map = "PointMap"),
-  function(map) {
-    Rcpp_PointMap_getName(attr(map, "sala_map"))
-  }
+    "name",
+    signature = c(map = "PointMap"),
+    function(map) {
+        Rcpp_PointMap_getName(attr(map, "sala_map"))
+    }
 )
 
 #' Get the PointMap connections
@@ -44,11 +44,11 @@ setMethod(
 #' "head(connections(pointMap), 100)")
 #' @export
 setMethod(
-  "connections",
-  signature = c(map = "PointMap"),
-  function(map) {
-    return(Rcpp_PointMap_getConnections(attr(map, "sala_map")))
-  }
+    "connections",
+    signature = c(map = "PointMap"),
+    function(map) {
+        return(Rcpp_PointMap_getConnections(attr(map, "sala_map")))
+    }
 )
 
 #' Get the PointMap links
@@ -63,11 +63,11 @@ setMethod(
 #' "links(pointMap)")
 #' @export
 setMethod(
-  "links",
-  signature = c(map = "PointMap"),
-  function(map) {
-    return(Rcpp_PointMap_getLinks(attr(map, "sala_map")))
-  }
+    "links",
+    signature = c(map = "PointMap"),
+    function(map) {
+        return(Rcpp_PointMap_getLinks(attr(map, "sala_map")))
+    }
 )
 
 #' Link two PointMap Cells (coordinates)
@@ -88,16 +88,16 @@ setMethod(
 #' "linkCoords(pointMap, 1.74, 6.7, 5.05, 5.24)")
 #' @export
 setMethod(
-  "linkCoords",
-  signature = c(map = "PointMap"),
-  function(map, fromX, fromY, toX, toY, copyMap = TRUE) {
-    result <- Rcpp_PointMap_linkCoords(
-      attr(map, "sala_map"),
-      cbind(fromX, fromY, toX, toY),
-      copyMapNV = copyMap
-    )
-    return(processPointMapResult(map, result))
-  }
+    "linkCoords",
+    signature = c(map = "PointMap"),
+    function(map, fromX, fromY, toX, toY, copyMap = TRUE) {
+        result <- Rcpp_PointMap_linkCoords(
+            attr(map, "sala_map"),
+            cbind(fromX, fromY, toX, toY),
+            copyMapNV = copyMap
+        )
+        return(processPointMapResult(map, result))
+    }
 )
 
 #' Unlink two PointMap Cells (coordinates)
@@ -119,16 +119,16 @@ setMethod(
 #' "pointMap <- unlinkCoords(pointMap, 1.74, 6.7, 5.05, 5.24)")
 #' @export
 setMethod(
-  "unlinkCoords",
-  signature = c(map = "PointMap"),
-  function(map, fromX, fromY, toX, toY, copyMap = TRUE) {
-    result <- Rcpp_PointMap_unlinkCoords(
-      attr(map, "sala_map"),
-      cbind(fromX, fromY, toX, toY),
-      copyMapNV = copyMap
-    )
-    return(processPointMapResult(map, result))
-  }
+    "unlinkCoords",
+    signature = c(map = "PointMap"),
+    function(map, fromX, fromY, toX, toY, copyMap = TRUE) {
+        result <- Rcpp_PointMap_unlinkCoords(
+            attr(map, "sala_map"),
+            cbind(fromX, fromY, toX, toY),
+            copyMapNV = copyMap
+        )
+        return(processPointMapResult(map, result))
+    }
 )
 
 #' Link two PointMap Cells (refs)
@@ -147,16 +147,16 @@ setMethod(
 #' "pointMap <- linkRefs(pointMap, 1835056L, 7208971L)")
 #' @export
 setMethod(
-  "linkRefs",
-  signature = c(map = "PointMap"),
-  function(map, fromRef, toRef, copyMap = TRUE) {
-    result <- Rcpp_PointMap_linkRefs(
-      attr(map, "sala_map"),
-      cbind(fromRef, toRef),
-      copyMapNV = copyMap
-    )
-    return(processPointMapResult(map, result))
-  }
+    "linkRefs",
+    signature = c(map = "PointMap"),
+    function(map, fromRef, toRef, copyMap = TRUE) {
+        result <- Rcpp_PointMap_linkRefs(
+            attr(map, "sala_map"),
+            cbind(fromRef, toRef),
+            copyMapNV = copyMap
+        )
+        return(processPointMapResult(map, result))
+    }
 )
 
 #' Unlink two PointMap Cells (refs)
@@ -176,16 +176,16 @@ setMethod(
 #' "pointMap <- unlinkRefs(pointMap, 1835056L, 7208971L)")
 #' @export
 setMethod(
-  "unlinkRefs",
-  signature = c(map = "PointMap"),
-  function(map, fromRef, toRef, copyMap = TRUE) {
-    result <- Rcpp_PointMap_unlinkRefs(
-      attr(map, "sala_map"),
-      cbind(fromRef, toRef),
-      copyMapNV = copyMap
-    )
-    return(processPointMapResult(map, result))
-  }
+    "unlinkRefs",
+    signature = c(map = "PointMap"),
+    function(map, fromRef, toRef, copyMap = TRUE) {
+        result <- Rcpp_PointMap_unlinkRefs(
+            attr(map, "sala_map"),
+            cbind(fromRef, toRef),
+            copyMapNV = copyMap
+        )
+        return(processPointMapResult(map, result))
+    }
 )
 
 #' Subset PointMap objects
@@ -198,10 +198,10 @@ setMethod(
 #' @param ... other parameters passed to \code{stars[]}
 #' @export
 `[.PointMap` <- function(x, ...) {
-  class(x) <- setdiff(class(x), "PointMap")
-  x <- NextMethod()
-  class(x) <- c("PointMap", class(x))
-  return(x)
+    class(x) <- setdiff(class(x), "PointMap")
+    x <- NextMethod()
+    class(x) <- c("PointMap", class(x))
+    return(x)
 }
 
 #' @name PointMap_subset
@@ -210,10 +210,10 @@ setMethod(
 #' @param value value to be passed to \code{stars[] <- }
 #' @export
 `[<-.PointMap` <- function(x, ..., value) {
-  class(x) <- setdiff(class(x), "PointMap")
-  x <- NextMethod()
-  class(x) <- c("PointMap", class(x))
-  return(x)
+    class(x) <- setdiff(class(x), "PointMap")
+    x <- NextMethod()
+    class(x) <- c("PointMap", class(x))
+    return(x)
 }
 
 #' plot a PointMap
@@ -224,6 +224,6 @@ setMethod(
 #' @importFrom stars st_flip
 #' @export
 plot.PointMap <- function(x, ...) {
-  x <- st_flip(x, which = 2L)
-  NextMethod(...)
+    x <- st_flip(x, which = 2L)
+    NextMethod(...)
 }

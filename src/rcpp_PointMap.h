@@ -8,4 +8,4 @@
 
 #include <Rcpp.h>
 
-std::vector<std::string> getPointMapAttributeNames(PointMap* pointMap);
+std::vector<std::string> getPointMapAttributeNames(PointMap *pointMap);

@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: GPL-3.0-only
 
 rxLoadSmallSegmentLines <- function() {
-  ex <- "mifFile <- system.file(
+    ex <- "mifFile <- system.file(
     \"extdata\", \"testdata\", \"barnsbury\",
     \"barnsbury_small_segment_original.mif\",
     package = \"alcyon\"
@@ -12,11 +12,11 @@ rxLoadSmallSegmentLines <- function() {
     geometry_column = 1L, quiet = TRUE
   )
   shapeGraph <- as(sfMap, \"SegmentShapeGraph\")"
-  return(strsplit(ex, split = "\n", fixed = TRUE)[[1L]])
+    return(strsplit(ex, split = "\n", fixed = TRUE)[[1L]])
 }
 
 rxLoadSmallAxialLines <- function() {
-  ex <- "mifFile <- system.file(
+    ex <- "mifFile <- system.file(
     \"extdata\", \"testdata\", \"barnsbury\",
     \"barnsbury_small_axial_original.mif\",
     package = \"alcyon\"
@@ -25,11 +25,11 @@ rxLoadSmallAxialLines <- function() {
     geometry_column = 1L, quiet = TRUE
   )
   shapeGraph <- as(sfMap, \"AxialShapeGraph\")"
-  return(strsplit(ex, split = "\n", fixed = TRUE)[[1L]])
+    return(strsplit(ex, split = "\n", fixed = TRUE)[[1L]])
 }
 
 rxLoadInteriorLinesAsShapeMap <- function() {
-  ex <- "mifFile <- system.file(
+    ex <- "mifFile <- system.file(
     \"extdata\", \"testdata\", \"gallery\",
     \"gallery_lines.mif\",
     package = \"alcyon\"
@@ -38,11 +38,11 @@ rxLoadInteriorLinesAsShapeMap <- function() {
     geometry_column = 1L, quiet = TRUE
   )
   shapeMap <- as(sfMap[, vector()], \"ShapeMap\")"
-  return(strsplit(ex, split = "\n", fixed = TRUE)[[1L]])
+    return(strsplit(ex, split = "\n", fixed = TRUE)[[1L]])
 }
 
 rxLoadInteriorLinesAsPointMap <- function() {
-  ex <- "mifFile <- system.file(
+    ex <- "mifFile <- system.file(
     \"extdata\", \"testdata\", \"gallery\",
     \"gallery_lines.mif\",
     package = \"alcyon\"
@@ -59,11 +59,11 @@ rxLoadInteriorLinesAsPointMap <- function() {
     boundaryGraph = FALSE,
     verbose = FALSE
   )"
-  return(strsplit(ex, split = "\n", fixed = TRUE)[[1L]])
+    return(strsplit(ex, split = "\n", fixed = TRUE)[[1L]])
 }
 
 rxLoadSimpleLinesAsShapeMap <- function() {
-  ex <- "mifFile <- system.file(
+    ex <- "mifFile <- system.file(
     \"extdata\", \"testdata\", \"simple\",
     \"simple_interior.mif\",
     package = \"alcyon\"
@@ -72,11 +72,11 @@ rxLoadSimpleLinesAsShapeMap <- function() {
     geometry_column = 1L, quiet = TRUE
   )
   shapeMap <- as(sfMap[, vector()], \"ShapeMap\")"
-  return(strsplit(ex, split = "\n", fixed = TRUE)[[1L]])
+    return(strsplit(ex, split = "\n", fixed = TRUE)[[1L]])
 }
 
 rxLoadSimpleLinesAsPointMap <- function(gridSize = 0.04) {
-  ex <- "mifFile <- system.file(
+    ex <- "mifFile <- system.file(
     \"extdata\", \"testdata\", \"simple\",
     \"simple_interior.mif\",
     package = \"alcyon\"
@@ -93,5 +93,5 @@ rxLoadSimpleLinesAsPointMap <- function(gridSize = 0.04) {
     boundaryGraph = FALSE,
     verbose = FALSE
   )"
-  return(strsplit(ex, split = "\n", fixed = TRUE)[[1L]])
+    return(strsplit(ex, split = "\n", fixed = TRUE)[[1L]])
 }

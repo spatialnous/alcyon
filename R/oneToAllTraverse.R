@@ -63,28 +63,28 @@ oneToAllTraverse <- function(map,
                              quantizationWidth = NA,
                              copyMap = TRUE,
                              verbose = FALSE) {
-  if (!(traversalType %in% as.list(TraversalType))) {
-    stop("Unknown traversalType: ", traversalType)
-  }
+    if (!(traversalType %in% as.list(TraversalType))) {
+        stop("Unknown traversalType: ", traversalType)
+    }
 
-  if (!is.na(quantizationWidth) && !inherits(map, "SegmentShapeGraph")) {
-    stop("quantizationWidth can only be used with Segment ShapeGraphs")
-  }
+    if (!is.na(quantizationWidth) && !inherits(map, "SegmentShapeGraph")) {
+        stop("quantizationWidth can only be used with Segment ShapeGraphs")
+    }
 
-  if (is.na(quantizationWidth)
-      && inherits(map, "SegmentShapeGraph")
-      && traversalType == TraversalType$Angular) {
-    stop("Angular traversal requires a quantizationWidth")
-  }
-  return(oneToAllTraversePerMapType(
-    map,
-    traversalType,
-    fromX,
-    fromY,
-    quantizationWidth,
-    copyMap = copyMap,
-    verbose = verbose
-  ))
+    if (is.na(quantizationWidth) &&
+            inherits(map, "SegmentShapeGraph") &&
+            traversalType == TraversalType$Angular) {
+        stop("Angular traversal requires a quantizationWidth")
+    }
+    return(oneToAllTraversePerMapType(
+        map,
+        traversalType,
+        fromX,
+        fromY,
+        quantizationWidth,
+        copyMap = copyMap,
+        verbose = verbose
+    ))
 }
 oneToAllTraversePerMapType <- function(map,
                                        traversalType,
@@ -93,40 +93,41 @@ oneToAllTraversePerMapType <- function(map,
                                        quantizationWidth = NA,
                                        copyMap = TRUE,
                                        verbose = FALSE) {
-
-  if (inherits(map, "PointMap")) {
-    return(oneToAllTraversePointMap(
-      map,
-      traversalType,
-      fromX,
-      fromY,
-      quantizationWidth,
-      copyMap = copyMap,
-      verbose
-    ))
-  } else if (inherits(map, "AxialShapeGraph")) {
-    result <- Rcpp_axialStepDepth(attr(map, "sala_map"),
-                                  traversalType,
-                                  fromX,
-                                  fromY,
-                                  copyMapNV = copyMap)
-    return(processShapeMapResult(map, result))
-  } else if (inherits(map, "SegmentShapeGraph")) {
-    tulipBins <- 0L
-    if (traversalType == TraversalType$Angular
-        && !is.na(quantizationWidth)) {
-      tulipBins <- as.integer(pi / quantizationWidth)
+    if (inherits(map, "PointMap")) {
+        return(oneToAllTraversePointMap(
+            map,
+            traversalType,
+            fromX,
+            fromY,
+            quantizationWidth,
+            copyMap = copyMap,
+            verbose
+        ))
+    } else if (inherits(map, "AxialShapeGraph")) {
+        result <- Rcpp_axialStepDepth(attr(map, "sala_map"),
+            traversalType,
+            fromX,
+            fromY,
+            copyMapNV = copyMap
+        )
+        return(processShapeMapResult(map, result))
+    } else if (inherits(map, "SegmentShapeGraph")) {
+        tulipBins <- 0L
+        if (traversalType == TraversalType$Angular &&
+                !is.na(quantizationWidth)) {
+            tulipBins <- as.integer(pi / quantizationWidth)
+        }
+        result <- Rcpp_segmentStepDepth(attr(map, "sala_map"),
+            traversalType,
+            fromX,
+            fromY,
+            tulipBins,
+            copyMapNV = copyMap
+        )
+        return(processShapeMapResult(map, result))
+    } else {
+        stop("Can only run depth on Axial or Segment ShapeGraphs and PointMaps")
     }
-    result <- Rcpp_segmentStepDepth(attr(map, "sala_map"),
-                                    traversalType,
-                                    fromX,
-                                    fromY,
-                                    tulipBins,
-                                    copyMapNV = copyMap)
-    return(processShapeMapResult(map, result))
-  } else {
-    stop("Can only run depth on Axial or Segment ShapeGraphs and PointMaps")
-  }
 }
 
 oneToAllTraversePointMap <- function(map,
@@ -136,26 +137,26 @@ oneToAllTraversePointMap <- function(map,
                                      quantizationWidth = NA,
                                      copyMap = TRUE,
                                      verbose = FALSE) {
-  if (traversalType == TraversalType$Topological) {
-    result <- Rcpp_VGA_visualDepth(
-      attr(map, "sala_map"),
-      cbind(fromX, fromY),
-      copyMapNV = copyMap
-    )
-    return(processPointMapResult(map, result))
-  } else if (traversalType == TraversalType$Metric) {
-    result <- Rcpp_VGA_metricDepth(
-      attr(map, "sala_map"),
-      cbind(fromX, fromY),
-      copyMapNV = copyMap
-    )
-    return(processPointMapResult(map, result))
-  } else if (traversalType == TraversalType$Angular) {
-    result <- Rcpp_VGA_angularDepth(
-      attr(map, "sala_map"),
-      cbind(fromX, fromY),
-      copyMapNV = copyMap
-    )
-    return(processPointMapResult(map, result))
-  }
+    if (traversalType == TraversalType$Topological) {
+        result <- Rcpp_VGA_visualDepth(
+            attr(map, "sala_map"),
+            cbind(fromX, fromY),
+            copyMapNV = copyMap
+        )
+        return(processPointMapResult(map, result))
+    } else if (traversalType == TraversalType$Metric) {
+        result <- Rcpp_VGA_metricDepth(
+            attr(map, "sala_map"),
+            cbind(fromX, fromY),
+            copyMapNV = copyMap
+        )
+        return(processPointMapResult(map, result))
+    } else if (traversalType == TraversalType$Angular) {
+        result <- Rcpp_VGA_angularDepth(
+            attr(map, "sala_map"),
+            cbind(fromX, fromY),
+            copyMapNV = copyMap
+        )
+        return(processPointMapResult(map, result))
+    }
 }

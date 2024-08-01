@@ -8,4 +8,4 @@
 
 #include <Rcpp.h>
 
-std::vector<std::string> getShapeMapAttributeNames(ShapeMap* shapeMap);
+std::vector<std::string> getShapeMapAttributeNames(ShapeMap *shapeMap);

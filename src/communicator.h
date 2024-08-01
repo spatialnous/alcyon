@@ -12,31 +12,31 @@
 
 #include <memory>
 
-class ProgressCommunicator: public Communicator {
-  mutable SEXP progress = nullptr;
+class ProgressCommunicator : public Communicator {
+    mutable SEXP progress = nullptr;
 
-public:
-  ProgressCommunicator(bool displayProgress=false) {}
-  ~ProgressCommunicator() {
-    cli_progress_done(progress);
-    UNPROTECT(1);
-  }
-
-  void CommPostMessage(size_t m, size_t x) const override {
-    try {
-      Rcpp::checkUserInterrupt();
-    } catch (Rcpp::internal::InterruptedException& e) {
-      m_cancelled = true;
-      return;
+  public:
+    ProgressCommunicator(bool displayProgress = false) {}
+    ~ProgressCommunicator() {
+        cli_progress_done(progress);
+        UNPROTECT(1);
     }
 
-    if (m == Communicator::NUM_RECORDS && x > 0) {
-      progress = PROTECT(cli_progress_bar(x, NULL));
+    void CommPostMessage(size_t m, size_t x) const override {
+        try {
+            Rcpp::checkUserInterrupt();
+        } catch (Rcpp::internal::InterruptedException &e) {
+            m_cancelled = true;
+            return;
+        }
 
-    } else if (CLI_SHOULD_TICK && m == Communicator::CURRENT_RECORD) {
-      cli_progress_set(progress, x);
+        if (m == Communicator::NUM_RECORDS && x > 0) {
+            progress = PROTECT(cli_progress_bar(x, NULL));
+
+        } else if (CLI_SHOULD_TICK && m == Communicator::CURRENT_RECORD) {
+            cli_progress_set(progress, x);
+        }
     }
-  }
 };
 
 std::unique_ptr<Communicator> getCommunicator(const bool printProgress);

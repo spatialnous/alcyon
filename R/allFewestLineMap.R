@@ -21,17 +21,21 @@ makeAllLineMap <- function(boundsMap,
                            seedX,
                            seedY,
                            verbose = FALSE) {
-  allLineMapPtr <- Rcpp_makeAllLineMap(
-    attr(boundsMap, "sala_map"),
-    seedX = seedX,
-    seedY = seedY
-  )
-  newMap <- processPtrAsNewLineMap(allLineMapPtr$allLineMap,
-                                   c("AllLineShapeGraph",
-                                     "AxialShapeGraph",
-                                     "ShapeMap"))
-  attr(newMap, "all_line_data") <- allLineMapPtr$mapData
-  return(newMap)
+    allLineMapPtr <- Rcpp_makeAllLineMap(
+        attr(boundsMap, "sala_map"),
+        seedX = seedX,
+        seedY = seedY
+    )
+    newMap <- processPtrAsNewLineMap(
+        allLineMapPtr$allLineMap,
+        c(
+            "AllLineShapeGraph",
+            "AxialShapeGraph",
+            "ShapeMap"
+        )
+    )
+    attr(newMap, "all_line_data") <- allLineMapPtr$mapData
+    return(newMap)
 }
 
 
@@ -49,14 +53,20 @@ makeAllLineMap <- function(boundsMap,
 #' "reduceToFewest(allLineMap)")
 #' @export
 reduceToFewest <- function(allLineMap) {
-  result <- list()
-  fewestMaps <- Rcpp_extractFewestLineMaps(attr(allLineMap, "sala_map"),
-                                           attr(allLineMap, "all_line_data"))
-  result[["Fewest-Line Map (Subsets)"]] <-
-    processPtrAsNewLineMap(fewestMaps[["Fewest-Line Map (Subsets)"]],
-                           c("AxialShapeGraph", "ShapeMap"))
-  result[["Fewest-Line Map (Minimal)"]] <-
-    processPtrAsNewLineMap(fewestMaps[["Fewest-Line Map (Minimal)"]],
-                           c("AxialShapeGraph", "ShapeMap"))
-  return(result)
+    result <- list()
+    fewestMaps <- Rcpp_extractFewestLineMaps(
+        attr(allLineMap, "sala_map"),
+        attr(allLineMap, "all_line_data")
+    )
+    result[["Fewest-Line Map (Subsets)"]] <-
+        processPtrAsNewLineMap(
+            fewestMaps[["Fewest-Line Map (Subsets)"]],
+            c("AxialShapeGraph", "ShapeMap")
+        )
+    result[["Fewest-Line Map (Minimal)"]] <-
+        processPtrAsNewLineMap(
+            fewestMaps[["Fewest-Line Map (Minimal)"]],
+            c("AxialShapeGraph", "ShapeMap")
+        )
+    return(result)
 }

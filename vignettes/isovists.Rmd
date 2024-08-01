@@ -15,8 +15,8 @@ vignette: >
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>"
+    collapse = TRUE,
+    comment = "#>"
 )
 ```
 
@@ -24,12 +24,12 @@ knitr::opts_chunk$set(
 library(alcyon)
 
 lineStringMap <- st_read(
-  system.file(
-    "extdata", "testdata", "gallery",
-    "gallery_lines.mif",
-    package = "alcyon"
-  ),
-  geometry_column = 1L, quiet = TRUE
+    system.file(
+        "extdata", "testdata", "gallery",
+        "gallery_lines.mif",
+        package = "alcyon"
+    ),
+    geometry_column = 1L, quiet = TRUE
 )
 
 shapeMap <- as(lineStringMap[, vector()], "ShapeMap")
@@ -38,14 +38,13 @@ shapeMap <- as(lineStringMap[, vector()], "ShapeMap")
 
 ```{r}
 isovistMap <- isovist(
-  shapeMap,
-  x = c(3.01),
-  y = c(6.70),
-  angle = 0.01,
-  viewAngle = 3.14,
-  FALSE
+    shapeMap,
+    x = c(3.01),
+    y = c(6.70),
+    angle = 0.01,
+    viewAngle = 3.14,
+    FALSE
 )
-
 ```
 
 ```{r}

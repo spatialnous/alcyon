@@ -24,11 +24,11 @@ setOldClass(c("SegmentShapeGraph", "ShapeMap", "sf"))
 #' "connections(shapeGraph)")
 #' @export
 setMethod(
-  "connections",
-  signature(map = "SegmentShapeGraph"),
-  function(map) {
-    Rcpp_ShapeGraph_getSegmentConnections(attr(map, "sala_map"))
-  }
+    "connections",
+    signature(map = "SegmentShapeGraph"),
+    function(map) {
+        Rcpp_ShapeGraph_getSegmentConnections(attr(map, "sala_map"))
+    }
 )
 
 #' Axial to Segment ShapeGraph
@@ -46,15 +46,17 @@ setMethod(
 #' @export
 axialToSegmentShapeGraph <- function(axialShapeGraph,
                                      stubRemoval = NULL) {
-  newSegmentMapPtr <- Rcpp_axialToSegment(
-    attr(axialShapeGraph, "sala_map"),
-    "Segment Map",
-    TRUE,
-    stubRemoval
-  )
+    newSegmentMapPtr <- Rcpp_axialToSegment(
+        attr(axialShapeGraph, "sala_map"),
+        "Segment Map",
+        TRUE,
+        stubRemoval
+    )
 
-  return(processPtrAsNewLineMap(newSegmentMapPtr,
-                                c("SegmentShapeGraph", "ShapeMap")))
+    return(processPtrAsNewLineMap(
+        newSegmentMapPtr,
+        c("SegmentShapeGraph", "ShapeMap")
+    ))
 }
 
 #' as("ShapeMap", "SegmentShapeGraph")
@@ -67,9 +69,9 @@ axialToSegmentShapeGraph <- function(axialShapeGraph,
 #'
 #' @importFrom methods as
 setAs("ShapeMap", "SegmentShapeGraph", function(from) {
-  class(from) <- c("SegmentShapeGraph", class(from))
-  result <- Rcpp_shapeMapToSegment(attr(from, "sala_map"))
-  return(processShapeMapResult(from, result))
+    class(from) <- c("SegmentShapeGraph", class(from))
+    result <- Rcpp_shapeMapToSegment(attr(from, "sala_map"))
+    return(processShapeMapResult(from, result))
 })
 
 #' as("sf", "SegmentShapeGraph")
@@ -82,7 +84,7 @@ setAs("ShapeMap", "SegmentShapeGraph", function(from) {
 #'
 #' @importFrom methods as
 setAs("sf", "SegmentShapeGraph", function(from) {
-  return(as(as(from, "ShapeMap"), "SegmentShapeGraph"))
+    return(as(as(from, "ShapeMap"), "SegmentShapeGraph"))
 })
 
 #' Subset SegmentShapeGraph objects
@@ -95,10 +97,10 @@ setAs("sf", "SegmentShapeGraph", function(from) {
 #' @param ... other parameters passed to \code{stars[]}
 #' @export
 `[.SegmentShapeGraph` <- function(x, ...) {
-  class(x) <- setdiff(class(x), "SegmentShapeGraph")
-  x <- NextMethod()
-  class(x) <- c("SegmentShapeGraph", class(x))
-  return(x)
+    class(x) <- setdiff(class(x), "SegmentShapeGraph")
+    x <- NextMethod()
+    class(x) <- c("SegmentShapeGraph", class(x))
+    return(x)
 }
 
 #' @name SegmentShapeGraph_subset
@@ -107,8 +109,8 @@ setAs("sf", "SegmentShapeGraph", function(from) {
 #' @param value value to be passed to \code{sf[] <- }
 #' @export
 `[<-.SegmentShapeGraph` <- function(x, ..., value) {
-  class(x) <- setdiff(class(x), "SegmentShapeGraph")
-  x <- NextMethod()
-  class(x) <- c("SegmentShapeGraph", class(x))
-  return(x)
+    class(x) <- setdiff(class(x), "SegmentShapeGraph")
+    x <- NextMethod()
+    class(x) <- c("SegmentShapeGraph", class(x))
+    return(x)
 }

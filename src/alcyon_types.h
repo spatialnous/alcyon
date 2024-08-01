@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "salalib/shapemap.h"
-#include "salalib/shapegraph.h"
 #include "salalib/alllinemap.h"
 #include "salalib/pointmap.h"
+#include "salalib/shapegraph.h"
+#include "salalib/shapemap.h"

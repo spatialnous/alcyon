@@ -24,11 +24,11 @@ setOldClass(c("AxialShapeGraph", "ShapeMap", "sf"))
 #' "connections(shapeGraph)")
 #' @export
 setMethod(
-  "connections",
-  signature = c(map = "AxialShapeGraph"),
-  function(map) {
-    Rcpp_ShapeGraph_getAxialConnections(attr(map, "sala_map"))
-  }
+    "connections",
+    signature = c(map = "AxialShapeGraph"),
+    function(map) {
+        Rcpp_ShapeGraph_getAxialConnections(attr(map, "sala_map"))
+    }
 )
 
 #' Get the Axial ShapeGraph links
@@ -45,11 +45,11 @@ setMethod(
 #' "links(shapeGraph)")
 #' @export
 setMethod(
-  "links",
-  signature = c(map = "AxialShapeGraph"),
-  function(map) {
-    Rcpp_ShapeGraph_getLinksUnlinks(attr(map, "sala_map"))
-  }
+    "links",
+    signature = c(map = "AxialShapeGraph"),
+    function(map) {
+        Rcpp_ShapeGraph_getLinksUnlinks(attr(map, "sala_map"))
+    }
 )
 
 #' Link two Axial Lines (coordinates)
@@ -70,16 +70,16 @@ setMethod(
 #' "linkCoords(shapeGraph, 982.8, -1620.3, 1217.1, -1977.3)")
 #' @export
 setMethod(
-  "linkCoords",
-  signature = c(map = "AxialShapeGraph"),
-  function(map, fromX, fromY, toX, toY, copyMap = TRUE) {
-    result <- Rcpp_ShapeGraph_linkCoords(
-      attr(map, "sala_map"),
-      cbind(fromX, fromY, toX, toY),
-      copyMapNV = copyMap
-    )
-    return(processShapeMapResult(map, result))
-  }
+    "linkCoords",
+    signature = c(map = "AxialShapeGraph"),
+    function(map, fromX, fromY, toX, toY, copyMap = TRUE) {
+        result <- Rcpp_ShapeGraph_linkCoords(
+            attr(map, "sala_map"),
+            cbind(fromX, fromY, toX, toY),
+            copyMapNV = copyMap
+        )
+        return(processShapeMapResult(map, result))
+    }
 )
 
 #' Unlink two Axial Lines (coordinates)
@@ -100,16 +100,16 @@ setMethod(
 #' "unlinkCoords(shapeGraph, 982.8, -1620.3, 1080.4, -1873.5)")
 #' @export
 setMethod(
-  "unlinkCoords",
-  signature = c(map = "AxialShapeGraph"),
-  function(map, fromX, fromY, toX, toY, copyMap = TRUE) {
-    result <- Rcpp_ShapeGraph_unlinkCoords(
-      attr(map, "sala_map"),
-      cbind(fromX, fromY, toX, toY),
-      copyMapNV = copyMap
-    )
-    return(processShapeMapResult(map, result))
-  }
+    "unlinkCoords",
+    signature = c(map = "AxialShapeGraph"),
+    function(map, fromX, fromY, toX, toY, copyMap = TRUE) {
+        result <- Rcpp_ShapeGraph_unlinkCoords(
+            attr(map, "sala_map"),
+            cbind(fromX, fromY, toX, toY),
+            copyMapNV = copyMap
+        )
+        return(processShapeMapResult(map, result))
+    }
 )
 
 #' Link two Axial Lines (refs)
@@ -128,16 +128,16 @@ setMethod(
 #' "linkRefs(shapeGraph, 0L, 9L)")
 #' @export
 setMethod(
-  "linkRefs",
-  signature = c(map = "AxialShapeGraph"),
-  function(map, fromRef, toRef, copyMap = TRUE) {
-    result <- Rcpp_ShapeGraph_linkRefs(
-      attr(map, "sala_map"),
-      cbind(fromRef, toRef),
-      copyMapNV = copyMap
-    )
-    return(processShapeMapResult(map, result))
-  }
+    "linkRefs",
+    signature = c(map = "AxialShapeGraph"),
+    function(map, fromRef, toRef, copyMap = TRUE) {
+        result <- Rcpp_ShapeGraph_linkRefs(
+            attr(map, "sala_map"),
+            cbind(fromRef, toRef),
+            copyMapNV = copyMap
+        )
+        return(processShapeMapResult(map, result))
+    }
 )
 
 #' Unlink two Axial Lines (refs)
@@ -156,16 +156,16 @@ setMethod(
 #' "unlinkRefs(shapeGraph, 12L, 34L)")
 #' @export
 setMethod(
-  "unlinkRefs",
-  signature = c(map = "AxialShapeGraph"),
-  function(map, fromRef, toRef, copyMap = TRUE) {
-    result <- Rcpp_ShapeGraph_unlinkRefs(
-      attr(map, "sala_map"),
-      cbind(fromRef, toRef),
-      copyMapNV = copyMap
-    )
-    return(processShapeMapResult(map, result))
-  }
+    "unlinkRefs",
+    signature = c(map = "AxialShapeGraph"),
+    function(map, fromRef, toRef, copyMap = TRUE) {
+        result <- Rcpp_ShapeGraph_unlinkRefs(
+            attr(map, "sala_map"),
+            cbind(fromRef, toRef),
+            copyMapNV = copyMap
+        )
+        return(processShapeMapResult(map, result))
+    }
 )
 
 
@@ -185,16 +185,16 @@ setMethod(
 #' "unlinkAtCrossPoint(shapeGraph, 530925.0, 184119.0)")
 #' @export
 setMethod(
-  "unlinkAtCrossPoint",
-  signature = c(map = "AxialShapeGraph"),
-  function(map, x, y, copyMap = TRUE) {
-    result <- Rcpp_ShapeGraph_unlinkAtCrossPoint(
-      attr(map, "sala_map"),
-      cbind(x, y),
-      copyMapNV = copyMap
-    )
-    return(processShapeMapResult(map, result))
-  }
+    "unlinkAtCrossPoint",
+    signature = c(map = "AxialShapeGraph"),
+    function(map, x, y, copyMap = TRUE) {
+        result <- Rcpp_ShapeGraph_unlinkAtCrossPoint(
+            attr(map, "sala_map"),
+            cbind(x, y),
+            copyMapNV = copyMap
+        )
+        return(processShapeMapResult(map, result))
+    }
 )
 
 #' as("ShapeMap", "AxialShapeGraph")
@@ -204,9 +204,9 @@ setMethod(
 #'
 #' @importFrom methods as
 setAs("ShapeMap", "AxialShapeGraph", function(from) {
-  class(from) <- c("AxialShapeGraph", class(from))
-  result <- Rcpp_toAxialShapeGraph(attr(from, "sala_map"))
-  return(processShapeMapResult(from, result))
+    class(from) <- c("AxialShapeGraph", class(from))
+    result <- Rcpp_toAxialShapeGraph(attr(from, "sala_map"))
+    return(processShapeMapResult(from, result))
 })
 
 #' as("sf", "AxialShapeGraph")
@@ -216,7 +216,7 @@ setAs("ShapeMap", "AxialShapeGraph", function(from) {
 #'
 #' @importFrom methods as
 setAs("sf", "AxialShapeGraph", function(from) {
-  return(as(as(from, "ShapeMap"), "AxialShapeGraph"))
+    return(as(as(from, "ShapeMap"), "AxialShapeGraph"))
 })
 
 #' Subset AxialShapeGraph objects
@@ -229,10 +229,10 @@ setAs("sf", "AxialShapeGraph", function(from) {
 #' @param ... other parameters passed to \code{stars[]}
 #' @export
 `[.AxialShapeGraph` <- function(x, ...) {
-  class(x) <- setdiff(class(x), "AxialShapeGraph")
-  x <- NextMethod()
-  class(x) <- c("AxialShapeGraph", class(x))
-  return(x)
+    class(x) <- setdiff(class(x), "AxialShapeGraph")
+    x <- NextMethod()
+    class(x) <- c("AxialShapeGraph", class(x))
+    return(x)
 }
 
 #' @name AxialShapeGraph_subset
@@ -241,8 +241,8 @@ setAs("sf", "AxialShapeGraph", function(from) {
 #' @param value value to be passed to \code{sf[] <- }
 #' @export
 `[<-.AxialShapeGraph` <- function(x, ..., value) {
-  class(x) <- setdiff(class(x), "AxialShapeGraph")
-  x <- NextMethod()
-  class(x) <- c("AxialShapeGraph", class(x))
-  return(x)
+    class(x) <- setdiff(class(x), "AxialShapeGraph")
+    x <- NextMethod()
+    class(x) <- c("AxialShapeGraph", class(x))
+    return(x)
 }

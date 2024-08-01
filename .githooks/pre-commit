@@ -10,3 +10,10 @@ reuse lint
 echo "Running the linter..."
 Rscript -e 'devtools::load_all(); res <- lintr::lint_package(show_progress = T); if (length(res) != 0) {print("Linter failed!"); q(status = 2)}'
 echo "Linter satisfied!"
+echo "Running clang-format..."
+for FILE in $(git diff --cached --name-only --diff-filter=d | grep -E '.*\.(c|cpp|h|hpp)$')
+do
+    echo "Checking file: $FILE"
+    clang-format --dry-run --Werror -style=file:./src/.clang-format $FILE
+done
+echo "clang-format satisfied"

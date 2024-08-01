@@ -11,24 +11,24 @@ axialAnalysis <- function(shapeGraph,
                           copyMap = TRUE,
                           keepGraph = FALSE,
                           verbose = FALSE) {
-  numRadii <- vapply(radii, function(r) {
-    if (r == "n") {
-      return(-1L)
-    } else {
-      return(as.integer(r))
-    }
-  }, FUN.VALUE = 1L)
+    numRadii <- vapply(radii, function(r) {
+        if (r == "n") {
+            return(-1L)
+        } else {
+            return(as.integer(r))
+        }
+    }, FUN.VALUE = 1L)
 
-  result <- Rcpp_runAxialAnalysis(
-    attr(shapeGraph, "sala_map"),
-    numRadii,
-    weightByAttribute,
-    includeChoice,
-    includeIntermediateMetrics,
-    copyMapNV = copyMap
-  )
+    result <- Rcpp_runAxialAnalysis(
+        attr(shapeGraph, "sala_map"),
+        numRadii,
+        weightByAttribute,
+        includeChoice,
+        includeIntermediateMetrics,
+        copyMapNV = copyMap
+    )
 
-  return(processShapeMapResult(shapeGraph, result))
+    return(processShapeMapResult(shapeGraph, result))
 }
 
 #' Axial analysis - local metrics
@@ -50,13 +50,13 @@ axialAnalysis <- function(shapeGraph,
 #' "axialAnalysisLocal(shapeGraph)")
 #' @export
 axialAnalysisLocal <- function(
-    shapeGraph,
-    copyMap = TRUE,
-    verbose = FALSE) {
-  result <- Rcpp_runAxialLocalAnalysis(
-    attr(shapeGraph, "sala_map"),
-    copyMapNV = copyMap,
-    verbose
-  )
-  return(processShapeMapResult(shapeGraph, result))
+        shapeGraph,
+        copyMap = TRUE,
+        verbose = FALSE) {
+    result <- Rcpp_runAxialLocalAnalysis(
+        attr(shapeGraph, "sala_map"),
+        copyMapNV = copyMap,
+        verbose
+    )
+    return(processShapeMapResult(shapeGraph, result))
 }

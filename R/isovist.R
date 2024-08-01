@@ -31,15 +31,15 @@ isovist <- function(boundaryMap,
                     angle = NA,
                     viewAngle = NA,
                     verbose = FALSE) {
-  isovistMapPtr <- Rcpp_makeIsovists(
-    attr(boundaryMap, "sala_map"),
-    cbind(x, y),
-    angle,
-    viewAngle,
-    verbose
-  )
+    isovistMapPtr <- Rcpp_makeIsovists(
+        attr(boundaryMap, "sala_map"),
+        cbind(x, y),
+        angle,
+        viewAngle,
+        verbose
+    )
 
-  return(processPtrAsNewPolyMap(isovistMapPtr, "ShapeMap"))
+    return(processPtrAsNewPolyMap(isovistMapPtr, "ShapeMap"))
 }
 
 #' Create isovists using two points
@@ -74,7 +74,7 @@ isovist2pts <- function(boundaryMap,
                         toY,
                         viewAngle,
                         verbose = FALSE) {
-  angles <- atan2(toY - y, toX - x)
-  angles <- ifelse(angles < 0.0, (2.0 * pi) + angles, angles)
-  isovist(boundaryMap, x, y, angles, viewAngle, verbose)
+    angles <- atan2(toY - y, toX - x)
+    angles <- ifelse(angles < 0.0, (2.0 * pi) + angles, angles)
+    isovist(boundaryMap, x, y, angles, viewAngle, verbose)
 }

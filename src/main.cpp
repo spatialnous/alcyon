@@ -22,7 +22,7 @@ void exploreDF(Rcpp::DataFrame &df) {
         // #define DOTSXP      17    /* dot-dot-dot object */
         // #define ANYSXP      18    /* make "any" args work. */
         // #define VECSXP      19    /* generic vectors */
-        switch( TYPEOF(*it) ) {
+        switch (TYPEOF(*it)) {
         case REALSXP: {
             auto tmp = Rcpp::as<Rcpp::NumericVector>(*it);
 
@@ -44,7 +44,8 @@ void exploreDF(Rcpp::DataFrame &df) {
             break;
         }
         case INTSXP: {
-            if( Rf_isFactor(*it) ) break; // factors have internal type INTSXP
+            if (Rf_isFactor(*it))
+                break; // factors have internal type INTSXP
             auto tmp = Rcpp::as<Rcpp::IntegerVector>(*it);
 
             // std::cout << "INTSXP" << std::endl;
@@ -58,13 +59,11 @@ void exploreDF(Rcpp::DataFrame &df) {
         case VECSXP: {
             // generic vector
             auto gv = Rcpp::as<Rcpp::GenericVector>(*it);
-            if (gv.hasAttribute("class") &&
-                TYPEOF(gv.attr("class")) == STRSXP) {
+            if (gv.hasAttribute("class") && TYPEOF(gv.attr("class")) == STRSXP) {
                 // has a class attribute which is a string vector
                 auto classData = Rcpp::as<Rcpp::StringVector>(gv.attr("class"));
-                bool isLineString = std::find(
-                    classData.begin(), classData.end(),
-                    "sfc_LINESTRING") != classData.end();
+                bool isLineString = std::find(classData.begin(), classData.end(),
+                                              "sfc_LINESTRING") != classData.end();
 
                 if (isLineString) {
                     // do stuff with line vector
@@ -74,10 +73,8 @@ void exploreDF(Rcpp::DataFrame &df) {
         }
         default: {
             Rcpp::stop("incompatible SEXP encountered; only accepts lists"
-                           " with REALSXPs, STRSXPs, VECSXPs and INTSXPs");
+                       " with REALSXPs, STRSXPs, VECSXPs and INTSXPs");
         }
         }
     }
 }
-
-

@@ -25,7 +25,7 @@
 getTopFeatures <- function(lineStringMap,
                            column,
                            percent) {
-  numberOfFeatures <- nrow(lineStringMap)
-  orderedFeatureIDs <- order(lineStringMap[[column]])
-  lineStringMap[tail(orderedFeatureIDs, percent * numberOfFeatures), ]
+    numberOfFeatures <- nrow(lineStringMap)
+    orderedFeatureIDs <- order(lineStringMap[[column]])
+    lineStringMap[tail(orderedFeatureIDs, percent * numberOfFeatures), ]
 }

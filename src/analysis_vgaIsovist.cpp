@@ -12,28 +12,24 @@
 #include <Rcpp.h>
 
 // [[Rcpp::export("Rcpp_VGA_isovist")]]
-Rcpp::List vgaIsovist(Rcpp::XPtr<PointMap> mapPtr,
-                      Rcpp::XPtr<ShapeMap> shapeMapPtr,
+Rcpp::List vgaIsovist(Rcpp::XPtr<PointMap> mapPtr, Rcpp::XPtr<ShapeMap> shapeMapPtr,
                       const Rcpp::Nullable<bool> copyMapNV = R_NilValue,
                       const Rcpp::Nullable<bool> progressNV = R_NilValue) {
-  auto copyMap = NullableValue::get(copyMapNV, true);
-  auto progress = NullableValue::get(progressNV, false);
+    auto copyMap = NullableValue::get(copyMapNV, true);
+    auto progress = NullableValue::get(progressNV, false);
 
-  mapPtr = RcppRunner::copyMapWithRegion(mapPtr, copyMap);
+    mapPtr = RcppRunner::copyMapWithRegion(mapPtr, copyMap);
 
-  return RcppRunner::runAnalysis<PointMap>(
-    mapPtr, progress,
-    [&shapeMapPtr](
-        Communicator *comm, Rcpp::XPtr<PointMap> mapPtr){
+    return RcppRunner::runAnalysis<PointMap>(
+        mapPtr, progress, [&shapeMapPtr](Communicator *comm, Rcpp::XPtr<PointMap> mapPtr) {
+            auto shapeMap = shapeMapPtr->getAllShapes();
 
-      auto shapeMap = shapeMapPtr->getAllShapes();
+            std::vector<SalaShape> shapes;
+            shapes.reserve(shapeMap.size());
+            for (auto it = shapeMap.begin(); it != shapeMap.end(); ++it) {
+                shapes.push_back(it->second);
+            }
 
-      std::vector<SalaShape> shapes;
-      shapes.reserve(shapeMap.size());
-      for(auto it = shapeMap.begin(); it != shapeMap.end(); ++it) {
-        shapes.push_back(it->second);
-      }
-
-      return VGAIsovist(shapes).run(comm, *mapPtr, false);
-    });
+            return VGAIsovist(shapes).run(comm, *mapPtr, false);
+        });
 }

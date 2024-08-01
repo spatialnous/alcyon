@@ -19,9 +19,9 @@
 #' VGALocalAlgorithm$Metric
 #' @export
 VGALocalAlgorithm <- list(
-  None = 0L,
-  Standard = 1L,
-  AdjacencyMatrix = 2L
+    None = 0L,
+    Standard = 1L,
+    AdjacencyMatrix = 2L
 )
 
 #' Visibility Graph Analysis - Visual local metrics
@@ -44,16 +44,16 @@ vgaVisualLocal <- function(pointMap,
                            copyMap = TRUE,
                            gatesOnly = FALSE,
                            progress = FALSE) {
-  result <- Rcpp_VGA_visualLocal(
-    attr(pointMap, "sala_map"),
-    gatesOnly,
-    nthreadsNV = nthreads,
-    algorithmNV = algorithm,
-    copyMapNV = copyMap,
-    progressNV = progress
-  )
-  if (result$cancelled) {
-    stop("Analysis cancelled")
-  }
-  return(processPointMapResult(pointMap, result))
+    result <- Rcpp_VGA_visualLocal(
+        attr(pointMap, "sala_map"),
+        gatesOnly,
+        nthreadsNV = nthreads,
+        algorithmNV = algorithm,
+        copyMapNV = copyMap,
+        progressNV = progress
+    )
+    if (result$cancelled) {
+        stop("Analysis cancelled")
+    }
+    return(processPointMapResult(pointMap, result))
 }

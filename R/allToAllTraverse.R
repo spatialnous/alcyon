@@ -76,70 +76,70 @@ allToAllTraverse <- function(map,
                              copyMap = TRUE,
                              verbose = FALSE,
                              progress = FALSE) {
-  if (!(traversalType %in% as.list(TraversalType))) {
-    stop("Unknown traversalType type: ", traversalType)
-  }
-  if (!is.na(quantizationWidth) && !inherits(map, "SegmentShapeGraph")) {
-    stop("quantizationWidth can only be used with Segment ShapeGraphs")
-  }
-  if (length(radii) < 1L) {
-    stop("At least one radius is required")
-  }
-
-  if (!inherits(map, "PointMap") && nthreads != 1L) {
-    stop("Setting the number of threads is only possible for PointMaps (VGA)")
-  }
-
-  if (inherits(map, "PointMap")) {
-    return(allToAllTraversePointMap(
-      map,
-      traversalType,
-      radii,
-      radiusTraversalType,
-      weightByAttribute,
-      includeBetweenness,
-      quantizationWidth,
-      gatesOnly,
-      nthreads,
-      copyMap,
-      verbose,
-      progress
-    ))
-  } else if (inherits(map, "AxialShapeGraph")) {
-    return(axialAnalysis(
-      shapeGraph = map,
-      radii = radii,
-      weightByAttribute = weightByAttribute,
-      includeChoice = includeBetweenness,
-      includeIntermediateMetrics = FALSE,
-      copyMap = copyMap,
-      verbose = verbose
-    ))
-  } else if (inherits(map, "SegmentShapeGraph")) {
-    tulipBins <- 0L
-    if (traversalType == TraversalType$Angular
-        && !is.na(quantizationWidth)) {
-      tulipBins <- as.integer(pi / quantizationWidth)
+    if (!(traversalType %in% as.list(TraversalType))) {
+        stop("Unknown traversalType type: ", traversalType)
     }
-    return(segmentAnalysis(
-      segmentGraph = map,
-      radii = radii,
-      radiusStepType = radiusTraversalType,
-      analysisStepType = traversalType,
-      weightWithColumn = weightByAttribute,
-      includeChoice = includeBetweenness,
-      tulipBins = tulipBins,
-      selOnly = FALSE,
-      copyMap = copyMap,
-      verbose = verbose,
-      progress = progress
-    ))
-  } else {
-    stop(
-      "Can only run all-to-all traversal on Axial or Segment ",
-      "ShapeGraphs and PointMaps"
-    )
-  }
+    if (!is.na(quantizationWidth) && !inherits(map, "SegmentShapeGraph")) {
+        stop("quantizationWidth can only be used with Segment ShapeGraphs")
+    }
+    if (length(radii) < 1L) {
+        stop("At least one radius is required")
+    }
+
+    if (!inherits(map, "PointMap") && nthreads != 1L) {
+        stop("Setting the number of threads is only possible for PointMaps (VGA)")
+    }
+
+    if (inherits(map, "PointMap")) {
+        return(allToAllTraversePointMap(
+            map,
+            traversalType,
+            radii,
+            radiusTraversalType,
+            weightByAttribute,
+            includeBetweenness,
+            quantizationWidth,
+            gatesOnly,
+            nthreads,
+            copyMap,
+            verbose,
+            progress
+        ))
+    } else if (inherits(map, "AxialShapeGraph")) {
+        return(axialAnalysis(
+            shapeGraph = map,
+            radii = radii,
+            weightByAttribute = weightByAttribute,
+            includeChoice = includeBetweenness,
+            includeIntermediateMetrics = FALSE,
+            copyMap = copyMap,
+            verbose = verbose
+        ))
+    } else if (inherits(map, "SegmentShapeGraph")) {
+        tulipBins <- 0L
+        if (traversalType == TraversalType$Angular &&
+                !is.na(quantizationWidth)) {
+            tulipBins <- as.integer(pi / quantizationWidth)
+        }
+        return(segmentAnalysis(
+            segmentGraph = map,
+            radii = radii,
+            radiusStepType = radiusTraversalType,
+            analysisStepType = traversalType,
+            weightWithColumn = weightByAttribute,
+            includeChoice = includeBetweenness,
+            tulipBins = tulipBins,
+            selOnly = FALSE,
+            copyMap = copyMap,
+            verbose = verbose,
+            progress = progress
+        ))
+    } else {
+        stop(
+            "Can only run all-to-all traversal on Axial or Segment ",
+            "ShapeGraphs and PointMaps"
+        )
+    }
 }
 
 allToAllTraversePointMap <- function(map,
@@ -154,91 +154,91 @@ allToAllTraversePointMap <- function(map,
                                      copyMap = TRUE,
                                      verbose = FALSE,
                                      progress = FALSE) {
-  if (traversalType == TraversalType$Metric) {
-    analysisResult <- Rcpp_VGA_metric(
-      attr(map, "sala_map"),
-      radii[1L],
-      gatesOnly,
-      nthreadsNV = nthreads,
-      copyMapNV = copyMap,
-      progressNV = progress
-    )
-    if (analysisResult$cancelled) {
-      stop("Analysis cancelled")
+    if (traversalType == TraversalType$Metric) {
+        analysisResult <- Rcpp_VGA_metric(
+            attr(map, "sala_map"),
+            radii[1L],
+            gatesOnly,
+            nthreadsNV = nthreads,
+            copyMapNV = copyMap,
+            progressNV = progress
+        )
+        if (analysisResult$cancelled) {
+            stop("Analysis cancelled")
+        }
+        for (radius in radii[-1L]) {
+            radiusAnalysisResult <- Rcpp_VGA_metric(
+                attr(map, "sala_map"),
+                radius,
+                gatesOnly,
+                nthreadsNV = nthreads,
+                copyMapNV = FALSE,
+                progressNV = progress
+            )
+            if ("cancelled" %in% radiusAnalysisResult) {
+                stop("Analysis cancelled")
+            }
+            analysisResult$completed <- analysisResult$completed &
+                radiusAnalysisResult$completed
+            analysisResult$newAttributes <- c(
+                analysisResult$newAttributes,
+                radiusAnalysisResult$newAttributes
+            )
+        }
+        return(processPointMapResult(map, analysisResult))
+    } else if (traversalType == TraversalType$Topological) {
+        analysisResult <- Rcpp_VGA_visualGlobal(
+            attr(map, "sala_map"),
+            radii[1L],
+            gatesOnly,
+            nthreadsNV = nthreads,
+            copyMapNV = copyMap,
+            progressNV = progress
+        )
+        for (radius in radii[-1L]) {
+            radiusAnalysisResult <- Rcpp_VGA_visualGlobal(
+                attr(map, "sala_map"),
+                radius,
+                gatesOnly,
+                nthreadsNV = nthreads,
+                copyMapNV = FALSE,
+                progressNV = progress
+            )
+            analysisResult$completed <- analysisResult$completed &
+                radiusAnalysisResult$completed
+            analysisResult$newAttributes <- c(
+                analysisResult$newAttributes,
+                radiusAnalysisResult$newAttributes
+            )
+        }
+        return(processPointMapResult(map, analysisResult))
+    } else if (traversalType == TraversalType$Angular) {
+        analysisResult <- Rcpp_VGA_angular(
+            attr(map, "sala_map"),
+            radii[1L],
+            gatesOnly,
+            nthreadsNV = nthreads,
+            copyMapNV = copyMap,
+            progressNV = progress
+        )
+        for (radius in radii[-1L]) {
+            radiusAnalysisResult <- Rcpp_VGA_angular(
+                attr(map, "sala_map"),
+                radius,
+                gatesOnly,
+                nthreadsNV = nthreads,
+                copyMapNV = FALSE,
+                progressNV = progress
+            )
+            analysisResult$completed <- analysisResult$completed &
+                radiusAnalysisResult$completed
+            analysisResult$newAttributes <- c(
+                analysisResult$newAttributes,
+                radiusAnalysisResult$newAttributes
+            )
+        }
+        return(processPointMapResult(map, analysisResult))
     }
-    for (radius in radii[-1L]) {
-      radiusAnalysisResult <- Rcpp_VGA_metric(
-        attr(map, "sala_map"),
-        radius,
-        gatesOnly,
-        nthreadsNV = nthreads,
-        copyMapNV = FALSE,
-        progressNV = progress
-      )
-      if ("cancelled" %in% radiusAnalysisResult) {
-        stop("Analysis cancelled")
-      }
-      analysisResult$completed <- analysisResult$completed &
-        radiusAnalysisResult$completed
-      analysisResult$newAttributes <- c(
-        analysisResult$newAttributes,
-        radiusAnalysisResult$newAttributes
-      )
-    }
-    return(processPointMapResult(map, analysisResult))
-  } else if (traversalType == TraversalType$Topological) {
-    analysisResult <- Rcpp_VGA_visualGlobal(
-      attr(map, "sala_map"),
-      radii[1L],
-      gatesOnly,
-      nthreadsNV = nthreads,
-      copyMapNV = copyMap,
-      progressNV = progress
-    )
-    for (radius in radii[-1L]) {
-      radiusAnalysisResult <- Rcpp_VGA_visualGlobal(
-        attr(map, "sala_map"),
-        radius,
-        gatesOnly,
-        nthreadsNV = nthreads,
-        copyMapNV = FALSE,
-        progressNV = progress
-      )
-      analysisResult$completed <- analysisResult$completed &
-        radiusAnalysisResult$completed
-      analysisResult$newAttributes <- c(
-        analysisResult$newAttributes,
-        radiusAnalysisResult$newAttributes
-      )
-    }
-    return(processPointMapResult(map, analysisResult))
-  } else if (traversalType == TraversalType$Angular) {
-    analysisResult <- Rcpp_VGA_angular(
-      attr(map, "sala_map"),
-      radii[1L],
-      gatesOnly,
-      nthreadsNV = nthreads,
-      copyMapNV = copyMap,
-      progressNV = progress
-    )
-    for (radius in radii[-1L]) {
-      radiusAnalysisResult <- Rcpp_VGA_angular(
-        attr(map, "sala_map"),
-        radius,
-        gatesOnly,
-        nthreadsNV = nthreads,
-        copyMapNV = FALSE,
-        progressNV = progress
-      )
-      analysisResult$completed <- analysisResult$completed &
-        radiusAnalysisResult$completed
-      analysisResult$newAttributes <- c(
-        analysisResult$newAttributes,
-        radiusAnalysisResult$newAttributes
-      )
-    }
-    return(processPointMapResult(map, analysisResult))
-  }
 }
 
 #' Visibility Graph Analysis - Through Vision
@@ -254,11 +254,11 @@ allToAllTraversePointMap <- function(map,
 #' @export
 vgaThroughVision <- function(pointMap,
                              copyMap = TRUE) {
-  result <- Rcpp_VGA_throughVision(
-    attr(pointMap, "sala_map"),
-    copyMapNV = copyMap
-  )
-  return(processPointMapResult(pointMap, result))
+    result <- Rcpp_VGA_throughVision(
+        attr(pointMap, "sala_map"),
+        copyMapNV = copyMap
+    )
+    return(processPointMapResult(pointMap, result))
 }
 
 #' Visibility Graph Analysis - isovist metrics
@@ -277,10 +277,10 @@ vgaThroughVision <- function(pointMap,
 vgaIsovist <- function(pointMap,
                        boundaryMap,
                        copyMap = TRUE) {
-  result <- Rcpp_VGA_isovist(
-    attr(pointMap, "sala_map"),
-    attr(boundaryMap, "sala_map"),
-    copyMapNV = copyMap
-  )
-  return(processPointMapResult(pointMap, result))
+    result <- Rcpp_VGA_isovist(
+        attr(pointMap, "sala_map"),
+        attr(boundaryMap, "sala_map"),
+        copyMapNV = copyMap
+    )
+    return(processPointMapResult(pointMap, result))
 }

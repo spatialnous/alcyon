@@ -16,8 +16,8 @@
 #' TraversalType$Metric
 #' @export
 TraversalType <- list(
-  None = 0L,
-  Angular = 1L,
-  Topological = 2L,
-  Metric = 3L
+    None = 0L,
+    Angular = 1L,
+    Topological = 2L,
+    Metric = 3L
 )

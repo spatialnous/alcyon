@@ -22,5 +22,5 @@
 #' "shapeMapToPolygonSf(isovistMap)")
 #' @export
 shapeMapToPolygonSf <- function(shapeMap) {
-  return(processPtrAsNewPolyMap(attr(shapeMap, "sala_map"), "ShapeMap"))
+    return(processPtrAsNewPolyMap(attr(shapeMap, "sala_map"), "ShapeMap"))
 }

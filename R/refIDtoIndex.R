@@ -23,14 +23,14 @@
 #' @rdname refIdToIndexAndBack
 #' @export
 refIDtoIndex <- function(refID) {
-  i <- bitwShiftR(refID, 16L)
-  j <- bitwAnd(refID, 0x0000FFFF)
-  return(data.frame(i, j))
+    i <- bitwShiftR(refID, 16L)
+    j <- bitwAnd(refID, 0x0000FFFF)
+    return(data.frame(i, j))
 }
 
 #' @rdname refIdToIndexAndBack
 #' @export
 indexToRefID <- function(i,
                          j) {
-  return(bitwShiftL(i, 16L) + j)
+    return(bitwShiftL(i, 16L) + j)
 }

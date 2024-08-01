@@ -7,8 +7,8 @@
 #' @returns The name of the object as a string
 #' @importFrom methods setGeneric
 setGeneric(
-  "name",
-  function(map) standardGeneric("name")
+    "name",
+    function(map) standardGeneric("name")
 )
 
 #' Get map connections
@@ -16,8 +16,8 @@ setGeneric(
 #' @returns A matrix with the connected refs
 #' @importFrom methods setGeneric
 setGeneric(
-  "connections",
-  function(map) standardGeneric("connections")
+    "connections",
+    function(map) standardGeneric("connections")
 )
 
 #' Get map links
@@ -26,9 +26,9 @@ setGeneric(
 #' @importFrom methods setGeneric
 #' @importFrom methods .valueClassTest
 setGeneric(
-  "links",
-  function(map) standardGeneric("links"),
-  valueClass = "matrix"
+    "links",
+    function(map) standardGeneric("links"),
+    valueClass = "matrix"
 )
 
 #' Link map points/lines as if selecting them using points
@@ -41,10 +41,10 @@ setGeneric(
 #' @returns A new map with linked points/lines
 #' @importFrom methods setGeneric
 setGeneric(
-  "linkCoords",
-  function(map, fromX, fromY, toX, toY, copyMap = TRUE) {
-    standardGeneric("linkCoords")
-  }
+    "linkCoords",
+    function(map, fromX, fromY, toX, toY, copyMap = TRUE) {
+        standardGeneric("linkCoords")
+    }
 )
 
 #' Unlink map points/lines as if selecting them using points
@@ -57,10 +57,10 @@ setGeneric(
 #' @returns A new map with unlinked points/lines
 #' @importFrom methods setGeneric
 setGeneric(
-  "unlinkCoords",
-  function(map, fromX, fromY, toX, toY, copyMap = TRUE) {
-    standardGeneric("unlinkCoords")
-  }
+    "unlinkCoords",
+    function(map, fromX, fromY, toX, toY, copyMap = TRUE) {
+        standardGeneric("unlinkCoords")
+    }
 )
 
 #' Link map points/lines using their refs
@@ -71,10 +71,10 @@ setGeneric(
 #' @returns A new map with linked points/lines
 #' @importFrom methods setGeneric
 setGeneric(
-  "linkRefs",
-  function(map, fromRef, toRef, copyMap = TRUE) {
-    standardGeneric("linkRefs")
-  }
+    "linkRefs",
+    function(map, fromRef, toRef, copyMap = TRUE) {
+        standardGeneric("linkRefs")
+    }
 )
 
 #' Unlink map points/lines using their refs
@@ -85,10 +85,10 @@ setGeneric(
 #' @returns A new map with unlinked points/lines
 #' @importFrom methods setGeneric
 setGeneric(
-  "unlinkRefs",
-  function(map, fromRef, toRef, copyMap = TRUE) {
-    standardGeneric("unlinkRefs")
-  }
+    "unlinkRefs",
+    function(map, fromRef, toRef, copyMap = TRUE) {
+        standardGeneric("unlinkRefs")
+    }
 )
 
 #' Unlink map lines at their crossing point
@@ -99,8 +99,8 @@ setGeneric(
 #' @returns A new map with linked lines
 #' @importFrom methods setGeneric
 setGeneric(
-  "unlinkAtCrossPoint",
-  function(map, x, y, copyMap = TRUE) {
-    standardGeneric("unlinkAtCrossPoint")
-  }
+    "unlinkAtCrossPoint",
+    function(map, x, y, copyMap = TRUE) {
+        standardGeneric("unlinkAtCrossPoint")
+    }
 )

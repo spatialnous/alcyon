@@ -17,8 +17,8 @@ Reads a metagraph into a bunch of ShapeMaps/ShapeGraphs/PointMaps
 }
 \examples{
 fileName <- system.file(
-  "extdata", "testdata", "barnsbury", "barnsburySmall.graph",
-  package = "alcyon"
+    "extdata", "testdata", "barnsbury", "barnsburySmall.graph",
+    package = "alcyon"
 )
 readMetaGraph(fileName)
 }

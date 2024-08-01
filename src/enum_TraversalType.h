@@ -9,11 +9,11 @@
 #include <Rcpp.h>
 
 enum class TraversalType {
-  None = 0,
-  Angular = 1,
-  Topological = 2,
-  Metric = 3,
-  // remember to change maximum if adding values here
-  min = None,
-  max = Metric
+    None = 0,
+    Angular = 1,
+    Topological = 2,
+    Metric = 3,
+    // remember to change maximum if adding values here
+    min = None,
+    max = Metric
 };

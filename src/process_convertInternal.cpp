@@ -4,9 +4,9 @@
 
 #include "rcpp_ShapeMap.h"
 
-#include "salalib/shapemap.h"
-#include "salalib/shapegraph.h"
 #include "salalib/mapconverter.h"
+#include "salalib/shapegraph.h"
+#include "salalib/shapemap.h"
 
 #include "helper_nullablevalue.h"
 
@@ -15,11 +15,10 @@
 #include <Rcpp.h>
 
 // [[Rcpp::export("Rcpp_toAxialShapeGraph")]]
-Rcpp::List toAxialShapeGraph(
-        Rcpp::XPtr<ShapeMap> shapeMap,
-        const Rcpp::Nullable<std::string> nameNV = R_NilValue,
-        const Rcpp::Nullable<bool> copydataNV = R_NilValue,
-        const Rcpp::Nullable<bool> progressNV = R_NilValue) {
+Rcpp::List toAxialShapeGraph(Rcpp::XPtr<ShapeMap> shapeMap,
+                             const Rcpp::Nullable<std::string> nameNV = R_NilValue,
+                             const Rcpp::Nullable<bool> copydataNV = R_NilValue,
+                             const Rcpp::Nullable<bool> progressNV = R_NilValue) {
 
     auto name = NullableValue::get(nameNV, std::string("ax_map"));
     auto copydata = NullableValue::get(copydataNV, true);
@@ -31,31 +30,27 @@ Rcpp::List toAxialShapeGraph(
     auto shapeMapNames = getShapeMapAttributeNames(shapeMap.get());
     auto newNames = getShapeMapAttributeNames(axMap.get());
 
-    for(const auto &name: shapeMapNames) {
+    for (const auto &name : shapeMapNames) {
         auto axIt = std::find(newNames.begin(), newNames.end(), name);
         if (axIt != newNames.end()) {
-          newNames.erase(axIt);
+            newNames.erase(axIt);
         }
     }
 
-    Rcpp::List result = Rcpp::List::create(
-        Rcpp::Named("completed") = true,
-        Rcpp::Named("newAttributes") = newNames,
-        // release the unique_ptr so that it's not deleted on scope close
-        Rcpp::Named("mapPtr") = Rcpp::XPtr<ShapeGraph>(axMap.release())
-    );
+    Rcpp::List result =
+        Rcpp::List::create(Rcpp::Named("completed") = true, Rcpp::Named("newAttributes") = newNames,
+                           // release the unique_ptr so that it's not deleted on scope close
+                           Rcpp::Named("mapPtr") = Rcpp::XPtr<ShapeGraph>(axMap.release()));
 
     return result;
 }
 
-
 // [[Rcpp::export("Rcpp_axialToSegment")]]
-Rcpp::XPtr<ShapeGraph> axialToSegment(
-        Rcpp::XPtr<ShapeGraph> shapeGraph,
-        const Rcpp::Nullable<std::string> nameNV = R_NilValue,
-        const Rcpp::Nullable<bool> copydataNV = R_NilValue,
-        const Rcpp::Nullable<double> stubremovalNV = R_NilValue,
-        const Rcpp::Nullable<bool> progressNV = R_NilValue) {
+Rcpp::XPtr<ShapeGraph> axialToSegment(Rcpp::XPtr<ShapeGraph> shapeGraph,
+                                      const Rcpp::Nullable<std::string> nameNV = R_NilValue,
+                                      const Rcpp::Nullable<bool> copydataNV = R_NilValue,
+                                      const Rcpp::Nullable<double> stubremovalNV = R_NilValue,
+                                      const Rcpp::Nullable<bool> progressNV = R_NilValue) {
 
     auto name = NullableValue::get(nameNV, std::string("seg_map"));
     auto copydata = NullableValue::get(copydataNV, true);
@@ -65,24 +60,19 @@ Rcpp::XPtr<ShapeGraph> axialToSegment(
     // keepOriginal - will try to remove it from shapeGraphs, but since
     // this is a plain conversion it's not necessary
     std::unique_ptr<ShapeGraph> segMap(MapConverter::convertAxialToSegment(
-            getCommunicator(progress).get(),
-            *(shapeGraph.get()),
-            name,
-            true, // keepOriginal
-            copydata,
-            stubremoval));
+        getCommunicator(progress).get(), *(shapeGraph.get()), name,
+        true, // keepOriginal
+        copydata, stubremoval));
 
     return Rcpp::XPtr<ShapeGraph>(segMap.release());
 }
 
-
 // [[Rcpp::export("Rcpp_shapeMapToSegment")]]
-Rcpp::List shapeMapToSegment(
-        Rcpp::XPtr<ShapeMap> shapeMap,
-        const Rcpp::Nullable<std::string> nameNV = R_NilValue,
-        const Rcpp::Nullable<bool> keeporiginalNV = R_NilValue,
-        const Rcpp::Nullable<bool> copydataNV = R_NilValue,
-        const Rcpp::Nullable<bool> progressNV = R_NilValue) {
+Rcpp::List shapeMapToSegment(Rcpp::XPtr<ShapeMap> shapeMap,
+                             const Rcpp::Nullable<std::string> nameNV = R_NilValue,
+                             const Rcpp::Nullable<bool> keeporiginalNV = R_NilValue,
+                             const Rcpp::Nullable<bool> copydataNV = R_NilValue,
+                             const Rcpp::Nullable<bool> progressNV = R_NilValue) {
 
     auto name = NullableValue::get(nameNV, std::string("seg_map"));
     auto keeporiginal = NullableValue::get(keeporiginalNV, true);
@@ -91,29 +81,22 @@ Rcpp::List shapeMapToSegment(
 
     bool converted = true;
 
-    auto segMap =
-        MapConverter::convertDataToSegment(
-            getCommunicator(progress).get(),
-            name,
-            *(shapeMap.get()),
-            copydata
-        );
+    auto segMap = MapConverter::convertDataToSegment(getCommunicator(progress).get(), name,
+                                                     *(shapeMap.get()), copydata);
 
     auto shapeMapNames = getShapeMapAttributeNames(shapeMap.get());
     auto newNames = getShapeMapAttributeNames(segMap.get());
-    for(const auto &name: shapeMapNames) {
-      auto axIt = std::find(newNames.begin(), newNames.end(), name);
-      if (axIt != newNames.end()) {
-        newNames.erase(axIt);
-      }
+    for (const auto &name : shapeMapNames) {
+        auto axIt = std::find(newNames.begin(), newNames.end(), name);
+        if (axIt != newNames.end()) {
+            newNames.erase(axIt);
+        }
     }
 
-    Rcpp::List result = Rcpp::List::create(
-        Rcpp::Named("completed") = true,
-        Rcpp::Named("newAttributes") = newNames,
-        // release the unique_ptr so that it's not deleted on scope close
-        Rcpp::Named("mapPtr") = Rcpp::XPtr<ShapeGraph>(segMap.release())
-    );
+    Rcpp::List result =
+        Rcpp::List::create(Rcpp::Named("completed") = true, Rcpp::Named("newAttributes") = newNames,
+                           // release the unique_ptr so that it's not deleted on scope close
+                           Rcpp::Named("mapPtr") = Rcpp::XPtr<ShapeGraph>(segMap.release()));
 
     return result;
 }

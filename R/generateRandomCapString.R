@@ -3,5 +3,5 @@
 # SPDX-License-Identifier: GPL-3.0-only
 
 generateRandomCapString <- function(n = 10L) {
-  paste(sample(LETTERS, n, TRUE), collapse = "")
+    paste(sample(LETTERS, n, TRUE), collapse = "")
 }
