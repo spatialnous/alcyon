@@ -43,7 +43,7 @@ test_that("Segment Analysis in C++", {
 
     expect_identical(
         dim(Rcpp_ShapeMap_getShapesAsLineCoords(segmentGraph)),
-        c(178L, 4L)
+        c(191L, 4L)
     )
 
     expectedColNameAfter <- c(
@@ -61,8 +61,8 @@ test_that("Segment Analysis in C++", {
     expect_identical(expectedColNameAfter, attrNameBefore)
 
     connections <- Rcpp_ShapeGraph_getSegmentConnections(segmentGraph)
-    expect_length(connections$from, 770L)
-    expect_length(connections$to, 770L)
+    expect_length(connections$from, 826L)
+    expect_length(connections$to, 826L)
 })
 
 

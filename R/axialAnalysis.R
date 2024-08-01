@@ -5,7 +5,7 @@
 
 axialAnalysis <- function(shapeGraph,
                           radii,
-                          weightByAttribute = "",
+                          weightByAttribute = NULL,
                           includeChoice = FALSE,
                           includeIntermediateMetrics = FALSE,
                           copyMap = TRUE,
