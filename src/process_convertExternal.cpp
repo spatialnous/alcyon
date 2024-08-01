@@ -5,7 +5,8 @@
 #include "salalib/shapemap.h"
 #include "salalib/shapegraph.h"
 
-#include "attrHelper.h"
+#include "helper_attr.h"
+#include "helper_nullablevalue.h"
 
 #include <Rcpp.h>
 
@@ -39,7 +40,7 @@ std::string getAxialToSegmentExpectedColName(
 // [[Rcpp::export("Rcpp_toShapeMap")]]
 Rcpp::XPtr<ShapeMap> toShapeMap(
         Rcpp::DataFrame &df,
-        Rcpp::Nullable<std::vector<int>> keepColumnIdxsNV = R_NilValue) {
+        const Rcpp::Nullable<std::vector<int>> keepColumnIdxsNV = R_NilValue) {
 
     if (!AttrHelper::hasClass(df, "sf")) {
         Rcpp::stop("Not an sf dataframe");
@@ -53,10 +54,7 @@ Rcpp::XPtr<ShapeMap> toShapeMap(
 
     auto dfcn = Rcpp::as<const Rcpp::StringVector>(df.attr("names"));
 
-    std::vector<int> keepColumnIdxs;
-    if (keepColumnIdxsNV.isNotNull()) {
-        keepColumnIdxs = Rcpp::as<std::vector<int>>(keepColumnIdxsNV);
-    }
+    auto keepColumnIdxs = NullableValue::get(keepColumnIdxsNV, std::vector<int>());
 
     auto geometryColumnIdx = AttrHelper::getGeometryColumnIndex(df);
     const auto &geom = Rcpp::as<Rcpp::GenericVector>(df.at(geometryColumnIdx));

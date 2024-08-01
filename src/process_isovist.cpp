@@ -5,6 +5,10 @@
 #include "salalib/isovist.h"
 #include "salalib/shapemap.h"
 
+#include "helper_nullablevalue.h"
+
+#include "communicator.h"
+
 #include <Rcpp.h>
 #include <memory>
 
@@ -39,7 +43,7 @@ bool makeBSPtree(Communicator *communicator,
     try {
       BSPTree::make(communicator, atime, partitionlines, bspRoot);
       return true;
-    } catch (Communicator::CancelledException) {
+    } catch (Communicator::CancelledException &) {
       // cancelled, do nothing. bspRoot is cleaned by caller
       return false;
     }
@@ -105,7 +109,8 @@ Rcpp::XPtr<ShapeMap> makeIsovists(Rcpp::XPtr<ShapeMap> boundsMap,
                                   Rcpp::NumericMatrix pointCoords,
                                   Rcpp::NumericVector directionAngles,
                                   Rcpp::NumericVector fieldOfViewAngles,
-                                  bool simple_version) {
+                                  const Rcpp::Nullable<bool> progressNV = R_NilValue) {
+  auto progress = NullableValue::get(progressNV, false);
   if (pointCoords.rows() == 0) {
     Rcpp::stop("No data provided in point coordinates matrix");
   }
@@ -135,7 +140,7 @@ Rcpp::XPtr<ShapeMap> makeIsovists(Rcpp::XPtr<ShapeMap> boundsMap,
   std::unique_ptr<BSPNode> bspRoot(new BSPNode());
 
   Rcpp::XPtr<ShapeMap> map(new ShapeMap("Isovists"));
-  if (makeBSPtree(nullptr, bspRoot.get(), *boundsMap)) {
+  if (makeBSPtree(getCommunicator(progress).get(), bspRoot.get(), *boundsMap)) {
     for (int r = 0; r < pointCoords.rows(); ++r) {
       Isovist iso;
       auto coordRow = pointCoords.row(r);
@@ -161,7 +166,7 @@ Rcpp::XPtr<ShapeMap> makeIsovists(Rcpp::XPtr<ShapeMap> boundsMap,
 
       AttributeTable &table = map->getAttributeTable();
       AttributeRow &row = table.getRow(AttributeKey(polyref));
-      setIsovistData(iso, table, row, simple_version);
+      setIsovistData(iso, table, row, /* simple mode = */ false);
     }
   }
   return map;

@@ -7,6 +7,7 @@
 
 #include "genlib/p2dpoly.h"
 
+#include "helper_nullablevalue.h"
 #include "communicator.h"
 
 #include <Rcpp.h>
@@ -18,10 +19,7 @@ Rcpp::List shapeGraphLinkCoords(Rcpp::XPtr<ShapeGraph> shapeGraphPtr,
   if (coords.cols() != 4) {
     Rcpp::stop("The coords matrix needs to have 4 columns: x1, y1, x2, y2");
   }
-  bool copyMap = true;
-  if (copyMapNV.isNotNull()) {
-    copyMap = Rcpp::as<bool>(copyMapNV);
-  }
+  auto copyMap = NullableValue::get(copyMapNV, true);
   if (copyMap) {
     auto prevShapeGraph = shapeGraphPtr;
     shapeGraphPtr = Rcpp::XPtr(new ShapeGraph());
@@ -50,10 +48,7 @@ Rcpp::List shapeGraphLinkRefs(Rcpp::XPtr<ShapeGraph> shapeGraphPtr,
   if (refs.cols() != 2) {
     Rcpp::stop("The refs matrix needs to have 2 columns: fromRef, toRef");
   }
-  bool copyMap = true;
-  if (copyMapNV.isNotNull()) {
-    copyMap = Rcpp::as<bool>(copyMapNV);
-  }
+  auto copyMap = NullableValue::get(copyMapNV, true);
   if (copyMap) {
     auto prevShapeGraph = shapeGraphPtr;
     shapeGraphPtr = Rcpp::XPtr(new ShapeGraph());
@@ -77,10 +72,7 @@ Rcpp::List pointMapLinkCoords(Rcpp::XPtr<PointMap> pointMapPtr,
   if (coords.cols() != 4) {
     Rcpp::stop("The coords matrix needs to have 4 columns: x1, y1, x2, y2");
   }
-  bool copyMap = true;
-  if (copyMapNV.isNotNull()) {
-    copyMap = Rcpp::as<bool>(copyMapNV);
-  }
+  auto copyMap = NullableValue::get(copyMapNV, true);
   if (copyMap) {
     auto prevPointMap = pointMapPtr;
     const auto &prevRegion = prevPointMap->getRegion();
@@ -129,10 +121,7 @@ Rcpp::List pointMapLinkRefs(Rcpp::XPtr<PointMap> pointMapPtr,
   if (refs.cols() != 2) {
     Rcpp::stop("The refs matrix needs to have 2 columns: fromRef, toRef");
   }
-  bool copyMap = true;
-  if (copyMapNV.isNotNull()) {
-    copyMap = Rcpp::as<bool>(copyMapNV);
-  }
+  auto copyMap = NullableValue::get(copyMapNV, true);
   if (copyMap) {
     auto prevPointMap = pointMapPtr;
     const auto &prevRegion = prevPointMap->getRegion();
@@ -182,10 +171,7 @@ Rcpp::List shapeMapUnlinkCoords(Rcpp::XPtr<ShapeGraph> shapeGraphPtr,
   if (coords.cols() != 4) {
     Rcpp::stop("The coords matrix needs to have 4 columns: x1, y1, x2, y2");
   }
-  bool copyMap = true;
-  if (copyMapNV.isNotNull()) {
-    copyMap = Rcpp::as<bool>(copyMapNV);
-  }
+  auto copyMap = NullableValue::get(copyMapNV, true);
   if (copyMap) {
     auto prevShapeGraph = shapeGraphPtr;
     shapeGraphPtr = Rcpp::XPtr(new ShapeGraph());
@@ -213,10 +199,7 @@ Rcpp::List shapeGraphUnlinkAtCrossPoint(Rcpp::XPtr<ShapeGraph> shapeGraphPtr,
   if (coords.cols() != 2) {
     Rcpp::stop("The coords matrix needs to have 2 columns: x, y");
   }
-  bool copyMap = true;
-  if (copyMapNV.isNotNull()) {
-    copyMap = Rcpp::as<bool>(copyMapNV);
-  }
+  auto copyMap = NullableValue::get(copyMapNV, true);
   if (copyMap) {
     auto prevShapeGraph = shapeGraphPtr;
     shapeGraphPtr = Rcpp::XPtr(new ShapeGraph());
@@ -240,10 +223,7 @@ Rcpp::List shapeMapUnlinkRefs(Rcpp::XPtr<ShapeGraph> shapeGraphPtr,
   if (refs.cols() != 2) {
     Rcpp::stop("The refs matrix needs to have 2 columns: fromRef, toRef");
   }
-  bool copyMap = true;
-  if (copyMapNV.isNotNull()) {
-    copyMap = Rcpp::as<bool>(copyMapNV);
-  }
+  auto copyMap = NullableValue::get(copyMapNV, true);
   if (copyMap) {
     auto prevShapeGraph = shapeGraphPtr;
     shapeGraphPtr = Rcpp::XPtr(new ShapeGraph());
@@ -267,10 +247,7 @@ Rcpp::List pointMapUnlinkCoords(Rcpp::XPtr<PointMap> pointMapPtr,
   if (coords.cols() != 4) {
     Rcpp::stop("The coords matrix needs to have 4 columns: x1, y1, x2, y2");
   }
-  bool copyMap = true;
-  if (copyMapNV.isNotNull()) {
-    copyMap = Rcpp::as<bool>(copyMapNV);
-  }
+  auto copyMap = NullableValue::get(copyMapNV, true);
   if (copyMap) {
     auto prevPointMap = pointMapPtr;
     const auto &prevRegion = prevPointMap->getRegion();
@@ -319,10 +296,7 @@ Rcpp::List pointMapUnlinkRefs(Rcpp::XPtr<PointMap> pointMapPtr,
   if (refs.cols() != 2) {
     Rcpp::stop("The refs matrix needs to have 2 columns: fromRef, toRef");
   }
-  bool copyMap = true;
-  if (copyMapNV.isNotNull()) {
-    copyMap = Rcpp::as<bool>(copyMapNV);
-  }
+  auto copyMap = NullableValue::get(copyMapNV, true);
   if (copyMap) {
     auto prevPointMap = pointMapPtr;
     const auto &prevRegion = prevPointMap->getRegion();

@@ -68,7 +68,7 @@ agentAnalysis <- function(pointMap,
     stop("Unknown agent look mode: ", agentLookMode)
   }
   agentAnalysis <- Rcpp_agentAnalysis(
-    pointMapPtr = attr(pointMap, "sala_map"),
+    mapPtr = attr(pointMap, "sala_map"),
     systemTimesteps = timesteps,
     releaseRate = releaseRate,
     agentLifeTimesteps = agentLifeTimesteps,

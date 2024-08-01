@@ -7,17 +7,16 @@
 #include "salalib/pointmap.h"
 #include "salalib/metagraphreadwrite.h"
 
+#include "helper_nullablevalue.h"
+
 #include <Rcpp.h>
 
 // [[Rcpp::export("Rcpp_MetaGraph_read")]]
 Rcpp::List readMetaGraph(
     std::string fileName,
-    Rcpp::Nullable<bool> verboseNV = R_NilValue) {
+    const Rcpp::Nullable<bool> verboseNV = R_NilValue) {
 
-  bool verbose = false;
-  if (verboseNV.isNotNull()) {
-    verbose = Rcpp::as<bool>(verboseNV);
-  }
+  auto verbose = NullableValue::get(verboseNV, false);
 
   if (verbose) {
     Rcpp::Rcout << "Loading MetaGraph at: " << fileName << std::endl;

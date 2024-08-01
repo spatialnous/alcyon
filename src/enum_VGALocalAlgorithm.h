@@ -11,5 +11,8 @@
 enum class VGALocalAlgorithm {
     None = 0,
     Standard = 1,
-    AdjacencyMatrix = 2
+    AdjacencyMatrix = 2,
+    // remember to change maximum if adding values here
+    min = None,
+    max = AdjacencyMatrix
 };

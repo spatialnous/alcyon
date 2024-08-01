@@ -42,13 +42,18 @@ vgaVisualLocal <- function(pointMap,
                            nthreads = 1L,
                            algorithm = VGALocalAlgorithm$Standard,
                            copyMap = TRUE,
-                           gatesOnly = FALSE) {
+                           gatesOnly = FALSE,
+                           progress = FALSE) {
   result <- Rcpp_VGA_visualLocal(
     attr(pointMap, "sala_map"),
     gatesOnly,
     nthreadsNV = nthreads,
     algorithmNV = algorithm,
-    copyMapNV = copyMap
+    copyMapNV = copyMap,
+    progressNV = progress
   )
+  if (result$cancelled) {
+    stop("Analysis cancelled")
+  }
   return(processPointMapResult(pointMap, result))
 }

@@ -6,16 +6,17 @@
 
 #include "salalib/gridproperties.h"
 
+#include "helper_nullablevalue.h"
 #include "communicator.h"
 
 RCPP_EXPOSED_CLASS(PointMap);
 
 // [[Rcpp::export("Rcpp_PointMap_createFromGrid")]]
-Rcpp::XPtr<PointMap> createFromGrid(double minX,
-                                    double minY,
-                                    double maxX,
-                                    double maxY,
-                                    double gridSize) {
+Rcpp::XPtr<PointMap> createFromGrid(const double minX,
+                                    const double minY,
+                                    const double maxX,
+                                    const double maxY,
+                                    const double gridSize) {
 
   if (gridSize <= 0) {
     Rcpp::stop("gridSize can not be less or equal to zero (%d given)",
@@ -44,11 +45,7 @@ Rcpp::XPtr<PointMap> createFromGrid(double minX,
 Rcpp::List blockLines(Rcpp::XPtr<PointMap> pointMapPtr,
                       Rcpp::XPtr<ShapeMap> boundaryMapPtr,
                       const Rcpp::Nullable<bool> copyMapNV = R_NilValue) {
-
-  bool copyMap = true;
-  if (copyMapNV.isNotNull()) {
-    copyMap = Rcpp::as<bool>(copyMapNV);
-  }
+  auto copyMap = NullableValue::get(copyMapNV, true);
   if (copyMap) {
     auto prevPointMap = pointMapPtr;
     const auto &prevRegion = prevPointMap->getRegion();
@@ -72,15 +69,15 @@ Rcpp::List blockLines(Rcpp::XPtr<PointMap> pointMapPtr,
 // [[Rcpp::export("Rcpp_PointMap_fill")]]
 Rcpp::List fill(Rcpp::XPtr<PointMap> pointMapPtr,
                 Rcpp::NumericMatrix pointCoords,
-                const Rcpp::Nullable<bool> copyMapNV = R_NilValue) {
+                const Rcpp::Nullable<bool> copyMapNV = R_NilValue,
+                const Rcpp::Nullable<bool> progressNV = R_NilValue) {
   if (pointCoords.rows() == 0) {
     Rcpp::stop("No data provided in point coordinates matrix");
   }
 
-  bool copyMap = true;
-  if (copyMapNV.isNotNull()) {
-    copyMap = Rcpp::as<bool>(copyMapNV);
-  }
+  auto copyMap = NullableValue::get(copyMapNV, true);
+  auto progress = NullableValue::get(progressNV, true);
+
   if (copyMap) {
     auto prevPointMap = pointMapPtr;
     const auto &prevRegion = prevPointMap->getRegion();
@@ -99,7 +96,9 @@ Rcpp::List fill(Rcpp::XPtr<PointMap> pointMapPtr,
   for (int r = 0; r < pointCoords.rows(); ++r) {
     auto coordRow = pointCoords.row(r);
     Point2f p(coordRow[0], coordRow[1]);
-    pointMapPtr->makePoints(p, 0, getCommunicator(true).get());
+    pointMapPtr->makePoints(
+        p, 0,
+        getCommunicator(progress).get());
   }
 
   return Rcpp::List::create(
@@ -113,13 +112,12 @@ Rcpp::List fill(Rcpp::XPtr<PointMap> pointMapPtr,
 
 // [[Rcpp::export("Rcpp_PointMap_makeGraph")]]
 Rcpp::List makeGraph(Rcpp::XPtr<PointMap> pointMapPtr,
-                     bool boundaryGraph,
-                     double maxVisibility,
-                     const Rcpp::Nullable<bool> copyMapNV = R_NilValue) {
-  bool copyMap = true;
-  if (copyMapNV.isNotNull()) {
-    copyMap = Rcpp::as<bool>(copyMapNV);
-  }
+                     const bool boundaryGraph,
+                     const double maxVisibility,
+                     const Rcpp::Nullable<bool> copyMapNV = R_NilValue,
+                     const Rcpp::Nullable<bool> progressNV = R_NilValue) {
+  auto copyMap = NullableValue::get(copyMapNV, true);
+  auto progress = NullableValue::get(progressNV, false);
   if (copyMap) {
     auto prevPointMap = pointMapPtr;
     const auto &prevRegion = prevPointMap->getRegion();
@@ -128,10 +126,10 @@ Rcpp::List makeGraph(Rcpp::XPtr<PointMap> pointMapPtr,
   }
   auto prevAttributes = getPointMapAttributeNames(pointMapPtr);
   try {
-    pointMapPtr->sparkGraph2(getCommunicator(true).get(),
-                                         boundaryGraph,
-                                         maxVisibility);
-  } catch (Communicator::CancelledException) {
+    pointMapPtr->sparkGraph2(
+        getCommunicator(progress).get(),
+        boundaryGraph, maxVisibility);
+  } catch (Communicator::CancelledException &) {
     return Rcpp::List::create(
       Rcpp::Named("completed") = false
     );
@@ -160,10 +158,7 @@ Rcpp::List makeGraph(Rcpp::XPtr<PointMap> pointMapPtr,
 Rcpp::List unmakeGraph(Rcpp::XPtr<PointMap> pointMapPtr,
                        bool removeLinksWhenUnmaking,
                        const Rcpp::Nullable<bool> copyMapNV = R_NilValue) {
-  bool copyMap = true;
-  if (copyMapNV.isNotNull()) {
-    copyMap = Rcpp::as<bool>(copyMapNV);
-  }
+  auto copyMap = NullableValue::get(copyMapNV, true);
   if (copyMap) {
     auto prevPointMap = pointMapPtr;
     const auto &prevRegion = prevPointMap->getRegion();

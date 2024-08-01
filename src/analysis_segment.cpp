@@ -11,14 +11,16 @@
 #include "salalib/segmmodules/segmangular.h"
 
 #include "enum_TraversalType.h"
-
+#include "helper_nullablevalue.h"
+#include "helper_runAnalysis.h"
+#include "helper_enum.h"
 #include "communicator.h"
 
 #include <Rcpp.h>
 
 // [[Rcpp::export("Rcpp_runSegmentAnalysis")]]
 Rcpp::List runSegmentAnalysis(
-        Rcpp::XPtr<ShapeGraph> shapeGraph,
+        Rcpp::XPtr<ShapeGraph> mapPtr,
         const Rcpp::NumericVector radii,
         const int radiusStepType,
         const int analysisStepType,
@@ -30,181 +32,152 @@ Rcpp::List runSegmentAnalysis(
         const Rcpp::Nullable<bool> verboseNV = R_NilValue,
         const Rcpp::Nullable<bool> progressNV = R_NilValue) {
 
-    std::optional<std::string> weightedMeasureColName = std::nullopt;
-    if (weightedMeasureColNameNV.isNotNull()) {
-        weightedMeasureColName = Rcpp::as<std::string>(weightedMeasureColNameNV);
-    }
-    bool includeChoice = false;
-    if (includeChoiceNV.isNotNull()) {
-        includeChoice = Rcpp::as<bool>(includeChoiceNV);
-    }
-    int tulipBins = 0;
-    if (tulipBinsNV.isNotNull()) {
-        tulipBins = Rcpp::as<int>(tulipBinsNV);
-    }
+    auto weightedMeasureColName = NullableValue::getOptional(
+        weightedMeasureColNameNV);
+    auto includeChoice = NullableValue::get(includeChoiceNV, false);
+    auto tulipBins = NullableValue::get(tulipBinsNV, 0);
     // TODO: Instead of expecting things to be selected,
     // provide indices to select
-    bool selOnly = false;
-    if (selOnlyNV.isNotNull()) {
-        selOnly = Rcpp::as<bool>(selOnlyNV);
-    }
-    bool copyMap = true;
-    if (copyMapNV.isNotNull()) {
-        copyMap = Rcpp::as<bool>(copyMapNV);
-    }
-    bool verbose = false;
-    if (verboseNV.isNotNull()) {
-        verbose = Rcpp::as<bool>(verboseNV);
-    }
-    bool progress = false;
-    if (progressNV.isNotNull()) {
-        progress = Rcpp::as<bool>(progressNV);
-    }
+    auto selOnly = NullableValue::get(selOnlyNV, false);
+    auto copyMap = NullableValue::get(copyMapNV, true);
+    auto verbose = NullableValue::get(verboseNV, false);
+    auto progress = NullableValue::get(progressNV, false);
 
-    if (verbose) {
-        Rcpp::Rcout << "Running segment analysis... " << '\n';
-    }
+    auto radiusTraversalType = getAsValidEnum<TraversalType>(radiusStepType);
+    auto analysisTraversalType = getAsValidEnum<TraversalType>(analysisStepType);
 
-    if (copyMap) {
-        auto prevShapeGraph = shapeGraph;
-        shapeGraph = Rcpp::XPtr(new ShapeGraph());
-        shapeGraph->copy(*prevShapeGraph, ShapeMap::COPY_ALL, true);
-    }
+    mapPtr = RcppRunner::copyMap(mapPtr, copyMap);
 
-    std::set<double> radius_set;
-    radius_set.insert(radii.begin(), radii.end());
+    return RcppRunner::runAnalysis<ShapeGraph>(
+        mapPtr, progress,
+        [&radii, &radiusTraversalType, &analysisTraversalType, &includeChoice,
+         &weightedMeasureColName, &tulipBins, &verbose](
+                 Communicator *comm, Rcpp::XPtr<ShapeGraph> mapPtr){
 
-    int weightedMeasureColIdx = -1;
+             if (verbose) {
+                 Rcpp::Rcout << "Running segment analysis... " << '\n';
+             }
 
-    if (weightedMeasureColName.has_value()) {
-        const AttributeTable &table = shapeGraph->getAttributeTable();
-        for (int i = 0; i < table.getNumColumns(); i++) {
-            if (weightedMeasureColName == table.getColumnName(i).c_str()) {
-                weightedMeasureColIdx = i;
-            }
-        }
-        if (weightedMeasureColIdx == -1) {
-            Rcpp::stop("Given attribute (" +
-                weightedMeasureColName.value() +
-                ") does not exist in " +
-                "currently selected map");
-        }
-    }
+             std::set<double> radius_set;
+             radius_set.insert(radii.begin(), radii.end());
 
-    RadiusType radiusType = RadiusType::NONE;
-    std::map<double, std::string> radiusSuffixes;
-    radiusSuffixes[-1] = "";
+             int weightedMeasureColIdx = -1;
 
-    switch (static_cast<TraversalType>(radiusStepType)) {
-    case TraversalType::Topological: {
-        radiusType = RadiusType::TOPOLOGICAL;
-        for (auto radius: radii) {
-            if (radius != -1) {
-                radiusSuffixes[radius] = " R" + std::to_string(int(radius));
-            }
-        }
-        break;
-    }
-    case TraversalType::Metric: {
-        radiusType = RadiusType::METRIC;
-        for (auto radius: radii) {
-            if (radius != -1) {
-                radiusSuffixes[radius] = " R" + std::to_string(radius) +
-                    " metric";
-            }
-        }
-        break;
-    }
-    case TraversalType::Angular: {
-        radiusType = RadiusType::ANGULAR;
-        for (auto radius: radii) {
-            if (radius != -1) {
-                radiusSuffixes[radius] = " R" + std::to_string(radius);
-            }
-        }
-        break;
-    }
-    default:
-        Rcpp::stop("No radius analysis type given");
-    }
+             if (weightedMeasureColName.has_value()) {
+                 const AttributeTable &table = mapPtr->getAttributeTable();
+                 for (int i = 0; i < table.getNumColumns(); i++) {
+                     if (weightedMeasureColName == table.getColumnName(i).c_str()) {
+                         weightedMeasureColIdx = i;
+                     }
+                 }
+                 if (weightedMeasureColIdx == -1) {
+                     Rcpp::stop("Given attribute (" +
+                         weightedMeasureColName.value() +
+                         ") does not exist in " +
+                         "currently selected map");
+                 }
+             }
 
-    Rcpp::List result = Rcpp::List::create(
-        Rcpp::Named("completed") = false
-    );
+             RadiusType radiusType = RadiusType::NONE;
+             std::map<double, std::string> radiusSuffixes;
+             radiusSuffixes[-1] = "";
 
 
-    try {
-        AnalysisResult analysisResult;
-        switch (static_cast<TraversalType>(analysisStepType)) {
-        case TraversalType::Angular: {
-            if (tulipBins > 0) {
-            analysisResult =
-                SegmentTulip(radius_set, std::nullopt,
-                             tulipBins, weightedMeasureColIdx,
-                             radiusType, includeChoice).run(
-                                     getCommunicator(progress).get(),
-                                     *shapeGraph, false /* interactive */);
-        } else {
-            analysisResult =
-                SegmentAngular(radius_set).run(
-                        getCommunicator(progress).get(),
-                        *shapeGraph,
-                        false /* unused */);
-        }
-        break;
-        }
-        case TraversalType::Topological: {
-            bool first = true;
-            for (auto radius: radius_set) {
-                auto radiusAnalysisResult =
-                    SegmentTopological(radius, std::nullopt).run(
-                            getCommunicator(progress).get(),
-                            *shapeGraph, false /* unused */);
-                if (first) {
-                    analysisResult.completed = radiusAnalysisResult.completed;
-                    first = false;
-                } else {
-                    analysisResult.completed = analysisResult.completed &
-                        radiusAnalysisResult.completed;
-                }
-                for (auto column: radiusAnalysisResult.getAttributes())
-                    analysisResult.addAttribute(column);
-            }
-            break;
-        }
-        case TraversalType::Metric: {
-            bool first = true;
-            for (auto radius: radius_set) {
-                auto radiusAnalysisResult =
-                    SegmentMetric(radius, std::nullopt).run(
-                            getCommunicator(progress).get(),
-                            *shapeGraph, false /* unused */);
-                if (first) {
-                    analysisResult.completed = radiusAnalysisResult.completed;
-                    first = false;
-                } else {
-                    analysisResult.completed = analysisResult.completed &
-                        radiusAnalysisResult.completed;
-                }
-                for (auto column: radiusAnalysisResult.getAttributes())
-                    analysisResult.addAttribute(column);
-            }
-            break;
-        }
-        default:
-            Rcpp::stop("No segment analysis type given");
-        }
-        result["completed"] = analysisResult.completed;
-        result["newAttributes"] = analysisResult.getAttributes();
-        result["mapPtr"] = shapeGraph;
-    } catch (Communicator::CancelledException) {
-        Rcpp::stop("Analysis cancelled");
-    }
-    if (verbose) {
-        Rcpp::Rcout << "ok" << '\n';
-    }
+             switch (radiusTraversalType) {
+             case TraversalType::Topological: {
+                 radiusType = RadiusType::TOPOLOGICAL;
+                 for (auto radius: radii) {
+                     if (radius != -1) {
+                         radiusSuffixes[radius] = " R" + std::to_string(int(radius));
+                     }
+                 }
+                 break;
+             }
+             case TraversalType::Metric: {
+                 radiusType = RadiusType::METRIC;
+                 for (auto radius: radii) {
+                     if (radius != -1) {
+                         radiusSuffixes[radius] = " R" + std::to_string(radius) +
+                             " metric";
+                     }
+                 }
+                 break;
+             }
+             case TraversalType::Angular: {
+                 radiusType = RadiusType::ANGULAR;
+                 for (auto radius: radii) {
+                     if (radius != -1) {
+                         radiusSuffixes[radius] = " R" + std::to_string(radius);
+                     }
+                 }
+                 break;
+             }
+             case TraversalType::None: {
+                 Rcpp::stop("No radius analysis type given");
+             }
+             }
 
-
-    return result;
+             AnalysisResult analysisResult;
+             switch (analysisTraversalType) {
+             case TraversalType::Angular: {
+                 if (tulipBins > 0) {
+                 analysisResult =
+                     SegmentTulip(radius_set, std::nullopt,
+                                  tulipBins, weightedMeasureColIdx,
+                                  radiusType, includeChoice).run(
+                                          comm,
+                                          *mapPtr, false /* interactive */);
+             } else {
+                 analysisResult =
+                     SegmentAngular(radius_set).run(
+                             comm, *mapPtr, false /* unused */);
+             }
+             break;
+             }
+             case TraversalType::Topological: {
+                 bool first = true;
+                 for (auto radius: radius_set) {
+                     auto radiusAnalysisResult =
+                         SegmentTopological(radius, std::nullopt).run(
+                                 comm, *mapPtr, false /* unused */);
+                     if (first) {
+                         analysisResult.completed = radiusAnalysisResult.completed;
+                         first = false;
+                     } else {
+                         analysisResult.completed = analysisResult.completed &
+                             radiusAnalysisResult.completed;
+                     }
+                     for (auto column: radiusAnalysisResult.getAttributes())
+                         analysisResult.addAttribute(column);
+                 }
+                 break;
+             }
+             case TraversalType::Metric: {
+                 bool first = true;
+                 for (auto radius: radius_set) {
+                     auto radiusAnalysisResult =
+                         SegmentMetric(radius, std::nullopt).run(
+                                 comm, *mapPtr, false /* unused */);
+                     if (first) {
+                         analysisResult.completed = radiusAnalysisResult.completed;
+                         first = false;
+                     } else {
+                         analysisResult.completed = analysisResult.completed &
+                             radiusAnalysisResult.completed;
+                     }
+                     for (auto column: radiusAnalysisResult.getAttributes())
+                         analysisResult.addAttribute(column);
+                 }
+                 break;
+             }
+             case TraversalType::None: {
+                 Rcpp::stop("No segment analysis type given");
+             }
+             }
+             if (verbose) {
+                 Rcpp::Rcout << "ok" << '\n';
+             }
+             return analysisResult;
+         });
 }
 

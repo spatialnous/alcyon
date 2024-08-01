@@ -9,7 +9,8 @@ vgaVisualLocal(
   nthreads = 1L,
   algorithm = VGALocalAlgorithm$Standard,
   copyMap = TRUE,
-  gatesOnly = FALSE
+  gatesOnly = FALSE,
+  progress = FALSE
 )
 }
 \arguments{

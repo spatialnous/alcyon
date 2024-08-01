@@ -10,101 +10,85 @@
 #include "salalib/segmmodules/segmtulipdepth.h"
 
 #include "enum_TraversalType.h"
-
+#include "helper_nullablevalue.h"
+#include "helper_runAnalysis.h"
+#include "helper_enum.h"
 #include "communicator.h"
 
 #include <Rcpp.h>
 
 // [[Rcpp::export("Rcpp_segmentStepDepth")]]
-Rcpp::List segmentStepDepth(Rcpp::XPtr<ShapeGraph> shapeGraph, const int stepType,
+Rcpp::List segmentStepDepth(Rcpp::XPtr<ShapeGraph> mapPtr, const int stepType,
                             const std::vector<double> stepDepthPointsX,
                             const std::vector<double> stepDepthPointsY,
                             const Rcpp::Nullable<int> tulipBinsNV = R_NilValue,
                             const Rcpp::Nullable<bool> copyMapNV = R_NilValue,
                             const Rcpp::Nullable<bool> verboseNV = R_NilValue,
                             const Rcpp::Nullable<bool> progressNV = R_NilValue) {
-  int tulipBins = 0;
-  if (tulipBinsNV.isNotNull()) {
-    tulipBins = Rcpp::as<int>(tulipBinsNV);
-  }
-  bool copyMap = true;
-  if (copyMapNV.isNotNull()) {
-    copyMap = Rcpp::as<bool>(copyMapNV);
-  }
-  bool verbose = false;
-  if (verboseNV.isNotNull()) {
-    verbose = Rcpp::as<bool>(verboseNV);
-  }
-  bool progress = false;
-  if (progressNV.isNotNull()) {
-    progress = Rcpp::as<bool>(progressNV);
-  }
+  auto tulipBins = NullableValue::get(tulipBinsNV, 0);
+  auto copyMap = NullableValue::get(copyMapNV, true);
+  auto verbose = NullableValue::get(verboseNV, false);
+  auto progress = NullableValue::get(progressNV, false);
 
-  if (verbose) {
-    Rcpp::Rcout << "ok\nSelecting cells... " << '\n';
-  }
+  auto traversalStepType = getAsValidEnum<TraversalType>(stepType);
 
-  if (copyMap) {
-    auto prevShapeGraph = shapeGraph;
-    shapeGraph = Rcpp::XPtr(new ShapeGraph());
-    shapeGraph->copy(*prevShapeGraph, ShapeMap::COPY_ALL, true);
-  }
+  mapPtr = RcppRunner::copyMap(mapPtr, copyMap);
 
-  std::set<int> origins;
-  for (int i = 0; i < stepDepthPointsX.size(); ++i) {
-    Point2f p2f(stepDepthPointsX[i], stepDepthPointsY[i]);
-    auto graphRegion = shapeGraph->getRegion();
-    if (!graphRegion.contains(p2f)) {
-      Rcpp::stop("Point outside of target region");
-    }
-    QtRegion r(p2f, p2f);
-    origins.insert(shapeGraph->getShapesInRegion(r).begin()->first);
-  }
+  return RcppRunner::runAnalysis<ShapeGraph>(
+    mapPtr, progress,
+    [&traversalStepType, &stepDepthPointsX, &stepDepthPointsY, &tulipBins,
+     &verbose](
+         Communicator *comm, Rcpp::XPtr<ShapeGraph> mapPtr){
 
-  if (verbose) {
-    Rcpp::Rcout << "ok\nCalculating step-depth... " << '\n';
-  }
+       if (verbose) {
+         Rcpp::Rcout << "ok\nSelecting cells... " << '\n';
+       }
 
-  Rcpp::List result = Rcpp::List::create(Rcpp::Named("completed") = false);
+       std::set<int> origins;
+       for (int i = 0; i < stepDepthPointsX.size(); ++i) {
+         Point2f p2f(stepDepthPointsX[i], stepDepthPointsY[i]);
+         auto graphRegion = mapPtr->getRegion();
+         if (!graphRegion.contains(p2f)) {
+           Rcpp::stop("Point outside of target region");
+         }
+         QtRegion r(p2f, p2f);
+         origins.insert(mapPtr->getShapesInRegion(r).begin()->first);
+       }
 
-  try {
-    AnalysisResult analysisResult;
-    switch (static_cast<TraversalType>(stepType)) {
-    case TraversalType::Angular:
-      if (tulipBins != 0) {
-        analysisResult = SegmentTulipDepth(tulipBins, origins)
-                             .run(getCommunicator(progress).get(), *shapeGraph,
-                                  false /* simple mode */
-                             );
-      } else {
-        // full angular was never created as a step-function
-        // do normal tulip
-        Rcpp::stop("Full angular depth not implemented, "
-                   "provide tulipBins for quantization");
-      }
-      break;
-    case TraversalType::Metric: {
-      analysisResult = SegmentMetricPD(origins).run(
-          getCommunicator(progress).get(), *shapeGraph, false /* simple mode */
-      );
-      break;
-    }
-    case TraversalType::Topological: {
-      analysisResult = SegmentTopologicalPD(origins).run(
-          getCommunicator(progress).get(), *shapeGraph, false /* simple mode */
-      );
-      break;
-    }
-    default: {
-      Rcpp::stop("Error, unsupported step type");
-    }
-    }
-    result["completed"] = analysisResult.completed;
-    result["newAttributes"] = analysisResult.getAttributes();
-    result["mapPtr"] = shapeGraph;
-  } catch (Communicator::CancelledException) {
-    // result["completed"] = false;
-  }
-
-  return result;
+       if (verbose) {
+         Rcpp::Rcout << "ok\nCalculating step-depth... " << '\n';
+       }
+       AnalysisResult analysisResult;
+       switch (traversalStepType) {
+       case TraversalType::Angular:
+         if (tulipBins != 0) {
+           analysisResult = SegmentTulipDepth(tulipBins, origins).run(
+             comm, *mapPtr,
+             false /* simple mode */
+           );
+         } else {
+           // full angular was never created as a step-function
+           // do normal tulip
+           Rcpp::stop("Full angular depth not implemented, "
+                        "provide tulipBins for quantization");
+         }
+         break;
+       case TraversalType::Metric: {
+         analysisResult = SegmentMetricPD(origins).run(
+           comm, *mapPtr, false /* simple mode */
+         );
+         break;
+       }
+       case TraversalType::Topological: {
+         analysisResult = SegmentTopologicalPD(origins).run(
+           comm, *mapPtr, false /* simple mode */
+         );
+         break;
+       }
+       case TraversalType::None: {
+         Rcpp::stop("No traversal type has been set");
+       }
+       }
+       return analysisResult;
+     });
 }

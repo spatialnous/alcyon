@@ -5,6 +5,8 @@
 #include "salalib/shapemap.h"
 #include "salalib/alllinemap.h"
 
+#include "helper_nullablevalue.h"
+
 #include "communicator.h"
 
 #include <Rcpp.h>
@@ -12,8 +14,10 @@
 
 // [[Rcpp::export("Rcpp_makeAllLineMap")]]
 Rcpp::List makeAllLineMap(Rcpp::XPtr<ShapeMap> boundsMap,
-                                      double seedX,
-                                      double seedY) {
+                          double seedX,
+                          double seedY,
+                          const Rcpp::Nullable<bool> progressNV = R_NilValue) {
+    auto progress = NullableValue::get(progressNV, false);
 
     Rcpp::XPtr<ShapeGraph> map(new ShapeGraph(AllLine::createAllLineMap()));
     std::vector<Line> lines;
@@ -25,7 +29,7 @@ Rcpp::List makeAllLineMap(Rcpp::XPtr<ShapeMap> boundsMap,
     QtRegion region(boundsMap->getRegion());
 
     auto mapData = Rcpp::XPtr<AllLine::MapData>(new AllLine::MapData(
-        AllLine::generate(getCommunicator(true).get(),
+        AllLine::generate(getCommunicator(progress).get(),
                           *map.get(),
                           lines,
                           region,
@@ -37,11 +41,14 @@ Rcpp::List makeAllLineMap(Rcpp::XPtr<ShapeMap> boundsMap,
 
 // [[Rcpp::export("Rcpp_extractFewestLineMaps")]]
 Rcpp::List extractFewestLineMaps(Rcpp::XPtr<ShapeGraph> allLineMap,
-                                 Rcpp::XPtr<AllLine::MapData> mapData) {
+                                 Rcpp::XPtr<AllLine::MapData> mapData,
+                                 const Rcpp::Nullable<bool> progressNV = R_NilValue) {
+    auto progress = NullableValue::get(progressNV, false);
+
     auto [fewestlinemap_subsets, fewestlinemap_minimal] =
-        AllLine::extractFewestLineMaps(getCommunicator(true).get(),
-                                       *allLineMap,
-                                       *mapData);
+        AllLine::extractFewestLineMaps(
+            getCommunicator(progress).get(),
+            *allLineMap, *mapData);
 
     return Rcpp::List::create(
         Rcpp::Named("Fewest-Line Map (Subsets)") =

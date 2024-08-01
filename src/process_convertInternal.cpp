@@ -8,25 +8,25 @@
 #include "salalib/shapegraph.h"
 #include "salalib/mapconverter.h"
 
+#include "helper_nullablevalue.h"
+
+#include "communicator.h"
+
 #include <Rcpp.h>
 
 // [[Rcpp::export("Rcpp_toAxialShapeGraph")]]
 Rcpp::List toAxialShapeGraph(
         Rcpp::XPtr<ShapeMap> shapeMap,
-        Rcpp::Nullable<std::string> nameNV = R_NilValue,
-        Rcpp::Nullable<bool> copydataNV = R_NilValue) {
+        const Rcpp::Nullable<std::string> nameNV = R_NilValue,
+        const Rcpp::Nullable<bool> copydataNV = R_NilValue,
+        const Rcpp::Nullable<bool> progressNV = R_NilValue) {
 
-    std::string name = "ax_map";
-    if (nameNV.isNotNull()) {
-        name = Rcpp::as<std::string>(nameNV);
-    }
-    bool copydata = true;
-    if (copydataNV.isNotNull()) {
-        copydata = Rcpp::as<bool>(copydataNV);
-    }
+    auto name = NullableValue::get(nameNV, std::string("ax_map"));
+    auto copydata = NullableValue::get(copydataNV, true);
+    auto progress = NullableValue::get(progressNV, false);
 
     std::unique_ptr<ShapeGraph> axMap(MapConverter::convertDataToAxial(
-            nullptr, name, *(shapeMap.get()), copydata));
+        getCommunicator(progress).get(), name, *(shapeMap.get()), copydata));
 
     auto shapeMapNames = getShapeMapAttributeNames(shapeMap.get());
     auto newNames = getShapeMapAttributeNames(axMap.get());
@@ -52,29 +52,20 @@ Rcpp::List toAxialShapeGraph(
 // [[Rcpp::export("Rcpp_axialToSegment")]]
 Rcpp::XPtr<ShapeGraph> axialToSegment(
         Rcpp::XPtr<ShapeGraph> shapeGraph,
-        Rcpp::Nullable<std::string> nameNV = R_NilValue,
-        Rcpp::Nullable<bool> copydataNV = R_NilValue,
-        Rcpp::Nullable<double> stubremovalNV = R_NilValue) {
+        const Rcpp::Nullable<std::string> nameNV = R_NilValue,
+        const Rcpp::Nullable<bool> copydataNV = R_NilValue,
+        const Rcpp::Nullable<double> stubremovalNV = R_NilValue,
+        const Rcpp::Nullable<bool> progressNV = R_NilValue) {
 
-    std::string name = "seg_map";
-    if (nameNV.isNotNull()) {
-        name = Rcpp::as<std::string>(nameNV);
-    }
-
-    bool copydata = true;
-    if (copydataNV.isNotNull()) {
-        copydata = Rcpp::as<bool>(copydataNV);
-    }
-
-    double stubremoval = 0.0;
-    if (stubremovalNV.isNotNull()) {
-        stubremoval = Rcpp::as<bool>(stubremovalNV);
-    }
+    auto name = NullableValue::get(nameNV, std::string("seg_map"));
+    auto copydata = NullableValue::get(copydataNV, true);
+    auto stubremoval = NullableValue::get(stubremovalNV, 0.0);
+    auto progress = NullableValue::get(progressNV, false);
 
     // keepOriginal - will try to remove it from shapeGraphs, but since
     // this is a plain conversion it's not necessary
     std::unique_ptr<ShapeGraph> segMap(MapConverter::convertAxialToSegment(
-            nullptr,
+            getCommunicator(progress).get(),
             *(shapeGraph.get()),
             name,
             true, // keepOriginal
@@ -88,31 +79,21 @@ Rcpp::XPtr<ShapeGraph> axialToSegment(
 // [[Rcpp::export("Rcpp_shapeMapToSegment")]]
 Rcpp::List shapeMapToSegment(
         Rcpp::XPtr<ShapeMap> shapeMap,
-        Rcpp::Nullable<std::string> nameNV = R_NilValue,
-        Rcpp::Nullable<bool> keeporiginalNV = R_NilValue,
-        Rcpp::Nullable<bool> copydataNV = R_NilValue,
-        Rcpp::Nullable<double> stubremovalNV = R_NilValue) {
+        const Rcpp::Nullable<std::string> nameNV = R_NilValue,
+        const Rcpp::Nullable<bool> keeporiginalNV = R_NilValue,
+        const Rcpp::Nullable<bool> copydataNV = R_NilValue,
+        const Rcpp::Nullable<bool> progressNV = R_NilValue) {
 
-    std::string name = "seg_map";
-    if (nameNV.isNotNull()) {
-        name = Rcpp::as<std::string>(nameNV);
-    }
-
-    bool keeporiginal = true;
-    if (keeporiginalNV.isNotNull()) {
-        keeporiginal = Rcpp::as<bool>(keeporiginalNV);
-    }
-
-    bool copydata = true;
-    if (copydataNV.isNotNull()) {
-        copydata = Rcpp::as<bool>(copydataNV);
-    }
+    auto name = NullableValue::get(nameNV, std::string("seg_map"));
+    auto keeporiginal = NullableValue::get(keeporiginalNV, true);
+    auto copydata = NullableValue::get(copydataNV, true);
+    auto progress = NullableValue::get(progressNV, false);
 
     bool converted = true;
 
     auto segMap =
         MapConverter::convertDataToSegment(
-            nullptr,
+            getCommunicator(progress).get(),
             name,
             *(shapeMap.get()),
             copydata

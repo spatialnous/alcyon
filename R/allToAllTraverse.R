@@ -160,16 +160,24 @@ allToAllTraversePointMap <- function(map,
       radii[1L],
       gatesOnly,
       nthreadsNV = nthreads,
-      copyMapNV = copyMap
+      copyMapNV = copyMap,
+      progressNV = progress
     )
+    if (analysisResult$cancelled) {
+      stop("Analysis cancelled")
+    }
     for (radius in radii[-1L]) {
       radiusAnalysisResult <- Rcpp_VGA_metric(
         attr(map, "sala_map"),
         radius,
         gatesOnly,
         nthreadsNV = nthreads,
-        copyMapNV = FALSE
+        copyMapNV = FALSE,
+        progressNV = progress
       )
+      if ("cancelled" %in% radiusAnalysisResult) {
+        stop("Analysis cancelled")
+      }
       analysisResult$completed <- analysisResult$completed &
         radiusAnalysisResult$completed
       analysisResult$newAttributes <- c(
@@ -184,7 +192,8 @@ allToAllTraversePointMap <- function(map,
       radii[1L],
       gatesOnly,
       nthreadsNV = nthreads,
-      copyMapNV = copyMap
+      copyMapNV = copyMap,
+      progressNV = progress
     )
     for (radius in radii[-1L]) {
       radiusAnalysisResult <- Rcpp_VGA_visualGlobal(
@@ -192,7 +201,8 @@ allToAllTraversePointMap <- function(map,
         radius,
         gatesOnly,
         nthreadsNV = nthreads,
-        copyMapNV = FALSE
+        copyMapNV = FALSE,
+        progressNV = progress
       )
       analysisResult$completed <- analysisResult$completed &
         radiusAnalysisResult$completed
@@ -208,7 +218,8 @@ allToAllTraversePointMap <- function(map,
       radii[1L],
       gatesOnly,
       nthreadsNV = nthreads,
-      copyMapNV = copyMap
+      copyMapNV = copyMap,
+      progressNV = progress
     )
     for (radius in radii[-1L]) {
       radiusAnalysisResult <- Rcpp_VGA_angular(
@@ -216,7 +227,8 @@ allToAllTraversePointMap <- function(map,
         radius,
         gatesOnly,
         nthreadsNV = nthreads,
-        copyMapNV = FALSE
+        copyMapNV = FALSE,
+        progressNV = progress
       )
       analysisResult$completed <- analysisResult$completed &
         radiusAnalysisResult$completed

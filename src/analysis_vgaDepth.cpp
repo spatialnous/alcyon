@@ -7,123 +7,109 @@
 #include "salalib/vgamodules/vgametricdepth.h"
 #include "salalib/vgamodules/vgaangulardepth.h"
 
+#include "helper_nullablevalue.h"
+#include "helper_runAnalysis.h"
+
 #include "communicator.h"
 
 #include <Rcpp.h>
 
 // [[Rcpp::export("Rcpp_VGA_visualDepth")]]
-Rcpp::List vgaVisualDepth(Rcpp::XPtr<PointMap> pointMapPtr,
+Rcpp::List vgaVisualDepth(Rcpp::XPtr<PointMap> mapPtr,
                           Rcpp::NumericMatrix stepDepthPoints,
-                          const Rcpp::Nullable<bool> copyMapNV = R_NilValue) {
-  bool copyMap = true;
-  if (copyMapNV.isNotNull()) {
-    copyMap = Rcpp::as<bool>(copyMapNV);
-  }
-  if (copyMap) {
-    auto prevPointMap = pointMapPtr;
-    const auto &prevRegion = prevPointMap->getRegion();
-    pointMapPtr = Rcpp::XPtr(new PointMap(prevRegion));
-    pointMapPtr->copy(*prevPointMap, true, true);
-  }
-  Rcpp::List result = Rcpp::List::create(
-    Rcpp::Named("completed") = false
-  );
+                          const Rcpp::Nullable<bool> copyMapNV = R_NilValue,
+                          const Rcpp::Nullable<bool> progressNV = R_NilValue) {
+  auto copyMap = NullableValue::get(copyMapNV, true);
+  auto progress = NullableValue::get(progressNV, false);
 
-  std::set<PixelRef> origins;
-  for (int r = 0; r < stepDepthPoints.rows(); ++r) {
-    auto coordRow = stepDepthPoints.row(r);
-    Point2f p(coordRow[0], coordRow[1]);
-    auto pixref = pointMapPtr->pixelate(p);
-    if (!pointMapPtr->includes(pixref)) {
-      Rcpp::stop("Origin point (%d %d) outside of target pointmap region.", p.x, p.y);
-    }
-    if (!pointMapPtr->getPoint(pixref).filled()) {
-      Rcpp::stop("Origin point (%d %d) not pointing to a filled cell.", p.x, p.y);
-    }
-    origins.insert(pixref);
-  }
-  auto analysisResult = VGAVisualGlobalDepth(origins)
-    .run(getCommunicator(true).get(), *pointMapPtr, false);
-  result["completed"] = analysisResult.completed;
-  result["newAttributes"] = analysisResult.getAttributes();
-  result["mapPtr"] = pointMapPtr;
-  return result;
+  mapPtr = RcppRunner::copyMapWithRegion(mapPtr, copyMap);
+
+  return RcppRunner::runAnalysis<PointMap>(
+    mapPtr, progress,
+    [&stepDepthPoints](
+        Communicator *comm, Rcpp::XPtr<PointMap> mapPtr){
+
+      std::set<PixelRef> origins;
+      for (int r = 0; r < stepDepthPoints.rows(); ++r) {
+        auto coordRow = stepDepthPoints.row(r);
+        Point2f p(coordRow[0], coordRow[1]);
+        auto pixref = mapPtr->pixelate(p);
+        if (!mapPtr->includes(pixref)) {
+          Rcpp::stop("Origin point (%d %d) outside of target pointmap region.",
+                     p.x, p.y);
+        }
+        if (!mapPtr->getPoint(pixref).filled()) {
+          Rcpp::stop("Origin point (%d %d) not pointing to a filled cell.",
+                     p.x, p.y);
+        }
+        origins.insert(pixref);
+      }
+
+      return VGAVisualGlobalDepth(origins).run(comm, *mapPtr, false);
+    });
 }
 
 // [[Rcpp::export("Rcpp_VGA_metricDepth")]]
-Rcpp::List vgaMetricDepth(Rcpp::XPtr<PointMap> pointMapPtr,
+Rcpp::List vgaMetricDepth(Rcpp::XPtr<PointMap> mapPtr,
                           Rcpp::NumericMatrix stepDepthPoints,
-                          const Rcpp::Nullable<bool> copyMapNV = R_NilValue) {
-  bool copyMap = true;
-  if (copyMapNV.isNotNull()) {
-    copyMap = Rcpp::as<bool>(copyMapNV);
-  }
-  if (copyMap) {
-    auto prevPointMap = pointMapPtr;
-    const auto &prevRegion = prevPointMap->getRegion();
-    pointMapPtr = Rcpp::XPtr(new PointMap(prevRegion));
-    pointMapPtr->copy(*prevPointMap, true, true);
-  }
-  Rcpp::List result = Rcpp::List::create(
-    Rcpp::Named("completed") = false
-  );
+                          const Rcpp::Nullable<bool> copyMapNV = R_NilValue,
+                          const Rcpp::Nullable<bool> progressNV = R_NilValue) {
+  auto copyMap = NullableValue::get(copyMapNV, true);
+  auto progress = NullableValue::get(progressNV, false);
 
-  std::set<PixelRef> origins;
-  for (int r = 0; r < stepDepthPoints.rows(); ++r) {
-    auto coordRow = stepDepthPoints.row(r);
-    Point2f p(coordRow[0], coordRow[1]);
-    auto pixref = pointMapPtr->pixelate(p);
-    if (!pointMapPtr->includes(pixref)) {
-      Rcpp::stop("Origin point (%d %d) outside of target pointmap region.", p.x, p.y);
-    }
-    if (!pointMapPtr->getPoint(pixref).filled()) {
-      Rcpp::stop("Origin point (%d %d) not pointing to a filled cell.", p.x, p.y);
-    }
-    origins.insert(pixref);
-  }
-  auto analysisResult = VGAMetricDepth(origins)
-    .run(getCommunicator(true).get(), *pointMapPtr, false);
-  result["completed"] = analysisResult.completed;
-  result["newAttributes"] = analysisResult.getAttributes();
-  result["mapPtr"] = pointMapPtr;
-  return result;
+  mapPtr = RcppRunner::copyMapWithRegion(mapPtr, copyMap);
+
+  return RcppRunner::runAnalysis<PointMap>(
+    mapPtr, progress,
+    [&stepDepthPoints](
+        Communicator *comm, Rcpp::XPtr<PointMap> mapPtr){
+      std::set<PixelRef> origins;
+      for (int r = 0; r < stepDepthPoints.rows(); ++r) {
+        auto coordRow = stepDepthPoints.row(r);
+        Point2f p(coordRow[0], coordRow[1]);
+        auto pixref = mapPtr->pixelate(p);
+        if (!mapPtr->includes(pixref)) {
+          Rcpp::stop("Origin point (%d %d) outside of target pointmap region.",
+                     p.x, p.y);
+        }
+        if (!mapPtr->getPoint(pixref).filled()) {
+          Rcpp::stop("Origin point (%d %d) not pointing to a filled cell.",
+                     p.x, p.y);
+        }
+        origins.insert(pixref);
+      }
+      return VGAMetricDepth(origins).run(comm, *mapPtr, false);
+    });
 }
 
 // [[Rcpp::export("Rcpp_VGA_angularDepth")]]
-Rcpp::List vgaAngularDepth(Rcpp::XPtr<PointMap> pointMapPtr,
+Rcpp::List vgaAngularDepth(Rcpp::XPtr<PointMap> mapPtr,
                            Rcpp::NumericMatrix stepDepthPoints,
-                           const Rcpp::Nullable<bool> copyMapNV = R_NilValue) {
-  bool copyMap = true;
-  if (copyMapNV.isNotNull()) {
-    copyMap = Rcpp::as<bool>(copyMapNV);
-  }
-  if (copyMap) {
-    auto prevPointMap = pointMapPtr;
-    const auto &prevRegion = prevPointMap->getRegion();
-    pointMapPtr = Rcpp::XPtr(new PointMap(prevRegion));
-    pointMapPtr->copy(*prevPointMap, true, true);
-  }
-  Rcpp::List result = Rcpp::List::create(
-    Rcpp::Named("completed") = false
-  );
+                           const Rcpp::Nullable<bool> copyMapNV = R_NilValue,
+                           const Rcpp::Nullable<bool> progressNV = R_NilValue) {
+  auto copyMap = NullableValue::get(copyMapNV, true);
+  auto progress = NullableValue::get(progressNV, false);
 
-  std::set<PixelRef> origins;
-  for (int r = 0; r < stepDepthPoints.rows(); ++r) {
-    auto coordRow = stepDepthPoints.row(r);
-    Point2f p(coordRow[0], coordRow[1]);
-    auto pixref = pointMapPtr->pixelate(p);
-    if (!pointMapPtr->includes(pixref)) {
-      Rcpp::stop("Origin point (%d %d) outside of target pointmap region.", p.x, p.y);
-    }
-    if (!pointMapPtr->getPoint(pixref).filled()) {
-      Rcpp::stop("Origin point (%d %d) not pointing to a filled cell.", p.x, p.y);
-    }
-    origins.insert(pixref);
-  }
-  auto analysisResult = VGAAngularDepth(origins)
-    .run(getCommunicator(true).get(), *pointMapPtr, false);
-  result["completed"] = analysisResult.completed;
-  result["newAttributes"] = analysisResult.getAttributes();
-  result["mapPtr"] = pointMapPtr;
-  return result;
+  mapPtr = RcppRunner::copyMapWithRegion(mapPtr, copyMap);
+
+  return RcppRunner::runAnalysis<PointMap>(
+    mapPtr, progress,
+    [&stepDepthPoints](
+        Communicator *comm, Rcpp::XPtr<PointMap> mapPtr){
+
+      std::set<PixelRef> origins;
+      for (int r = 0; r < stepDepthPoints.rows(); ++r) {
+        auto coordRow = stepDepthPoints.row(r);
+        Point2f p(coordRow[0], coordRow[1]);
+        auto pixref = mapPtr->pixelate(p);
+        if (!mapPtr->includes(pixref)) {
+          Rcpp::stop("Origin point (%d %d) outside of target pointmap region.", p.x, p.y);
+        }
+        if (!mapPtr->getPoint(pixref).filled()) {
+          Rcpp::stop("Origin point (%d %d) not pointing to a filled cell.", p.x, p.y);
+        }
+        origins.insert(pixref);
+      }
+      return VGAAngularDepth(origins).run(comm, *mapPtr, false);
+    });
 }

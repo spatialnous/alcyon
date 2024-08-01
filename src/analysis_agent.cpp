@@ -5,12 +5,16 @@
 #include "salalib/agents/agentanalysis.h"
 
 #include "enum_AgentLookMode.h"
+
+#include "helper_nullablevalue.h"
+#include "helper_runAnalysis.h"
+#include "helper_enum.h"
 #include "communicator.h"
 
 #include <Rcpp.h>
 
 // [[Rcpp::export("Rcpp_agentAnalysis")]]
-Rcpp::List agentAnalysis(Rcpp::XPtr<PointMap> pointMapPtr,
+Rcpp::List agentAnalysis(Rcpp::XPtr<PointMap> mapPtr,
                          int systemTimesteps,
                          float releaseRate,
                          int agentLifeTimesteps,
@@ -24,26 +28,11 @@ Rcpp::List agentAnalysis(Rcpp::XPtr<PointMap> pointMapPtr,
                          const Rcpp::Nullable<bool> copyMapNV = R_NilValue,
                          const Rcpp::Nullable<bool> verboseNV = R_NilValue,
                          const Rcpp::Nullable<bool> progressNV = R_NilValue) {
+  auto copyMap = NullableValue::get(copyMapNV, true);
+  auto verbose = NullableValue::get(verboseNV, false);
+  auto progress = NullableValue::get(progressNV, false);
 
-  bool copyMap = true;
-  if (copyMapNV.isNotNull()) {
-    copyMap = Rcpp::as<bool>(copyMapNV);
-  }
-  bool verbose = false;
-  if (verboseNV.isNotNull()) {
-    verbose = Rcpp::as<bool>(verboseNV);
-  }
-  bool progress = false;
-  if (progressNV.isNotNull()) {
-    progress = Rcpp::as<bool>(progressNV);
-  }
-
-  if (copyMap) {
-    auto prevPointMap = pointMapPtr;
-    const auto &prevRegion = prevPointMap->getRegion();
-    pointMapPtr = Rcpp::XPtr(new PointMap(prevRegion));
-    pointMapPtr->copy(*prevPointMap, true, true);
-  }
+  mapPtr = RcppRunner::copyMapWithRegion(mapPtr, copyMap);
 
   int agentAlgorithm = AgentProgram::SEL_STANDARD;
   switch (static_cast<AgentLookMode>(agentLookMode)) {
@@ -113,24 +102,29 @@ Rcpp::List agentAnalysis(Rcpp::XPtr<PointMap> pointMapPtr,
     ? std::nullopt
     : std::make_optional(static_cast<size_t>(recordTrailForAgents)),
       std::ref(trailMap)})
-      : std::nullopt;
+    : std::nullopt;
 
-  AgentAnalysis(*pointMapPtr, systemTimesteps, releaseRate, agentLifeTimesteps,
-                agentFov, agentStepsToDecision, agentAlgorithm,
-                randomReleaseLocationSeed, releasePoints, gateLayer,
-                recordTrails).run(getCommunicator(true).get());
+  RcppAnalysisResults result(mapPtr);
 
-  Rcpp::List result = Rcpp::List::create(
-    Rcpp::Named("completed") = true,
-    Rcpp::Named("newAttributes") = Rcpp::CharacterVector("Gate Counts"),
-    Rcpp::Named("mapPtr") = pointMapPtr
-  );
-  if (recordTrailForAgents > 0) {
-    result["newShapeMaps"] = Rcpp::List::create(
-      Rcpp::Named("trailMap") = Rcpp::XPtr<ShapeMap>(
-        new ShapeMap(std::move(trailMap))
-      )
-    );
+  try {
+    auto analysisResult = AgentAnalysis(
+      *mapPtr, systemTimesteps, releaseRate,
+                                        agentLifeTimesteps,
+                  agentFov, agentStepsToDecision, agentAlgorithm,
+                  randomReleaseLocationSeed, releasePoints, gateLayer,
+                  recordTrails).run(getCommunicator(progress).get());
+
+    result.setFromResult(std::move(analysisResult));
+
+    if (recordTrailForAgents > 0) {
+      result.getData()["newShapeMaps"] = Rcpp::List::create(
+        Rcpp::Named("trailMap") = Rcpp::XPtr<ShapeMap>(
+          new ShapeMap(std::move(trailMap))
+        )
+      );
+    }
+  } catch(Communicator::CancelledException &) {
+    result.cancel();
   }
-  return result;
+  return result.getData();
 }

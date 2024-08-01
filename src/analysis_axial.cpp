@@ -11,14 +11,16 @@
 #include "genlib/p2dpoly.h"
 
 #include "enum_TraversalType.h"
-
+#include "helper_nullablevalue.h"
+#include "helper_runAnalysis.h"
+#include "helper_enum.h"
 #include "communicator.h"
 
 #include <Rcpp.h>
 
 // [[Rcpp::export("Rcpp_runAxialAnalysis")]]
 Rcpp::List runAxialAnalysis(
-        Rcpp::XPtr<ShapeGraph> shapeGraph,
+        Rcpp::XPtr<ShapeGraph> mapPtr,
         const Rcpp::NumericVector radii,
         const Rcpp::Nullable<std::string> weightedMeasureColNameNV = R_NilValue,
         const Rcpp::Nullable<bool> includeChoiceNV = R_NilValue,
@@ -26,214 +28,145 @@ Rcpp::List runAxialAnalysis(
         const Rcpp::Nullable<bool> copyMapNV = R_NilValue,
         const Rcpp::Nullable<bool> verboseNV = R_NilValue,
         const Rcpp::Nullable<bool> progressNV = R_NilValue) {
-    std::string weightedMeasureColName = "";
-    if (weightedMeasureColNameNV.isNotNull()) {
-        weightedMeasureColName = Rcpp::as<std::string>(weightedMeasureColNameNV);
-    }
-    bool includeChoice = false;
-    if (includeChoiceNV.isNotNull()) {
-        includeChoice = Rcpp::as<bool>(includeChoiceNV);
-    }
-    bool includeIntermediateMetrics = false;
-    if (includeIntermediateMetricsNV.isNotNull()) {
-        includeIntermediateMetrics = Rcpp::as<bool>(includeIntermediateMetricsNV);
-    }
+
+    auto weightedMeasureColName = NullableValue::getOptional(
+        weightedMeasureColNameNV);
+    auto includeChoice = NullableValue::get(includeChoiceNV, false);
+    auto includeIntermediateMetrics = NullableValue::get(
+        includeIntermediateMetricsNV, false);
     // The normal behaviour of R is to copy objects wholesale when applying a
     // function to them. In C++ this is to be avoided unless absolutely
     // necessary. However, since this function is to be used in R and for it to
     // have the same effects as any other R function, we will copy the given map
     // and provide a new pointer if instructed to do so.
-    bool copyMap = true;
-    if (copyMapNV.isNotNull()) {
-        copyMap = Rcpp::as<bool>(copyMapNV);
-    }
-    bool verbose = false;
-    if (verboseNV.isNotNull()) {
-        verbose = Rcpp::as<bool>(verboseNV);
-    }
-    bool progress = false;
-    if (progressNV.isNotNull()) {
-        progress = Rcpp::as<bool>(progressNV);
-    }
+    auto copyMap = NullableValue::get(copyMapNV, true);
+    auto verbose = NullableValue::get(verboseNV, false);
+    auto progress = NullableValue::get(progressNV, false);
 
-    if (verbose)
-        Rcpp::Rcout << "Running axial analysis... " << '\n';
+    mapPtr = RcppRunner::copyMap(mapPtr, copyMap);
 
-    if (copyMap) {
-        auto prevShapeGraph = shapeGraph;
-        shapeGraph = Rcpp::XPtr(new ShapeGraph());
-        shapeGraph->copy(*prevShapeGraph, ShapeMap::COPY_ALL, true);
-    }
+    return RcppRunner::runAnalysis<ShapeGraph>(
+        mapPtr, progress,
+        [&radii, &weightedMeasureColName, &includeChoice,
+         &includeIntermediateMetrics, &verbose](
+                 Communicator *comm, Rcpp::XPtr<ShapeGraph> mapPtr){
+             if (verbose)
+                 Rcpp::Rcout << "Running axial analysis... " << '\n';
 
-    int weightedMeasureColIdx = -1;
+             int weightedMeasureColIdx = -1;
 
-    if (!weightedMeasureColName.empty()) {
-        const AttributeTable &table = shapeGraph->getAttributeTable();
-        for (int i = 0; i < table.getNumColumns(); i++) {
-            if (weightedMeasureColName == table.getColumnName(i).c_str()) {
-                weightedMeasureColIdx = i;
-            }
-        }
-        if (weightedMeasureColIdx == -1) {
-            throw depthmapX::RuntimeException("Given attribute (" +
-                                              weightedMeasureColName +
-                                              ") does not exist in " +
-                                              "currently selected map");
-        }
-    }
+             if (weightedMeasureColName.has_value()) {
+                 const AttributeTable &table = mapPtr->getAttributeTable();
+                 for (int i = 0; i < table.getNumColumns(); i++) {
+                     if (*weightedMeasureColName == table.getColumnName(i).c_str()) {
+                         weightedMeasureColIdx = i;
+                     }
+                 }
+                 if (weightedMeasureColIdx == -1) {
+                     throw depthmapX::RuntimeException("Given attribute (" +
+                                                       *weightedMeasureColName +
+                                                       ") does not exist in " +
+                                                       "currently selected map");
+                 }
+             }
 
-    Rcpp::List result = Rcpp::List::create(
-        Rcpp::Named("completed") = false
-    );
-
-    try {
-        std::set<double> radius_set;
-        radius_set.insert(radii.begin(), radii.end());
-        auto analysis = AxialIntegration(radius_set,
-                                         weightedMeasureColIdx,
-                                         includeChoice,
-                                         includeIntermediateMetrics);
-        AnalysisResult analysisResult = analysis.run(
-            getCommunicator(progress).get(),
-            *shapeGraph,
-            false /* simple version*/
-        );
-        result["completed"] = analysisResult.completed;
-        result["newAttributes"] = analysisResult.getAttributes();
-        result["mapPtr"] = shapeGraph;
-    } catch (Communicator::CancelledException) {
-        // result["completed"] = false;
-    }
-    return result;
+             std::set<double> radius_set;
+             radius_set.insert(radii.begin(), radii.end());
+             auto analysis = AxialIntegration(radius_set,
+                                              weightedMeasureColIdx,
+                                              includeChoice,
+                                              includeIntermediateMetrics);
+             AnalysisResult analysisResult = analysis.run(
+                 comm, *mapPtr, false /* simple version*/);
+             return analysisResult;
+         });
 }
 
 // [[Rcpp::export("Rcpp_runAxialLocalAnalysis")]]
 Rcpp::List runAxialLocalAnalysis(
-        Rcpp::XPtr<ShapeGraph> shapeGraph,
+        Rcpp::XPtr<ShapeGraph> mapPtr,
         const Rcpp::Nullable<bool> copyMapNV = R_NilValue,
         const Rcpp::Nullable<bool> verboseNV = R_NilValue,
         const Rcpp::Nullable<bool> progressNV = R_NilValue) {
-    bool copyMap = true;
-    if (copyMapNV.isNotNull()) {
-        copyMap = Rcpp::as<bool>(copyMapNV);
-    }
-    bool verbose = false;
-    if (verboseNV.isNotNull()) {
-        verbose = Rcpp::as<bool>(verboseNV);
-    }
-    bool progress = false;
-    if (progressNV.isNotNull()) {
-        progress = Rcpp::as<bool>(progressNV);
-    }
+    auto copyMap = NullableValue::get(copyMapNV, true);
+    auto verbose = NullableValue::get(verboseNV, false);
+    auto progress = NullableValue::get(progressNV, false);
 
-    if (verbose)
-        Rcpp::Rcout << "Running axial analysis... " << '\n';
+    mapPtr = RcppRunner::copyMap(mapPtr, copyMap);
 
-    if (copyMap) {
-        auto prevShapeGraph = shapeGraph;
-        shapeGraph = Rcpp::XPtr(new ShapeGraph());
-        shapeGraph->copy(*prevShapeGraph, ShapeMap::COPY_ALL, true);
-    }
+    return RcppRunner::runAnalysis<ShapeGraph>(
+        mapPtr, progress,
+        [&verbose](Communicator *comm, Rcpp::XPtr<ShapeGraph> mapPtr){
 
-    Rcpp::List result = Rcpp::List::create(
-        Rcpp::Named("completed") = false
-    );
+            if (verbose)
+                Rcpp::Rcout << "Running axial analysis... " << '\n';
 
-    try {
-
-        auto analysis = AxialLocal();
-        AnalysisResult analysisResult = analysis.run(
-            getCommunicator(progress).get(),
-            *shapeGraph,
-            false /* simple version*/
-        );
-        result["completed"] = analysisResult.completed;
-        result["newAttributes"] = analysisResult.getAttributes();
-        result["mapPtr"] = shapeGraph;
-    } catch (Communicator::CancelledException) {
-        // result["completed"] = false;
-    }
-    return result;
+            auto analysis = AxialLocal();
+            AnalysisResult analysisResult = analysis.run(
+                comm, *mapPtr, false /* simple version*/);
+            return analysisResult;
+        });
 }
 
 // [[Rcpp::export("Rcpp_axialStepDepth")]]
 Rcpp::List axialStepDepth(
-        Rcpp::XPtr<ShapeGraph> shapeGraph,
+        Rcpp::XPtr<ShapeGraph> mapPtr,
         const int stepType,
         const std::vector<double> stepDepthPointsX,
         const std::vector<double> stepDepthPointsY,
         const Rcpp::Nullable<bool> copyMapNV = R_NilValue,
         const Rcpp::Nullable<bool> verboseNV = R_NilValue,
         const Rcpp::Nullable<bool> progressNV = R_NilValue) {
-    bool copyMap = true;
-    if (copyMapNV.isNotNull()) {
-        copyMap = Rcpp::as<bool>(copyMapNV);
-    }
-    bool verbose = false;
-    if (verboseNV.isNotNull()) {
-        verbose = Rcpp::as<bool>(verboseNV);
-    }
-    bool progress = false;
-    if (progressNV.isNotNull()) {
-        progress = Rcpp::as<bool>(progressNV);
-    }
+    auto copyMap = NullableValue::get(copyMapNV, true);
+    auto verbose = NullableValue::get(verboseNV, false);
+    auto progress = NullableValue::get(progressNV, false);
 
-    if (verbose)
-        Rcpp::Rcout << "ok\nSelecting cells... " << '\n';
 
-    if (copyMap) {
-        auto prevShapeGraph = shapeGraph;
-        shapeGraph = Rcpp::XPtr(new ShapeGraph());
-        shapeGraph->copy(*prevShapeGraph, ShapeMap::COPY_ALL, true);
-    }
+    auto traversalStepType = getAsValidEnum<TraversalType>(stepType);
 
-    std::set<int> origins;
-    for (int i = 0; i < stepDepthPointsX.size(); ++i) {
-        Point2f p2f(stepDepthPointsX[i], stepDepthPointsY[i]);
-        auto graphRegion = shapeGraph->getRegion();
-        if (!graphRegion.contains(p2f)) {
-            throw depthmapX::RuntimeException("Point outside of target region");
-        }
-        QtRegion r(p2f, p2f);
-        origins.insert(shapeGraph->getShapesInRegion(r).begin()->first);
-    }
+    mapPtr = RcppRunner::copyMap(mapPtr, copyMap);
 
-    if (verbose)
-        Rcpp::Rcout << "ok\nCalculating step-depth... " << '\n';
+    return RcppRunner::runAnalysis<ShapeGraph>(
+        mapPtr, progress,
+        [&stepDepthPointsX, &stepDepthPointsY, traversalStepType, &verbose](
+                Communicator *comm, Rcpp::XPtr<ShapeGraph> mapPtr){
 
-    Rcpp::List result = Rcpp::List::create(
-        Rcpp::Named("completed") = false
-    );
+            if (verbose)
+                Rcpp::Rcout << "ok\nSelecting cells... " << '\n';
 
-    try {
-        AnalysisResult analysisResult;
-        switch (static_cast<TraversalType>(stepType)) {
-        // never really supported for axial maps
-        // case AxialAnalysis::AxialStepType::ANGULAR:
-        //     pointDepthType = 3;
-        //     break;
-        // case AxialAnalysis::AxialStepType::METRIC:
-        //     pointDepthType = 2;
-        //     break;
-        case TraversalType::Topological:
-            // currently axial only allows for topological analysis
-            analysisResult = AxialStepDepth(origins).run(
-                getCommunicator(progress).get(),
-                *shapeGraph,
-                false /* simple mode */
+            std::set<int> origins;
+            for (int i = 0; i < stepDepthPointsX.size(); ++i) {
+                Point2f p2f(stepDepthPointsX[i], stepDepthPointsY[i]);
+                auto graphRegion = mapPtr->getRegion();
+                if (!graphRegion.contains(p2f)) {
+                    throw depthmapX::RuntimeException("Point outside of target region");
+                }
+                QtRegion r(p2f, p2f);
+                origins.insert(mapPtr->getShapesInRegion(r).begin()->first);
+            }
+
+            if (verbose)
+                Rcpp::Rcout << "ok\nCalculating step-depth... " << '\n';
+
+            Rcpp::List result = Rcpp::List::create(
+                Rcpp::Named("completed") = false
             );
-            break;
-        default: {
+
+            AnalysisResult analysisResult;
+            switch (traversalStepType) {
+            case TraversalType::Topological:
+                // currently axial only allows for topological analysis
+                analysisResult = AxialStepDepth(origins).run(
+                    comm, *mapPtr, false /* simple mode */);
+                break;
+            case TraversalType::Angular:
+            case TraversalType::Metric:
+                // never really supported for axial maps
+                throw depthmapX::RuntimeException("Error, unsupported step type");
+            case TraversalType::None: {
                 throw depthmapX::RuntimeException("Error, unsupported step type");
             }
-        }
-        result["completed"] = analysisResult.completed;
-        result["newAttributes"] = analysisResult.getAttributes();
-        result["mapPtr"] = shapeGraph;
-
-    } catch (Communicator::CancelledException) {
-        //
-    }
-
-    return result;
+            }
+            return analysisResult;
+        });
 }
