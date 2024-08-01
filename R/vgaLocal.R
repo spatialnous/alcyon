@@ -33,6 +33,7 @@ VGALocalAlgorithm <- list(
 #' @param algorithm Optional. The algorithm to use. See ?VGALocalAlgorithm
 #' @param copyMap Optional. Copy the internal sala map
 #' @param gatesOnly Optional. Only keep the values at specific gates
+#' @param progress Optional. Enable progress display
 #' @returns A new PointMap with the results included
 #' @eval c("@examples",
 #' rxLoadSimpleLinesAsPointMap(),

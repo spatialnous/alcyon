@@ -4,6 +4,7 @@
 ^\.githooks$
 ^\.reuse$
 ^src/build-Release$
+^src/.clang-format$
 ^src/libs/genlib/\.git$
 ^src/libs/genlib/\.clang-format$
 ^src/libs/genlib/\.githooks$
