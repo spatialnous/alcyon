@@ -3,11 +3,11 @@
 #
 # SPDX-License-Identifier: GPL-3.0-only
 
-#' Conversion of shapegraph to igraph
+#' Conversion of shapegraph to graph data
 #'
-#' Creates igraph based on the connections and the x,y coordinates of the
-#' centroids of shapes in a shapegraph (axial,segment, convex). Specify
-#' weightColumn to assign weight to graph edges.
+#' Creates data to be construct a graph, based on the connections and the x,y
+#' coordinates of the centroids of shapes in a shapegraph (axial, segment,
+#' convex). Specify weightColumn to assign weight to graph edges.
 #'
 #' If weightColumn is provided, edge connections weight is calculated by taking
 #' the average of the variable of the connected nodes.
@@ -15,11 +15,9 @@
 #' @param shapeGraph A ShapeGraph
 #' @param weightColumn Optional.The variable used to assign weight to graph
 #' edges
-#' @importFrom igraph graph.data.frame E E<-
-#' @importFrom sf st_drop_geometry
-#' @returns Returns graph.data.frame.
-shapegraphToIGraph <- function(shapeGraph,
-                               weightColumn = NA) {
+#' @returns Returns a list with edges and vertices for contstructing a graph.
+shapegraphToGraphData <- function(shapeGraph,
+                                  weightColumn = NA) {
     ogr <- shapeGraph
     linksunlinks <- links(shapeGraph)
     links <- linksunlinks[linksunlinks$link == 1L, ]
@@ -48,15 +46,14 @@ shapegraphToIGraph <- function(shapeGraph,
     if (!is.na(weightColumn)) {
         edges$weight <- ((ogr[[match(refA, depthRef), weightColumn]]) +
                              (ogr[[match(refB, depthRef), weightColumn]])) / 2.0
-        graph <- graph.data.frame(
+        graph <- list(
             edges,
             directed = FALSE,
             vertices = st_drop_geometry(ogr)
         )
-        E(graph)$weight <- edges[["weight"]]
     } else {
-        graph <- graph.data.frame(
-            edges,
+        graph <- list(
+            edges = edges,
             directed = FALSE,
             vertices = st_drop_geometry(ogr)
         )

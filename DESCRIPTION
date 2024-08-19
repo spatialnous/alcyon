@@ -55,7 +55,7 @@ LinkingTo:
 Imports:
     Rcpp, methods
 Depends:
-    sf, stars, igraph
+    sf, stars
 Suggests: 
     knitr,
     rmarkdown,
