@@ -199,7 +199,9 @@ test_that("VGA in R, Angular one-to-one", {
             "Angular Shortest Path",
             "Angular Shortest Path Linked",
             "Angular Shortest Path Order",
-            "Angular Shortest Path Zone"
+            "Angular Shortest Path Visual Zone",
+            "Angular Shortest Path Metric Zone",
+            "Angular Shortest Path Inv Metric Zone"
         )
     )
 })
@@ -217,11 +219,13 @@ test_that("VGA in R, Metric one-to-one", {
             ))
         },
         newExpectedCols = c(
-            "Link Metric Cost",
             "Metric Shortest Path",
             "Metric Shortest Path Distance",
             "Metric Shortest Path Linked",
-            "Metric Shortest Path Order"
+            "Metric Shortest Path Order",
+            "Metric Shortest Path Visual Zone",
+            "Metric Shortest Path Metric Zone",
+            "Metric Shortest Path Inv Metric Zone"
         )
     )
 })
@@ -242,7 +246,9 @@ test_that("VGA in R, Visual one-to-one", {
             "Visual Shortest Path",
             "Visual Shortest Path Linked",
             "Visual Shortest Path Order",
-            "Visual Shortest Path Zone"
+            "Visual Shortest Path Visual Zone",
+            "Visual Shortest Path Metric Zone",
+            "Visual Shortest Path Inv Metric Zone"
         )
     )
 })

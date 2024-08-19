@@ -39,7 +39,12 @@ Rcpp::List vgaVisualDepth(Rcpp::XPtr<PointMap> mapPtr, Rcpp::NumericMatrix stepD
                 origins.insert(pixref);
             }
 
-            return VGAVisualGlobalDepth(origins).run(comm, *mapPtr, false);
+            auto analysis = VGAVisualGlobalDepth(*mapPtr, origins);
+            auto analysisResult = analysis.run(comm);
+            analysis.copyResultToMap(analysisResult.getAttributes(),
+                                     std::move(analysisResult.getAttributeData()), *mapPtr,
+                                     analysisResult.columnStats);
+            return analysisResult;
         });
 }
 
@@ -67,7 +72,13 @@ Rcpp::List vgaMetricDepth(Rcpp::XPtr<PointMap> mapPtr, Rcpp::NumericMatrix stepD
                 }
                 origins.insert(pixref);
             }
-            return VGAMetricDepth(origins).run(comm, *mapPtr, false);
+
+            auto analysis = VGAMetricDepth(*mapPtr, origins);
+            auto analysisResult = analysis.run(comm);
+            analysis.copyResultToMap(analysisResult.getAttributes(),
+                                     std::move(analysisResult.getAttributeData()), *mapPtr,
+                                     analysisResult.columnStats);
+            return analysisResult;
         });
 }
 
@@ -95,6 +106,11 @@ Rcpp::List vgaAngularDepth(Rcpp::XPtr<PointMap> mapPtr, Rcpp::NumericMatrix step
                 }
                 origins.insert(pixref);
             }
-            return VGAAngularDepth(origins).run(comm, *mapPtr, false);
+            auto analysis = VGAAngularDepth(*mapPtr, origins);
+            auto analysisResult = analysis.run(comm);
+            analysis.copyResultToMap(analysisResult.getAttributes(),
+                                     std::move(analysisResult.getAttributeData()), *mapPtr,
+                                     analysisResult.columnStats);
+            return analysisResult;
         });
 }

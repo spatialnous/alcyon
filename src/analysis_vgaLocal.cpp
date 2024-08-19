@@ -48,7 +48,11 @@ Rcpp::List vgaVisualLocal(Rcpp::XPtr<PointMap> mapPtr,
             if (algorithm == VGALocalAlgorithm::Standard) {
                 if (nthreads == 1) {
                     // original algorithm
-                    analysisResult = VGAVisualLocal(gatesOnly).run(comm, *mapPtr, false);
+                    auto analysis = VGAVisualLocal(*mapPtr, gatesOnly);
+                    analysisResult = analysis.run(comm);
+                    analysis.copyResultToMap(analysisResult.getAttributes(),
+                                             std::move(analysisResult.getAttributeData()), *mapPtr,
+                                             analysisResult.columnStats);
                 } else {
                     // openmp algorithm
                     analysisResult =
@@ -80,6 +84,11 @@ Rcpp::List vgaThroughVision(Rcpp::XPtr<PointMap> mapPtr,
 
     return RcppRunner::runAnalysis<PointMap>(
         mapPtr, progress, [](Communicator *comm, Rcpp::XPtr<PointMap> mapPtr) {
-            return VGAThroughVision().run(comm, *mapPtr, false);
+            auto analysis = VGAThroughVision(*mapPtr);
+            auto analysisResult = analysis.run(comm);
+            analysis.copyResultToMap(analysisResult.getAttributes(),
+                                     std::move(analysisResult.getAttributeData()), *mapPtr,
+                                     analysisResult.columnStats);
+            return analysisResult;
         });
 }

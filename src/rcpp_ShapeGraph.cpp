@@ -15,7 +15,7 @@ std::map<std::string, std::vector<int>> getAxialConnections(Rcpp::XPtr<ShapeMap>
     std::vector<int> &axialConnectionsFrom = axialConnections["from"];
     std::vector<int> &axialConnectionsTo = axialConnections["to"];
     for (int i = 0; i < connectors.size(); i++) {
-        const auto &connections = connectors[i].m_connections;
+        const auto &connections = connectors[i].connections;
         for (int connection : connections) {
             axialConnectionsFrom.push_back(i);
             axialConnectionsTo.push_back(connection);
@@ -36,7 +36,7 @@ std::map<std::string, std::vector<int>> getSegmentConnections(Rcpp::XPtr<ShapeMa
 
     // directed links
     for (size_t i = 0; i < connectors.size(); i++) {
-        for (auto &segconn : connectors[i].m_forward_segconns) {
+        for (auto &segconn : connectors[i].forwardSegconns) {
             segmentConnectionsFrom.push_back(i);
             segmentConnectionsTo.push_back(segconn.first.ref);
             segmentConnectionsSSWeight.push_back(segconn.second);
@@ -44,7 +44,7 @@ std::map<std::string, std::vector<int>> getSegmentConnections(Rcpp::XPtr<ShapeMa
             segmentConnectionsDirection.push_back(int(segconn.first.dir));
         }
 
-        for (auto &segconn : connectors[i].m_back_segconns) {
+        for (auto &segconn : connectors[i].backSegconns) {
             segmentConnectionsFrom.push_back(i);
             segmentConnectionsTo.push_back(segconn.first.ref);
             segmentConnectionsSSWeight.push_back(segconn.second);

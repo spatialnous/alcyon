@@ -64,13 +64,18 @@ Rcpp::List vgaVisualShortestPath(Rcpp::XPtr<PointMap> mapPtr, Rcpp::NumericMatri
                 destinations.insert(pixref);
             }
 
-            AppendableAnalysisResult analysisResult;
+            AppendableAnalysisResult allAnalysisResult;
             auto destIt = destinations.begin();
             for (auto &origin : origins) {
-                analysisResult.append(VGAVisualShortestPath(*mapPtr, origin, *destIt).run(comm));
+                auto analysis = VGAVisualShortestPath(*mapPtr, origin, *destIt);
+                auto analysisResult = analysis.run(comm);
+                analysis.copyResultToMap(analysisResult.getAttributes(),
+                                         std::move(analysisResult.getAttributeData()), *mapPtr,
+                                         analysisResult.columnStats);
+                allAnalysisResult.append(analysisResult);
                 destIt++;
             }
-            return analysisResult;
+            return allAnalysisResult;
         });
 }
 
@@ -123,14 +128,18 @@ Rcpp::List vgaMetricShortestPath(Rcpp::XPtr<PointMap> mapPtr, Rcpp::NumericMatri
                 destinations.insert(pixref);
             }
 
-            AppendableAnalysisResult analysisResult;
+            AppendableAnalysisResult allAnalysisResult;
             auto destIt = destinations.begin();
             for (auto &origin : origins) {
-                analysisResult.append(
-                    VGAMetricShortestPath(*mapPtr, std::set<PixelRef>{origin}, *destIt).run(comm));
+                auto analysis = VGAMetricShortestPath(*mapPtr, std::set<PixelRef>{origin}, *destIt);
+                auto analysisResult = analysis.run(comm);
+                analysis.copyResultToMap(analysisResult.getAttributes(),
+                                         std::move(analysisResult.getAttributeData()), *mapPtr,
+                                         analysisResult.columnStats);
+                allAnalysisResult.append(analysisResult);
                 destIt++;
             }
-            return analysisResult;
+            return allAnalysisResult;
         });
 }
 
@@ -183,12 +192,17 @@ Rcpp::List vgaAngularShortestPath(Rcpp::XPtr<PointMap> mapPtr, Rcpp::NumericMatr
                 destinations.insert(pixref);
             }
 
-            AppendableAnalysisResult analysisResult;
+            AppendableAnalysisResult allAnalysisResult;
             auto destIt = destinations.begin();
             for (auto &origin : origins) {
-                analysisResult.append(VGAAngularShortestPath(*mapPtr, origin, *destIt).run(comm));
+                auto analysis = VGAAngularShortestPath(*mapPtr, origin, *destIt);
+                auto analysisResult = analysis.run(comm);
+                analysis.copyResultToMap(analysisResult.getAttributes(),
+                                         std::move(analysisResult.getAttributeData()), *mapPtr,
+                                         analysisResult.columnStats);
+                allAnalysisResult.append(analysisResult);
                 destIt++;
             }
-            return analysisResult;
+            return allAnalysisResult;
         });
 }

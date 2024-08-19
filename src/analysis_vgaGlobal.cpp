@@ -38,14 +38,20 @@ Rcpp::List vgaAngular(Rcpp::XPtr<PointMap> mapPtr, double radius,
             AnalysisResult analysisResult;
             if (nthreads == 1) {
                 // original algorithm
-                analysisResult = VGAAngular(radius, gatesOnly).run(comm, *mapPtr, false);
+                auto analysis = VGAAngular(*mapPtr, radius, gatesOnly);
+                analysisResult = analysis.run(comm);
+                analysis.copyResultToMap(analysisResult.getAttributes(),
+                                         std::move(analysisResult.getAttributeData()), *mapPtr,
+                                         analysisResult.columnStats);
             } else {
                 // openmp algorithm
-                analysisResult =
-                    VGAAngularOpenMP(*mapPtr, radius, gatesOnly,
-                                     nthreads == 0 ? std::nullopt : std::make_optional(nthreads),
-                                     true)
-                        .run(comm);
+                auto analysis = VGAAngularOpenMP(
+                    *mapPtr, radius, gatesOnly,
+                    nthreads == 0 ? std::nullopt : std::make_optional(nthreads), true);
+                analysisResult = analysis.run(comm);
+                analysis.copyResultToMap(analysisResult.getAttributes(),
+                                         std::move(analysisResult.getAttributeData()), *mapPtr,
+                                         analysisResult.columnStats);
             }
             return analysisResult;
         });
@@ -75,14 +81,20 @@ Rcpp::List vgaMetric(Rcpp::XPtr<PointMap> mapPtr, double radius,
             AnalysisResult analysisResult;
             if (nthreads == 1) {
                 // original algorithm
-                analysisResult = VGAMetric(radius, gatesOnly).run(comm, *mapPtr, false);
+                auto analysis = VGAMetric(*mapPtr, radius, gatesOnly);
+                analysisResult = analysis.run(comm);
+                analysis.copyResultToMap(analysisResult.getAttributes(),
+                                         std::move(analysisResult.getAttributeData()), *mapPtr,
+                                         analysisResult.columnStats);
             } else {
                 // openmp algorithm
-                analysisResult =
-                    VGAMetricOpenMP(*mapPtr, radius, gatesOnly,
-                                    nthreads == 0 ? std::nullopt : std::make_optional(nthreads),
-                                    true)
-                        .run(comm);
+                auto analysis = VGAMetricOpenMP(
+                    *mapPtr, radius, gatesOnly,
+                    nthreads == 0 ? std::nullopt : std::make_optional(nthreads), true);
+                analysisResult = analysis.run(comm);
+                analysis.copyResultToMap(analysisResult.getAttributes(),
+                                         std::move(analysisResult.getAttributeData()), *mapPtr,
+                                         analysisResult.columnStats);
             }
             return analysisResult;
         });
@@ -112,7 +124,11 @@ Rcpp::List vgaVisualGlobal(Rcpp::XPtr<PointMap> mapPtr, int radius,
             AnalysisResult analysisResult;
             if (nthreads == 1) {
                 // original algorithm
-                analysisResult = VGAVisualGlobal(radius, gatesOnly).run(comm, *mapPtr, false);
+                auto analysis = VGAVisualGlobal(*mapPtr, radius, gatesOnly);
+                analysisResult = analysis.run(comm);
+                analysis.copyResultToMap(analysisResult.getAttributes(),
+                                         std::move(analysisResult.getAttributeData()), *mapPtr,
+                                         analysisResult.columnStats);
             } else {
                 // openmp algorithm
                 analysisResult = VGAVisualGlobalOpenMP(*mapPtr, radius, gatesOnly,

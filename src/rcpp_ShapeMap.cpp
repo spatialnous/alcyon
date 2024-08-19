@@ -86,14 +86,14 @@ Rcpp::GenericVector getShapesAsPolygonCoords(Rcpp::XPtr<ShapeMap> shapeMap) {
     for (const auto &shape : shapes) {
         if (!shape.second.isPolygon())
             continue;
-        const auto &firstPoint = *shape.second.m_points.begin();
-        const auto &lastPoint = *shape.second.m_points.rbegin();
+        const auto &firstPoint = *shape.second.points.begin();
+        const auto &lastPoint = *shape.second.points.rbegin();
         bool lastPointIsFirst = fabs(firstPoint.x - lastPoint.x) < TOLERANCE &&
                                 fabs(firstPoint.y - lastPoint.y) < TOLERANCE;
-        Rcpp::NumericMatrix poly(shape.second.m_points.size() + (lastPointIsFirst ? 0 : 1), 2);
+        Rcpp::NumericMatrix poly(shape.second.points.size() + (lastPointIsFirst ? 0 : 1), 2);
         Rcpp::colnames(poly) = Rcpp::CharacterVector({"x", "y"});
         int rowIdx = 0;
-        for (const auto &point : shape.second.m_points) {
+        for (const auto &point : shape.second.points) {
             const Rcpp::NumericMatrix::Row &row = poly(rowIdx, Rcpp::_);
             row[0] = point.x;
             row[1] = point.y;
@@ -119,12 +119,12 @@ Rcpp::GenericVector getShapesAsPolylineCoords(Rcpp::XPtr<ShapeMap> shapeMap) {
     for (const auto &shape : shapes) {
         if (!shape.second.isPolyLine())
             continue;
-        const auto &firstPoint = *shape.second.m_points.begin();
-        const auto &lastPoint = *shape.second.m_points.rbegin();
-        Rcpp::NumericMatrix poly(shape.second.m_points.size(), 2);
+        const auto &firstPoint = *shape.second.points.begin();
+        const auto &lastPoint = *shape.second.points.rbegin();
+        Rcpp::NumericMatrix poly(shape.second.points.size(), 2);
         Rcpp::colnames(poly) = Rcpp::CharacterVector({"x", "y"});
         int rowIdx = 0;
-        for (const auto &point : shape.second.m_points) {
+        for (const auto &point : shape.second.points) {
             const Rcpp::NumericMatrix::Row &row = poly(rowIdx, Rcpp::_);
             row[0] = point.x;
             row[1] = point.y;
@@ -150,16 +150,16 @@ Rcpp::List getShapeCoords(Rcpp::XPtr<ShapeMap> shapeMapPtr, int ref) {
     shapeProperties["isLine"] = shape->second.isLine();
     shapeProperties["isPoint"] = shape->second.isPoint();
 
-    const auto &firstPoint = *shape->second.m_points.begin();
-    const auto &lastPoint = *shape->second.m_points.rbegin();
+    const auto &firstPoint = *shape->second.points.begin();
+    const auto &lastPoint = *shape->second.points.rbegin();
     bool isPolyAndlastPointIsFirst = shape->second.isPolygon() &&
                                      fabs(firstPoint.x - lastPoint.x) < TOLERANCE &&
                                      fabs(firstPoint.y - lastPoint.y) < TOLERANCE;
-    Rcpp::NumericMatrix coords(shape->second.m_points.size() + (isPolyAndlastPointIsFirst ? 0 : 1),
+    Rcpp::NumericMatrix coords(shape->second.points.size() + (isPolyAndlastPointIsFirst ? 0 : 1),
                                2);
     Rcpp::colnames(coords) = Rcpp::CharacterVector({"x", "y"});
     int rowIdx = 0;
-    for (const auto &point : shape->second.m_points) {
+    for (const auto &point : shape->second.points) {
         const Rcpp::NumericMatrix::Row &row = coords(rowIdx, Rcpp::_);
         row[0] = point.x;
         row[1] = point.y;

@@ -30,6 +30,11 @@ Rcpp::List vgaIsovist(Rcpp::XPtr<PointMap> mapPtr, Rcpp::XPtr<ShapeMap> shapeMap
                 shapes.push_back(it->second);
             }
 
-            return VGAIsovist(shapes).run(comm, *mapPtr, false);
+            auto analysis = VGAIsovist(*mapPtr, shapes);
+            auto analysisResult = analysis.run(comm);
+            analysis.copyResultToMap(analysisResult.getAttributes(),
+                                     std::move(analysisResult.getAttributeData()), *mapPtr,
+                                     analysisResult.columnStats);
+            return analysisResult;
         });
 }
