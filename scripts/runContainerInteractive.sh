@@ -8,7 +8,7 @@ cd $SCRIPT_DIR
 
 podman run -it --volume=../:/alcyon/ \
     --workdir=/alcyon \
-     alcyon-debug-builder:latest \
+     alcyon-debug:latest \
      /bin/bash
 
 

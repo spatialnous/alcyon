@@ -1,0 +1,45 @@
+# SPDX-FileCopyrightText: No Copyright
+#
+# SPDX-License-Identifier: CC0-1.0
+
+# Workflow derived from https://github.com/r-lib/actions/tree/v2/examples
+# Need help debugging build failures? Start at https://github.com/r-lib/actions#where-to-find-help
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+name: Install and test on RDsan and RDcsan (Address Sanitizer)
+
+jobs:
+  RDsan-RDAsan-build-and-test:
+    runs-on: ubuntu-latest
+
+    container:
+      image: spatialnous/alcyon-debug:latest
+      volumes:
+        - $GITHUB_WORKSPACE:/alcyon
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: RDsan: Install alcyon
+        run: RDsan -e 'install.packages("/alcyon", repos=NULL)'
+
+      - name: RDsan: Test
+        run: RDsan -e 'testthat::test_dir("/alcyon/tests")'
+
+      - name: RDsan: Run examples
+        run: RDsan -e 'devtools::run_examples()'
+
+      - name: RDcsan: Install alcyon
+        run: RDcsan -e 'install.packages("/alcyon", repos=NULL)'
+
+      - name: RDsan: Test
+        run: RDcsan -e 'testthat::test_dir("/alcyon/tests")'
+
+      - name: RDsan: Run examples
+        run: RDcsan -e 'devtools::run_examples()'
