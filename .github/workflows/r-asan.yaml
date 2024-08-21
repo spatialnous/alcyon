@@ -28,7 +28,7 @@ jobs:
         run: RDsan -e 'install.packages(".", repos=NULL)'
 
       - name: RDsan, Test
-        run: RDsan -e 'testthat::test_dir("./tests")'
+        run: RDsan -e 'devtools::test(".")'
 
       - name: RDsan, Run examples
         run: RDsan -e 'devtools::run_examples(".")'
@@ -40,7 +40,7 @@ jobs:
         run: RDcsan -e 'install.packages(".", repos=NULL)'
 
       - name: RDcsan, Test
-        run: RDcsan -e 'testthat::test_dir("./tests")'
+        run: RDcsan -e 'devtools::test(".")'
 
       - name: RDcsan, Run examples
         run: RDcsan -e 'devtools::run_examples(".")'
