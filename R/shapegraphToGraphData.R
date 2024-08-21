@@ -3,24 +3,23 @@
 #
 # SPDX-License-Identifier: GPL-3.0-only
 
-#" Conversion of shapegraph to graph data
-#"
-#" Creates data to be construct a graph, based on the connections and the x,y
-#" coordinates of the centroids of shapes in a shapegraph (axial, segment,
-#" convex). Specify weightColumn to assign weight to graph edges.
-#"
-#" If weightColumn is provided, edge connections weight is calculated by taking
-#" the average of the variable of the connected nodes.
-#"
-#" @importFrom sf st_drop_geometry st_coordinates st_geometry
-#" @param shapeGraph A ShapeGraph
-#" @param weightColumn Optional. The variable used to assign weight to graph
-#" edges
-#" @returns Returns a list with edges and vertices for constructing a graph.
-#" @eval c("@examples",
-#" rxLoadSmallAxialLines(),
-#" "shapegraphToGraphData(shapeGraph)")
-#" @export
+#' Conversion of shapegraph to graph data
+#'
+#' Creates data to be construct a graph, based on the connections and the x,y
+#' coordinates of the centroids of shapes in a shapegraph (axial, segment,
+#' convex). Specify weightColumn to assign weight to graph edges.
+#'
+#' If weightColumn is provided, edge connections weight is calculated by taking
+#' the average of the variable of the connected nodes.
+#'
+#' @importFrom sf st_coordinates st_geometry st_drop_geometry
+#' @param shapeGraph A ShapeGraph
+#' @param weightColumn Optional. The variable used to assign weight to graph edges
+#' @returns Returns a list with edges and vertices for constructing a graph.
+#' @eval c("@examples",
+#' rxLoadSmallAxialLines(),
+#' "shapegraphToGraphData(shapeGraph)")
+#' @export
 shapegraphToGraphData <- function(shapeGraph,
                                   weightColumn = NA) {
     ogr <- shapeGraph
@@ -72,8 +71,8 @@ shapegraphToGraphData <- function(shapeGraph,
     colnames(edges) <- c("from", "to", "type")
     edges <- edges[!duplicated(edges), ]
 
-    ogr$x <- st_coordinates(sf::st_centroid(st_geometry(ogr)))[, "X"]
-    ogr$y <- st_coordinates(sf::st_centroid(st_geometry(ogr)))[, "Y"]
+    ogr$x <- st_coordinates(st_centroid(st_geometry(ogr)))[, "X"]
+    ogr$y <- st_coordinates(st_centroid(st_geometry(ogr)))[, "Y"]
 
     refA <- edges[, "from"]
     refB <- edges[, "to"]

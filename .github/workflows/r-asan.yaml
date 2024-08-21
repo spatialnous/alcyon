@@ -14,10 +14,7 @@ jobs:
   RDsan-RDAsan-build-and-test:
     runs-on: ubuntu-latest
 
-    container:
-      image: spatialnous/alcyon-debug:latest
-      volumes:
-        - $GITHUB_WORKSPACE:/alcyon
+    container: spatialnous/alcyon-debug:latest
 
     steps:
       - uses: actions/checkout@v4
@@ -25,19 +22,19 @@ jobs:
           submodules: recursive
 
       - name: RDsan, Install alcyon
-        run: RDsan -e 'install.packages("/alcyon", repos=NULL)'
+        run: RDsan -e 'install.packages("$GITHUB_WORKSPACE", repos=NULL)'
 
       - name: RDsan, Test
-        run: RDsan -e 'testthat::test_dir("/alcyon/tests")'
+        run: RDsan -e 'testthat::test_dir("$GITHUB_WORKSPACE/tests")'
 
       - name: RDsan, Run examples
-        run: RDsan -e 'devtools::run_examples()'
+        run: RDsan -e 'devtools::run_examples("$GITHUB_WORKSPACE")'
 
       - name: RDcsan, Install alcyon
-        run: RDcsan -e 'install.packages("/alcyon", repos=NULL)'
+        run: RDcsan -e 'install.packages("$GITHUB_WORKSPACE", repos=NULL)'
 
       - name: RDcsan, Test
-        run: RDcsan -e 'testthat::test_dir("/alcyon/tests")'
+        run: RDcsan -e 'testthat::test_dir("$GITHUB_WORKSPACE/tests")'
 
       - name: RDcsan, Run examples
-        run: RDcsan -e 'devtools::run_examples()'
+        run: RDcsan -e 'devtools::run_examples("$GITHUB_WORKSPACE")'
