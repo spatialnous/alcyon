@@ -12,7 +12,7 @@
 #' If weightColumn is provided, edge connections weight is calculated by taking
 #' the average of the variable of the connected nodes.
 #'
-#' @importFrom sf st_coordinates st_geometry st_drop_geometry
+#' @importFrom sf st_coordinates st_geometry st_drop_geometry st_centroid
 #' @param shapeGraph A ShapeGraph
 #' @param weightColumn Optional. The variable used to assign weight to graph edges
 #' @returns Returns a list with edges and vertices for constructing a graph.
