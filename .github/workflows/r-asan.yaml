@@ -30,6 +30,9 @@ jobs:
       - name: RDsan, Run examples
         run: RDsan -e 'devtools::run_examples(".")'
 
+      - name: Clear for rebuild
+        run: rm -rf 'src/build-Release'
+
       - name: RDcsan, Install alcyon
         run: RDcsan -e 'install.packages(".", repos=NULL)'
 
