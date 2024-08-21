@@ -10,7 +10,7 @@ BLDDIR = build-Release
 # Make sure libraries are included so that they can refer to each other
 PKG_CXXFLAGS = $(SHLIB_OPENMP_CXXFLAGS)
 PKG_CPPFLAGS = -Ilibs -I../inst/include/ -I.
-PKG_LIBS = $(SHLIB_OPENMP_CXXFLAGS) /openmp $(BLDDIR)/libalcyon_gensala.a
+PKG_LIBS = $(SHLIB_OPENMP_CXXFLAGS) $(BLDDIR)/libalcyon_gensala.a
 
 SOURCES = main.cpp \
           communicator.cpp \
