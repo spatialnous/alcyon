@@ -1,3 +1,4 @@
+AdjacencyMatrix
 AgentLookMode
 AllLineShapeGraph
 AxialShapeGraph
@@ -28,6 +29,7 @@ ShapeMaps
 VignetteEncoding
 VignetteEngine
 VignetteIndexEntry
+VGALocalAlgorithm
 depthmapX
 depthmapX's
 exosomatic

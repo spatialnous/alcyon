@@ -88,7 +88,7 @@ Collate:
     'refIDtoIndex.R'
     'segmentAnalysis.R'
     'sfConversions.R'
-    'shapegraphToIGraph.R'
+    'shapegraphToGraphData.R'
     'oneToOneTraverse.R'
     'oneToAllTraverse.R'
     'allToAllTraverse.R'

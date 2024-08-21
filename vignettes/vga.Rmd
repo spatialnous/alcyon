@@ -154,8 +154,8 @@ vgaMap <- oneToOneTraverse(
     toX = 1.27,
     toY = 7.60
 )
-nuv <- length(unique(unlist(vgaMap["Visual Shortest Path Zone"])))
-plot(vgaMap["Visual Shortest Path Zone"],
+nuv <- length(unique(unlist(vgaMap["Visual Shortest Path Visual Zone"])))
+plot(vgaMap["Visual Shortest Path Visual Zone"],
     breaks = "equal",
     nbreaks = nuv,
     col = c("lightgray", depthmap.axmanesque.colour(nuv - 2))
@@ -205,10 +205,10 @@ vgaMap <- oneToOneTraverse(
     toX = 1.27,
     toY = 7.60
 )
-nuv <- length(unique(unlist(vgaMap["Angular Shortest Path"])))
-plot(vgaMap["Angular Shortest Path Zone"],
+nuv <- length(unique(unlist(vgaMap["Angular Shortest Path Metric Zone"])))
+plot(vgaMap["Angular Shortest Path Metric Zone"],
     breaks = "equal",
     nbreaks = nuv,
-    col = c("lightgray", depthmap.axmanesque.colour(nuv - 2))
+    col = c("lightgray", depthmap.classic.colour(nuv - 2))
 )
 ```
