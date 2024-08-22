@@ -1,6 +1,6 @@
 [submodule "src/salalib"]
 	path = src/libs/salalib
-	url = git@github.com:spatialnous/salalib.git
+	url = ../../spatialnous/salalib.git
 [submodule "src/genlib"]
 	path = src/libs/genlib
-	url = git@github.com:spatialnous/genlib.git
+	url = ../../spatialnous/genlib.git
