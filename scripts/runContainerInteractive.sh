@@ -19,7 +19,7 @@ podman run -it --volume=../:/alcyon/ \
 # RDsan -e 'testthat::test_file("/alcyon/tests/testthat/test-agentanalysis.R", package="alcyon")'
 # RDsan -e 'testthat::test_file("/alcyon/tests/testthat/test-MetaGraph.R", package="alcyon")'
 # RDsan -e 'testthat::test_file("/alcyon/tests/testthat/test-prepareVGA.R", package="alcyon")'
-# RDsan -e 'testthat::test_dir("/alcyon/tests")'
+# RDsan -e 'devtools::test("/alcyon")'
 # RDsan -e 'devtools::run_examples()'
 
 # To test with clang
@@ -29,7 +29,7 @@ podman run -it --volume=../:/alcyon/ \
 # RDcsan -e 'testthat::test_file("/alcyon/tests/testthat/test-agentanalysis.R", package="alcyon")'
 # RDcsan -e 'testthat::test_file("/alcyon/tests/testthat/test-MetaGraph.R", package="alcyon")'
 # RDcsan -e 'testthat::test_file("/alcyon/tests/testthat/test-prepareVGA.R", package="alcyon")'
-# RDcsan -e 'testthat::test_dir("/alcyon/tests")'
+# RDcsan -e 'devtools::test("/alcyon")'
 # RDcsan -e 'devtools::run_examples()'
 
 

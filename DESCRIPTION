@@ -93,6 +93,6 @@ Collate:
     'oneToAllTraverse.R'
     'allToAllTraverse.R'
     'vgaLocal.R'
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2
 Language: en-GB
 URL: https://github.com/spatialnous/alcyon
