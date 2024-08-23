@@ -50,9 +50,12 @@ endforeach ()
 
 add_library(alcyon_gensala STATIC ${real_genlib_SRCS} ${real_salalib_SRCS})
 
-find_package(OpenMP)
-if(OpenMP_CXX_FOUND)
-    target_link_libraries(alcyon_gensala PUBLIC OpenMP::OpenMP_CXX)
+if (NOT DISABLE_OPENMP)
+    find_package(OpenMP)
+    if(OpenMP_CXX_FOUND)
+        target_link_libraries(alcyon_gensala PUBLIC OpenMP::OpenMP_CXX)
+    endif()
 endif()
+
 
 

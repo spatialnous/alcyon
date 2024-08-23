@@ -21,9 +21,6 @@ jobs:
         with:
           submodules: recursive
 
-      - name: RDebug Makevars setup
-        run: mkdir ~/.R/ && echo "PKG_LIBS += -fopenmp" > ~/.R/Makevars
-
       - name: RDsan, Install alcyon
         run: RDsan -e 'install.packages(".", repos=NULL)'
 

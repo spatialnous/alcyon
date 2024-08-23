@@ -1,0 +1,8 @@
+# SPDX-FileCopyrightText: 2024 Petros Koutsolampros
+#
+# SPDX-License-Identifier: GPL-3.0-only
+
+rm confdefs.h
+rm config.log
+rm config.status
+rm src/Makevars

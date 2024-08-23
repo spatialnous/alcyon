@@ -13,3 +13,8 @@ inst/doc
 scratch/
 /doc/
 /Meta/
+autom4te.cache/
+config.log
+config.status
+configure~
+src/Makevars

@@ -14,3 +14,11 @@ Make sure that git hooks are enabled, to avoid committing minor issues:
 ```
 git config --local core.hooksPath .githooks/
 ```
+
+Do not change `configure` directly, instead change `configure.ac` and run `autoconf`
+
+To force enable OpenMP if R was not built with it, install the source package with:
+```
+install.packages("alcyon", configure.args = "--enable-force-openmp")
+
+```

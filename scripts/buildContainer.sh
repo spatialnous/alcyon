@@ -10,6 +10,5 @@ FROM docker.io/wch1/r-debug:latest
 RUN apt-get update && apt-get upgrade -y && apt-get install -y libudunits2-dev libgdal-dev cmake libomp-15-dev
 RUN RDsan -e 'install.packages(c("sf", "stars", "RcppProgress", "testthat", "devtools"))'
 RUN RDcsan -e 'install.packages(c("sf", "stars", "RcppProgress", "testthat", "devtools"))'
-RUN mkdir ~/.R/ && echo "PKG_LIBS += -fopenmp" > ~/.R/Makevars
 EOF
 
