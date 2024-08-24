@@ -2923,8 +2923,6 @@ ompopt = trimws(ompopt); cat(ompopt == "-fopenmp")'`
 
 DISABLE_OPENMP=OFF
 
-echo "R_HAS_OMP = $R_HAS_OMP"
-
 if test "$R_HAS_OMP" = "FALSE" ; then
   if stringContain "-fopenmp" "$EXTRA_LIBS" -a ; then
     echo "R has NOT been built with OpenMP support but enabled manually"
