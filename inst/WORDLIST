@@ -16,6 +16,7 @@ OcclusionAny
 OcclusionFurthest
 OcclusionGroup
 OcclusionLength
+OpenMP
 PointMap
 PointMap's
 PointMaps
