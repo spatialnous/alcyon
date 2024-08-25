@@ -23,6 +23,7 @@ jobs:
 
       - name: RDsan, Install alcyon
         run: RDsan -e 'install.packages(".", repos=NULL)'
+        # perhaps use devtools::build(".", binary = T, args = c("--preclean"))
 
       - name: RDsan, Test
         run: RDsan -e 'devtools::test(".")'
