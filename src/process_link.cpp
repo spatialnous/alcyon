@@ -157,11 +157,7 @@ Rcpp::List shapeMapUnlinkCoords(Rcpp::XPtr<ShapeGraph> shapeGraphPtr, Rcpp::Nume
     }
     for (int i = 0; i < coords.rows(); ++i) {
         const Rcpp::NumericMatrix::Row &row = coords(i, Rcpp::_);
-        QtRegion region(Point2f(row[0], row[1]), Point2f(row[0], row[1]));
-        auto shapesInRegion = shapeGraphPtr->getShapesInRegion(region);
-        if (!shapesInRegion.empty()) {
-            shapeGraphPtr->unlinkShapes(Point2f(row[2], row[3]), shapesInRegion.begin()->first);
-        }
+        shapeGraphPtr->unlinkShapes(Point2f(row[0], row[1]), Point2f(row[2], row[3]));
     }
     return Rcpp::List::create(Rcpp::Named("completed") = true,
                               Rcpp::Named("newAttributes") = std::vector<std::string>(),
