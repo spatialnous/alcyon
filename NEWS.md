@@ -1,3 +1,7 @@
+# alcyon 0.5.1
+
+* Fix agent analysis and unlinking sanitizer errors
+
 # alcyon 0.5.0
 
 * Add multi-threaded analysis for Global VGA (Metric, Topological, Tulip), and for VGA Local analysis (generating the metrics Control, Controllability and Clustering Coefficient), as well as a new algorithm for Local analysis using an adjacency matrix.
