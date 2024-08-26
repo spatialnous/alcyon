@@ -7,6 +7,9 @@
 set -e
 
 reuse lint
+echo "Running spell check"
+Rscript -e 'spchk <- devtools::spell_check("."); if(length(spchk$word) != 0) {print("Spell check failed"); print(spchk); q(status = 2)}'
+echo "Spell check passed"
 echo "Running the linter..."
 Rscript -e 'devtools::load_all(); res <- lintr::lint_package(show_progress = T); if (length(res) != 0) {print("Linter failed!"); q(status = 2)}'
 echo "Linter satisfied!"
