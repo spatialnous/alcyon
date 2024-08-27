@@ -1,7 +1,7 @@
 Package: alcyon
 Type: Package
 Title: Spatial Network Analysis
-Version: 0.5.1
+Version: 0.5.0
 Authors@R: c(
     person(given = "Petros",
            family = "Koutsolampros",

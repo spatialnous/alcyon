@@ -1,4 +1,4 @@
-# alcyon 0.5.1
+# alcyon {next version}
 
 * Fix agent analysis and unlinking sanitizer errors
 
