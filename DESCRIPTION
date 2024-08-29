@@ -35,9 +35,11 @@ Authors@R: c(
            role = c("ctb", "cph"),
            comment = c("'sala' library contributor through 'depthmapX'")),
     person(given = "University College London",
-           role = "fnd"),
+           role = "fnd",
+           comment = c("2015 - 2020")),
     person(given = "Spacelab UK",
-           role = "fnd"))
+           role = "fnd",
+           comment = c("2015 - 2020")))
 Description: Interface package for 'sala', the spatial network analysis library
     from the 'depthmapX' software application. The R parts of the code are based
     on the 'rdepthmap' package. Allows for the analysis of urban and
