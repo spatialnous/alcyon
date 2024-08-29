@@ -11,7 +11,7 @@ Authors@R: c(
                        "'sala' library contributor through 'depthmapX'")),
     person(given = "Fani",
            family = "Kostourou",
-           role = c("aut", "ctb", "cph"),
+           role = c("ctb", "cph"),
            comment = c(ORCID = "0000-0002-6544-7693")),
     person(given = "Kimon",
            family = "Krenz",
