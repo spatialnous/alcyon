@@ -4,3 +4,5 @@ template:
 authors:
   footer:
     roles: [cre]
+  sidebar:
+    roles: [aut, ctb]
