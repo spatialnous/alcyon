@@ -1,4 +1,6 @@
 url: https://spatialnous.github.io/alcyon/
 template:
   bootstrap: 5
-
+authors:
+  footer:
+    roles: [cre]
