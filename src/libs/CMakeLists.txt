@@ -23,19 +23,7 @@ cmake_policy(SET CMP0076 NEW)
 
 include_directories(".")
 
-add_subdirectory(genlib)
 add_subdirectory(salalib)
-
-# get all the sources from genlib
-get_target_property(genlib_SRCS genlib SOURCES)
-
-# fix paths if they are not absolute
-set(real_genlib_SRCS "")
-foreach (source ${genlib_SRCS})
-  get_filename_component(newSource ${source}
-                         REALPATH BASE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/genlib")
-  list(APPEND real_genlib_SRCS ${newSource})
-endforeach ()
 
 # get all the sources from salalib
 get_target_property(salalib_SRCS salalib SOURCES)
@@ -48,7 +36,7 @@ foreach (source ${salalib_SRCS})
   list(APPEND real_salalib_SRCS ${newSource})
 endforeach ()
 
-add_library(alcyon_gensala STATIC ${real_genlib_SRCS} ${real_salalib_SRCS})
+add_library(alcyon_gensala STATIC ${real_salalib_SRCS})
 
 if (NOT DISABLE_OPENMP)
     find_package(OpenMP)

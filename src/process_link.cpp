@@ -2,10 +2,9 @@
 //
 // SPDX-License-Identifier: GPL-3.0-only
 
+#include "salalib/genlib/p2dpoly.h"
 #include "salalib/pointmap.h"
 #include "salalib/shapegraph.h"
-
-#include "genlib/p2dpoly.h"
 
 #include "communicator.h"
 #include "helper_nullablevalue.h"

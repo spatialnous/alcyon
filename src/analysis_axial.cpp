@@ -6,7 +6,7 @@
 #include "salalib/axialmodules/axiallocal.h"
 #include "salalib/axialmodules/axialstepdepth.h"
 
-#include "genlib/p2dpoly.h"
+#include "salalib/genlib/p2dpoly.h"
 #include "salalib/shapegraph.h"
 #include "salalib/shapemap.h"
 

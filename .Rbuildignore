@@ -5,11 +5,6 @@
 ^\.reuse$
 ^src/build-Release$
 ^src/.clang-format$
-^src/libs/genlib/\.git$
-^src/libs/genlib/\.clang-format$
-^src/libs/genlib/\.clang-tidy$
-^src/libs/genlib/\.githooks$
-^src/libs/genlib/\.reuse$
 ^src/libs/salalib/\.git$
 ^src/libs/salalib/\.clang-format$
 ^src/libs/salalib/\.clang-tidy$
