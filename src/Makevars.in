@@ -49,7 +49,7 @@ $(BLDDIR):
 # Build each object. This is necessary to override
 # becasue otherwise .o files would end up in src/
 $(BLDDIR)/%.o: %.cpp | $(BLDDIR)
-	$(CXX) $(ALL_CPPFLAGS) $(ALL_OBJCXXFLAGS) -c $< -o $@
+	$(CXX) $(ALL_CPPFLAGS) $(ALL_CXXFLAGS) -c $< -o $@
 
 # Provide recipe to remove all objects
 clean:
