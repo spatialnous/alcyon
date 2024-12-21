@@ -1,6 +1,12 @@
 # alcyon {next version}
 
+# alcyon 0.6.0
+
+* Use ALL_CXXFLAGS instead of ALL_OBJCXXFLAGS to build
+* Update to latest sala which now contains genlib
+* Add pkgdown and fix descriptions
 * Fix agent analysis and unlinking sanitizer errors
+* Add point-to-point unlinking
 
 # alcyon 0.5.0
 
