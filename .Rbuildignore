@@ -8,6 +8,7 @@
 ^src/libs/salalib/\.git$
 ^src/libs/salalib/\.clang-format$
 ^src/libs/salalib/\.clang-tidy$
+^src/libs/salalib/\.github$
 ^src/libs/salalib/\.githooks$
 ^src/libs/salalib/\.reuse$
 ^inst/extdata/testdata/\.git$
