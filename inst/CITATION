@@ -1,14 +1,9 @@
 year <- 2024
 note <- sprintf("R package version %s", meta$Version)
-citableRoles = c("cre", "aut")
-authors <- as.person(meta['Author'])
-citableAuthors = authors[unlist(lapply(authors, function(author) {
-  length(intersect(author$role, citableRoles)) > 0
-}))]
 
 bibentry(bibtype = "Misc",
          title = "{alcyon}: An R package for Spatial Network Analysis",
-         author = citableAuthors,
+         author = "Petros Koutsolampros",
          year = year,
          note = note,
          version = meta$Version,
