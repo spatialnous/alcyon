@@ -153,8 +153,13 @@ Rcpp::XPtr<ShapeMap> makeIsovists(Rcpp::XPtr<ShapeMap> boundsMap, Rcpp::NumericM
             }
             iso.makeit(bspRoot.get(), p, boundsMap->getRegion(), leftAngle, rightAngle);
 
+            std::vector<Point2f> polygon = iso.getPolygon();
+            // if the polygon is not closed force it to close
+            if (polygon.front().x != polygon.back().x || polygon.front().y != polygon.back().y) {
+                polygon.push_back(polygon.front());
+            }
             // false: closed polygon, true: isovist
-            int polyref = map->makePolyShape(iso.getPolygon(), false);
+            int polyref = map->makePolyShape(polygon, false);
             map->getAllShapes()[polyref].setCentroid(p);
 
             AttributeTable &table = map->getAttributeTable();
