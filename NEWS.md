@@ -1,4 +1,7 @@
-# alcyon {next version}
+# alcyon 0.7.0
+
+* Sala: Increase calculation accuracy to achieve parity between x86 and arm64 results
+* Force isovist polygons to be closed
 
 # alcyon 0.6.0
 
