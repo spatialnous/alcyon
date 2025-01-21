@@ -55,7 +55,7 @@ LazyData: true
 LinkingTo:
     Rcpp, cli
 Imports:
-    Rcpp, methods
+    Rcpp, methods, withr
 Depends:
     sf, stars
 Suggests: 
