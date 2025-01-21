@@ -55,13 +55,14 @@ LazyData: true
 LinkingTo:
     Rcpp, cli
 Imports:
-    Rcpp, methods, withr
+    Rcpp, methods
 Depends:
     sf, stars
 Suggests: 
     knitr,
     rmarkdown,
-    testthat
+    testthat,
+    withr
 SystemRequirements: C++17
 VignetteBuilder: knitr
 Collate:
