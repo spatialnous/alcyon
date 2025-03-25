@@ -28,7 +28,7 @@ jobs:
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: any::lintr, any::devtools, local::.
+          extra-packages: any::lintr, any::cyclocomp, any::devtools, local::.
           needs: lint, devtools
 
       - name: Lint
