@@ -48,7 +48,8 @@ setAs("sf", "ShapeMap", function(from) {
             warning(
                 "Non-numeric columns will not be transferred to ",
                 "the ShapeMap: ",
-                do.call(paste, as.list(cols[!numericCols]))
+                do.call(paste, as.list(cols[!numericCols])),
+                call. = FALSE
             )
         }
         attr(shapeMap, "sala_map") <- Rcpp_toShapeMap(from, which(numericCols))

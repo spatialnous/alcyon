@@ -1,9 +1,9 @@
-# SPDX-FileCopyrightText: 2024 Petros Koutsolampros
+# SPDX-FileCopyrightText: 2024-2025 Petros Koutsolampros
 #
 # SPDX-License-Identifier: GPL-3.0-only
 
-AC_INIT([alcyon], 0.7.0) dnl package name, version
-AC_CONFIG_SRCDIR([src/communicator.h])
+AC_INIT([alcyon], 0.8.0) dnl package name, version
+AC_CONFIG_SRCDIR([src/communicator.hpp])
 
 if test -z "$CMAKE"; then CMAKE="`which cmake`"; fi
 if test -z "$CMAKE"; then CMAKE=/Applications/CMake.app/Contents/bin/cmake; fi

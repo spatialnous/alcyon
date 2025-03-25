@@ -1,13 +1,13 @@
-// SPDX-FileCopyrightText: 2024 Petros Koutsolampros
+// SPDX-FileCopyrightText: 2024-2025 Petros Koutsolampros
 //
 // SPDX-License-Identifier: GPL-3.0-only
 
-#include "rcpp_PointMap.h"
+#include "rcpp_PointMap.hpp"
 
-#include "salalib/gridproperties.h"
+#include "salalib/gridproperties.hpp"
 
-#include "communicator.h"
-#include "helper_nullablevalue.h"
+#include "communicator.hpp"
+#include "helper_nullablevalue.hpp"
 
 RCPP_EXPOSED_CLASS(PointMap);
 
@@ -19,7 +19,7 @@ Rcpp::XPtr<PointMap> createFromGrid(const double minX, const double minY, const 
         Rcpp::stop("gridSize can not be less or equal to zero (%d given)", gridSize);
     }
     // Create a new pointmap and set tha grid
-    QtRegion r(Point2f(minX, minY) /* bottom left */, Point2f(maxX, maxY) /* top right */);
+    Region4f r(Point2f(minX, minY) /* bottom left */, Point2f(maxX, maxY) /* top right */);
 
     Rcpp::XPtr<PointMap> pointMap = Rcpp::XPtr<PointMap>(new PointMap(r, "PointMap"));
 
@@ -45,7 +45,7 @@ Rcpp::List blockLines(Rcpp::XPtr<PointMap> pointMapPtr, Rcpp::XPtr<ShapeMap> bou
         pointMapPtr = Rcpp::XPtr(new PointMap(prevRegion));
         pointMapPtr->copy(*prevPointMap, true, true);
     }
-    std::vector<Line> lines;
+    std::vector<Line4f> lines;
     for (auto line : boundaryMapPtr->getAllShapesAsLines()) {
         lines.emplace_back(line.start(), line.end());
     }
@@ -216,8 +216,8 @@ Rcpp::NumericMatrix getGridCoordinates(Rcpp::XPtr<PointMap> pointMapPtr) {
     colNames[2] = "Ref";
     Rcpp::colnames(coords) = colNames;
     int rowIdx = 0;
-    for (int i = 0; i < pointMapPtr->getRows(); i++) {
-        for (int j = 0; j < pointMapPtr->getCols(); j++) {
+    for (size_t i = 0; i < pointMapPtr->getRows(); i++) {
+        for (size_t j = 0; j < pointMapPtr->getCols(); j++) {
             PixelRef ref(j, i);
             const auto &point = pointMapPtr->getPoint(ref);
             const Rcpp::NumericMatrix::Row &row = coords(rowIdx, Rcpp::_);
@@ -237,7 +237,7 @@ std::vector<std::string> getPointMapAttributeNames(PointMap *pointMap) {
     // + 1 for the key column
     names.reserve(1 + numCols);
     names.push_back(attributes.getColumnName(size_t(-1)));
-    for (int i = 0; i < attributes.getNumColumns(); ++i) {
+    for (size_t i = 0; i < attributes.getNumColumns(); ++i) {
         names.push_back(attributes.getColumnName(i));
     }
     return names;
@@ -257,8 +257,8 @@ getPointMapAttributeData(Rcpp::XPtr<PointMap> pointMap, std::vector<std::string>
         auto &attributeData = data[attributeName];
         attributeData.reserve(pointMap->getRows() * pointMap->getCols());
         if (attributeName == attrbs.getColumnName(size_t(-1))) {
-            for (int i = 0; i < pointMap->getRows(); i++) {
-                for (int j = 0; j < pointMap->getCols(); j++) {
+            for (size_t i = 0; i < pointMap->getRows(); i++) {
+                for (size_t j = 0; j < pointMap->getCols(); j++) {
                     PixelRef ref(j, i);
                     const auto &point = pointMap->getPoint(ref);
                     if (point.filled()) {
@@ -271,8 +271,8 @@ getPointMapAttributeData(Rcpp::XPtr<PointMap> pointMap, std::vector<std::string>
         } else {
             size_t colIdx = attrbs.getColumnIndex(attributeName);
 
-            for (int i = 0; i < pointMap->getRows(); i++) {
-                for (int j = 0; j < pointMap->getCols(); j++) {
+            for (size_t i = 0; i < pointMap->getRows(); i++) {
+                for (size_t j = 0; j < pointMap->getCols(); j++) {
                     PixelRef ref(j, i);
                     const auto &point = pointMap->getPoint(ref);
                     if (point.filled()) {
@@ -304,8 +304,8 @@ getPointMapPropertyData(Rcpp::XPtr<PointMap> pointMap, std::vector<std::string> 
     for (auto &propertyName : propertyNames) {
         auto &propertyData = data[propertyName];
         propertyData.reserve(pointMap->getCols() * pointMap->getRows());
-        for (int i = 0; i < pointMap->getRows(); i++) {
-            for (int j = 0; j < pointMap->getCols(); j++) {
+        for (size_t i = 0; i < pointMap->getRows(); i++) {
+            for (size_t j = 0; j < pointMap->getCols(); j++) {
                 PixelRef ref(j, i);
                 double propertyValue = -1;
                 if (propertyName == "Ref") {

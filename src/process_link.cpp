@@ -1,13 +1,12 @@
-// SPDX-FileCopyrightText: 2024 Petros Koutsolampros
+// SPDX-FileCopyrightText: 2024-2025 Petros Koutsolampros
 //
 // SPDX-License-Identifier: GPL-3.0-only
 
-#include "salalib/genlib/p2dpoly.h"
-#include "salalib/pointmap.h"
-#include "salalib/shapegraph.h"
+#include "salalib/pointmap.hpp"
+#include "salalib/shapegraph.hpp"
 
-#include "communicator.h"
-#include "helper_nullablevalue.h"
+#include "communicator.hpp"
+#include "helper_nullablevalue.hpp"
 
 #include <Rcpp.h>
 
@@ -26,7 +25,7 @@ Rcpp::List shapeGraphLinkCoords(Rcpp::XPtr<ShapeGraph> shapeGraphPtr, Rcpp::Nume
     bool completed = true;
     for (int i = 0; i < coords.rows(); ++i) {
         const Rcpp::NumericMatrix::Row &row = coords(i, Rcpp::_);
-        QtRegion region(Point2f(row[0], row[1]), Point2f(row[0], row[1]));
+        Region4f region(Point2f(row[0], row[1]), Point2f(row[0], row[1]));
         auto shapesInRegion = shapeGraphPtr->getShapesInRegion(region);
         completed &=
             shapeGraphPtr->linkShapes(Point2f(row[2], row[3]), shapesInRegion.begin()->first);

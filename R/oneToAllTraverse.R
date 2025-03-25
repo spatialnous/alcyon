@@ -64,17 +64,17 @@ oneToAllTraverse <- function(map,
                              copyMap = TRUE,
                              verbose = FALSE) {
     if (!(traversalType %in% as.list(TraversalType))) {
-        stop("Unknown traversalType: ", traversalType)
+        stop("Unknown traversalType: ", traversalType, call. = FALSE)
     }
 
     if (!is.na(quantizationWidth) && !inherits(map, "SegmentShapeGraph")) {
-        stop("quantizationWidth can only be used with Segment ShapeGraphs")
+        stop("quantizationWidth can only be used with Segment ShapeGraphs", call. = FALSE)
     }
 
     if (is.na(quantizationWidth) &&
             inherits(map, "SegmentShapeGraph") &&
             traversalType == TraversalType$Angular) {
-        stop("Angular traversal requires a quantizationWidth")
+        stop("Angular traversal requires a quantizationWidth", call. = FALSE)
     }
     return(oneToAllTraversePerMapType(
         map,
@@ -126,7 +126,7 @@ oneToAllTraversePerMapType <- function(map,
         )
         return(processShapeMapResult(map, result))
     } else {
-        stop("Can only run depth on Axial or Segment ShapeGraphs and PointMaps")
+        stop("Can only run depth on Axial or Segment ShapeGraphs and PointMaps", call. = FALSE)
     }
 }
 

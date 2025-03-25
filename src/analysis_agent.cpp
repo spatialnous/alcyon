@@ -1,15 +1,15 @@
-// SPDX-FileCopyrightText: 2024 Petros Koutsolampros
+// SPDX-FileCopyrightText: 2024-2025 Petros Koutsolampros
 //
 // SPDX-License-Identifier: GPL-3.0-only
 
-#include "salalib/agents/agentanalysis.h"
+#include "salalib/agents/agentanalysis.hpp"
 
-#include "enum_AgentLookMode.h"
+#include "enum_AgentLookMode.hpp"
 
-#include "communicator.h"
-#include "helper_enum.h"
-#include "helper_nullablevalue.h"
-#include "helper_runAnalysis.h"
+#include "communicator.hpp"
+#include "helper_enum.hpp"
+#include "helper_nullablevalue.hpp"
+#include "helper_runAnalysis.hpp"
 
 #include <Rcpp.h>
 

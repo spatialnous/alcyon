@@ -1,12 +1,12 @@
-// SPDX-FileCopyrightText: 2024 Petros Koutsolampros
+// SPDX-FileCopyrightText: 2024-2025 Petros Koutsolampros
 //
 // SPDX-License-Identifier: GPL-3.0-only
 
-#include "salalib/shapegraph.h"
-#include "salalib/shapemap.h"
+#include "salalib/shapegraph.hpp"
+#include "salalib/shapemap.hpp"
 
-#include "helper_attr.h"
-#include "helper_nullablevalue.h"
+#include "helper_attr.hpp"
+#include "helper_nullablevalue.hpp"
 
 #include <Rcpp.h>
 
@@ -145,7 +145,7 @@ toShapeMap(Rcpp::DataFrame &df,
         }
 
         // TODO: Make this a vector of pairs
-        std::map<int, float> extraAttributes;
+        std::map<size_t, float> extraAttributes;
 
         for (auto &idxiit : iIts) {
             extraAttributes.emplace(std::get<0>(idxiit), *std::get<2>(idxiit));
@@ -161,7 +161,7 @@ toShapeMap(Rcpp::DataFrame &df,
         } else if (coords.rows() == 2) {
             // 2D line x1,x2,y1,y2
 
-            Line line(Point2f(coords[0], coords[2]), Point2f(coords[1], coords[3]));
+            Line4f line(Point2f(coords[0], coords[2]), Point2f(coords[1], coords[3]));
             shp->makeLineShape(line, false /* through_ui */, false /* tempshape */,
                                extraAttributes);
         } else if (coords.rows() > 2) {

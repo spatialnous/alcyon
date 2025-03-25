@@ -1,19 +1,19 @@
-// SPDX-FileCopyrightText: 2024 Petros Koutsolampros
+// SPDX-FileCopyrightText: 2024-2025 Petros Koutsolampros
 //
 // SPDX-License-Identifier: GPL-3.0-only
 
-#include "salalib/shapegraph.h"
+#include "salalib/shapegraph.hpp"
 
-#include "salalib/radiustype.h"
-#include "salalib/segmmodules/segmmetricshortestpath.h"
-#include "salalib/segmmodules/segmtopologicalshortestpath.h"
-#include "salalib/segmmodules/segmtulipshortestpath.h"
+#include "salalib/radiustype.hpp"
+#include "salalib/segmmodules/segmmetricshortestpath.hpp"
+#include "salalib/segmmodules/segmtopologicalshortestpath.hpp"
+#include "salalib/segmmodules/segmtulipshortestpath.hpp"
 
-#include "communicator.h"
-#include "enum_TraversalType.h"
-#include "helper_enum.h"
-#include "helper_nullablevalue.h"
-#include "helper_runAnalysis.h"
+#include "communicator.hpp"
+#include "enum_TraversalType.hpp"
+#include "helper_enum.hpp"
+#include "helper_nullablevalue.hpp"
+#include "helper_runAnalysis.hpp"
 
 #include <Rcpp.h>
 
@@ -54,7 +54,7 @@ Rcpp::List segmentShortestPath(Rcpp::XPtr<ShapeGraph> mapPtr, const int stepType
                 if (!graphRegion.contains(p)) {
                     Rcpp::stop("Point outside of target region");
                 }
-                QtRegion region(p, p);
+                Region4f region(p, p);
                 origins.insert(mapPtr->getShapesInRegion(region).begin()->first);
             }
 
@@ -66,7 +66,7 @@ Rcpp::List segmentShortestPath(Rcpp::XPtr<ShapeGraph> mapPtr, const int stepType
                 if (!graphRegion.contains(p)) {
                     Rcpp::stop("Point outside of target region");
                 }
-                QtRegion region(p, p);
+                Region4f region(p, p);
                 destinations.insert(mapPtr->getShapesInRegion(region).begin()->first);
             }
 

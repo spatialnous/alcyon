@@ -1,20 +1,19 @@
-// SPDX-FileCopyrightText: 2024 Petros Koutsolampros
+// SPDX-FileCopyrightText: 2024-2025 Petros Koutsolampros
 //
 // SPDX-License-Identifier: GPL-3.0-only
 
-#include "salalib/axialmodules/axialintegration.h"
-#include "salalib/axialmodules/axiallocal.h"
-#include "salalib/axialmodules/axialstepdepth.h"
+#include "salalib/axialmodules/axialintegration.hpp"
+#include "salalib/axialmodules/axiallocal.hpp"
+#include "salalib/axialmodules/axialstepdepth.hpp"
 
-#include "salalib/genlib/p2dpoly.h"
-#include "salalib/shapegraph.h"
-#include "salalib/shapemap.h"
+#include "salalib/shapegraph.hpp"
+#include "salalib/shapemap.hpp"
 
-#include "communicator.h"
-#include "enum_TraversalType.h"
-#include "helper_enum.h"
-#include "helper_nullablevalue.h"
-#include "helper_runAnalysis.h"
+#include "communicator.hpp"
+#include "enum_TraversalType.hpp"
+#include "helper_enum.hpp"
+#include "helper_nullablevalue.hpp"
+#include "helper_runAnalysis.hpp"
 
 #include <Rcpp.h>
 
@@ -52,9 +51,9 @@ Rcpp::List runAxialAnalysis(Rcpp::XPtr<ShapeGraph> mapPtr, const Rcpp::NumericVe
 
             if (weightedMeasureColName.has_value()) {
                 const AttributeTable &table = mapPtr->getAttributeTable();
-                for (int i = 0; i < table.getNumColumns(); i++) {
+                for (size_t i = 0; i < table.getNumColumns(); i++) {
                     if (*weightedMeasureColName == table.getColumnName(i).c_str()) {
-                        weightedMeasureColIdx = i;
+                        weightedMeasureColIdx = static_cast<int>(i);
                     }
                 }
                 if (weightedMeasureColIdx == -1) {
@@ -118,13 +117,13 @@ Rcpp::List axialStepDepth(Rcpp::XPtr<ShapeGraph> mapPtr, const int stepType,
                 Rcpp::Rcout << "ok\nSelecting cells... " << '\n';
 
             std::set<int> origins;
-            for (int i = 0; i < stepDepthPointsX.size(); ++i) {
+            for (size_t i = 0; i < stepDepthPointsX.size(); ++i) {
                 Point2f p2f(stepDepthPointsX[i], stepDepthPointsY[i]);
                 auto graphRegion = mapPtr->getRegion();
                 if (!graphRegion.contains(p2f)) {
                     throw depthmapX::RuntimeException("Point outside of target region");
                 }
-                QtRegion r(p2f, p2f);
+                Region4f r(p2f, p2f);
                 origins.insert(mapPtr->getShapesInRegion(r).begin()->first);
             }
 

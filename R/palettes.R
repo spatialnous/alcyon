@@ -112,10 +112,10 @@ makeDepthmapClassicColour <- function(value,
 
     green <- rangeMin + (rangeMax - rangeMin) / 10.0
     r <- g <- b <- 0.0
-    offset <- 0.0333
+    colorOffset <- 0.0333
 
     htmlByte <- function(colorByte) {
-        return(floor((colorByte + offset) * 15.0) * 17.0)
+        return(floor((colorByte + colorOffset) * 15.0) * 17.0)
     }
 
     ## | --- 0

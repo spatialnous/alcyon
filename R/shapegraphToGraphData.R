@@ -26,7 +26,7 @@ shapegraphToGraphData <- function(shapeGraph,
     linksunlinks <- links(shapeGraph)
     connections <- connections(shapeGraph)
     if (nrow(linksunlinks) == 0L && length(connections$from) == 0L) {
-        stop("The shapeGraph provided has no connections and no links")
+        stop("The shapeGraph provided has no connections and no links", call. = FALSE)
     }
 
     edges <- matrix(ncol = 3L, nrow = 0L)

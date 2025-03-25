@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: GPL-3.0-only
 
 processShapeMapResult <- function(shapeGraph, result) {
-    if (!result$completed) stop("Analysis did not complete")
+    if (!result$completed) stop("Analysis did not complete", call. = FALSE)
     if (length(result$newAttributes) != 0L) {
         newAttrs <- Rcpp_ShapeMap_getAttributeData(
             result$mapPtr,
@@ -18,7 +18,7 @@ processShapeMapResult <- function(shapeGraph, result) {
 }
 
 processPointMapResult <- function(pointMap, result) {
-    if (!result$completed) stop("Analysis did not complete")
+    if (!result$completed) stop("Analysis did not complete", call. = FALSE)
     if (length(result$newAttributes) != 0L) {
         newAttrs <- Rcpp_PointMap_getAttributeData(
             result$mapPtr,

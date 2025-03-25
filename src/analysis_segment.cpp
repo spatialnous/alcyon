@@ -1,20 +1,20 @@
-// SPDX-FileCopyrightText: 2024 Petros Koutsolampros
+// SPDX-FileCopyrightText: 2024-2025 Petros Koutsolampros
 //
 // SPDX-License-Identifier: GPL-3.0-only
 
-#include "salalib/shapegraph.h"
+#include "salalib/shapegraph.hpp"
 
-#include "salalib/radiustype.h"
-#include "salalib/segmmodules/segmangular.h"
-#include "salalib/segmmodules/segmmetric.h"
-#include "salalib/segmmodules/segmtopological.h"
-#include "salalib/segmmodules/segmtulip.h"
+#include "salalib/radiustype.hpp"
+#include "salalib/segmmodules/segmangular.hpp"
+#include "salalib/segmmodules/segmmetric.hpp"
+#include "salalib/segmmodules/segmtopological.hpp"
+#include "salalib/segmmodules/segmtulip.hpp"
 
-#include "communicator.h"
-#include "enum_TraversalType.h"
-#include "helper_enum.h"
-#include "helper_nullablevalue.h"
-#include "helper_runAnalysis.h"
+#include "communicator.hpp"
+#include "enum_TraversalType.hpp"
+#include "helper_enum.hpp"
+#include "helper_nullablevalue.hpp"
+#include "helper_runAnalysis.hpp"
 
 #include <Rcpp.h>
 
@@ -35,7 +35,7 @@ runSegmentAnalysis(Rcpp::XPtr<ShapeGraph> mapPtr, const Rcpp::NumericVector radi
     auto tulipBins = NullableValue::get(tulipBinsNV, 0);
     // TODO: Instead of expecting things to be selected,
     // provide indices to select
-    auto selOnly = NullableValue::get(selOnlyNV, false);
+    // auto selOnly = NullableValue::get(selOnlyNV, false);
     auto copyMap = NullableValue::get(copyMapNV, true);
     auto verbose = NullableValue::get(verboseNV, false);
     auto progress = NullableValue::get(progressNV, false);
@@ -61,9 +61,9 @@ runSegmentAnalysis(Rcpp::XPtr<ShapeGraph> mapPtr, const Rcpp::NumericVector radi
 
             if (weightedMeasureColName.has_value()) {
                 const AttributeTable &table = mapPtr->getAttributeTable();
-                for (int i = 0; i < table.getNumColumns(); i++) {
+                for (size_t i = 0; i < table.getNumColumns(); i++) {
                     if (weightedMeasureColName == table.getColumnName(i).c_str()) {
-                        weightedMeasureColIdx = i;
+                        weightedMeasureColIdx = static_cast<int>(i);
                     }
                 }
                 if (weightedMeasureColIdx == -1) {

@@ -15,10 +15,10 @@ segmentAnalysis <- function(segmentGraph,
                             verbose = FALSE,
                             progress = FALSE) {
     if (!(analysisStepType %in% as.list(TraversalType))) {
-        stop("Unknown segment analysis type: ", analysisStepType)
+        stop("Unknown segment analysis type: ", analysisStepType, call. = FALSE)
     }
     if (!(radiusStepType %in% as.list(TraversalType))) {
-        stop("Unknown radius type: ", radiusStepType)
+        stop("Unknown radius type: ", radiusStepType, call. = FALSE)
     }
 
     numRadii <- vapply(radii, function(r) {

@@ -54,7 +54,7 @@ vgaVisualLocal <- function(pointMap,
         progressNV = progress
     )
     if (result$cancelled) {
-        stop("Analysis cancelled")
+        stop("Analysis cancelled", call. = FALSE)
     }
     return(processPointMapResult(pointMap, result))
 }

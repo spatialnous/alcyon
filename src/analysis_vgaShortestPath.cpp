@@ -1,17 +1,17 @@
-// SPDX-FileCopyrightText: 2024 Petros Koutsolampros
+// SPDX-FileCopyrightText: 2024-2025 Petros Koutsolampros
 //
 // SPDX-License-Identifier: GPL-3.0-only
 
-#include "salalib/pointmap.h"
-#include "salalib/vgamodules/vgaangularshortestpath.h"
-#include "salalib/vgamodules/vgametricshortestpath.h"
-#include "salalib/vgamodules/vgametricshortestpathtomany.h"
-#include "salalib/vgamodules/vgavisualshortestpath.h"
+#include "salalib/pointmap.hpp"
+#include "salalib/vgamodules/vgaangularshortestpath.hpp"
+#include "salalib/vgamodules/vgametricshortestpath.hpp"
+#include "salalib/vgamodules/vgametricshortestpathtomany.hpp"
+#include "salalib/vgamodules/vgavisualshortestpath.hpp"
 
-#include "helper_nullablevalue.h"
-#include "helper_runAnalysis.h"
+#include "helper_nullablevalue.hpp"
+#include "helper_runAnalysis.hpp"
 
-#include "communicator.h"
+#include "communicator.hpp"
 
 #include <Rcpp.h>
 
@@ -22,7 +22,7 @@ Rcpp::List vgaVisualShortestPath(Rcpp::XPtr<PointMap> mapPtr, Rcpp::NumericMatri
                                  const Rcpp::Nullable<bool> verboseNV = R_NilValue,
                                  const Rcpp::Nullable<bool> progressNV = R_NilValue) {
     auto copyMap = NullableValue::get(copyMapNV, true);
-    auto verbose = NullableValue::get(verboseNV, false);
+    // auto verbose = NullableValue::get(verboseNV, false);
     auto progress = NullableValue::get(progressNV, false);
 
     if (origPoints.rows() != destPoints.rows()) {
@@ -86,7 +86,7 @@ Rcpp::List vgaMetricShortestPath(Rcpp::XPtr<PointMap> mapPtr, Rcpp::NumericMatri
                                  const Rcpp::Nullable<bool> verboseNV = R_NilValue,
                                  const Rcpp::Nullable<bool> progressNV = R_NilValue) {
     auto copyMap = NullableValue::get(copyMapNV, true);
-    auto verbose = NullableValue::get(verboseNV, false);
+    // auto verbose = NullableValue::get(verboseNV, false);
     auto progress = NullableValue::get(progressNV, false);
 
     if (origPoints.rows() != destPoints.rows()) {
@@ -150,7 +150,7 @@ Rcpp::List vgaAngularShortestPath(Rcpp::XPtr<PointMap> mapPtr, Rcpp::NumericMatr
                                   const Rcpp::Nullable<bool> verboseNV = R_NilValue,
                                   const Rcpp::Nullable<bool> progressNV = R_NilValue) {
     auto copyMap = NullableValue::get(copyMapNV, true);
-    auto verbose = NullableValue::get(verboseNV, false);
+    // auto verbose = NullableValue::get(verboseNV, false);
     auto progress = NullableValue::get(progressNV, false);
 
     if (origPoints.rows() != destPoints.rows()) {

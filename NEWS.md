@@ -1,3 +1,7 @@
+# alcyon 0.8.0
+
+* Sala: Major clean-up
+
 # alcyon 0.7.0
 
 * Sala: Increase calculation accuracy to achieve parity between x86 and arm64 results

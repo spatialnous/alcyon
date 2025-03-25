@@ -1,8 +1,8 @@
-// SPDX-FileCopyrightText: 2024 Petros Koutsolampros
+// SPDX-FileCopyrightText: 2024-2025 Petros Koutsolampros
 //
 // SPDX-License-Identifier: GPL-3.0-only
 
-#include "salalib/shapegraph.h"
+#include "salalib/shapegraph.hpp"
 
 #include <Rcpp.h>
 
@@ -14,7 +14,7 @@ std::map<std::string, std::vector<int>> getAxialConnections(Rcpp::XPtr<ShapeMap>
     std::map<std::string, std::vector<int>> axialConnections;
     std::vector<int> &axialConnectionsFrom = axialConnections["from"];
     std::vector<int> &axialConnectionsTo = axialConnections["to"];
-    for (int i = 0; i < connectors.size(); i++) {
+    for (size_t i = 0; i < connectors.size(); i++) {
         const auto &connections = connectors[i].connections;
         for (int connection : connections) {
             axialConnectionsFrom.push_back(i);

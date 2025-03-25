@@ -65,7 +65,7 @@ agentAnalysis <- function(pointMap,
                           verbose = FALSE,
                           progress = FALSE) {
     if (!(agentLookMode %in% AgentLookMode)) {
-        stop("Unknown agent look mode: ", agentLookMode)
+        stop("Unknown agent look mode: ", agentLookMode, call. = FALSE)
     }
     agentAnalysis <- Rcpp_agentAnalysis(
         mapPtr = attr(pointMap, "sala_map"),

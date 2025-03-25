@@ -1,7 +1,7 @@
 linters: all_linters(
     packages = "lintr",
     object_name_linter = object_name_linter(styles = c("CamelCase", "camelCase", "dotted.case", "symbols")),
-    extraction_operator_linter = NULL,
+    return_linter = NULL,
     indentation_linter = indentation_linter(indent = 4L),
     line_length_linter = line_length_linter(length = 100L)
   )

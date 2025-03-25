@@ -1,13 +1,13 @@
-// SPDX-FileCopyrightText: 2024 Petros Koutsolampros
+// SPDX-FileCopyrightText: 2024-2025 Petros Koutsolampros
 //
 // SPDX-License-Identifier: GPL-3.0-only
 
-#include "salalib/alllinemap.h"
-#include "salalib/shapemap.h"
+#include "salalib/alllinemap.hpp"
+#include "salalib/shapemap.hpp"
 
-#include "helper_nullablevalue.h"
+#include "helper_nullablevalue.hpp"
 
-#include "communicator.h"
+#include "communicator.hpp"
 
 #include <Rcpp.h>
 #include <memory>
@@ -18,13 +18,13 @@ Rcpp::List makeAllLineMap(Rcpp::XPtr<ShapeMap> boundsMap, double seedX, double s
     auto progress = NullableValue::get(progressNV, false);
 
     Rcpp::XPtr<ShapeGraph> map(new ShapeGraph(AllLine::createAllLineMap()));
-    std::vector<Line> lines;
+    std::vector<Line4f> lines;
 
     for (const auto &line : boundsMap->getAllShapesAsLines()) {
-        lines.push_back(Line(line.start(), line.end()));
+        lines.push_back(Line4f(line.start(), line.end()));
     }
 
-    QtRegion region(boundsMap->getRegion());
+    Region4f region(boundsMap->getRegion());
 
     auto mapData = Rcpp::XPtr<AllLine::MapData>(new AllLine::MapData(AllLine::generate(
         getCommunicator(progress).get(), *map.get(), lines, region, Point2f(seedX, seedY))));
@@ -39,7 +39,7 @@ Rcpp::List extractFewestLineMaps(Rcpp::XPtr<ShapeGraph> allLineMap,
     auto progress = NullableValue::get(progressNV, false);
 
     auto [fewestlinemap_subsets, fewestlinemap_minimal] =
-        AllLine::extractFewestLineMaps(getCommunicator(progress).get(), *allLineMap, *mapData);
+        AllLine::extractFewestLineMaps(getCommunicator(progress).get(), *allLineMap, *mapData, 0);
 
     return Rcpp::List::create(Rcpp::Named("Fewest-Line Map (Subsets)") = Rcpp::XPtr<ShapeGraph>(
                                   new ShapeGraph(std::move(fewestlinemap_subsets)), true),

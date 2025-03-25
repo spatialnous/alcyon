@@ -1,10 +1,8 @@
-// SPDX-FileCopyrightText: 2024 Petros Koutsolampros
+// SPDX-FileCopyrightText: 2024-2025 Petros Koutsolampros
 //
 // SPDX-License-Identifier: GPL-3.0-only
 
-#include "rcpp_ShapeMap.h"
-
-#include "salalib/genlib/p2dpoly.h"
+#include "rcpp_ShapeMap.hpp"
 
 #include <Rcpp.h>
 
@@ -25,7 +23,7 @@ std::vector<std::string> getShapeMapAttributeNames(ShapeMap *shapeMap) {
     // + 1 for the key column
     names.reserve(1 + numCols);
     names.push_back(attributes.getColumnName(size_t(-1)));
-    for (int i = 0; i < attributes.getNumColumns(); ++i) {
+    for (size_t i = 0; i < attributes.getNumColumns(); ++i) {
         names.push_back(attributes.getColumnName(i));
     }
     return names;
@@ -111,7 +109,7 @@ Rcpp::GenericVector getShapesAsPolygonCoords(Rcpp::XPtr<ShapeMap> shapeMap) {
 
 // [[Rcpp::export("Rcpp_ShapeMap_getShapesAsPolylineCoords")]]
 Rcpp::GenericVector getShapesAsPolylineCoords(Rcpp::XPtr<ShapeMap> shapeMap) {
-    float TOLERANCE = 0.0001;
+    // float TOLERANCE = 0.0001;
     std::vector<std::string> names;
     Rcpp::GenericVector coords;
     const auto &shapes = shapeMap->getAllShapes();
@@ -119,8 +117,8 @@ Rcpp::GenericVector getShapesAsPolylineCoords(Rcpp::XPtr<ShapeMap> shapeMap) {
     for (const auto &shape : shapes) {
         if (!shape.second.isPolyLine())
             continue;
-        const auto &firstPoint = *shape.second.points.begin();
-        const auto &lastPoint = *shape.second.points.rbegin();
+        // const auto &firstPoint = *shape.second.points.begin();
+        // const auto &lastPoint = *shape.second.points.rbegin();
         Rcpp::NumericMatrix poly(shape.second.points.size(), 2);
         Rcpp::colnames(poly) = Rcpp::CharacterVector({"x", "y"});
         int rowIdx = 0;
@@ -176,12 +174,12 @@ Rcpp::List getShapeCoords(Rcpp::XPtr<ShapeMap> shapeMapPtr, int ref) {
 
 // [[Rcpp::export("Rcpp_ShapeMap_getShapeAttributes")]]
 Rcpp::List getShapeAttributes(Rcpp::XPtr<ShapeMap> shapeMapPtr, int ref) {
-    float TOLERANCE = 0.0001;
+    // float TOLERANCE = 0.0001;
     Rcpp::List shapeAttributes = Rcpp::List::create();
     try {
         auto &attributes = shapeMapPtr->getAttributeTable();
         auto &row = attributes.getRow(AttributeKey(ref));
-        for (int col = 0; col < attributes.getNumColumns(); ++col) {
+        for (size_t col = 0; col < attributes.getNumColumns(); ++col) {
             shapeAttributes[attributes.getColumnName(col)] = row.getValue(col);
         }
     } catch (const std::out_of_range &) {

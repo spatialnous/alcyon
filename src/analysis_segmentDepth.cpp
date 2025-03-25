@@ -1,19 +1,19 @@
-// SPDX-FileCopyrightText: 2024 Petros Koutsolampros
+// SPDX-FileCopyrightText: 2024-2025 Petros Koutsolampros
 //
 // SPDX-License-Identifier: GPL-3.0-only
 
-#include "salalib/shapegraph.h"
+#include "salalib/shapegraph.hpp"
 
-#include "salalib/radiustype.h"
-#include "salalib/segmmodules/segmmetricpd.h"
-#include "salalib/segmmodules/segmtopologicalpd.h"
-#include "salalib/segmmodules/segmtulipdepth.h"
+#include "salalib/radiustype.hpp"
+#include "salalib/segmmodules/segmmetricpd.hpp"
+#include "salalib/segmmodules/segmtopologicalpd.hpp"
+#include "salalib/segmmodules/segmtulipdepth.hpp"
 
-#include "communicator.h"
-#include "enum_TraversalType.h"
-#include "helper_enum.h"
-#include "helper_nullablevalue.h"
-#include "helper_runAnalysis.h"
+#include "communicator.hpp"
+#include "enum_TraversalType.hpp"
+#include "helper_enum.hpp"
+#include "helper_nullablevalue.hpp"
+#include "helper_runAnalysis.hpp"
 
 #include <Rcpp.h>
 
@@ -43,13 +43,13 @@ Rcpp::List segmentStepDepth(Rcpp::XPtr<ShapeGraph> mapPtr, const int stepType,
             }
 
             std::set<int> origins;
-            for (int i = 0; i < stepDepthPointsX.size(); ++i) {
+            for (size_t i = 0; i < stepDepthPointsX.size(); ++i) {
                 Point2f p2f(stepDepthPointsX[i], stepDepthPointsY[i]);
                 auto graphRegion = mapPtr->getRegion();
                 if (!graphRegion.contains(p2f)) {
                     Rcpp::stop("Point outside of target region");
                 }
-                QtRegion r(p2f, p2f);
+                Region4f r(p2f, p2f);
                 origins.insert(mapPtr->getShapesInRegion(r).begin()->first);
             }
 

@@ -1,19 +1,19 @@
-// SPDX-FileCopyrightText: 2024 Petros Koutsolampros
+// SPDX-FileCopyrightText: 2024-2025 Petros Koutsolampros
 //
 // SPDX-License-Identifier: GPL-3.0-only
 
-#include "salalib/pointmap.h"
-#include "salalib/vgamodules/vgaangular.h"
-#include "salalib/vgamodules/vgaangularopenmp.h"
-#include "salalib/vgamodules/vgametric.h"
-#include "salalib/vgamodules/vgametricopenmp.h"
-#include "salalib/vgamodules/vgavisualglobal.h"
-#include "salalib/vgamodules/vgavisualglobalopenmp.h"
+#include "salalib/pointmap.hpp"
+#include "salalib/vgamodules/vgaangular.hpp"
+#include "salalib/vgamodules/vgaangularopenmp.hpp"
+#include "salalib/vgamodules/vgametric.hpp"
+#include "salalib/vgamodules/vgametricopenmp.hpp"
+#include "salalib/vgamodules/vgavisualglobal.hpp"
+#include "salalib/vgamodules/vgavisualglobalopenmp.hpp"
 
-#include "helper_nullablevalue.h"
-#include "helper_runAnalysis.h"
+#include "helper_nullablevalue.hpp"
+#include "helper_runAnalysis.hpp"
 
-#include "communicator.h"
+#include "communicator.hpp"
 
 #include <Rcpp.h>
 

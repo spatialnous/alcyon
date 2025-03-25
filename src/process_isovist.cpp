@@ -1,28 +1,28 @@
-// SPDX-FileCopyrightText: 2024 Petros Koutsolampros
+// SPDX-FileCopyrightText: 2024-2025 Petros Koutsolampros
 //
 // SPDX-License-Identifier: GPL-3.0-only
 
-#include "salalib/isovist.h"
-#include "salalib/shapemap.h"
+#include "salalib/isovist.hpp"
+#include "salalib/shapemap.hpp"
 
-#include "helper_nullablevalue.h"
+#include "helper_nullablevalue.hpp"
 
-#include "communicator.h"
+#include "communicator.hpp"
 
 #include <Rcpp.h>
 #include <memory>
 
 bool makeBSPtree(Communicator *communicator, BSPNode *bspRoot, ShapeMap &boundsMap) {
 
-    std::vector<Line> partitionlines;
+    std::vector<Line4f> partitionlines;
 
     auto refShapes = boundsMap.getAllShapes();
     for (const auto &refShape : refShapes) {
-        std::vector<Line> newLines = refShape.second.getAsLines();
+        std::vector<Line4f> newLines = refShape.second.getAsLines();
         // I'm not sure what the tagging was meant for any more,
         // tagging at the moment tags the *polygon* it was original attached to
         // must check it is not a zero length line:
-        for (const Line &line : newLines) {
+        for (const Line4f &line : newLines) {
             if (line.length() > 0.0) {
                 partitionlines.push_back(line);
             }

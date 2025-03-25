@@ -1,18 +1,18 @@
-// SPDX-FileCopyrightText: 2024 Petros Koutsolampros
+// SPDX-FileCopyrightText: 2024-2025 Petros Koutsolampros
 //
 // SPDX-License-Identifier: GPL-3.0-only
 
-#include "salalib/vgamodules/vgathroughvision.h"
-#include "salalib/vgamodules/vgavisuallocal.h"
-#include "salalib/vgamodules/vgavisuallocaladjmatrix.h"
-#include "salalib/vgamodules/vgavisuallocalopenmp.h"
+#include "salalib/vgamodules/vgathroughvision.hpp"
+#include "salalib/vgamodules/vgavisuallocal.hpp"
+#include "salalib/vgamodules/vgavisuallocaladjmatrix.hpp"
+#include "salalib/vgamodules/vgavisuallocalopenmp.hpp"
 
-#include "enum_VGALocalAlgorithm.h"
+#include "enum_VGALocalAlgorithm.hpp"
 
-#include "helper_nullablevalue.h"
-#include "helper_runAnalysis.h"
+#include "helper_nullablevalue.hpp"
+#include "helper_runAnalysis.hpp"
 
-#include "communicator.h"
+#include "communicator.hpp"
 
 #include <Rcpp.h>
 

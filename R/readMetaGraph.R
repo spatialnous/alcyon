@@ -39,7 +39,7 @@ readMetaGraph <- function(fileName) {
         }
     }
     for (mapData in mgraphData$shapeGraphs) {
-        if (mapData$type == "axial") {
+        switch(mapData$type, axial = {
             result$axialShapeGraphs <-
                 c(
                     result$axialShapeGraphs,
@@ -48,7 +48,8 @@ readMetaGraph <- function(fileName) {
                         "ShapeMap"
                     )))
                 )
-        } else if (mapData$type == "allline") {
+        },
+        allline = {
             result$alllineShapeGraphs <-
                 c(
                     result$alllineShapeGraphs,
@@ -58,7 +59,7 @@ readMetaGraph <- function(fileName) {
                         "ShapeMap"
                     )))
                 )
-        } else if (mapData$type == "segment") {
+        }, segment = {
             result$segmentShapeGraphs <-
                 c(
                     result$segmentShapeGraphs,
@@ -67,7 +68,7 @@ readMetaGraph <- function(fileName) {
                         "ShapeMap"
                     )))
                 )
-        }
+        })
     }
     return(result)
 }

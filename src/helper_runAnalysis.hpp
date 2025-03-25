@@ -1,14 +1,14 @@
-// SPDX-FileCopyrightText: 2024 Petros Koutsolampros
+// SPDX-FileCopyrightText: 2024-2025 Petros Koutsolampros
 //
 // SPDX-License-Identifier: GPL-3.0-only
 
 #pragma once
 
-#include "salalib/pointmap.h"
+#include "salalib/pointmap.hpp"
 
-#include "helper_rcppanalysisresults.h"
+#include "helper_rcppanalysisresults.hpp"
 
-#include "communicator.h"
+#include "communicator.hpp"
 
 namespace RcppRunner {
 
