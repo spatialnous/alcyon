@@ -17,7 +17,7 @@ git config --local core.hooksPath .githooks/
 
 To be able to do all development tasks (including testing and linting) all these packages are necessary:
 ```
-install.packages(c('sf', 'stars', 'rmarkdown', 'devtools', 'spelling', 'lintr', 'Rcpp', 'knitr', 'testthat', 'withr', 'cyclocomp'))
+install.packages(c('sf', 'stars', 'rmarkdown', 'devtools', 'spelling', 'lintr', 'Rcpp', 'knitr', 'testthat', 'withr', 'cyclocomp', 'httr'))
 ```
 
 Do not change `configure` directly, instead change `configure.ac` and run `autoconf`
