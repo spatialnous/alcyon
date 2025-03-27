@@ -37,6 +37,10 @@ class ProgressCommunicator : public Communicator {
             cli_progress_set(progress, x);
         }
     }
+
+    void logError(const std::string &message) const override { Rcpp::Rcerr << message << '\n'; }
+    void logWarning(const std::string &message) const override { Rcpp::Rcerr << message << '\n'; }
+    void logInfo(const std::string &message) const override { Rcpp::Rcout << message << '\n'; }
 };
 
 std::unique_ptr<Communicator> getCommunicator(const bool printProgress);
