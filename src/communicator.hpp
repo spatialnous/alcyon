@@ -38,9 +38,11 @@ class ProgressCommunicator : public Communicator {
         }
     }
 
-    void logError(const std::string &message) const override { Rcpp::Rcerr << message << '\n'; }
-    void logWarning(const std::string &message) const override { Rcpp::Rcerr << message << '\n'; }
-    void logInfo(const std::string &message) const override { Rcpp::Rcout << message << '\n'; }
+    void logError(const std::string &message) const override { REprintf("%s\n", message.c_str()); }
+    void logWarning(const std::string &message) const override {
+        REprintf("%s\n", message.c_str());
+    }
+    void logInfo(const std::string &message) const override { Rprintf("%s\n", message.c_str()); }
 };
 
 std::unique_ptr<Communicator> getCommunicator(const bool printProgress);
