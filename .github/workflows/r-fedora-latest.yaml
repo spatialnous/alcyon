@@ -33,6 +33,10 @@ jobs:
       R_KEEP_PKG_SOURCE: yes
 
     steps:
+      - name: Upgrade git
+        run: |
+          dnf install -y dnf-plugins-core
+          dnf upgrade -y git
       - uses: actions/checkout@v4
         with:
           submodules: recursive
