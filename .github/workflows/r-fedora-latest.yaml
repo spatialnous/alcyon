@@ -35,8 +35,9 @@ jobs:
     steps:
       - name: Upgrade git
         run: |
-          dnf install -y dnf-plugins-core
-          dnf upgrade -y git
+          dnf clean all
+          dnf makecache --refresh
+          dnf install -y git
       - uses: actions/checkout@v4
         with:
           submodules: recursive
