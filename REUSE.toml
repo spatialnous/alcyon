@@ -1,0 +1,16 @@
+version = 1
+SPDX-PackageName = "alcyon"
+SPDX-PackageSupplier = "Petros Koutsolampros <r-devel@pklampros.net>"
+SPDX-PackageDownloadLocation = "https://github.com/spatialnous/alcyon"
+
+[[annotations]]
+path = [".Rbuildignore", ".gitignore", ".gitmodules", ".lintr", "DESCRIPTION", "README.md", "alcyon.Rproj", "inst/CITATION", "inst/WORDLIST", "man/**.Rd", "NAMESPACE", "vignettes/.gitignore", "NEWS.md", "cran-comments.md", ".github/workflows/rhub.yaml", "CRAN-SUBMISSION", "src/.clang-format", "configure", ".github/FUNDING.yml", ".github/.gitignore", ".github/workflows/pkgdown.yaml", "_pkgdown.yml"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "Petros Koutsolampros <r-devel@pklampros.net>"
+SPDX-License-Identifier = "GPL-3.0-only"
+
+[[annotations]]
+path = "inst/extdata/testdata/**"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "Public domain"
+SPDX-License-Identifier = "CC0-1.0"
