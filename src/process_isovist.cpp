@@ -154,6 +154,9 @@ Rcpp::XPtr<ShapeMap> makeIsovists(Rcpp::XPtr<ShapeMap> boundsMap, Rcpp::NumericM
             iso.makeit(bspRoot.get(), p, boundsMap->getRegion(), leftAngle, rightAngle);
 
             std::vector<Point2f> polygon = iso.getPolygon();
+            if (polygon.size() < 3) {
+                continue;
+            }
             // if the polygon is not closed force it to close
             if (polygon.front().x != polygon.back().x || polygon.front().y != polygon.back().y) {
                 polygon.push_back(polygon.front());
