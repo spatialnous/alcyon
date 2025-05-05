@@ -10,25 +10,13 @@
 #
 # It is unlikely that you need to modify this file manually.
 
-name: R-hub (manual)
-run-name: "${{ github.event.inputs.id }}: ${{ github.event.inputs.name || format('Manually run by {0}', github.triggering_actor) }}"
+name: R-hub (on push)
 
 on:
-  workflow_dispatch:
-    inputs:
-      config:
-        description: 'A comma separated list of R-hub platforms to use.'
-        type: string
-        default: 'linux,windows,macos'
-      name:
-        description: 'Run name. You can leave this empty now.'
-        type: string
-      id:
-        description: 'Unique ID. You can leave this empty now.'
-        type: string
+  push:
+    branches: [main]
 
 jobs:
-
   setup:
     runs-on: ubuntu-latest
     outputs:
@@ -39,7 +27,9 @@ jobs:
     # NO NEED TO CHECKOUT HERE
     - uses: r-hub/actions/setup@v1
       with:
-        config: ${{ github.event.inputs.config }}
+      # A comma separated list of R-hub platforms to use
+      # for example 'linux,windows,macos,gcc14' etc.
+        config: 'gcc15'
       id: rhub-setup
 
   linux-containers:
