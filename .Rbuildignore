@@ -2,7 +2,7 @@
 ^\.Rproj\.user$
 ^\.github$
 ^\.githooks$
-^\.reuse$
+^REUSE.toml$
 ^src/build-Release$
 ^src/.clang-format$
 ^src/libs/salalib/\.git$
