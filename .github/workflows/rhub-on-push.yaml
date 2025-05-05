@@ -51,6 +51,8 @@ jobs:
       - name: Install cmake
         run: sudo dnf install -y cmake
       - uses: r-hub/actions/checkout@v1
+        with:
+          submodules: recursive
       - uses: r-hub/actions/platform-info@v1
         with:
           token: ${{ secrets.RHUB_TOKEN }}
