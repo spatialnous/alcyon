@@ -22,6 +22,10 @@ on:
       id:
         description: 'Unique ID. You can leave this empty now.'
         type: string
+  push:
+    inputs:
+      config: "gcc15"
+    branches: [main]
 
 jobs:
 
@@ -51,13 +55,7 @@ jobs:
       image: ${{ matrix.config.container }}
 
     steps:
-      - name: Install git on container
-        run: |
-          apt update
-          apt install -y cmake git
       - uses: r-hub/actions/checkout@v1
-        with:
-          submodules: recursive
       - uses: r-hub/actions/platform-info@v1
         with:
           token: ${{ secrets.RHUB_TOKEN }}
