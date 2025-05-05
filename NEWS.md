@@ -1,3 +1,7 @@
+# alcyon 0.8.1
+
+* Various minor fixes
+
 # alcyon 0.8.0
 
 * Sala: Major clean-up

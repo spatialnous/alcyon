@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: GPL-3.0-only
 
-AC_INIT([alcyon], 0.8.0) dnl package name, version
+AC_INIT([alcyon], 0.8.1) dnl package name, version
 AC_CONFIG_SRCDIR([src/communicator.hpp])
 
 if test -z "$CMAKE"; then CMAKE="`which cmake`"; fi
