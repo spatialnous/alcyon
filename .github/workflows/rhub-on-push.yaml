@@ -48,6 +48,8 @@ jobs:
       - name: Install awk (for gcc15 containers only)
         if: contains(matrix.config.container, 'gcc15')
         run: sudo dnf install -y gawk
+      - name: Install cmake
+        run: sudo dnf install -y cmake
       - uses: r-hub/actions/checkout@v1
       - uses: r-hub/actions/platform-info@v1
         with:
