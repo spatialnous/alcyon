@@ -57,9 +57,9 @@ Rcpp::List runAxialAnalysis(Rcpp::XPtr<ShapeGraph> mapPtr, const Rcpp::NumericVe
                     }
                 }
                 if (weightedMeasureColIdx == -1) {
-                    throw depthmapX::RuntimeException(
-                        "Given attribute (" + *weightedMeasureColName + ") does not exist in " +
-                        "currently selected map");
+                    throw genlib::RuntimeException("Given attribute (" + *weightedMeasureColName +
+                                                   ") does not exist in " +
+                                                   "currently selected map");
                 }
             }
 
@@ -121,7 +121,7 @@ Rcpp::List axialStepDepth(Rcpp::XPtr<ShapeGraph> mapPtr, const int stepType,
                 Point2f p2f(stepDepthPointsX[i], stepDepthPointsY[i]);
                 auto graphRegion = mapPtr->getRegion();
                 if (!graphRegion.contains(p2f)) {
-                    throw depthmapX::RuntimeException("Point outside of target region");
+                    throw genlib::RuntimeException("Point outside of target region");
                 }
                 Region4f r(p2f, p2f);
                 origins.insert(mapPtr->getShapesInRegion(r).begin()->first);
@@ -142,9 +142,9 @@ Rcpp::List axialStepDepth(Rcpp::XPtr<ShapeGraph> mapPtr, const int stepType,
             case TraversalType::Angular:
             case TraversalType::Metric:
                 // never really supported for axial maps
-                throw depthmapX::RuntimeException("Error, unsupported step type");
+                throw genlib::RuntimeException("Error, unsupported step type");
             case TraversalType::None: {
-                throw depthmapX::RuntimeException("Error, unsupported step type");
+                throw genlib::RuntimeException("Error, unsupported step type");
             }
             }
             return analysisResult;
