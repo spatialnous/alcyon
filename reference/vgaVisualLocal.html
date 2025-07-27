@@ -48,7 +48,7 @@
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">vgaVisualLocal</span><span class="op">(</span></span>
-<span>  <span class="va">pointMap</span>,</span>
+<span>  <span class="va">latticeMap</span>,</span>
 <span>  nthreads <span class="op">=</span> <span class="fl">1L</span>,</span>
 <span>  algorithm <span class="op">=</span> <span class="va">VGALocalAlgorithm</span><span class="op">$</span><span class="va">Standard</span>,</span>
 <span>  copyMap <span class="op">=</span> <span class="cn">TRUE</span>,</span>
@@ -61,8 +61,8 @@
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
 
 
-<dl><dt id="arg-pointmap">pointMap<a class="anchor" aria-label="anchor" href="#arg-pointmap"></a></dt>
-<dd><p>A PointMap</p></dd>
+<dl><dt id="arg-latticemap">latticeMap<a class="anchor" aria-label="anchor" href="#arg-latticemap"></a></dt>
+<dd><p>A LatticeMap</p></dd>
 
 
 <dt id="arg-nthreads">nthreads<a class="anchor" aria-label="anchor" href="#arg-nthreads"></a></dt>
@@ -87,7 +87,7 @@
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A new PointMap with the results included</p>
+    <p>A new LatticeMap with the results included</p>
     </div>
 
     <div class="section level2">
@@ -100,7 +100,7 @@
 <span class="r-in"><span>  <span class="va">sfMap</span> <span class="op">&lt;-</span> <span class="fu">st_read</span><span class="op">(</span><span class="va">mifFile</span>,</span></span>
 <span class="r-in"><span>    geometry_column <span class="op">=</span> <span class="fl">1L</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="va">pointMap</span> <span class="op">&lt;-</span> <span class="fu"><a href="makeVGAPointMap.html">makeVGAPointMap</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">latticeMap</span> <span class="op">&lt;-</span> <span class="fu"><a href="makeVGALatticeMap.html">makeVGALatticeMap</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>    <span class="va">sfMap</span>,</span></span>
 <span class="r-in"><span>    gridSize <span class="op">=</span> <span class="fl">0.5</span>,</span></span>
 <span class="r-in"><span>    fillX <span class="op">=</span> <span class="fl">3.0</span>,</span></span>
@@ -109,7 +109,7 @@
 <span class="r-in"><span>    boundaryGraph <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
 <span class="r-in"><span>    verbose <span class="op">=</span> <span class="cn">FALSE</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">vgaVisualLocal</span><span class="op">(</span><span class="va">pointMap</span>, <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">vgaVisualLocal</span><span class="op">(</span><span class="va">latticeMap</span>, <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> stars object with 2 dimensions and 10 attributes</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> attribute(s):</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                       Min.      1st Qu.       Median</span>

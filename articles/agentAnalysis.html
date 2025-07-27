@@ -85,16 +85,16 @@
 <span>    geometry_column <span class="op">=</span> <span class="fl">1L</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">pointMap</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/makeVGAPointMap.html">makeVGAPointMap</a></span><span class="op">(</span></span>
+<code class="sourceCode R"><span><span class="va">latticeMap</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/makeVGALatticeMap.html">makeVGALatticeMap</a></span><span class="op">(</span></span>
 <span>    <span class="va">galleryMap</span>,</span>
 <span>    fillX <span class="op">=</span> <span class="fl">3.01</span>,</span>
 <span>    fillY <span class="op">=</span> <span class="fl">6.7</span>,</span>
 <span>    gridSize <span class="op">=</span> <span class="fl">0.06</span></span>
 <span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">pointMap</span><span class="op">[</span><span class="st">"Connectivity"</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">latticeMap</span><span class="op">[</span><span class="st">"Connectivity"</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
 <p><img src="agentAnalysis_files/figure-html/unnamed-chunk-2-1.png" width="700"></p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">agentAnalysis</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/agentAnalysis.html">agentAnalysis</a></span><span class="op">(</span><span class="va">pointMap</span>,</span>
+<code class="sourceCode R"><span><span class="va">agentAnalysis</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/agentAnalysis.html">agentAnalysis</a></span><span class="op">(</span><span class="va">latticeMap</span>,</span>
 <span>    timesteps <span class="op">=</span> <span class="fl">10000</span>,</span>
 <span>    releaseRate <span class="op">=</span> <span class="fl">0.1</span>,</span>
 <span>    agentLifeTimesteps <span class="op">=</span> <span class="fl">1000</span>,</span>
@@ -102,10 +102,10 @@
 <span>    agentStepsToDecision <span class="op">=</span> <span class="fl">3</span>,</span>
 <span>    agentLookMode <span class="op">=</span> <span class="va">AgentLookMode</span><span class="op">$</span><span class="va">Standard</span></span>
 <span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">agentAnalysis</span><span class="op">$</span><span class="va">pointMap</span><span class="op">[</span><span class="st">"Gate Counts"</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">agentAnalysis</span><span class="op">$</span><span class="va">latticeMap</span><span class="op">[</span><span class="st">"Gate Counts"</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
 <p><img src="agentAnalysis_files/figure-html/unnamed-chunk-3-1.png" width="700"></p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">agentAnalysis</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/agentAnalysis.html">agentAnalysis</a></span><span class="op">(</span><span class="va">pointMap</span>,</span>
+<code class="sourceCode R"><span><span class="va">agentAnalysis</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/agentAnalysis.html">agentAnalysis</a></span><span class="op">(</span><span class="va">latticeMap</span>,</span>
 <span>    timesteps <span class="op">=</span> <span class="fl">10000</span>,</span>
 <span>    releaseRate <span class="op">=</span> <span class="fl">0.1</span>,</span>
 <span>    agentLifeTimesteps <span class="op">=</span> <span class="fl">1000</span>,</span>
