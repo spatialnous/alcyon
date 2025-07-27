@@ -5,7 +5,7 @@
 \title{Visibility Graph Analysis - Visual local metrics}
 \usage{
 vgaVisualLocal(
-  pointMap,
+  latticeMap,
   nthreads = 1L,
   algorithm = VGALocalAlgorithm$Standard,
   copyMap = TRUE,
@@ -14,7 +14,7 @@ vgaVisualLocal(
 )
 }
 \arguments{
-\item{pointMap}{A PointMap}
+\item{latticeMap}{A LatticeMap}
 
 \item{nthreads}{Optional. Number of threads to use (defaults to 1)}
 
@@ -27,7 +27,7 @@ vgaVisualLocal(
 \item{progress}{Optional. Enable progress display}
 }
 \value{
-A new PointMap with the results included
+A new LatticeMap with the results included
 }
 \description{
 Runs Visibility Graph Analysis to get visual local metrics
@@ -41,7 +41,7 @@ mifFile <- system.file(
   sfMap <- st_read(mifFile,
     geometry_column = 1L, quiet = TRUE
   )
-  pointMap <- makeVGAPointMap(
+  latticeMap <- makeVGALatticeMap(
     sfMap,
     gridSize = 0.5,
     fillX = 3.0,
@@ -50,5 +50,5 @@ mifFile <- system.file(
     boundaryGraph = FALSE,
     verbose = FALSE
   )
-vgaVisualLocal(pointMap, FALSE)
+vgaVisualLocal(latticeMap, FALSE)
 }

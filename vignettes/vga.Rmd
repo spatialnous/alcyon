@@ -32,23 +32,23 @@ galleryMap <- st_read(
 ```
 
 ```{r}
-pointMap <- makeVGAPointMap(
+latticeMap <- makeVGALatticeMap(
     galleryMap,
     fillX = 3.01,
     fillY = 6.7,
     gridSize = 0.06
 )
-plot(pointMap["Connectivity"])
+plot(latticeMap["Connectivity"])
 ```
 
 ```{r}
-linkedPointMap <- linkCoords(pointMap, 1.74, 6.7, 5.05, 5.24)
+linkedLatticeMap <- linkCoords(latticeMap, 1.74, 6.7, 5.05, 5.24)
 ```
 
 
 ```{r}
 vgaMap <- allToAllTraverse(
-    pointMap,
+    latticeMap,
     traversalType = TraversalType$Metric,
     radii = -1,
     radiusTraversalType = TraversalType$None

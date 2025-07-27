@@ -4,17 +4,17 @@
 \alias{vgaIsovist}
 \title{Visibility Graph Analysis - isovist metrics}
 \usage{
-vgaIsovist(pointMap, boundaryMap, copyMap = TRUE)
+vgaIsovist(latticeMap, boundaryMap, copyMap = TRUE)
 }
 \arguments{
-\item{pointMap}{A PointMap}
+\item{latticeMap}{A LatticeMap}
 
 \item{boundaryMap}{A ShapeMap of lines}
 
 \item{copyMap}{Optional. Copy the internal sala map}
 }
 \value{
-A new PointMap with the results included
+A new LatticeMap with the results included
 }
 \description{
 Runs axial analysis to get the local metrics Control and Controllability
@@ -28,7 +28,7 @@ mifFile <- system.file(
   sfMap <- st_read(mifFile,
     geometry_column = 1L, quiet = TRUE
   )
-  pointMap <- makeVGAPointMap(
+  latticeMap <- makeVGALatticeMap(
     sfMap,
     gridSize = 0.5,
     fillX = 3.0,
@@ -38,5 +38,5 @@ mifFile <- system.file(
     verbose = FALSE
   )
 boundaryMap <- as(sfMap[, c()], "ShapeMap")
-vgaIsovist(pointMap, boundaryMap)
+vgaIsovist(latticeMap, boundaryMap)
 }

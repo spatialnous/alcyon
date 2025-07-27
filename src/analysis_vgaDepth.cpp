@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: GPL-3.0-only
 
-#include "salalib/pointmap.hpp"
+#include "salalib/latticemap.hpp"
 #include "salalib/vgamodules/vgaangulardepth.hpp"
 #include "salalib/vgamodules/vgametricdepth.hpp"
 #include "salalib/vgamodules/vgavisualglobaldepth.hpp"
@@ -15,7 +15,7 @@
 #include <Rcpp.h>
 
 // [[Rcpp::export("Rcpp_VGA_visualDepth")]]
-Rcpp::List vgaVisualDepth(Rcpp::XPtr<PointMap> mapPtr, Rcpp::NumericMatrix stepDepthPoints,
+Rcpp::List vgaVisualDepth(Rcpp::XPtr<LatticeMap> mapPtr, Rcpp::NumericMatrix stepDepthPoints,
                           const Rcpp::Nullable<bool> copyMapNV = R_NilValue,
                           const Rcpp::Nullable<bool> progressNV = R_NilValue) {
     auto copyMap = NullableValue::get(copyMapNV, true);
@@ -23,15 +23,16 @@ Rcpp::List vgaVisualDepth(Rcpp::XPtr<PointMap> mapPtr, Rcpp::NumericMatrix stepD
 
     mapPtr = RcppRunner::copyMapWithRegion(mapPtr, copyMap);
 
-    return RcppRunner::runAnalysis<PointMap>(
-        mapPtr, progress, [&stepDepthPoints](Communicator *comm, Rcpp::XPtr<PointMap> mapPtr) {
+    return RcppRunner::runAnalysis<LatticeMap>(
+        mapPtr, progress, [&stepDepthPoints](Communicator *comm, Rcpp::XPtr<LatticeMap> mapPtr) {
             std::set<PixelRef> origins;
             for (int r = 0; r < stepDepthPoints.rows(); ++r) {
                 auto coordRow = stepDepthPoints.row(r);
                 Point2f p(coordRow[0], coordRow[1]);
                 auto pixref = mapPtr->pixelate(p);
                 if (!mapPtr->includes(pixref)) {
-                    Rcpp::stop("Origin point (%d %d) outside of target pointmap region.", p.x, p.y);
+                    Rcpp::stop("Origin point (%d %d) outside of target lattice map region.", p.x,
+                               p.y);
                 }
                 if (!mapPtr->getPoint(pixref).filled()) {
                     Rcpp::stop("Origin point (%d %d) not pointing to a filled cell.", p.x, p.y);
@@ -49,7 +50,7 @@ Rcpp::List vgaVisualDepth(Rcpp::XPtr<PointMap> mapPtr, Rcpp::NumericMatrix stepD
 }
 
 // [[Rcpp::export("Rcpp_VGA_metricDepth")]]
-Rcpp::List vgaMetricDepth(Rcpp::XPtr<PointMap> mapPtr, Rcpp::NumericMatrix stepDepthPoints,
+Rcpp::List vgaMetricDepth(Rcpp::XPtr<LatticeMap> mapPtr, Rcpp::NumericMatrix stepDepthPoints,
                           const Rcpp::Nullable<bool> copyMapNV = R_NilValue,
                           const Rcpp::Nullable<bool> progressNV = R_NilValue) {
     auto copyMap = NullableValue::get(copyMapNV, true);
@@ -57,15 +58,16 @@ Rcpp::List vgaMetricDepth(Rcpp::XPtr<PointMap> mapPtr, Rcpp::NumericMatrix stepD
 
     mapPtr = RcppRunner::copyMapWithRegion(mapPtr, copyMap);
 
-    return RcppRunner::runAnalysis<PointMap>(
-        mapPtr, progress, [&stepDepthPoints](Communicator *comm, Rcpp::XPtr<PointMap> mapPtr) {
+    return RcppRunner::runAnalysis<LatticeMap>(
+        mapPtr, progress, [&stepDepthPoints](Communicator *comm, Rcpp::XPtr<LatticeMap> mapPtr) {
             std::set<PixelRef> origins;
             for (int r = 0; r < stepDepthPoints.rows(); ++r) {
                 auto coordRow = stepDepthPoints.row(r);
                 Point2f p(coordRow[0], coordRow[1]);
                 auto pixref = mapPtr->pixelate(p);
                 if (!mapPtr->includes(pixref)) {
-                    Rcpp::stop("Origin point (%d %d) outside of target pointmap region.", p.x, p.y);
+                    Rcpp::stop("Origin point (%d %d) outside of target lattice map region.", p.x,
+                               p.y);
                 }
                 if (!mapPtr->getPoint(pixref).filled()) {
                     Rcpp::stop("Origin point (%d %d) not pointing to a filled cell.", p.x, p.y);
@@ -83,7 +85,7 @@ Rcpp::List vgaMetricDepth(Rcpp::XPtr<PointMap> mapPtr, Rcpp::NumericMatrix stepD
 }
 
 // [[Rcpp::export("Rcpp_VGA_angularDepth")]]
-Rcpp::List vgaAngularDepth(Rcpp::XPtr<PointMap> mapPtr, Rcpp::NumericMatrix stepDepthPoints,
+Rcpp::List vgaAngularDepth(Rcpp::XPtr<LatticeMap> mapPtr, Rcpp::NumericMatrix stepDepthPoints,
                            const Rcpp::Nullable<bool> copyMapNV = R_NilValue,
                            const Rcpp::Nullable<bool> progressNV = R_NilValue) {
     auto copyMap = NullableValue::get(copyMapNV, true);
@@ -91,15 +93,16 @@ Rcpp::List vgaAngularDepth(Rcpp::XPtr<PointMap> mapPtr, Rcpp::NumericMatrix step
 
     mapPtr = RcppRunner::copyMapWithRegion(mapPtr, copyMap);
 
-    return RcppRunner::runAnalysis<PointMap>(
-        mapPtr, progress, [&stepDepthPoints](Communicator *comm, Rcpp::XPtr<PointMap> mapPtr) {
+    return RcppRunner::runAnalysis<LatticeMap>(
+        mapPtr, progress, [&stepDepthPoints](Communicator *comm, Rcpp::XPtr<LatticeMap> mapPtr) {
             std::set<PixelRef> origins;
             for (int r = 0; r < stepDepthPoints.rows(); ++r) {
                 auto coordRow = stepDepthPoints.row(r);
                 Point2f p(coordRow[0], coordRow[1]);
                 auto pixref = mapPtr->pixelate(p);
                 if (!mapPtr->includes(pixref)) {
-                    Rcpp::stop("Origin point (%d %d) outside of target pointmap region.", p.x, p.y);
+                    Rcpp::stop("Origin point (%d %d) outside of target lattice map region.", p.x,
+                               p.y);
                 }
                 if (!mapPtr->getPoint(pixref).filled()) {
                     Rcpp::stop("Origin point (%d %d) not pointing to a filled cell.", p.x, p.y);

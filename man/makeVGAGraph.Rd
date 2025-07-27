@@ -2,10 +2,10 @@
 % Please edit documentation in R/prepareVGA.R
 \name{makeVGAGraph}
 \alias{makeVGAGraph}
-\title{Create a graph between visible cells in the PointMap}
+\title{Create a graph between visible cells in the LatticeMap}
 \usage{
 makeVGAGraph(
-  pointMap,
+  latticeMap,
   boundaryGraph = FALSE,
   maxVisibility = NA,
   copyMap = TRUE,
@@ -13,7 +13,7 @@ makeVGAGraph(
 )
 }
 \arguments{
-\item{pointMap}{The input PointMap}
+\item{latticeMap}{The input LatticeMap}
 
 \item{boundaryGraph}{Only create a graph on the boundary cells}
 
@@ -24,10 +24,10 @@ makeVGAGraph(
 \item{verbose}{Optional. Show more information of the process.}
 }
 \value{
-A new PointMap with a graph between points
+A new LatticeMap with a graph between points
 }
 \description{
-Create a graph between visible cells in the PointMap
+Create a graph between visible cells in the LatticeMap
 }
 \examples{
 mifFile <- system.file(
@@ -41,24 +41,24 @@ mifFile <- system.file(
   shapeMap <- as(sfMap[, vector()], "ShapeMap")
 lineStringMap <- as(sfMap, "sf")
 mapRegion <- sf::st_bbox(lineStringMap)
-pointMap <- createGrid(
+latticeMap <- createGrid(
   minX = mapRegion[["xmin"]],
   minY = mapRegion[["ymin"]],
   maxX = mapRegion[["xmax"]],
   maxY = mapRegion[["ymax"]],
   gridSize = 0.5
 )
-pointMap <- blockLines(
-  pointMap = pointMap,
+latticeMap <- blockLines(
+  latticeMap = latticeMap,
   lineStringMap = lineStringMap[vector()]
 )
-pointMap <- fillGrid(
-  pointMap = pointMap,
+latticeMap <- fillGrid(
+  latticeMap = latticeMap,
   fillX = 3.01,
   fillY = 6.7
 )
 makeVGAGraph(
-  pointMap = pointMap,
+  latticeMap = latticeMap,
   boundaryGraph = FALSE,
   maxVisibility = NA
 )

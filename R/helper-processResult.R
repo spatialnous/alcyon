@@ -17,35 +17,35 @@ processShapeMapResult <- function(shapeGraph, result) {
     return(shapeGraph)
 }
 
-processPointMapResult <- function(pointMap, result) {
+processLatticeMapResult <- function(latticeMap, result) {
     if (!result$completed) stop("Analysis did not complete", call. = FALSE)
     if (length(result$newAttributes) != 0L) {
-        newAttrs <- Rcpp_PointMap_getAttributeData(
+        newAttrs <- Rcpp_LatticeMap_getAttributeData(
             result$mapPtr,
             result$newAttributes
         )
         for (newAttr in names(newAttrs)) {
-            pointMap[newAttr] <- newAttrs[[newAttr]]
+            latticeMap[newAttr] <- newAttrs[[newAttr]]
         }
     }
     if (length(result$newProperties) != 0L) {
-        newProps <- Rcpp_PointMap_getPropertyData(
+        newProps <- Rcpp_LatticeMap_getPropertyData(
             result$mapPtr,
             result$newProperties
         )
         for (newProp in names(newProps)) {
-            pointMap[newProp] <- newProps[[newProp]]
+            latticeMap[newProp] <- newProps[[newProp]]
         }
     }
-    attr(pointMap, "sala_map") <- result$mapPtr
-    return(pointMap)
+    attr(latticeMap, "sala_map") <- result$mapPtr
+    return(latticeMap)
 }
 
-processPtrAsNewPointMap <- function(pointMapPtr) {
-    coordData <- Rcpp_PointMap_getFilledPoints(pointMapPtr)
+processPtrAsNewLatticeMap <- function(latticeMapPtr) {
+    coordData <- Rcpp_LatticeMap_getFilledPoints(latticeMapPtr)
     starsObj <- st_as_stars(as.data.frame(coordData))
-    attr(starsObj, "sala_map") <- pointMapPtr
-    class(starsObj) <- c("PointMap", class(starsObj))
+    attr(starsObj, "sala_map") <- latticeMapPtr
+    class(starsObj) <- c("LatticeMap", class(starsObj))
     return(starsObj)
 }
 

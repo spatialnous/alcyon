@@ -5,7 +5,7 @@
 \title{Agent Analysis}
 \usage{
 agentAnalysis(
-  pointMap,
+  latticeMap,
   timesteps,
   releaseRate,
   agentLifeTimesteps,
@@ -23,7 +23,7 @@ agentAnalysis(
 )
 }
 \arguments{
-\item{pointMap}{A PointMap, used as an exosomatic visual map for agents to
+\item{latticeMap}{A LatticeMap, used as an exosomatic visual map for agents to
 take exploratory information}
 
 \item{timesteps}{Number of total system timesteps.}
@@ -65,7 +65,7 @@ Returns a list with:
 }
 }
 \description{
-Runs Agent Analysis on the given PointMap
+Runs Agent Analysis on the given LatticeMap
 }
 \examples{
 mifFile <- system.file(
@@ -76,7 +76,7 @@ mifFile <- system.file(
   sfMap <- st_read(mifFile,
     geometry_column = 1L, quiet = TRUE
   )
-  pointMap <- makeVGAPointMap(
+  latticeMap <- makeVGALatticeMap(
     sfMap,
     gridSize = 0.5,
     fillX = 3.0,
@@ -86,7 +86,7 @@ mifFile <- system.file(
     verbose = FALSE
   )
 agentAnalysis(
-  pointMap,
+  latticeMap,
   timesteps = 3000L,
   releaseRate = 0.1,
   agentStepsToDecision = 3L,

@@ -12,7 +12,7 @@
 #include <Rcpp.h>
 
 // [[Rcpp::export("Rcpp_VGA_isovist")]]
-Rcpp::List vgaIsovist(Rcpp::XPtr<PointMap> mapPtr, Rcpp::XPtr<ShapeMap> shapeMapPtr,
+Rcpp::List vgaIsovist(Rcpp::XPtr<LatticeMap> mapPtr, Rcpp::XPtr<ShapeMap> shapeMapPtr,
                       const Rcpp::Nullable<bool> copyMapNV = R_NilValue,
                       const Rcpp::Nullable<bool> progressNV = R_NilValue) {
     auto copyMap = NullableValue::get(copyMapNV, true);
@@ -20,8 +20,8 @@ Rcpp::List vgaIsovist(Rcpp::XPtr<PointMap> mapPtr, Rcpp::XPtr<ShapeMap> shapeMap
 
     mapPtr = RcppRunner::copyMapWithRegion(mapPtr, copyMap);
 
-    return RcppRunner::runAnalysis<PointMap>(
-        mapPtr, progress, [&shapeMapPtr](Communicator *comm, Rcpp::XPtr<PointMap> mapPtr) {
+    return RcppRunner::runAnalysis<LatticeMap>(
+        mapPtr, progress, [&shapeMapPtr](Communicator *comm, Rcpp::XPtr<LatticeMap> mapPtr) {
             auto shapeMap = shapeMapPtr->getAllShapes();
 
             std::vector<SalaShape> shapes;

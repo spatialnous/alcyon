@@ -17,7 +17,7 @@ oneToOneTraverse(
 )
 }
 \arguments{
-\item{map}{A PointMap or Segment ShapeGraph}
+\item{map}{A LatticeMap or Segment ShapeGraph}
 
 \item{traversalType}{The traversal type. See \link{TraversalType}}
 
@@ -49,12 +49,12 @@ Returns a list with:
 \description{
 Runs one-to-one traversal on a map with a graph. This is applicable to:
 \itemize{
-  \item{PointMaps (Visibility Graph Analysis)}
+  \item{LatticeMaps (Visibility Graph Analysis)}
   \item{Segment ShapeGraphs (Segment analysis)}
 }
 }
 \examples{
-# Pointmap analysis (VGA)
+# LatticeMap analysis (VGA)
 mifFile <- system.file(
     "extdata", "testdata", "simple",
     "simple_interior.mif",
@@ -63,7 +63,7 @@ mifFile <- system.file(
   sfMap <- st_read(mifFile,
     geometry_column = 1L, quiet = TRUE
   )
-  pointMap <- makeVGAPointMap(
+  latticeMap <- makeVGALatticeMap(
     sfMap,
     gridSize = 0.5,
     fillX = 3.0,
@@ -73,7 +73,7 @@ mifFile <- system.file(
     verbose = FALSE
   )
 oneToOneTraverse(
-  pointMap,
+  latticeMap,
   traversalType = TraversalType$Metric,
   fromX = 7.52,
   fromY = 6.02,

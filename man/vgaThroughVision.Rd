@@ -4,15 +4,15 @@
 \alias{vgaThroughVision}
 \title{Visibility Graph Analysis - Through Vision}
 \usage{
-vgaThroughVision(pointMap, copyMap = TRUE)
+vgaThroughVision(latticeMap, copyMap = TRUE)
 }
 \arguments{
-\item{pointMap}{A PointMap}
+\item{latticeMap}{A LatticeMap}
 
 \item{copyMap}{Optional. Copy the internal sala map}
 }
 \value{
-A new PointMap with the results included
+A new LatticeMap with the results included
 }
 \description{
 Runs Visibility Graph Analysis to get the Through Vision metric
@@ -26,7 +26,7 @@ mifFile <- system.file(
   sfMap <- st_read(mifFile,
     geometry_column = 1L, quiet = TRUE
   )
-  pointMap <- makeVGAPointMap(
+  latticeMap <- makeVGALatticeMap(
     sfMap,
     gridSize = 0.5,
     fillX = 3.0,
@@ -35,5 +35,5 @@ mifFile <- system.file(
     boundaryGraph = FALSE,
     verbose = FALSE
   )
-vgaThroughVision(pointMap)
+vgaThroughVision(latticeMap)
 }

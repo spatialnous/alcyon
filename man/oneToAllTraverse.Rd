@@ -15,7 +15,7 @@ oneToAllTraverse(
 )
 }
 \arguments{
-\item{map}{A PointMap, Axial ShapeGraph or Segment ShapeGraph}
+\item{map}{A LatticeMap, Axial ShapeGraph or Segment ShapeGraph}
 
 \item{traversalType}{The traversal type. See \link{TraversalType}}
 
@@ -43,13 +43,13 @@ Returns a list with:
 \description{
 Runs one-to-all traversal on a map with a graph. This is applicable to:
 \itemize{
-  \item{PointMaps (Visibility Graph Analysis)}
+  \item{LatticeMaps (Visibility Graph Analysis)}
   \item{Axial ShapeGraphs (Axial analysis)}
   \item{Segment ShapeGraphs (Segment analysis)}
 }
 }
 \examples{
-# Pointmap analysis (VGA)
+# LatticeMap analysis (VGA)
 mifFile <- system.file(
     "extdata", "testdata", "simple",
     "simple_interior.mif",
@@ -58,7 +58,7 @@ mifFile <- system.file(
   sfMap <- st_read(mifFile,
     geometry_column = 1L, quiet = TRUE
   )
-  pointMap <- makeVGAPointMap(
+  latticeMap <- makeVGALatticeMap(
     sfMap,
     gridSize = 0.5,
     fillX = 3.0,
@@ -68,7 +68,7 @@ mifFile <- system.file(
     verbose = FALSE
   )
 oneToAllTraverse(
-  pointMap,
+  latticeMap,
   traversalType = TraversalType$Metric,
   fromX = 3.01,
   fromY = 6.7

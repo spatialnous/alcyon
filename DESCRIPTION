@@ -74,7 +74,7 @@ Collate:
     'AxialShapeGraph.R'
     'AllLineShapeGraph.R'
     'SegmentShapeGraph.R'
-    'PointMap.R'
+    'LatticeMap.R'
     'TraversalType.R'
     'AgentLookMode.R'
     'RcppExports.R'

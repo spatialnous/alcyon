@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: GPL-3.0-only
 
-#include "salalib/pointmap.hpp"
+#include "salalib/latticemap.hpp"
 #include "salalib/vgamodules/vgaangularshortestpath.hpp"
 #include "salalib/vgamodules/vgametricshortestpath.hpp"
 #include "salalib/vgamodules/vgametricshortestpathtomany.hpp"
@@ -16,7 +16,7 @@
 #include <Rcpp.h>
 
 // [[Rcpp::export("Rcpp_VGA_visualShortestPath")]]
-Rcpp::List vgaVisualShortestPath(Rcpp::XPtr<PointMap> mapPtr, Rcpp::NumericMatrix origPoints,
+Rcpp::List vgaVisualShortestPath(Rcpp::XPtr<LatticeMap> mapPtr, Rcpp::NumericMatrix origPoints,
                                  Rcpp::NumericMatrix destPoints,
                                  const Rcpp::Nullable<bool> copyMapNV = R_NilValue,
                                  const Rcpp::Nullable<bool> verboseNV = R_NilValue,
@@ -32,16 +32,17 @@ Rcpp::List vgaVisualShortestPath(Rcpp::XPtr<PointMap> mapPtr, Rcpp::NumericMatri
 
     mapPtr = RcppRunner::copyMapWithRegion(mapPtr, copyMap);
 
-    return RcppRunner::runAnalysis<PointMap>(
+    return RcppRunner::runAnalysis<LatticeMap>(
         mapPtr, progress,
-        [&origPoints, &destPoints](Communicator *comm, Rcpp::XPtr<PointMap> mapPtr) {
+        [&origPoints, &destPoints](Communicator *comm, Rcpp::XPtr<LatticeMap> mapPtr) {
             std::set<PixelRef> origins;
             for (int r = 0; r < origPoints.rows(); ++r) {
                 auto coordRow = origPoints.row(r);
                 Point2f p(coordRow[0], coordRow[1]);
                 auto pixref = mapPtr->pixelate(p);
                 if (!mapPtr->includes(pixref)) {
-                    Rcpp::stop("Origin point (%d %d) outside of target pointmap region.", p.x, p.y);
+                    Rcpp::stop("Origin point (%d %d) outside of target lattice map region.", p.x,
+                               p.y);
                 }
                 if (!mapPtr->getPoint(pixref).filled()) {
                     Rcpp::stop("Origin point (%d %d) not pointing to a filled cell.", p.x, p.y);
@@ -54,8 +55,8 @@ Rcpp::List vgaVisualShortestPath(Rcpp::XPtr<PointMap> mapPtr, Rcpp::NumericMatri
                 Point2f p(coordRow[0], coordRow[1]);
                 auto pixref = mapPtr->pixelate(p);
                 if (!mapPtr->includes(pixref)) {
-                    Rcpp::stop("Destination point (%d %d) outside of target pointmap region.", p.x,
-                               p.y);
+                    Rcpp::stop("Destination point (%d %d) outside of target lattice map region.",
+                               p.x, p.y);
                 }
                 if (!mapPtr->getPoint(pixref).filled()) {
                     Rcpp::stop("Destination point (%d %d) not pointing to a filled cell.", p.x,
@@ -80,7 +81,7 @@ Rcpp::List vgaVisualShortestPath(Rcpp::XPtr<PointMap> mapPtr, Rcpp::NumericMatri
 }
 
 // [[Rcpp::export("Rcpp_VGA_metricShortestPath")]]
-Rcpp::List vgaMetricShortestPath(Rcpp::XPtr<PointMap> mapPtr, Rcpp::NumericMatrix origPoints,
+Rcpp::List vgaMetricShortestPath(Rcpp::XPtr<LatticeMap> mapPtr, Rcpp::NumericMatrix origPoints,
                                  Rcpp::NumericMatrix destPoints,
                                  const Rcpp::Nullable<bool> copyMapNV = R_NilValue,
                                  const Rcpp::Nullable<bool> verboseNV = R_NilValue,
@@ -96,16 +97,17 @@ Rcpp::List vgaMetricShortestPath(Rcpp::XPtr<PointMap> mapPtr, Rcpp::NumericMatri
 
     mapPtr = RcppRunner::copyMapWithRegion(mapPtr, copyMap);
 
-    return RcppRunner::runAnalysis<PointMap>(
+    return RcppRunner::runAnalysis<LatticeMap>(
         mapPtr, progress,
-        [&origPoints, &destPoints](Communicator *comm, Rcpp::XPtr<PointMap> mapPtr) {
+        [&origPoints, &destPoints](Communicator *comm, Rcpp::XPtr<LatticeMap> mapPtr) {
             std::set<PixelRef> origins;
             for (int r = 0; r < origPoints.rows(); ++r) {
                 auto coordRow = origPoints.row(r);
                 Point2f p(coordRow[0], coordRow[1]);
                 auto pixref = mapPtr->pixelate(p);
                 if (!mapPtr->includes(pixref)) {
-                    Rcpp::stop("Origin point (%d %d) outside of target pointmap region.", p.x, p.y);
+                    Rcpp::stop("Origin point (%d %d) outside of target lattice map region.", p.x,
+                               p.y);
                 }
                 if (!mapPtr->getPoint(pixref).filled()) {
                     Rcpp::stop("Origin point (%d %d) not pointing to a filled cell.", p.x, p.y);
@@ -118,8 +120,8 @@ Rcpp::List vgaMetricShortestPath(Rcpp::XPtr<PointMap> mapPtr, Rcpp::NumericMatri
                 Point2f p(coordRow[0], coordRow[1]);
                 auto pixref = mapPtr->pixelate(p);
                 if (!mapPtr->includes(pixref)) {
-                    Rcpp::stop("Destination point (%d %d) outside of target pointmap region.", p.x,
-                               p.y);
+                    Rcpp::stop("Destination point (%d %d) outside of target lattice map region.",
+                               p.x, p.y);
                 }
                 if (!mapPtr->getPoint(pixref).filled()) {
                     Rcpp::stop("Destination point (%d %d) not pointing to a filled cell.", p.x,
@@ -144,7 +146,7 @@ Rcpp::List vgaMetricShortestPath(Rcpp::XPtr<PointMap> mapPtr, Rcpp::NumericMatri
 }
 
 // [[Rcpp::export("Rcpp_VGA_angularShortestPath")]]
-Rcpp::List vgaAngularShortestPath(Rcpp::XPtr<PointMap> mapPtr, Rcpp::NumericMatrix origPoints,
+Rcpp::List vgaAngularShortestPath(Rcpp::XPtr<LatticeMap> mapPtr, Rcpp::NumericMatrix origPoints,
                                   Rcpp::NumericMatrix destPoints,
                                   const Rcpp::Nullable<bool> copyMapNV = R_NilValue,
                                   const Rcpp::Nullable<bool> verboseNV = R_NilValue,
@@ -160,16 +162,17 @@ Rcpp::List vgaAngularShortestPath(Rcpp::XPtr<PointMap> mapPtr, Rcpp::NumericMatr
 
     mapPtr = RcppRunner::copyMapWithRegion(mapPtr, copyMap);
 
-    return RcppRunner::runAnalysis<PointMap>(
+    return RcppRunner::runAnalysis<LatticeMap>(
         mapPtr, progress,
-        [&origPoints, &destPoints](Communicator *comm, Rcpp::XPtr<PointMap> mapPtr) {
+        [&origPoints, &destPoints](Communicator *comm, Rcpp::XPtr<LatticeMap> mapPtr) {
             std::set<PixelRef> origins;
             for (int r = 0; r < origPoints.rows(); ++r) {
                 auto coordRow = origPoints.row(r);
                 Point2f p(coordRow[0], coordRow[1]);
                 auto pixref = mapPtr->pixelate(p);
                 if (!mapPtr->includes(pixref)) {
-                    Rcpp::stop("Origin point (%d %d) outside of target pointmap region.", p.x, p.y);
+                    Rcpp::stop("Origin point (%d %d) outside of target lattice map region.", p.x,
+                               p.y);
                 }
                 if (!mapPtr->getPoint(pixref).filled()) {
                     Rcpp::stop("Origin point (%d %d) not pointing to a filled cell.", p.x, p.y);
@@ -182,8 +185,8 @@ Rcpp::List vgaAngularShortestPath(Rcpp::XPtr<PointMap> mapPtr, Rcpp::NumericMatr
                 Point2f p(coordRow[0], coordRow[1]);
                 auto pixref = mapPtr->pixelate(p);
                 if (!mapPtr->includes(pixref)) {
-                    Rcpp::stop("Destination point (%d %d) outside of target pointmap region.", p.x,
-                               p.y);
+                    Rcpp::stop("Destination point (%d %d) outside of target lattice map region.",
+                               p.x, p.y);
                 }
                 if (!mapPtr->getPoint(pixref).filled()) {
                     Rcpp::stop("Destination point (%d %d) not pointing to a filled cell.", p.x,

@@ -2,38 +2,38 @@
 #
 # SPDX-License-Identifier: GPL-3.0-only
 
-context("PointMap tests")
+context("LatticeMap tests")
 
-test_that("PointMap linking", {
-    pointMap <- loadInteriorLinesAsPointMap()$pointMap
-    linkData <- links(pointMap)
+test_that("LatticeMap linking", {
+    latticeMap <- loadInteriorLinesAsLatticeMap()$latticeMap
+    linkData <- links(latticeMap)
     expect_identical(colnames(linkData), c("from", "to"))
     expect_identical(dim(linkData), c(0L, 2L))
 
-    pointMap <- linkCoords(pointMap, 1.74, 6.7, 5.05, 5.24)
-    linkData <- links(pointMap)
+    latticeMap <- linkCoords(latticeMap, 1.74, 6.7, 5.05, 5.24)
+    linkData <- links(latticeMap)
     expect_identical(colnames(linkData), c("from", "to"))
     expect_identical(dim(linkData), c(1L, 2L))
 
-    pointMap <- unlinkCoords(pointMap, 1.74, 6.7, 5.05, 5.24)
-    linkData <- links(pointMap)
+    latticeMap <- unlinkCoords(latticeMap, 1.74, 6.7, 5.05, 5.24)
+    linkData <- links(latticeMap)
     expect_identical(colnames(linkData), c("from", "to"))
     expect_identical(dim(linkData), c(0L, 2L))
 
-    pointMap <- linkRefs(pointMap, 1835056L, 7208971L)
-    linkData <- links(pointMap)
+    latticeMap <- linkRefs(latticeMap, 1835056L, 7208971L)
+    linkData <- links(latticeMap)
     expect_identical(colnames(linkData), c("from", "to"))
     expect_identical(dim(linkData), c(1L, 2L))
 
-    pointMap <- unlinkRefs(pointMap, 1835056L, 7208971L)
-    linkData <- links(pointMap)
+    latticeMap <- unlinkRefs(latticeMap, 1835056L, 7208971L)
+    linkData <- links(latticeMap)
     expect_identical(colnames(linkData), c("from", "to"))
     expect_identical(dim(linkData), c(0L, 2L))
 })
 
-test_that("PointMap linking", {
-    pointMap <- loadInteriorLinesAsPointMap()$pointMap
-    connectionData <- connections(pointMap)
+test_that("LatticeMap linking", {
+    latticeMap <- loadInteriorLinesAsLatticeMap()$latticeMap
+    connectionData <- connections(latticeMap)
     expect_identical(colnames(connectionData), c("from", "to"))
     expect_identical(dim(connectionData), c(887448L, 2L))
 })

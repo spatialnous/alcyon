@@ -2,7 +2,7 @@
 % Please edit documentation in R/prepareVGA.R
 \name{createGrid}
 \alias{createGrid}
-\title{Create a PointMap through a grid}
+\title{Create a LatticeMap through a grid}
 \usage{
 createGrid(minX, minY, maxX, maxY, gridSize, verbose = FALSE)
 }
@@ -20,10 +20,10 @@ createGrid(minX, minY, maxX, maxY, gridSize, verbose = FALSE)
 \item{verbose}{Optional. Show more information of the process.}
 }
 \value{
-A new PointMap
+A new LatticeMap
 }
 \description{
-Create a PointMap through a grid
+Create a LatticeMap through a grid
 }
 \examples{
 mifFile <- system.file(

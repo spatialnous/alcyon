@@ -1,3 +1,7 @@
+# alcyon 0.9.0
+
+* Rename PointMap to LatticeMap (following sala)
+
 # alcyon 0.8.1
 
 * Various minor fixes

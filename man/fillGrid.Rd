@@ -2,12 +2,12 @@
 % Please edit documentation in R/prepareVGA.R
 \name{fillGrid}
 \alias{fillGrid}
-\title{Fill a PointMap's grid starting from one or more points}
+\title{Fill a LatticeMap's grid starting from one or more points}
 \usage{
-fillGrid(pointMap, fillX, fillY, copyMap = TRUE, verbose = FALSE)
+fillGrid(latticeMap, fillX, fillY, copyMap = TRUE, verbose = FALSE)
 }
 \arguments{
-\item{pointMap}{The input PointMap}
+\item{latticeMap}{The input LatticeMap}
 
 \item{fillX}{X coordinate of the fill points}
 
@@ -18,10 +18,10 @@ fillGrid(pointMap, fillX, fillY, copyMap = TRUE, verbose = FALSE)
 \item{verbose}{Optional. Show more information of the process.}
 }
 \value{
-A new PointMap with filled points
+A new LatticeMap with filled points
 }
 \description{
-Fill a PointMap's grid starting from one or more points
+Fill a LatticeMap's grid starting from one or more points
 }
 \examples{
 mifFile <- system.file(
@@ -35,19 +35,19 @@ mifFile <- system.file(
   shapeMap <- as(sfMap[, vector()], "ShapeMap")
 lineStringMap <- as(sfMap, "sf")
 mapRegion <- sf::st_bbox(lineStringMap)
-pointMap <- createGrid(
+latticeMap <- createGrid(
   minX = mapRegion[["xmin"]],
   minY = mapRegion[["ymin"]],
   maxX = mapRegion[["xmax"]],
   maxY = mapRegion[["ymax"]],
   gridSize = 0.04
 )
-pointMap <- blockLines(
-  pointMap = pointMap,
+latticeMap <- blockLines(
+  latticeMap = latticeMap,
   lineStringMap = lineStringMap[vector()]
 )
 fillGrid(
-  pointMap = pointMap,
+  latticeMap = latticeMap,
   fillX = 3.01,
   fillY = 6.7
 )

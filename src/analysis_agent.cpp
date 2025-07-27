@@ -14,7 +14,7 @@
 #include <Rcpp.h>
 
 // [[Rcpp::export("Rcpp_agentAnalysis")]]
-Rcpp::List agentAnalysis(Rcpp::XPtr<PointMap> mapPtr, int systemTimesteps, float releaseRate,
+Rcpp::List agentAnalysis(Rcpp::XPtr<LatticeMap> mapPtr, int systemTimesteps, float releaseRate,
                          int agentLifeTimesteps, int agentFov, int agentStepsToDecision,
                          int agentLookMode, Rcpp::NumericMatrix agentReleaseLocations,
                          int randomReleaseLocationSeed, int recordTrailForAgents,

@@ -10,10 +10,10 @@ readMetaGraph(fileName)
 \item{fileName}{The metagraph file}
 }
 \value{
-A list of ShapeMaps, ShapeGraphs and PointMaps
+A list of ShapeMaps, ShapeGraphs and LatticeMaps
 }
 \description{
-Reads a metagraph into a bunch of ShapeMaps/ShapeGraphs/PointMaps
+Reads a metagraph into a bunch of ShapeMaps/ShapeGraphs/LatticeMaps
 }
 \examples{
 fileName <- system.file(

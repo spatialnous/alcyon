@@ -4,8 +4,8 @@
 
 #pragma once
 
-#include "salalib/pointmap.hpp"
+#include "salalib/latticemap.hpp"
 
 #include <Rcpp.h>
 
-std::vector<std::string> getPointMapAttributeNames(PointMap *pointMap);
+std::vector<std::string> getLatticeMapAttributeNames(LatticeMap *latticeMap);

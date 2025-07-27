@@ -32,17 +32,17 @@ galleryMap <- st_read(
 ```
 
 ```{r}
-pointMap <- makeVGAPointMap(
+latticeMap <- makeVGALatticeMap(
     galleryMap,
     fillX = 3.01,
     fillY = 6.7,
     gridSize = 0.06
 )
-plot(pointMap["Connectivity"])
+plot(latticeMap["Connectivity"])
 ```
 
 ```{r}
-agentAnalysis <- agentAnalysis(pointMap,
+agentAnalysis <- agentAnalysis(latticeMap,
     timesteps = 10000,
     releaseRate = 0.1,
     agentLifeTimesteps = 1000,
@@ -50,11 +50,11 @@ agentAnalysis <- agentAnalysis(pointMap,
     agentStepsToDecision = 3,
     agentLookMode = AgentLookMode$Standard
 )
-plot(agentAnalysis$pointMap["Gate Counts"])
+plot(agentAnalysis$latticeMap["Gate Counts"])
 ```
 
 ```{r}
-agentAnalysis <- agentAnalysis(pointMap,
+agentAnalysis <- agentAnalysis(latticeMap,
     timesteps = 10000,
     releaseRate = 0.1,
     agentLifeTimesteps = 1000,

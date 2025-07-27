@@ -19,7 +19,7 @@
 // [[Rcpp::plugins(openmp)]]
 
 // [[Rcpp::export("Rcpp_VGA_visualLocal")]]
-Rcpp::List vgaVisualLocal(Rcpp::XPtr<PointMap> mapPtr,
+Rcpp::List vgaVisualLocal(Rcpp::XPtr<LatticeMap> mapPtr,
                           const Rcpp::Nullable<bool> gatesOnlyNV = R_NilValue,
                           const Rcpp::Nullable<int> nthreadsNV = R_NilValue,
                           const Rcpp::Nullable<int> algorithmNV = R_NilValue,
@@ -41,9 +41,9 @@ Rcpp::List vgaVisualLocal(Rcpp::XPtr<PointMap> mapPtr,
 
     mapPtr = RcppRunner::copyMapWithRegion(mapPtr, copyMap);
 
-    return RcppRunner::runAnalysis<PointMap>(
+    return RcppRunner::runAnalysis<LatticeMap>(
         mapPtr, progress,
-        [&nthreads, &algorithm, &gatesOnly](Communicator *comm, Rcpp::XPtr<PointMap> mapPtr) {
+        [&nthreads, &algorithm, &gatesOnly](Communicator *comm, Rcpp::XPtr<LatticeMap> mapPtr) {
             AnalysisResult analysisResult;
             if (algorithm == VGALocalAlgorithm::Standard) {
                 if (nthreads == 1) {
@@ -74,7 +74,7 @@ Rcpp::List vgaVisualLocal(Rcpp::XPtr<PointMap> mapPtr,
 }
 
 // [[Rcpp::export("Rcpp_VGA_throughVision")]]
-Rcpp::List vgaThroughVision(Rcpp::XPtr<PointMap> mapPtr,
+Rcpp::List vgaThroughVision(Rcpp::XPtr<LatticeMap> mapPtr,
                             const Rcpp::Nullable<bool> copyMapNV = R_NilValue,
                             const Rcpp::Nullable<bool> progressNV = R_NilValue) {
     auto copyMap = NullableValue::get(copyMapNV, true);
@@ -82,8 +82,8 @@ Rcpp::List vgaThroughVision(Rcpp::XPtr<PointMap> mapPtr,
 
     mapPtr = RcppRunner::copyMapWithRegion(mapPtr, copyMap);
 
-    return RcppRunner::runAnalysis<PointMap>(
-        mapPtr, progress, [](Communicator *comm, Rcpp::XPtr<PointMap> mapPtr) {
+    return RcppRunner::runAnalysis<LatticeMap>(
+        mapPtr, progress, [](Communicator *comm, Rcpp::XPtr<LatticeMap> mapPtr) {
             auto analysis = VGAThroughVision(*mapPtr);
             auto analysisResult = analysis.run(comm);
             analysis.copyResultToMap(analysisResult.getAttributes(),

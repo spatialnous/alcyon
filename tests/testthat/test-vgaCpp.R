@@ -4,7 +4,7 @@
 
 context("VGA tests")
 
-defaultPointMapColumns <- c(
+defaultLatticeMapColumns <- c(
     "x",
     "y",
     "filled",
@@ -18,18 +18,18 @@ defaultPointMapColumns <- c(
 )
 
 runAnalysisCPP <- function(func, newExpectedCols) {
-    startData <- loadSimpleLinesAsPointMap(vector())
+    startData <- loadSimpleLinesAsLatticeMap(vector())
     lineStringMap <- startData$sf
-    pointMapPtr <- attr(startData$pointMap, "sala_map")
+    latticeMapPtr <- attr(startData$latticeMap, "sala_map")
 
-    expectedCols <- defaultPointMapColumns
+    expectedCols <- defaultLatticeMapColumns
 
-    vgaResult <- func(pointMapPtr, lineStringMap)
-    pointMapPtr <- vgaResult$mapPtr
+    vgaResult <- func(latticeMapPtr, lineStringMap)
+    latticeMapPtr <- vgaResult$mapPtr
 
     expect_identical(vgaResult$newAttributes, newExpectedCols)
 
-    coords <- Rcpp_PointMap_getFilledPoints(pointMapPtr = pointMapPtr)
+    coords <- Rcpp_LatticeMap_getFilledPoints(latticeMapPtr = latticeMapPtr)
     expect_identical(dim(coords), c(90L, 10L + length(newExpectedCols)))
     expectedCols <- c(
         expectedCols,
@@ -40,8 +40,8 @@ runAnalysisCPP <- function(func, newExpectedCols) {
 
 test_that("VGA in C++, Through vision", {
     runAnalysisCPP(
-        function(pointMapPtr, ...) {
-            return(Rcpp_VGA_throughVision(pointMapPtr))
+        function(latticeMapPtr, ...) {
+            return(Rcpp_VGA_throughVision(latticeMapPtr))
         },
         newExpectedCols = "Through vision"
     )
@@ -49,8 +49,8 @@ test_that("VGA in C++, Through vision", {
 
 test_that("VGA in C++, Angular all-to-all", {
     runAnalysisCPP(
-        function(pointMapPtr, ...) {
-            return(Rcpp_VGA_angular(pointMapPtr, -1.0, FALSE))
+        function(latticeMapPtr, ...) {
+            return(Rcpp_VGA_angular(latticeMapPtr, -1.0, FALSE))
         },
         newExpectedCols = c(
             "Angular Mean Depth",
@@ -62,8 +62,8 @@ test_that("VGA in C++, Angular all-to-all", {
 
 test_that("VGA in C++, Metric all-to-all", {
     runAnalysisCPP(
-        function(pointMapPtr, ...) {
-            return(Rcpp_VGA_metric(pointMapPtr, -1.0, FALSE))
+        function(latticeMapPtr, ...) {
+            return(Rcpp_VGA_metric(latticeMapPtr, -1.0, FALSE))
         },
         newExpectedCols = c(
             "Metric Mean Shortest-Path Angle",
@@ -76,8 +76,8 @@ test_that("VGA in C++, Metric all-to-all", {
 
 test_that("VGA in C++, Visual global all-to-all", {
     runAnalysisCPP(
-        function(pointMapPtr, ...) {
-            return(Rcpp_VGA_visualGlobal(pointMapPtr, -1L, FALSE))
+        function(latticeMapPtr, ...) {
+            return(Rcpp_VGA_visualGlobal(latticeMapPtr, -1L, FALSE))
         },
         newExpectedCols = c(
             "Visual Entropy",
@@ -93,8 +93,8 @@ test_that("VGA in C++, Visual global all-to-all", {
 
 test_that("VGA in C++, Visual local all-to-all", {
     runAnalysisCPP(
-        function(pointMapPtr, ...) {
-            return(Rcpp_VGA_visualLocal(pointMapPtr, FALSE))
+        function(latticeMapPtr, ...) {
+            return(Rcpp_VGA_visualLocal(latticeMapPtr, FALSE))
         },
         newExpectedCols = c(
             "Visual Clustering Coefficient",
@@ -106,9 +106,9 @@ test_that("VGA in C++, Visual local all-to-all", {
 
 test_that("VGA in C++, Isovist all-to-all", {
     runAnalysisCPP(
-        function(pointMapPtr, lineStringMap) {
+        function(latticeMapPtr, lineStringMap) {
             boundaryMap <- as(lineStringMap, "ShapeMap")
-            return(Rcpp_VGA_isovist(pointMapPtr, attr(boundaryMap, "sala_map")))
+            return(Rcpp_VGA_isovist(latticeMapPtr, attr(boundaryMap, "sala_map")))
         },
         newExpectedCols = c(
             "Isovist Area",
@@ -125,8 +125,8 @@ test_that("VGA in C++, Isovist all-to-all", {
 
 test_that("VGA in C++, Angular one-to-all", {
     runAnalysisCPP(
-        function(pointMapPtr, ...) {
-            return(Rcpp_VGA_angularDepth(pointMapPtr, cbind(7.52, 6.02)))
+        function(latticeMapPtr, ...) {
+            return(Rcpp_VGA_angularDepth(latticeMapPtr, cbind(7.52, 6.02)))
         },
         newExpectedCols = "Angular Step Depth"
     )
@@ -134,8 +134,8 @@ test_that("VGA in C++, Angular one-to-all", {
 
 test_that("VGA in C++, Metric one-to-all", {
     runAnalysisCPP(
-        function(pointMapPtr, ...) {
-            return(Rcpp_VGA_metricDepth(pointMapPtr, cbind(7.52, 6.02)))
+        function(latticeMapPtr, ...) {
+            return(Rcpp_VGA_metricDepth(latticeMapPtr, cbind(7.52, 6.02)))
         },
         newExpectedCols = c(
             "Metric Step Shortest-Path Angle",
@@ -147,8 +147,8 @@ test_that("VGA in C++, Metric one-to-all", {
 
 test_that("VGA in C++, Visual one-to-all", {
     runAnalysisCPP(
-        function(pointMapPtr, ...) {
-            return(Rcpp_VGA_visualDepth(pointMapPtr, cbind(7.52, 6.02)))
+        function(latticeMapPtr, ...) {
+            return(Rcpp_VGA_visualDepth(latticeMapPtr, cbind(7.52, 6.02)))
         },
         newExpectedCols = "Visual Step Depth"
     )
@@ -156,9 +156,9 @@ test_that("VGA in C++, Visual one-to-all", {
 
 test_that("VGA in C++, Angular one-to-one", {
     runAnalysisCPP(
-        function(pointMapPtr, ...) {
+        function(latticeMapPtr, ...) {
             return(Rcpp_VGA_angularShortestPath(
-                pointMapPtr,
+                latticeMapPtr,
                 cbind(7.52, 6.02),
                 cbind(5.78, 2.96)
             ))
@@ -176,9 +176,9 @@ test_that("VGA in C++, Angular one-to-one", {
 
 test_that("VGA in C++, Metric one-to-one", {
     runAnalysisCPP(
-        function(pointMapPtr, ...) {
+        function(latticeMapPtr, ...) {
             return(Rcpp_VGA_metricShortestPath(
-                pointMapPtr,
+                latticeMapPtr,
                 cbind(7.52, 6.02),
                 cbind(5.78, 2.96)
             ))
@@ -197,9 +197,9 @@ test_that("VGA in C++, Metric one-to-one", {
 
 test_that("VGA in C++, Visual one-to-one", {
     runAnalysisCPP(
-        function(pointMapPtr, ...) {
+        function(latticeMapPtr, ...) {
             return(Rcpp_VGA_visualShortestPath(
-                pointMapPtr,
+                latticeMapPtr,
                 cbind(7.52, 6.02),
                 cbind(5.78, 2.96)
             ))

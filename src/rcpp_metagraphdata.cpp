@@ -2,8 +2,8 @@
 //
 // SPDX-License-Identifier: GPL-3.0-only
 
+#include "salalib/latticemap.hpp"
 #include "salalib/metagraphreadwrite.hpp"
-#include "salalib/pointmap.hpp"
 #include "salalib/shapegraph.hpp"
 #include "salalib/shapemap.hpp"
 
@@ -26,7 +26,7 @@ Rcpp::List readMetaGraph(std::string fileName, const Rcpp::Nullable<bool> verbos
 
     Rcpp::GenericVector shapeMaps;
     Rcpp::GenericVector shapeGraphs;
-    Rcpp::GenericVector pointMaps;
+    Rcpp::GenericVector latticeMaps;
 
     for (auto &drawingFile : mgd.drawingFiles) {
         if (verbose) {
@@ -75,15 +75,15 @@ Rcpp::List readMetaGraph(std::string fileName, const Rcpp::Nullable<bool> verbos
             Rcpp::Named("type") = mapType,
             Rcpp::Named("ptr") = Rcpp::XPtr<ShapeGraph>(new ShapeGraph(std::move(*it)), true)));
     }
-    for (auto it = mgd.pointMaps.begin(); it != mgd.pointMaps.end(); ++it) {
+    for (auto it = mgd.latticeMaps.begin(); it != mgd.latticeMaps.end(); ++it) {
         if (verbose) {
             Rcpp::Rcout << " - dataMap name: " << it->getName() << std::endl;
         }
-        pointMaps.push_back(Rcpp::List::create(
-            Rcpp::Named("ptr") = Rcpp::XPtr<PointMap>(new PointMap(std::move(*it)), true)));
+        latticeMaps.push_back(Rcpp::List::create(
+            Rcpp::Named("ptr") = Rcpp::XPtr<LatticeMap>(new LatticeMap(std::move(*it)), true)));
     }
 
     return Rcpp::List::create(Rcpp::Named("shapeMaps") = shapeMaps,
                               Rcpp::Named("shapeGraphs") = shapeGraphs,
-                              Rcpp::Named("pointMaps") = pointMaps);
+                              Rcpp::Named("latticeMaps") = latticeMaps);
 }

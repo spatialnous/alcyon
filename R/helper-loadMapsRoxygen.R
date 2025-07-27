@@ -41,7 +41,7 @@ rxLoadInteriorLinesAsShapeMap <- function() {
     return(strsplit(ex, split = "\n", fixed = TRUE)[[1L]])
 }
 
-rxLoadInteriorLinesAsPointMap <- function() {
+rxLoadFloorLinesAsLatticeMap <- function() {
     ex <- "mifFile <- system.file(
     \"extdata\", \"testdata\", \"gallery\",
     \"gallery_lines.mif\",
@@ -50,7 +50,7 @@ rxLoadInteriorLinesAsPointMap <- function() {
   sfMap <- st_read(mifFile,
     geometry_column = 1L, quiet = TRUE
   )
-  pointMap <- makeVGAPointMap(
+  latticeMap <- makeVGALatticeMap(
     sfMap,
     gridSize = 0.04,
     fillX = 3.01,
@@ -75,7 +75,7 @@ rxLoadSimpleLinesAsShapeMap <- function() {
     return(strsplit(ex, split = "\n", fixed = TRUE)[[1L]])
 }
 
-rxLoadSimpleLinesAsPointMap <- function(gridSize = 0.04) {
+rxLoadSimpleLinesAsLatticeMap <- function(gridSize = 0.04) {
     ex <- "mifFile <- system.file(
     \"extdata\", \"testdata\", \"simple\",
     \"simple_interior.mif\",
@@ -84,7 +84,7 @@ rxLoadSimpleLinesAsPointMap <- function(gridSize = 0.04) {
   sfMap <- st_read(mifFile,
     geometry_column = 1L, quiet = TRUE
   )
-  pointMap <- makeVGAPointMap(
+  latticeMap <- makeVGALatticeMap(
     sfMap,
     gridSize = 0.5,
     fillX = 3.0,

@@ -4,10 +4,10 @@
 
 #' Read MetaGraph
 #'
-#' Reads a metagraph into a bunch of ShapeMaps/ShapeGraphs/PointMaps
+#' Reads a metagraph into a bunch of ShapeMaps/ShapeGraphs/LatticeMaps
 #'
 #' @param fileName The metagraph file
-#' @returns A list of ShapeMaps, ShapeGraphs and PointMaps
+#' @returns A list of ShapeMaps, ShapeGraphs and LatticeMaps
 #' @examples
 #' fileName <- system.file(
 #'     "extdata", "testdata", "barnsbury", "barnsburySmall.graph",
@@ -21,7 +21,7 @@ readMetaGraph <- function(fileName) {
         axialShapeGraphs = list(),
         alllineShapeGraphs = list(),
         segmentShapeGraphs = list(),
-        pointMaps = list()
+        latticeMaps = list()
     )
     mgraphData <- Rcpp_MetaGraph_read(fileName)
     if (length(mgraphData$shapeMaps) > 0L) {
@@ -29,12 +29,12 @@ readMetaGraph <- function(fileName) {
             return(processPtrAsNewLineMap(mapData$ptr, "ShapeMap"))
         })
     }
-    if (length(mgraphData$pointMaps) > 0L) {
-        for (mapData in mgraphData$pointMaps) {
-            result$pointMaps <-
+    if (length(mgraphData$latticeMaps) > 0L) {
+        for (mapData in mgraphData$latticeMaps) {
+            result$latticeMaps <-
                 c(
-                    result$pointMaps,
-                    list(processPtrAsNewPointMap(mapData$ptr))
+                    result$latticeMaps,
+                    list(processPtrAsNewLatticeMap(mapData$ptr))
                 )
         }
     }

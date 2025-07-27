@@ -2,26 +2,26 @@
 //
 // SPDX-License-Identifier: GPL-3.0-only
 
-#include "rcpp_PointMap.hpp"
+#include "rcpp_LatticeMap.hpp"
 
 #include "salalib/gridproperties.hpp"
 
 #include "communicator.hpp"
 #include "helper_nullablevalue.hpp"
 
-RCPP_EXPOSED_CLASS(PointMap);
+RCPP_EXPOSED_CLASS(LatticeMap);
 
-// [[Rcpp::export("Rcpp_PointMap_createFromGrid")]]
-Rcpp::XPtr<PointMap> createFromGrid(const double minX, const double minY, const double maxX,
-                                    const double maxY, const double gridSize) {
+// [[Rcpp::export("Rcpp_LatticeMap_createFromGrid")]]
+Rcpp::XPtr<LatticeMap> createFromGrid(const double minX, const double minY, const double maxX,
+                                      const double maxY, const double gridSize) {
 
     if (gridSize <= 0) {
         Rcpp::stop("gridSize can not be less or equal to zero (%d given)", gridSize);
     }
-    // Create a new pointmap and set tha grid
+    // Create a new lattice map and set tha grid
     Region4f r(Point2f(minX, minY) /* bottom left */, Point2f(maxX, maxY) /* top right */);
 
-    Rcpp::XPtr<PointMap> pointMap = Rcpp::XPtr<PointMap>(new PointMap(r, "PointMap"));
+    Rcpp::XPtr<LatticeMap> latticeMap = Rcpp::XPtr<LatticeMap>(new LatticeMap(r, "LatticeMap"));
 
     GridProperties gp(std::max(r.width(), r.height()));
     if (gridSize > gp.getMax() || gridSize < gp.getMin()) {
@@ -30,35 +30,35 @@ Rcpp::XPtr<PointMap> createFromGrid(const double minX, const double minY, const 
                    gridSize, gp.getMin(), gp.getMax());
     }
 
-    pointMap->setGrid(gridSize, Point2f(0.0, 0.0));
+    latticeMap->setGrid(gridSize, Point2f(0.0, 0.0));
 
-    return pointMap;
+    return latticeMap;
 }
 
-// [[Rcpp::export("Rcpp_PointMap_blockLines")]]
-Rcpp::List blockLines(Rcpp::XPtr<PointMap> pointMapPtr, Rcpp::XPtr<ShapeMap> boundaryMapPtr,
+// [[Rcpp::export("Rcpp_LatticeMap_blockLines")]]
+Rcpp::List blockLines(Rcpp::XPtr<LatticeMap> latticeMapPtr, Rcpp::XPtr<ShapeMap> boundaryMapPtr,
                       const Rcpp::Nullable<bool> copyMapNV = R_NilValue) {
     auto copyMap = NullableValue::get(copyMapNV, true);
     if (copyMap) {
-        auto prevPointMap = pointMapPtr;
-        const auto &prevRegion = prevPointMap->getRegion();
-        pointMapPtr = Rcpp::XPtr(new PointMap(prevRegion));
-        pointMapPtr->copy(*prevPointMap, true, true);
+        auto prevLatticeMap = latticeMapPtr;
+        const auto &prevRegion = prevLatticeMap->getRegion();
+        latticeMapPtr = Rcpp::XPtr(new LatticeMap(prevRegion));
+        latticeMapPtr->copy(*prevLatticeMap, true, true);
     }
     std::vector<Line4f> lines;
     for (auto line : boundaryMapPtr->getAllShapesAsLines()) {
         lines.emplace_back(line.start(), line.end());
     }
-    pointMapPtr->blockLines(lines);
+    latticeMapPtr->blockLines(lines);
 
     return Rcpp::List::create(Rcpp::Named("completed") = true,
                               Rcpp::Named("newAttributes") = std::vector<std::string>(),
                               Rcpp::Named("newProperties") = std::vector<std::string>{"blocked"},
-                              Rcpp::Named("mapPtr") = pointMapPtr);
+                              Rcpp::Named("mapPtr") = latticeMapPtr);
 }
 
-// [[Rcpp::export("Rcpp_PointMap_fill")]]
-Rcpp::List fill(Rcpp::XPtr<PointMap> pointMapPtr, Rcpp::NumericMatrix pointCoords,
+// [[Rcpp::export("Rcpp_LatticeMap_fill")]]
+Rcpp::List fill(Rcpp::XPtr<LatticeMap> latticeMapPtr, Rcpp::NumericMatrix pointCoords,
                 const Rcpp::Nullable<bool> copyMapNV = R_NilValue,
                 const Rcpp::Nullable<bool> progressNV = R_NilValue) {
     if (pointCoords.rows() == 0) {
@@ -69,52 +69,52 @@ Rcpp::List fill(Rcpp::XPtr<PointMap> pointMapPtr, Rcpp::NumericMatrix pointCoord
     auto progress = NullableValue::get(progressNV, true);
 
     if (copyMap) {
-        auto prevPointMap = pointMapPtr;
-        const auto &prevRegion = prevPointMap->getRegion();
-        pointMapPtr = Rcpp::XPtr(new PointMap(prevRegion));
-        pointMapPtr->copy(*prevPointMap, true, true);
+        auto prevLatticeMap = latticeMapPtr;
+        const auto &prevRegion = prevLatticeMap->getRegion();
+        latticeMapPtr = Rcpp::XPtr(new LatticeMap(prevRegion));
+        latticeMapPtr->copy(*prevLatticeMap, true, true);
     }
-    auto region = pointMapPtr->getRegion();
+    auto region = latticeMapPtr->getRegion();
     for (int r = 0; r < pointCoords.rows(); ++r) {
         auto coordRow = pointCoords.row(r);
         Point2f p(coordRow[0], coordRow[1]);
         if (!region.contains(p)) {
-            Rcpp::stop("Point (%d %d) outside of target pointmap region.", p.x, p.y);
+            Rcpp::stop("Point (%d %d) outside of target lattice map region.", p.x, p.y);
         }
     }
 
     for (int r = 0; r < pointCoords.rows(); ++r) {
         auto coordRow = pointCoords.row(r);
         Point2f p(coordRow[0], coordRow[1]);
-        pointMapPtr->makePoints(p, 0, getCommunicator(progress).get());
+        latticeMapPtr->makePoints(p, 0, getCommunicator(progress).get());
     }
 
     return Rcpp::List::create(
         Rcpp::Named("completed") = true, Rcpp::Named("newAttributes") = std::vector<std::string>(),
         Rcpp::Named("newProperties") = std::vector<std::string>{"filled", "contextfilled"},
-        Rcpp::Named("mapPtr") = pointMapPtr);
+        Rcpp::Named("mapPtr") = latticeMapPtr);
 }
 
-// [[Rcpp::export("Rcpp_PointMap_makeGraph")]]
-Rcpp::List makeGraph(Rcpp::XPtr<PointMap> pointMapPtr, const bool boundaryGraph,
+// [[Rcpp::export("Rcpp_LatticeMap_makeGraph")]]
+Rcpp::List makeGraph(Rcpp::XPtr<LatticeMap> latticeMapPtr, const bool boundaryGraph,
                      const double maxVisibility, const Rcpp::Nullable<bool> copyMapNV = R_NilValue,
                      const Rcpp::Nullable<bool> progressNV = R_NilValue) {
     auto copyMap = NullableValue::get(copyMapNV, true);
     auto progress = NullableValue::get(progressNV, false);
     if (copyMap) {
-        auto prevPointMap = pointMapPtr;
-        const auto &prevRegion = prevPointMap->getRegion();
-        pointMapPtr = Rcpp::XPtr(new PointMap(prevRegion));
-        pointMapPtr->copy(*prevPointMap, true, true);
+        auto prevLatticeMap = latticeMapPtr;
+        const auto &prevRegion = prevLatticeMap->getRegion();
+        latticeMapPtr = Rcpp::XPtr(new LatticeMap(prevRegion));
+        latticeMapPtr->copy(*prevLatticeMap, true, true);
     }
-    auto prevAttributes = getPointMapAttributeNames(pointMapPtr);
+    auto prevAttributes = getLatticeMapAttributeNames(latticeMapPtr);
     try {
-        pointMapPtr->sparkGraph2(getCommunicator(progress).get(), boundaryGraph, maxVisibility);
+        latticeMapPtr->sparkGraph2(getCommunicator(progress).get(), boundaryGraph, maxVisibility);
     } catch (Communicator::CancelledException &) {
         return Rcpp::List::create(Rcpp::Named("completed") = false);
     }
 
-    auto newAttributes = getPointMapAttributeNames(pointMapPtr);
+    auto newAttributes = getLatticeMapAttributeNames(latticeMapPtr);
 
     for (auto prevAttribute : prevAttributes) {
         auto it = std::find(newAttributes.begin(), newAttributes.end(), prevAttribute);
@@ -126,37 +126,39 @@ Rcpp::List makeGraph(Rcpp::XPtr<PointMap> pointMapPtr, const bool boundaryGraph,
     return Rcpp::List::create(Rcpp::Named("completed") = true,
                               Rcpp::Named("newAttributes") = newAttributes,
                               Rcpp::Named("newProperties") = std::vector<std::string>{},
-                              Rcpp::Named("mapPtr") = pointMapPtr);
+                              Rcpp::Named("mapPtr") = latticeMapPtr);
 }
 
-// [[Rcpp::export("Rcpp_PointMap_unmakeGraph")]]
-Rcpp::List unmakeGraph(Rcpp::XPtr<PointMap> pointMapPtr, bool removeLinksWhenUnmaking,
+// [[Rcpp::export("Rcpp_LatticeMap_unmakeGraph")]]
+Rcpp::List unmakeGraph(Rcpp::XPtr<LatticeMap> latticeMapPtr, bool removeLinksWhenUnmaking,
                        const Rcpp::Nullable<bool> copyMapNV = R_NilValue) {
     auto copyMap = NullableValue::get(copyMapNV, true);
     if (copyMap) {
-        auto prevPointMap = pointMapPtr;
-        const auto &prevRegion = prevPointMap->getRegion();
-        pointMapPtr = Rcpp::XPtr(new PointMap(prevRegion));
-        pointMapPtr->copy(*prevPointMap, true, true);
+        auto prevLatticeMap = latticeMapPtr;
+        const auto &prevRegion = prevLatticeMap->getRegion();
+        latticeMapPtr = Rcpp::XPtr(new LatticeMap(prevRegion));
+        latticeMapPtr->copy(*prevLatticeMap, true, true);
     }
-    if (!pointMapPtr->isProcessed()) {
+    if (!latticeMapPtr->isProcessed()) {
         Rcpp::stop("Current map has not had its graph "
                    "made so there's nothing to unmake");
     }
 
-    bool unmade = pointMapPtr->unmake(removeLinksWhenUnmaking);
+    bool unmade = latticeMapPtr->unmake(removeLinksWhenUnmaking);
     return Rcpp::List::create(Rcpp::Named("completed") = unmade,
                               Rcpp::Named("newAttributes") = std::vector<std::string>{},
                               Rcpp::Named("newProperties") = std::vector<std::string>{},
-                              Rcpp::Named("mapPtr") = pointMapPtr);
+                              Rcpp::Named("mapPtr") = latticeMapPtr);
 }
 
-// [[Rcpp::export("Rcpp_PointMap_getName")]]
-std::string pointMapGetName(Rcpp::XPtr<PointMap> pointMapPtr) { return pointMapPtr->getName(); }
+// [[Rcpp::export("Rcpp_LatticeMap_getName")]]
+std::string latticeMapGetName(Rcpp::XPtr<LatticeMap> latticeMapPtr) {
+    return latticeMapPtr->getName();
+}
 
-// [[Rcpp::export("Rcpp_PointMap_getLinks")]]
-Rcpp::IntegerMatrix pointMapGetLinks(Rcpp::XPtr<PointMap> pointMapPtr) {
-    auto mergedPixelPairs = pointMapPtr->getMergedPixelPairs();
+// [[Rcpp::export("Rcpp_LatticeMap_getLinks")]]
+Rcpp::IntegerMatrix latticeMapGetLinks(Rcpp::XPtr<LatticeMap> latticeMapPtr) {
+    auto mergedPixelPairs = latticeMapPtr->getMergedPixelPairs();
     Rcpp::IntegerMatrix linkData(mergedPixelPairs.size(), 2L);
     Rcpp::colnames(linkData) = Rcpp::CharacterVector({"from", "to"});
     int rowIdx = 0;
@@ -169,9 +171,9 @@ Rcpp::IntegerMatrix pointMapGetLinks(Rcpp::XPtr<PointMap> pointMapPtr) {
     return linkData;
 }
 
-// [[Rcpp::export("Rcpp_PointMap_getConnections")]]
-Rcpp::IntegerMatrix pointMapGetConnections(Rcpp::XPtr<PointMap> pointMapPtr) {
-    auto &points = pointMapPtr->getPoints();
+// [[Rcpp::export("Rcpp_LatticeMap_getConnections")]]
+Rcpp::IntegerMatrix latticeMapGetConnections(Rcpp::XPtr<LatticeMap> latticeMapPtr) {
+    auto &points = latticeMapPtr->getPoints();
     int numConnections = 0;
     for (size_t i = 0; i < points.columns(); i++) {
         for (size_t j = 0; j < points.rows(); j++) {
@@ -207,19 +209,19 @@ Rcpp::IntegerMatrix pointMapGetConnections(Rcpp::XPtr<PointMap> pointMapPtr) {
     return connectionData;
 }
 
-// [[Rcpp::export("Rcpp_PointMap_getGridCoordinates")]]
-Rcpp::NumericMatrix getGridCoordinates(Rcpp::XPtr<PointMap> pointMapPtr) {
-    Rcpp::NumericMatrix coords(pointMapPtr->getRows() * pointMapPtr->getCols(), 3);
+// [[Rcpp::export("Rcpp_LatticeMap_getGridCoordinates")]]
+Rcpp::NumericMatrix getGridCoordinates(Rcpp::XPtr<LatticeMap> latticeMapPtr) {
+    Rcpp::NumericMatrix coords(latticeMapPtr->getRows() * latticeMapPtr->getCols(), 3);
     Rcpp::CharacterVector colNames(3);
     colNames[0] = "x";
     colNames[1] = "y";
     colNames[2] = "Ref";
     Rcpp::colnames(coords) = colNames;
     int rowIdx = 0;
-    for (size_t i = 0; i < pointMapPtr->getRows(); i++) {
-        for (size_t j = 0; j < pointMapPtr->getCols(); j++) {
+    for (size_t i = 0; i < latticeMapPtr->getRows(); i++) {
+        for (size_t j = 0; j < latticeMapPtr->getCols(); j++) {
             PixelRef ref(j, i);
-            const auto &point = pointMapPtr->getPoint(ref);
+            const auto &point = latticeMapPtr->getPoint(ref);
             const Rcpp::NumericMatrix::Row &row = coords(rowIdx, Rcpp::_);
             row[0] = point.getLocation().x;
             row[1] = point.getLocation().y;
@@ -230,9 +232,9 @@ Rcpp::NumericMatrix getGridCoordinates(Rcpp::XPtr<PointMap> pointMapPtr) {
     return coords;
 }
 
-std::vector<std::string> getPointMapAttributeNames(PointMap *pointMap) {
+std::vector<std::string> getLatticeMapAttributeNames(LatticeMap *latticeMap) {
     std::vector<std::string> names;
-    auto &attributes = pointMap->getAttributeTable();
+    auto &attributes = latticeMap->getAttributeTable();
     int numCols = attributes.getNumColumns();
     // + 1 for the key column
     names.reserve(1 + numCols);
@@ -243,24 +245,25 @@ std::vector<std::string> getPointMapAttributeNames(PointMap *pointMap) {
     return names;
 }
 
-// [[Rcpp::export("Rcpp_PointMap_getAttributeNames")]]
-std::vector<std::string> getPointMapAttributeNames(Rcpp::XPtr<PointMap> pointMap) {
-    return getPointMapAttributeNames(pointMap.get());
+// [[Rcpp::export("Rcpp_LatticeMap_getAttributeNames")]]
+std::vector<std::string> getLatticeMapAttributeNames(Rcpp::XPtr<LatticeMap> latticeMap) {
+    return getLatticeMapAttributeNames(latticeMap.get());
 }
 
-// [[Rcpp::export("Rcpp_PointMap_getAttributeData")]]
+// [[Rcpp::export("Rcpp_LatticeMap_getAttributeData")]]
 std::map<std::string, std::vector<double>>
-getPointMapAttributeData(Rcpp::XPtr<PointMap> pointMap, std::vector<std::string> attributeNames) {
-    auto &attrbs = pointMap->getAttributeTable();
+getLatticeMapAttributeData(Rcpp::XPtr<LatticeMap> latticeMap,
+                           std::vector<std::string> attributeNames) {
+    auto &attrbs = latticeMap->getAttributeTable();
     std::map<std::string, std::vector<double>> data;
     for (auto &attributeName : attributeNames) {
         auto &attributeData = data[attributeName];
-        attributeData.reserve(pointMap->getRows() * pointMap->getCols());
+        attributeData.reserve(latticeMap->getRows() * latticeMap->getCols());
         if (attributeName == attrbs.getColumnName(size_t(-1))) {
-            for (size_t i = 0; i < pointMap->getRows(); i++) {
-                for (size_t j = 0; j < pointMap->getCols(); j++) {
+            for (size_t i = 0; i < latticeMap->getRows(); i++) {
+                for (size_t j = 0; j < latticeMap->getCols(); j++) {
                     PixelRef ref(j, i);
-                    const auto &point = pointMap->getPoint(ref);
+                    const auto &point = latticeMap->getPoint(ref);
                     if (point.filled()) {
                         attributeData.push_back(ref);
                     } else {
@@ -271,12 +274,12 @@ getPointMapAttributeData(Rcpp::XPtr<PointMap> pointMap, std::vector<std::string>
         } else {
             size_t colIdx = attrbs.getColumnIndex(attributeName);
 
-            for (size_t i = 0; i < pointMap->getRows(); i++) {
-                for (size_t j = 0; j < pointMap->getCols(); j++) {
+            for (size_t i = 0; i < latticeMap->getRows(); i++) {
+                for (size_t j = 0; j < latticeMap->getCols(); j++) {
                     PixelRef ref(j, i);
-                    const auto &point = pointMap->getPoint(ref);
+                    const auto &point = latticeMap->getPoint(ref);
                     if (point.filled()) {
-                        const auto &row = pointMap->getAttributeTable().getRow(AttributeKey(ref));
+                        const auto &row = latticeMap->getAttributeTable().getRow(AttributeKey(ref));
                         attributeData.push_back(row.getValue(colIdx));
                     } else {
                         attributeData.push_back(nan(""));
@@ -288,9 +291,10 @@ getPointMapAttributeData(Rcpp::XPtr<PointMap> pointMap, std::vector<std::string>
     return data;
 }
 
-// [[Rcpp::export("Rcpp_PointMap_getPropertyData")]]
+// [[Rcpp::export("Rcpp_LatticeMap_getPropertyData")]]
 std::map<std::string, std::vector<double>>
-getPointMapPropertyData(Rcpp::XPtr<PointMap> pointMap, std::vector<std::string> propertyNames) {
+getLatticeMapPropertyData(Rcpp::XPtr<LatticeMap> latticeMap,
+                          std::vector<std::string> propertyNames) {
     std::vector<std::string> cellProperties{"x",    "y",  "filled", "blocked", "contextfilled",
                                             "edge", "Ref"};
 
@@ -303,15 +307,15 @@ getPointMapPropertyData(Rcpp::XPtr<PointMap> pointMap, std::vector<std::string> 
     std::map<std::string, std::vector<double>> data;
     for (auto &propertyName : propertyNames) {
         auto &propertyData = data[propertyName];
-        propertyData.reserve(pointMap->getCols() * pointMap->getRows());
-        for (size_t i = 0; i < pointMap->getRows(); i++) {
-            for (size_t j = 0; j < pointMap->getCols(); j++) {
+        propertyData.reserve(latticeMap->getCols() * latticeMap->getRows());
+        for (size_t i = 0; i < latticeMap->getRows(); i++) {
+            for (size_t j = 0; j < latticeMap->getCols(); j++) {
                 PixelRef ref(j, i);
                 double propertyValue = -1;
                 if (propertyName == "Ref") {
                     propertyValue = ref;
                 } else {
-                    const auto &p = pointMap->getPoint(ref);
+                    const auto &p = latticeMap->getPoint(ref);
                     if (propertyName == "x") {
                         propertyValue = p.getLocation().x;
                     } else if (propertyName == "y") {
@@ -335,13 +339,13 @@ getPointMapPropertyData(Rcpp::XPtr<PointMap> pointMap, std::vector<std::string> 
     return data;
 }
 
-// [[Rcpp::export("Rcpp_PointMap_getFilledPoints")]]
-Rcpp::NumericMatrix getFilledPoints(Rcpp::XPtr<PointMap> pointMapPtr) {
-    const auto &attrTable = pointMapPtr->getAttributeTable();
+// [[Rcpp::export("Rcpp_LatticeMap_getFilledPoints")]]
+Rcpp::NumericMatrix getFilledPoints(Rcpp::XPtr<LatticeMap> latticeMapPtr) {
+    const auto &attrTable = latticeMapPtr->getAttributeTable();
     int numCols = attrTable.getNumColumns();
     std::vector<std::string> cellProperties{"x",    "y",  "filled", "blocked", "contextfilled",
                                             "edge", "Ref"};
-    Rcpp::NumericMatrix coordsData(pointMapPtr->getFilledPointCount(),
+    Rcpp::NumericMatrix coordsData(latticeMapPtr->getFilledPointCount(),
                                    cellProperties.size() + numCols);
     Rcpp::CharacterVector colNames(cellProperties.size() + numCols);
     {
@@ -356,7 +360,7 @@ Rcpp::NumericMatrix getFilledPoints(Rcpp::XPtr<PointMap> pointMapPtr) {
     }
 
     Rcpp::colnames(coordsData) = colNames;
-    const auto &points = pointMapPtr->getPoints();
+    const auto &points = latticeMapPtr->getPoints();
 
     int rowIdx = 0;
     auto attrRowIt = attrTable.begin();

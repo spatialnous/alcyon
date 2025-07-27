@@ -6,11 +6,11 @@
 #'
 #' Runs one-to-one traversal on a map with a graph. This is applicable to:
 #' \itemize{
-#'   \item{PointMaps (Visibility Graph Analysis)}
+#'   \item{LatticeMaps (Visibility Graph Analysis)}
 #'   \item{Segment ShapeGraphs (Segment analysis)}
 #' }
 #'
-#' @param map A PointMap or Segment ShapeGraph
+#' @param map A LatticeMap or Segment ShapeGraph
 #' @param traversalType The traversal type. See \link{TraversalType}
 #' @param fromX X coordinate of the point(s) to start the traversal from
 #' @param fromY X coordinate of the point(s) to start the traversal from
@@ -30,10 +30,10 @@
 #'   process}
 #' }
 #' @eval c("@examples",
-#' "# Pointmap analysis (VGA)",
-#' rxLoadSimpleLinesAsPointMap(),
+#' "# LatticeMap analysis (VGA)",
+#' rxLoadSimpleLinesAsLatticeMap(),
 #' "oneToOneTraverse(",
-#' "  pointMap,",
+#' "  latticeMap,",
 #' "  traversalType = TraversalType$Metric,",
 #' "  fromX = 7.52,",
 #' "  fromY = 6.02,",
@@ -95,8 +95,8 @@ oneToOneTraversePerMapType <- function(map,
                                        quantizationWidth = NA,
                                        copyMap = TRUE,
                                        verbose = FALSE) {
-    if (inherits(map, "PointMap")) {
-        return(oneToOneTraversePointMap(
+    if (inherits(map, "LatticeMap")) {
+        return(oneToOneTraverseLatticeMap(
             map,
             traversalType,
             fromX,
@@ -124,19 +124,19 @@ oneToOneTraversePerMapType <- function(map,
         )
         return(processShapeMapResult(map, result))
     } else {
-        stop("Can only run depth on Axial or Segment ShapeGraphs and PointMaps", call. = FALSE)
+        stop("Can only run depth on Axial or Segment ShapeGraphs and LatticeMaps", call. = FALSE)
     }
 }
 
-oneToOneTraversePointMap <- function(map,
-                                     traversalType,
-                                     fromX,
-                                     fromY,
-                                     toX,
-                                     toY,
-                                     quantizationWidth = NA,
-                                     copyMap = TRUE,
-                                     verbose = FALSE) {
+oneToOneTraverseLatticeMap <- function(map,
+                                       traversalType,
+                                       fromX,
+                                       fromY,
+                                       toX,
+                                       toY,
+                                       quantizationWidth = NA,
+                                       copyMap = TRUE,
+                                       verbose = FALSE) {
     if (traversalType == TraversalType$Topological) {
         result <- Rcpp_VGA_visualShortestPath(
             attr(map, "sala_map"),
@@ -144,7 +144,7 @@ oneToOneTraversePointMap <- function(map,
             cbind(toX, toY),
             copyMapNV = copyMap
         )
-        return(processPointMapResult(map, result))
+        return(processLatticeMapResult(map, result))
     } else if (traversalType == TraversalType$Metric) {
         result <- Rcpp_VGA_metricShortestPath(
             attr(map, "sala_map"),
@@ -152,7 +152,7 @@ oneToOneTraversePointMap <- function(map,
             cbind(toX, toY),
             copyMapNV = copyMap
         )
-        return(processPointMapResult(map, result))
+        return(processLatticeMapResult(map, result))
     } else if (traversalType == TraversalType$Angular) {
         result <- Rcpp_VGA_angularShortestPath(
             attr(map, "sala_map"),
@@ -160,6 +160,6 @@ oneToOneTraversePointMap <- function(map,
             cbind(toX, toY),
             copyMapNV = copyMap
         )
-        return(processPointMapResult(map, result))
+        return(processLatticeMapResult(map, result))
     }
 }

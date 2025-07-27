@@ -2,12 +2,17 @@
 % Please edit documentation in R/prepareVGA.R
 \name{unmakeVGAGraph}
 \alias{unmakeVGAGraph}
-\title{Unmake the graph in a PointMap}
+\title{Unmake the graph in a LatticeMap}
 \usage{
-unmakeVGAGraph(pointMap, removeLinks = FALSE, copyMap = TRUE, verbose = FALSE)
+unmakeVGAGraph(
+  latticeMap,
+  removeLinks = FALSE,
+  copyMap = TRUE,
+  verbose = FALSE
+)
 }
 \arguments{
-\item{pointMap}{The input PointMap}
+\item{latticeMap}{The input LatticeMap}
 
 \item{removeLinks}{Also remove the links}
 
@@ -16,10 +21,10 @@ unmakeVGAGraph(pointMap, removeLinks = FALSE, copyMap = TRUE, verbose = FALSE)
 \item{verbose}{Optional. Show more information of the process.}
 }
 \value{
-A new PointMap without the points graph
+A new LatticeMap without the points graph
 }
 \description{
-Unmake the graph in a PointMap
+Unmake the graph in a LatticeMap
 }
 \examples{
 mifFile <- system.file(
@@ -31,7 +36,7 @@ mifFile <- system.file(
     geometry_column = 1L, quiet = TRUE
   )
   shapeMap <- as(sfMap[, vector()], "ShapeMap")
-pointMap <- makeVGAPointMap(
+latticeMap <- makeVGALatticeMap(
   sfMap,
   gridSize = 0.5,
   fillX = 3.01,
@@ -41,7 +46,7 @@ pointMap <- makeVGAPointMap(
   verbose = FALSE
 )
 unmakeVGAGraph(
-  pointMap = pointMap,
+  latticeMap = latticeMap,
   removeLinks = FALSE
 )
 }

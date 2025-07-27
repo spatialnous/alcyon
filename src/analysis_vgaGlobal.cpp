@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: GPL-3.0-only
 
-#include "salalib/pointmap.hpp"
+#include "salalib/latticemap.hpp"
 #include "salalib/vgamodules/vgaangular.hpp"
 #include "salalib/vgamodules/vgaangularopenmp.hpp"
 #include "salalib/vgamodules/vgametric.hpp"
@@ -20,7 +20,7 @@
 // [[Rcpp::plugins(openmp)]]
 
 // [[Rcpp::export("Rcpp_VGA_angular")]]
-Rcpp::List vgaAngular(Rcpp::XPtr<PointMap> mapPtr, double radius,
+Rcpp::List vgaAngular(Rcpp::XPtr<LatticeMap> mapPtr, double radius,
                       const Rcpp::Nullable<bool> gatesOnlyNV = R_NilValue,
                       const Rcpp::Nullable<int> nthreadsNV = R_NilValue,
                       const Rcpp::Nullable<bool> copyMapNV = R_NilValue,
@@ -32,9 +32,9 @@ Rcpp::List vgaAngular(Rcpp::XPtr<PointMap> mapPtr, double radius,
 
     mapPtr = RcppRunner::copyMapWithRegion(mapPtr, copyMap);
 
-    return RcppRunner::runAnalysis<PointMap>(
+    return RcppRunner::runAnalysis<LatticeMap>(
         mapPtr, progress,
-        [&nthreads, &radius, &gatesOnly](Communicator *comm, Rcpp::XPtr<PointMap> mapPtr) {
+        [&nthreads, &radius, &gatesOnly](Communicator *comm, Rcpp::XPtr<LatticeMap> mapPtr) {
             AnalysisResult analysisResult;
             if (nthreads == 1) {
                 // original algorithm
@@ -58,7 +58,7 @@ Rcpp::List vgaAngular(Rcpp::XPtr<PointMap> mapPtr, double radius,
 }
 
 // [[Rcpp::export("Rcpp_VGA_metric")]]
-Rcpp::List vgaMetric(Rcpp::XPtr<PointMap> mapPtr, double radius,
+Rcpp::List vgaMetric(Rcpp::XPtr<LatticeMap> mapPtr, double radius,
                      const Rcpp::Nullable<bool> gatesOnlyNV = R_NilValue,
                      const Rcpp::Nullable<int> nthreadsNV = R_NilValue,
                      const Rcpp::Nullable<bool> copyMapNV = R_NilValue,
@@ -75,9 +75,9 @@ Rcpp::List vgaMetric(Rcpp::XPtr<PointMap> mapPtr, double radius,
 
     mapPtr = RcppRunner::copyMapWithRegion(mapPtr, copyMap);
 
-    return RcppRunner::runAnalysis<PointMap>(
+    return RcppRunner::runAnalysis<LatticeMap>(
         mapPtr, progress,
-        [&nthreads, &radius, &gatesOnly](Communicator *comm, Rcpp::XPtr<PointMap> &mapPtr) {
+        [&nthreads, &radius, &gatesOnly](Communicator *comm, Rcpp::XPtr<LatticeMap> &mapPtr) {
             AnalysisResult analysisResult;
             if (nthreads == 1) {
                 // original algorithm
@@ -101,7 +101,7 @@ Rcpp::List vgaMetric(Rcpp::XPtr<PointMap> mapPtr, double radius,
 }
 
 // [[Rcpp::export("Rcpp_VGA_visualGlobal")]]
-Rcpp::List vgaVisualGlobal(Rcpp::XPtr<PointMap> mapPtr, int radius,
+Rcpp::List vgaVisualGlobal(Rcpp::XPtr<LatticeMap> mapPtr, int radius,
                            const Rcpp::Nullable<bool> gatesOnlyNV = R_NilValue,
                            const Rcpp::Nullable<int> nthreadsNV = R_NilValue,
                            const Rcpp::Nullable<bool> copyMapNV = R_NilValue,
@@ -118,9 +118,9 @@ Rcpp::List vgaVisualGlobal(Rcpp::XPtr<PointMap> mapPtr, int radius,
 
     mapPtr = RcppRunner::copyMapWithRegion(mapPtr, copyMap);
 
-    return RcppRunner::runAnalysis<PointMap>(
+    return RcppRunner::runAnalysis<LatticeMap>(
         mapPtr, progress,
-        [&nthreads, &radius, &gatesOnly](Communicator *comm, Rcpp::XPtr<PointMap> mapPtr) {
+        [&nthreads, &radius, &gatesOnly](Communicator *comm, Rcpp::XPtr<LatticeMap> mapPtr) {
             AnalysisResult analysisResult;
             if (nthreads == 1) {
                 // original algorithm

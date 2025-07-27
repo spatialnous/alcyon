@@ -4,7 +4,7 @@
 
 context("VGA tests")
 
-defaultPointMapColumns <- c(
+defaultLatticeMapColumns <- c(
     "x",
     "y",
     "filled",
@@ -18,16 +18,16 @@ defaultPointMapColumns <- c(
 )
 
 runAnalysisR <- function(func, newExpectedCols) {
-    startData <- loadSimpleLinesAsPointMap(vector())
+    startData <- loadSimpleLinesAsLatticeMap(vector())
     lineStringMap <- startData$sf
-    pointMap <- startData$pointMap
+    latticeMap <- startData$latticeMap
 
-    expectedCols <- defaultPointMapColumns
+    expectedCols <- defaultLatticeMapColumns
 
-    pointMap <- func(pointMap, lineStringMap)
+    latticeMap <- func(latticeMap, lineStringMap)
 
-    coords <- Rcpp_PointMap_getFilledPoints(
-        pointMapPtr = attr(pointMap, "sala_map")
+    coords <- Rcpp_LatticeMap_getFilledPoints(
+        latticeMapPtr = attr(latticeMap, "sala_map")
     )
     expect_identical(dim(coords), c(90L, 10L + length(newExpectedCols)))
     expectedCols <- c(
@@ -39,8 +39,8 @@ runAnalysisR <- function(func, newExpectedCols) {
 
 test_that("VGA in R, Through vision", {
     runAnalysisR(
-        function(pointMap, ...) {
-            return(vgaThroughVision(pointMap))
+        function(latticeMap, ...) {
+            return(vgaThroughVision(latticeMap))
         },
         "Through vision"
     )
@@ -48,9 +48,9 @@ test_that("VGA in R, Through vision", {
 
 test_that("VGA in R, Angular all-to-all", {
     runAnalysisR(
-        function(pointMap, ...) {
+        function(latticeMap, ...) {
             return(allToAllTraverse(
-                pointMap,
+                latticeMap,
                 traversalType = TraversalType$Angular,
                 radii = -1L,
                 radiusTraversalType = TraversalType$None
@@ -66,9 +66,9 @@ test_that("VGA in R, Angular all-to-all", {
 
 test_that("VGA in R, Metric all-to-all", {
     runAnalysisR(
-        function(pointMap, ...) {
+        function(latticeMap, ...) {
             return(allToAllTraverse(
-                pointMap,
+                latticeMap,
                 traversalType = TraversalType$Metric,
                 radii = -1L,
                 radiusTraversalType = TraversalType$None
@@ -85,9 +85,9 @@ test_that("VGA in R, Metric all-to-all", {
 
 test_that("VGA in R, Topological (Visual global) all-to-all", {
     runAnalysisR(
-        function(pointMap, ...) {
+        function(latticeMap, ...) {
             return(allToAllTraverse(
-                pointMap,
+                latticeMap,
                 traversalType = TraversalType$Topological,
                 radii = -1L,
                 radiusTraversalType = TraversalType$None
@@ -107,8 +107,8 @@ test_that("VGA in R, Topological (Visual global) all-to-all", {
 
 test_that("VGA in R, Visual local all-to-all", {
     runAnalysisR(
-        function(pointMap, ...) {
-            return(vgaVisualLocal(pointMap, FALSE))
+        function(latticeMap, ...) {
+            return(vgaVisualLocal(latticeMap, FALSE))
         },
         newExpectedCols = c(
             "Visual Clustering Coefficient",
@@ -120,9 +120,9 @@ test_that("VGA in R, Visual local all-to-all", {
 
 test_that("VGA in R, Isovist all-to-all", {
     runAnalysisR(
-        function(pointMap, lineStringMap) {
+        function(latticeMap, lineStringMap) {
             boundaryMap <- as(lineStringMap, "ShapeMap")
-            return(vgaIsovist(pointMap, boundaryMap))
+            return(vgaIsovist(latticeMap, boundaryMap))
         },
         newExpectedCols = c(
             "Isovist Area",
@@ -139,9 +139,9 @@ test_that("VGA in R, Isovist all-to-all", {
 
 test_that("VGA in R, Angular one-to-all", {
     runAnalysisR(
-        function(pointMap, ...) {
+        function(latticeMap, ...) {
             return(oneToAllTraverse(
-                pointMap,
+                latticeMap,
                 traversalType = TraversalType$Angular,
                 fromX = 7.52,
                 fromY = 6.02
@@ -153,9 +153,9 @@ test_that("VGA in R, Angular one-to-all", {
 
 test_that("VGA in R, Metric one-to-all", {
     runAnalysisR(
-        function(pointMap, ...) {
+        function(latticeMap, ...) {
             return(oneToAllTraverse(
-                pointMap,
+                latticeMap,
                 traversalType = TraversalType$Metric,
                 fromX = 7.52,
                 fromY = 6.02
@@ -171,9 +171,9 @@ test_that("VGA in R, Metric one-to-all", {
 
 test_that("VGA in R, Visual one-to-all", {
     runAnalysisR(
-        function(pointMap, ...) {
+        function(latticeMap, ...) {
             return(oneToAllTraverse(
-                pointMap,
+                latticeMap,
                 traversalType = TraversalType$Topological,
                 fromX = 7.52,
                 fromY = 6.02
@@ -185,9 +185,9 @@ test_that("VGA in R, Visual one-to-all", {
 
 test_that("VGA in R, Angular one-to-one", {
     runAnalysisR(
-        function(pointMap, ...) {
+        function(latticeMap, ...) {
             return(oneToOneTraverse(
-                pointMap,
+                latticeMap,
                 traversalType = TraversalType$Angular,
                 fromX = 7.52,
                 fromY = 6.02,
@@ -208,9 +208,9 @@ test_that("VGA in R, Angular one-to-one", {
 
 test_that("VGA in R, Metric one-to-one", {
     runAnalysisR(
-        function(pointMap, ...) {
+        function(latticeMap, ...) {
             return(oneToOneTraverse(
-                pointMap,
+                latticeMap,
                 traversalType = TraversalType$Metric,
                 fromX = 7.52,
                 fromY = 6.02,
@@ -232,9 +232,9 @@ test_that("VGA in R, Metric one-to-one", {
 
 test_that("VGA in R, Visual one-to-one", {
     runAnalysisR(
-        function(pointMap, ...) {
+        function(latticeMap, ...) {
             return(oneToOneTraverse(
-                pointMap,
+                latticeMap,
                 traversalType = TraversalType$Topological,
                 fromX = 7.52,
                 fromY = 6.02,

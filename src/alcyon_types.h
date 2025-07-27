@@ -5,6 +5,6 @@
 #pragma once
 
 #include "salalib/alllinemap.hpp"
-#include "salalib/pointmap.hpp"
+#include "salalib/latticemap.hpp"
 #include "salalib/shapegraph.hpp"
 #include "salalib/shapemap.hpp"

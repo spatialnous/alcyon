@@ -2,12 +2,12 @@
 % Please edit documentation in R/prepareVGA.R
 \name{blockLines}
 \alias{blockLines}
-\title{Block lines on a PointMap}
+\title{Block lines on a LatticeMap}
 \usage{
-blockLines(pointMap, lineStringMap, copyMap = TRUE, verbose = FALSE)
+blockLines(latticeMap, lineStringMap, copyMap = TRUE, verbose = FALSE)
 }
 \arguments{
-\item{pointMap}{The input PointMap}
+\item{latticeMap}{The input LatticeMap}
 
 \item{lineStringMap}{Map of lines, either a ShapeMap, or an sf lineString map}
 
@@ -16,11 +16,11 @@ blockLines(pointMap, lineStringMap, copyMap = TRUE, verbose = FALSE)
 \item{verbose}{Optional. Show more information of the process.}
 }
 \value{
-A new PointMap with points as they have been blocked by the lines
+A new LatticeMap with points as they have been blocked by the lines
 }
 \description{
-Takes a PointMap and a ShapeMap with lines and blocks the cells on the
-PointMap where the lines pass.
+Takes a LatticeMap and a ShapeMap with lines and blocks the cells on the
+LatticeMap where the lines pass.
 }
 \examples{
 mifFile <- system.file(
@@ -34,7 +34,7 @@ mifFile <- system.file(
   shapeMap <- as(sfMap[, vector()], "ShapeMap")
 lineStringMap <- as(sfMap, "sf")
 mapRegion <- sf::st_bbox(lineStringMap)
-pointMap <- createGrid(
+latticeMap <- createGrid(
   minX = mapRegion[["xmin"]],
   minY = mapRegion[["ymin"]],
   maxX = mapRegion[["xmax"]],
@@ -42,7 +42,7 @@ pointMap <- createGrid(
   gridSize = 0.04
 )
 blockLines(
-  pointMap = pointMap,
+  latticeMap = latticeMap,
   lineStringMap = lineStringMap[vector()]
 )
 }

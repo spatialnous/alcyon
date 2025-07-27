@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "salalib/pointmap.hpp"
+#include "salalib/latticemap.hpp"
 
 #include "helper_rcppanalysisresults.hpp"
 

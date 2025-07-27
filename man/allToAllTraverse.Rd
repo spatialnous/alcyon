@@ -20,7 +20,7 @@ allToAllTraverse(
 )
 }
 \arguments{
-\item{map}{A PointMap, Axial ShapeGraph or Segment ShapeGraph}
+\item{map}{A LatticeMap, Axial ShapeGraph or Segment ShapeGraph}
 
 \item{traversalType}{The traversal type. See \link{TraversalType}}
 
@@ -40,10 +40,10 @@ bins" for depthmapX's tulip analysis (1024 tulip bins = pi/1024
 quantizationWidth). Only works for Segment ShapeGraphs}
 
 \item{gatesOnly}{Optional. Only calculate results at particular gate pixels.
-Only works for PointMaps}
+Only works for LatticeMaps}
 
 \item{nthreads}{Optional. Use more than one threads. 1 by default, set to 0
-to use all available. Only available for PointMaps.}
+to use all available. Only available for LatticeMaps.}
 
 \item{copyMap}{Optional. Copy the internal sala map}
 
@@ -57,13 +57,13 @@ A new map with the results included
 \description{
 Runs all-to-all traversal on a map with a graph. This is applicable to:
 \itemize{
-  \item{PointMaps (Visibility Graph Analysis)}
+  \item{LatticeMaps (Visibility Graph Analysis)}
   \item{Axial ShapeGraphs (Axial analysis)}
   \item{Segment ShapeGraphs (Segment analysis)}
 }
 }
 \examples{
-# Pointmap analysis (VGA)
+# LatticeMap analysis (VGA)
 mifFile <- system.file(
     "extdata", "testdata", "simple",
     "simple_interior.mif",
@@ -72,7 +72,7 @@ mifFile <- system.file(
   sfMap <- st_read(mifFile,
     geometry_column = 1L, quiet = TRUE
   )
-  pointMap <- makeVGAPointMap(
+  latticeMap <- makeVGALatticeMap(
     sfMap,
     gridSize = 0.5,
     fillX = 3.0,
@@ -81,7 +81,7 @@ mifFile <- system.file(
     boundaryGraph = FALSE,
     verbose = FALSE
   )
-allToAllTraverse(pointMap,
+allToAllTraverse(latticeMap,
   traversalType = TraversalType$Angular,
   radii = -1L,
   radiusTraversalType = TraversalType$None

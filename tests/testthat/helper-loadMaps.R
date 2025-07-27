@@ -33,9 +33,9 @@ loadInteriorLinesAsShapeMap <- function(keepAttributeIdx = NULL) {
     return(map)
 }
 
-loadInteriorLinesAsPointMap <- function(keepAttributeIdx = NULL) {
+loadInteriorLinesAsLatticeMap <- function(keepAttributeIdx = NULL) {
     map <- loadInteriorLinesAsSf(keepAttributeIdx)
-    map[["pointMap"]] <- makeVGAPointMap(
+    map[["latticeMap"]] <- makeVGALatticeMap(
         map$sf,
         gridSize = 0.04,
         fillX = 3.01,
@@ -63,9 +63,9 @@ loadSimpleLinesAsShapeMap <- function(keepAttributeIdx = NULL) {
     return(map)
 }
 
-loadSimpleLinesAsPointMap <- function(keepAttributeIdx = NULL) {
+loadSimpleLinesAsLatticeMap <- function(keepAttributeIdx = NULL) {
     map <- loadSimpleLinesAsSf(keepAttributeIdx)
-    map[["pointMap"]] <- makeVGAPointMap(
+    map[["latticeMap"]] <- makeVGALatticeMap(
         map$sf,
         gridSize = 0.5,
         fillX = 3.0,

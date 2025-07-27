@@ -28,25 +28,25 @@ VGALocalAlgorithm <- list(
 #'
 #' Runs Visibility Graph Analysis to get visual local metrics
 #'
-#' @param pointMap A PointMap
+#' @param latticeMap A LatticeMap
 #' @param nthreads Optional. Number of threads to use (defaults to 1)
 #' @param algorithm Optional. The algorithm to use. See ?VGALocalAlgorithm
 #' @param copyMap Optional. Copy the internal sala map
 #' @param gatesOnly Optional. Only keep the values at specific gates
 #' @param progress Optional. Enable progress display
-#' @returns A new PointMap with the results included
+#' @returns A new LatticeMap with the results included
 #' @eval c("@examples",
-#' rxLoadSimpleLinesAsPointMap(),
-#' "vgaVisualLocal(pointMap, FALSE)")
+#' rxLoadSimpleLinesAsLatticeMap(),
+#' "vgaVisualLocal(latticeMap, FALSE)")
 #' @export
-vgaVisualLocal <- function(pointMap,
+vgaVisualLocal <- function(latticeMap,
                            nthreads = 1L,
                            algorithm = VGALocalAlgorithm$Standard,
                            copyMap = TRUE,
                            gatesOnly = FALSE,
                            progress = FALSE) {
     result <- Rcpp_VGA_visualLocal(
-        attr(pointMap, "sala_map"),
+        attr(latticeMap, "sala_map"),
         gatesOnly,
         nthreadsNV = nthreads,
         algorithmNV = algorithm,
@@ -56,5 +56,5 @@ vgaVisualLocal <- function(pointMap,
     if (result$cancelled) {
         stop("Analysis cancelled", call. = FALSE)
     }
-    return(processPointMapResult(pointMap, result))
+    return(processLatticeMapResult(latticeMap, result))
 }

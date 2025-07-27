@@ -17,7 +17,7 @@ SOURCES = main.cpp \
           rcpp_ShapeMap.cpp \
           rcpp_ShapeGraph.cpp \
           rcpp_AllLineMap.cpp \
-          rcpp_PointMap.cpp \
+          rcpp_LatticeMap.cpp \
           rcpp_metagraphdata.cpp \
           process_convertInternal.cpp \
           process_convertExternal.cpp \

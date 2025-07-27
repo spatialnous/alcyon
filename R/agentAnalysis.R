@@ -4,9 +4,9 @@
 
 #' Agent Analysis
 #'
-#' Runs Agent Analysis on the given PointMap
+#' Runs Agent Analysis on the given LatticeMap
 #'
-#' @param pointMap A PointMap, used as an exosomatic visual map for agents to
+#' @param latticeMap A LatticeMap, used as an exosomatic visual map for agents to
 #' take exploratory information
 #' @param timesteps Number of total system timesteps.
 #' @param releaseRate Agent release rate (likelihood of release per timestep).
@@ -31,9 +31,9 @@
 #'   \item{trailMap: A ShapeMap with trails if numberOfTrails was set over 0}
 #' }
 #' @eval c("@examples",
-#' rxLoadSimpleLinesAsPointMap(),
+#' rxLoadSimpleLinesAsLatticeMap(),
 #' "agentAnalysis(",
-#' "  pointMap,",
+#' "  latticeMap,",
 #' "  timesteps = 3000L,",
 #' "  releaseRate = 0.1,",
 #' "  agentStepsToDecision = 3L,",
@@ -49,7 +49,7 @@
 #' ")")
 #' @importFrom utils hasName
 #' @export
-agentAnalysis <- function(pointMap,
+agentAnalysis <- function(latticeMap,
                           timesteps,
                           releaseRate,
                           agentLifeTimesteps,
@@ -68,7 +68,7 @@ agentAnalysis <- function(pointMap,
         stop("Unknown agent look mode: ", agentLookMode, call. = FALSE)
     }
     agentAnalysis <- Rcpp_agentAnalysis(
-        mapPtr = attr(pointMap, "sala_map"),
+        mapPtr = attr(latticeMap, "sala_map"),
         systemTimesteps = timesteps,
         releaseRate = releaseRate,
         agentLifeTimesteps = agentLifeTimesteps,
@@ -83,7 +83,7 @@ agentAnalysis <- function(pointMap,
         verboseNV = verbose
     )
     finalResult <- list(
-        pointMap = processPointMapResult(pointMap, agentAnalysis)
+        latticeMap = processLatticeMapResult(latticeMap, agentAnalysis)
     )
     if (hasName(agentAnalysis, "newShapeMaps") &&
             hasName(agentAnalysis$newShapeMaps, "trailMap")) {
