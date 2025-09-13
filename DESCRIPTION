@@ -90,6 +90,7 @@ Collate:
     'readMetaGraph.R'
     'refIDtoIndex.R'
     'segmentAnalysis.R'
+    'segmentTulipLeafChoice.R'
     'sfConversions.R'
     'shapegraphToGraphData.R'
     'oneToOneTraverse.R'

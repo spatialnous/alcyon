@@ -27,6 +27,7 @@ SOURCES = main.cpp \
           analysis_segment.cpp \
           analysis_segmentDepth.cpp \
           analysis_segmentShortestPath.cpp \
+          analysis_segmentTulipLeafChoice.cpp \
           analysis_allFewest.cpp \
           analysis_vgaGlobal.cpp \
           analysis_vgaLocal.cpp \

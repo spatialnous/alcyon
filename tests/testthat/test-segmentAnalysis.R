@@ -166,3 +166,96 @@ test_that("Segment Analysis in R (user-visible)", {
 
     expect_named(segmentGraph, expectedCols)
 })
+
+
+test_that("Segment Tulip Leaf Choice in C++", {
+    startData <- loadSmallAxialLinesAsSegmMap(c(1L, 2L))
+    lineStringMap <- startData$sf
+    segmentGraph <- attr(startData$segmentMap, "sala_map")
+
+    expectedColNameBefore <- c(
+        "Ref",
+        "Axial Line Ref",
+        "Segment Length",
+        "Angular Connectivity",
+        "Connectivity",
+        "Axial Connectivity",
+        "Axial Line Length",
+        "Axial Data Map Ref",
+        "Axial df_row_name",
+        "Axial df_1_Depthmap_Ref",
+        "Axial df_2_Connectivity"
+    )
+    attrNameBefore <- Rcpp_ShapeMap_getAttributeNames(segmentGraph)
+    expect_identical(expectedColNameBefore, attrNameBefore)
+
+    weightBy <- Rcpp_getAxialToSegmentExpectedColName(
+        Rcpp_getSfShapeMapExpectedColName(lineStringMap, 1L)
+    )
+    Rcpp_runSegmentTulipLeafChoice(
+        segmentGraph,
+        radii = c(-1.0, 100.0),
+        radiusStepType = TraversalType$Metric,
+        NULL, # weightedMeasureColName
+        1024L, # tulipBins
+        FALSE, # verbose
+        FALSE, # selOnly
+        FALSE # progress
+    )
+
+    expect_identical(
+        dim(Rcpp_ShapeMap_getShapesAsLineCoords(segmentGraph)),
+        c(191L, 4L)
+    )
+
+    expectedColNameAfter <- c(
+        expectedColNameBefore,
+        "T1024 Leaf Choice R100.00 metric",
+        "T1024 Leaf R100.00 metric",
+        "T1024 Leaf Choice",
+        "T1024 Leaf"
+    )
+    attrNameBefore <- Rcpp_ShapeMap_getAttributeNames(segmentGraph)
+    expect_identical(expectedColNameAfter, attrNameBefore)
+
+    connections <- Rcpp_ShapeGraph_getSegmentConnections(segmentGraph)
+    expect_length(connections$from, 826L)
+    expect_length(connections$to, 826L)
+})
+
+
+test_that("Segment Tulip Leaf Choice in R (user-visible)", {
+    startData <- loadSmallSegmLinesAsSegmMap(6L)
+    lineStringMap <- startData$sf
+    segmentGraph <- startData$segmentMap
+
+    weightBy <- Rcpp_getSfShapeMapExpectedColName(lineStringMap, 1L)
+
+    segmentGraph <- segmentTulipLeafChoice(
+        segmentGraph,
+        radii = c("n", "100"),
+        radiusTraversalType = TraversalType$Metric,
+        weightByAttribute = weightBy,
+        quantizationWidth = pi / 1024L,
+        verbose = FALSE,
+        progress = FALSE
+    )
+
+    expectedCols <- c(
+        "Segment_Length",
+        "geometry",
+        "Angular Connectivity",
+        "Axial Line Ref",
+        "Connectivity",
+        "Data Map Ref",
+        "Segment Length",
+        "T1024 Leaf",
+        "T1024 Leaf Choice",
+        "T1024 Leaf Choice R100.00 metric",
+        "T1024 Leaf Choice [df_1_Segment_Length Wgt]",
+        "T1024 Leaf Choice [df_1_Segment_Length Wgt] R100.00 metric",
+        "T1024 Leaf R100.00 metric"
+    )
+
+    expect_named(segmentGraph, expectedCols)
+})
