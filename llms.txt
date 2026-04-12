@@ -1,0 +1,205 @@
+## alcyon
+
+An R package for spatial network analysis. Based on the rdepthmap
+package and leveraging the sala library from depthmapX
+
+### How to install:
+
+    install.packages("alcyon")
+
+Windows users might need to also install
+[Rtools](https://cran.r-project.org/bin/windows/Rtools/)
+
+A demonstration of the package took place in the “Space syntax analysis
+in R” workshop of the 12th International Space Syntax Symposium (SSS12)
+in China on the 8th of July 2019, the content of which you may find
+[here](https://github.com/pklampros/space_syntax_analysis_in_r).
+
+### Development:
+
+Make sure that git hooks are enabled, to avoid committing minor issues:
+
+    git config --local core.hooksPath .githooks/
+
+To be able to do all development tasks (including testing and linting)
+all these packages are necessary:
+
+    install.packages(c('sf', 'stars', 'rmarkdown', 'devtools', 'spelling', 'lintr', 'Rcpp', 'knitr', 'testthat', 'withr', 'cyclocomp', 'httr'))
+
+Do not change `configure` directly, instead change `configure.ac` and
+run `autoconf`
+
+To force enable OpenMP if R was not built with it, install the source
+package with:
+
+    install.packages("alcyon", configure.args = "--enable-force-openmp")
+
+# Package index
+
+## All functions
+
+- [`AgentLookMode`](https://spatialnous.github.io/alcyon/reference/AgentLookMode.md)
+  : Agent look modes.
+- [`AllLineShapeGraph-class`](https://spatialnous.github.io/alcyon/reference/AllLineShapeGraph-class.md)
+  : All-line Axial ShapeGraph
+- [`AxialShapeGraph-class`](https://spatialnous.github.io/alcyon/reference/AxialShapeGraph-class.md)
+  [`AxialShapeGraph`](https://spatialnous.github.io/alcyon/reference/AxialShapeGraph-class.md)
+  : Axial ShapeGraph
+- [`` `[`( ``*`<AxialShapeGraph>`*`)`](https://spatialnous.github.io/alcyon/reference/AxialShapeGraph_subset.md)
+  [`` `[<-`( ``*`<AxialShapeGraph>`*`)`](https://spatialnous.github.io/alcyon/reference/AxialShapeGraph_subset.md)
+  : Subset AxialShapeGraph objects
+- [`LatticeMap-class`](https://spatialnous.github.io/alcyon/reference/LatticeMap-class.md)
+  [`LatticeMap`](https://spatialnous.github.io/alcyon/reference/LatticeMap-class.md)
+  : LatticeMap
+- [`` `[`( ``*`<LatticeMap>`*`)`](https://spatialnous.github.io/alcyon/reference/LatticeMap_subset.md)
+  [`` `[<-`( ``*`<LatticeMap>`*`)`](https://spatialnous.github.io/alcyon/reference/LatticeMap_subset.md)
+  : Subset LatticeMap objects
+- [`SegmentShapeGraph-class`](https://spatialnous.github.io/alcyon/reference/SegmentShapeGraph-class.md)
+  [`SegmentShapeGraph`](https://spatialnous.github.io/alcyon/reference/SegmentShapeGraph-class.md)
+  : Segment ShapeGraph
+- [`` `[`( ``*`<SegmentShapeGraph>`*`)`](https://spatialnous.github.io/alcyon/reference/SegmentShapeGraph_subset.md)
+  [`` `[<-`( ``*`<SegmentShapeGraph>`*`)`](https://spatialnous.github.io/alcyon/reference/SegmentShapeGraph_subset.md)
+  : Subset SegmentShapeGraph objects
+- [`ShapeMap-class`](https://spatialnous.github.io/alcyon/reference/ShapeMap-class.md)
+  [`ShapeMap`](https://spatialnous.github.io/alcyon/reference/ShapeMap-class.md)
+  : ShapeMap class
+- [`` `[`( ``*`<ShapeMap>`*`)`](https://spatialnous.github.io/alcyon/reference/ShapeMap_subset.md)
+  [`` `[<-`( ``*`<ShapeMap>`*`)`](https://spatialnous.github.io/alcyon/reference/ShapeMap_subset.md)
+  : Subset ShapeMap objects
+- [`TraversalType`](https://spatialnous.github.io/alcyon/reference/TraversalType.md)
+  : Traversal types
+- [`VGALocalAlgorithm`](https://spatialnous.github.io/alcyon/reference/VGALocalAlgorithm.md)
+  : VGA Local Analysis algorithms.
+- [`agentAnalysis()`](https://spatialnous.github.io/alcyon/reference/agentAnalysis.md)
+  : Agent Analysis
+- [`allToAllTraverse()`](https://spatialnous.github.io/alcyon/reference/allToAllTraverse.md)
+  : All-to-all traversal
+- [`as`](https://spatialnous.github.io/alcyon/reference/as.md) :
+  as("sf", "ShapeMap")
+- [`axialAnalysisLocal()`](https://spatialnous.github.io/alcyon/reference/axialAnalysisLocal.md)
+  : Axial analysis - local metrics
+- [`axialToSegmentShapeGraph()`](https://spatialnous.github.io/alcyon/reference/axialToSegmentShapeGraph.md)
+  : Axial to Segment ShapeGraph
+- [`blockLines()`](https://spatialnous.github.io/alcyon/reference/blockLines.md)
+  : Block lines on a LatticeMap
+- [`connections(`*`<AxialShapeGraph>`*`)`](https://spatialnous.github.io/alcyon/reference/connections-AxialShapeGraph-method.md)
+  : Get the Axial ShapeGraph connections
+- [`connections(`*`<LatticeMap>`*`)`](https://spatialnous.github.io/alcyon/reference/connections-LatticeMap-method.md)
+  : Get the LatticeMap connections
+- [`connections(`*`<SegmentShapeGraph>`*`)`](https://spatialnous.github.io/alcyon/reference/connections-SegmentShapeGraph-method.md)
+  : Get the Segment ShapeGraph connections
+- [`connections()`](https://spatialnous.github.io/alcyon/reference/connections.md)
+  : Get map connections
+- [`createGrid()`](https://spatialnous.github.io/alcyon/reference/createGrid.md)
+  : Create a LatticeMap through a grid
+- [`fillGrid()`](https://spatialnous.github.io/alcyon/reference/fillGrid.md)
+  : Fill a LatticeMap's grid starting from one or more points
+- [`getTopFeatures()`](https://spatialnous.github.io/alcyon/reference/getTopFeatures.md)
+  : Extract top x percent of features
+- [`isovist()`](https://spatialnous.github.io/alcyon/reference/isovist.md)
+  : Create isovists at point and direction angle
+- [`isovist2pts()`](https://spatialnous.github.io/alcyon/reference/isovist2pts.md)
+  : Create isovists using two points
+- [`linkCoords(`*`<AxialShapeGraph>`*`)`](https://spatialnous.github.io/alcyon/reference/linkCoords-AxialShapeGraph-method.md)
+  : Link two Axial Lines (coordinates)
+- [`linkCoords(`*`<LatticeMap>`*`)`](https://spatialnous.github.io/alcyon/reference/linkCoords-LatticeMap-method.md)
+  : Link two LatticeMap Cells (coordinates)
+- [`linkCoords()`](https://spatialnous.github.io/alcyon/reference/linkCoords.md)
+  : Link map points/lines as if selecting them using points
+- [`linkRefs(`*`<AxialShapeGraph>`*`)`](https://spatialnous.github.io/alcyon/reference/linkRefs-AxialShapeGraph-method.md)
+  : Link two Axial Lines (refs)
+- [`linkRefs(`*`<LatticeMap>`*`)`](https://spatialnous.github.io/alcyon/reference/linkRefs-LatticeMap-method.md)
+  : Link two LatticeMap Cells (refs)
+- [`linkRefs()`](https://spatialnous.github.io/alcyon/reference/linkRefs.md)
+  : Link map points/lines using their refs
+- [`links(`*`<AxialShapeGraph>`*`)`](https://spatialnous.github.io/alcyon/reference/links-AxialShapeGraph-method.md)
+  : Get the Axial ShapeGraph links
+- [`links(`*`<LatticeMap>`*`)`](https://spatialnous.github.io/alcyon/reference/links-LatticeMap-method.md)
+  : Get the LatticeMap links
+- [`links()`](https://spatialnous.github.io/alcyon/reference/links.md) :
+  Get map links
+- [`makeAllLineMap()`](https://spatialnous.github.io/alcyon/reference/makeAllLineMap.md)
+  : Create an All-line Map
+- [`makeDepthmapClassicColour()`](https://spatialnous.github.io/alcyon/reference/makeColour.md)
+  [`makeAxmanesqueColour()`](https://spatialnous.github.io/alcyon/reference/makeColour.md)
+  [`makePurpleOrangeColour()`](https://spatialnous.github.io/alcyon/reference/makeColour.md)
+  [`makeBlueRedColour()`](https://spatialnous.github.io/alcyon/reference/makeColour.md)
+  [`makeGreyScaleColour()`](https://spatialnous.github.io/alcyon/reference/makeColour.md)
+  [`makeNiceHSBColour()`](https://spatialnous.github.io/alcyon/reference/makeColour.md)
+  : Single Colour from depthmapX's Palettes
+- [`makeVGAGraph()`](https://spatialnous.github.io/alcyon/reference/makeVGAGraph.md)
+  : Create a graph between visible cells in the LatticeMap
+- [`makeVGALatticeMap()`](https://spatialnous.github.io/alcyon/reference/makeVGALatticeMap.md)
+  : Create a LatticeMap grid, fill it and make the graph
+- [`matchPointsToLines()`](https://spatialnous.github.io/alcyon/reference/matchPointsToLines.md)
+  : Match points to lines
+- [`name(`*`<LatticeMap>`*`)`](https://spatialnous.github.io/alcyon/reference/name-LatticeMap-method.md)
+  : Get the LatticeMap name
+- [`name(`*`<ShapeMap>`*`)`](https://spatialnous.github.io/alcyon/reference/name-ShapeMap-method.md)
+  : Get the ShapeMap name
+- [`name()`](https://spatialnous.github.io/alcyon/reference/name.md) :
+  Get map name
+- [`oneToAllTraverse()`](https://spatialnous.github.io/alcyon/reference/oneToAllTraverse.md)
+  : One-to-all traversal
+- [`oneToOneTraverse()`](https://spatialnous.github.io/alcyon/reference/oneToOneTraverse.md)
+  : One-to-one traversal
+- [`depthmap.classic.colour()`](https://spatialnous.github.io/alcyon/reference/palettes.md)
+  [`depthmap.axmanesque.colour()`](https://spatialnous.github.io/alcyon/reference/palettes.md)
+  [`depthmap.purpleorange.colour()`](https://spatialnous.github.io/alcyon/reference/palettes.md)
+  [`depthmap.bluered.colour()`](https://spatialnous.github.io/alcyon/reference/palettes.md)
+  [`depthmap.grayscale.colour()`](https://spatialnous.github.io/alcyon/reference/palettes.md)
+  [`depthmap.nicehsb.colour()`](https://spatialnous.github.io/alcyon/reference/palettes.md)
+  : Colour Palettes from depthmapX
+- [`plot(`*`<LatticeMap>`*`)`](https://spatialnous.github.io/alcyon/reference/plot.LatticeMap.md)
+  : plot a LatticeMap
+- [`readMetaGraph()`](https://spatialnous.github.io/alcyon/reference/readMetaGraph.md)
+  : Read MetaGraph
+- [`reduceToFewest()`](https://spatialnous.github.io/alcyon/reference/reduceToFewest.md)
+  : Reduce an All-line Map to two types of fewest-line maps
+- [`refIDtoIndex()`](https://spatialnous.github.io/alcyon/reference/refIdToIndexAndBack.md)
+  [`indexToRefID()`](https://spatialnous.github.io/alcyon/reference/refIdToIndexAndBack.md)
+  : Ref ID to index and vice-versa
+- [`segmentTulipLeafChoice()`](https://spatialnous.github.io/alcyon/reference/segmentTulipLeafChoice.md)
+  : Segment Tulip Leaf Choice
+- [`shapeMapToPolygonSf()`](https://spatialnous.github.io/alcyon/reference/shapeMapToPolygonSf.md)
+  : ShapeMap to sf Polygon map
+- [`shapegraphToGraphData()`](https://spatialnous.github.io/alcyon/reference/shapegraphToGraphData.md)
+  : Conversion of shapegraph to graph data
+- [`unlinkAtCrossPoint(`*`<AxialShapeGraph>`*`)`](https://spatialnous.github.io/alcyon/reference/unlinkAtCrossPoint-AxialShapeGraph-method.md)
+  : Unlink two Axial Lines (crosspoint)
+- [`unlinkAtCrossPoint()`](https://spatialnous.github.io/alcyon/reference/unlinkAtCrossPoint.md)
+  : Unlink map lines at their crossing point
+- [`unlinkCoords(`*`<AxialShapeGraph>`*`)`](https://spatialnous.github.io/alcyon/reference/unlinkCoords-AxialShapeGraph-method.md)
+  : Unlink two Axial Lines (coordinates)
+- [`unlinkCoords(`*`<LatticeMap>`*`)`](https://spatialnous.github.io/alcyon/reference/unlinkCoords-LatticeMap-method.md)
+  : Unlink two LatticeMap Cells (coordinates)
+- [`unlinkCoords()`](https://spatialnous.github.io/alcyon/reference/unlinkCoords.md)
+  : Unlink map points/lines as if selecting them using points
+- [`unlinkRefs(`*`<AxialShapeGraph>`*`)`](https://spatialnous.github.io/alcyon/reference/unlinkRefs-AxialShapeGraph-method.md)
+  : Unlink two Axial Lines (refs)
+- [`unlinkRefs(`*`<LatticeMap>`*`)`](https://spatialnous.github.io/alcyon/reference/unlinkRefs-LatticeMap-method.md)
+  : Unlink two LatticeMap Cells (refs)
+- [`unlinkRefs()`](https://spatialnous.github.io/alcyon/reference/unlinkRefs.md)
+  : Unlink map points/lines using their refs
+- [`unmakeVGAGraph()`](https://spatialnous.github.io/alcyon/reference/unmakeVGAGraph.md)
+  : Unmake the graph in a LatticeMap
+- [`vgaIsovist()`](https://spatialnous.github.io/alcyon/reference/vgaIsovist.md)
+  : Visibility Graph Analysis - isovist metrics
+- [`vgaThroughVision()`](https://spatialnous.github.io/alcyon/reference/vgaThroughVision.md)
+  : Visibility Graph Analysis - Through Vision
+- [`vgaVisualLocal()`](https://spatialnous.github.io/alcyon/reference/vgaVisualLocal.md)
+  : Visibility Graph Analysis - Visual local metrics
+
+# Articles
+
+### All vignettes
+
+- [Agent
+  Analysis](https://spatialnous.github.io/alcyon/articles/agentAnalysis.md):
+- [Axial
+  Analysis](https://spatialnous.github.io/alcyon/articles/axialAnalysis.md):
+- [Isovists](https://spatialnous.github.io/alcyon/articles/isovists.md):
+- [Segment
+  Analysis](https://spatialnous.github.io/alcyon/articles/segmentAnalysis.md):
+- [Visibility Graph
+  Analysis](https://spatialnous.github.io/alcyon/articles/vga.md):
