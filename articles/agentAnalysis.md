@@ -1,6 +1,7 @@
 # Agent Analysis
 
 ``` r
+
 library(alcyon)
 #> Loading required package: sf
 #> Linking to GEOS 3.12.1, GDAL 3.8.4, PROJ 9.4.0; sf_use_s2() is TRUE
@@ -18,6 +19,7 @@ galleryMap <- st_read(
 ```
 
 ``` r
+
 latticeMap <- makeVGALatticeMap(
     galleryMap,
     fillX = 3.01,
@@ -30,6 +32,7 @@ plot(latticeMap["Connectivity"])
 ![](agentAnalysis_files/figure-html/unnamed-chunk-2-1.png)
 
 ``` r
+
 agentAnalysis <- agentAnalysis(latticeMap,
     timesteps = 10000,
     releaseRate = 0.1,
@@ -44,6 +47,7 @@ plot(agentAnalysis$latticeMap["Gate Counts"])
 ![](agentAnalysis_files/figure-html/unnamed-chunk-3-1.png)
 
 ``` r
+
 agentAnalysis <- agentAnalysis(latticeMap,
     timesteps = 10000,
     releaseRate = 0.1,

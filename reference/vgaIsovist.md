@@ -50,6 +50,7 @@ boundaryMap <- as(sfMap[, c()], "ShapeMap")
 vgaIsovist(latticeMap, boundaryMap)
 #> stars object with 2 dimensions and 15 attributes
 #> attribute(s):
+#> Warning: number of columns of result is not a multiple of vector length (arg 1)
 #>                                  Min.      1st Qu.       Median         Mean
 #> Ref                        0.00000000 1.966108e+05 3.932215e+05 3.932215e+05
 #> Connectivity              39.00000000 6.500000e+01 7.500000e+01 7.106667e+01
@@ -66,22 +67,22 @@ vgaIsovist(latticeMap, boundaryMap)
 #> Isovist Min Radial         0.07054356 3.697004e-01 4.786798e-01 6.104857e-01
 #> Isovist Occlusivity        1.45719266 2.207036e+00 3.058959e+00 3.070312e+00
 #> Isovist Perimeter         14.01030445 1.875724e+01 2.116433e+01 2.098679e+01
-#>                               3rd Qu.         Max. NA's
-#> Ref                      5.898322e+05 7.864430e+05    0
-#> Connectivity             8.100000e+01 8.800000e+01   66
-#> Point First Moment       2.021131e+02 2.921885e+02   66
-#> Point Second Moment      6.655625e+02 1.157750e+03   66
-#> blocked                  1.000000e+00 1.000000e+00    0
-#> contextfilled            0.000000e+00 0.000000e+00    0
-#> filled                   1.000000e+00 1.000000e+00    0
-#> Isovist Area             2.203810e+01 2.358941e+01   66
-#> Isovist Compactness      5.984749e-01 7.025847e-01   66
-#> Isovist Drift Angle      2.764781e+02 3.576884e+02   66
-#> Isovist Drift Magnitude  2.257860e+00 3.034088e+00   66
-#> Isovist Max Radial       5.894182e+00 6.769641e+00   66
-#> Isovist Min Radial       9.041362e-01 1.445549e+00   66
-#> Isovist Occlusivity      3.736115e+00 5.765966e+00   66
-#> Isovist Perimeter        2.389084e+01 2.472556e+01   66
+#>                               3rd Qu.         Max. NAs NA's
+#> Ref                      5.898322e+05 7.864430e+05   0    0
+#> Connectivity             8.100000e+01 8.800000e+01  66    0
+#> Point First Moment       2.021131e+02 2.921885e+02  66    0
+#> Point Second Moment      6.655625e+02 1.157750e+03  66    0
+#> blocked                  1.000000e+00 1.000000e+00   0    0
+#> contextfilled            0.000000e+00 0.000000e+00   0    0
+#> filled                   1.000000e+00 1.000000e+00   0    0
+#> Isovist Area             2.203810e+01 2.358941e+01  66    0
+#> Isovist Compactness      5.984749e-01 7.025847e-01  66    0
+#> Isovist Drift Angle      2.764781e+02 3.576884e+02  66    0
+#> Isovist Drift Magnitude  2.257860e+00 3.034088e+00  66    0
+#> Isovist Max Radial       5.894182e+00 6.769641e+00  66    0
+#> Isovist Min Radial       9.041362e-01 1.445549e+00  66    0
+#> Isovist Occlusivity      3.736115e+00 5.765966e+00  66    0
+#> Isovist Perimeter        2.389084e+01 2.472556e+01  66    0
 #> dimension(s):
 #>   from to offset delta x/y
 #> x    1 13   1.75   0.5 [x]

@@ -118,6 +118,7 @@ allToAllTraverse(latticeMap,
 )
 #> stars object with 2 dimensions and 10 attributes
 #> attribute(s):
+#> Warning: number of columns of result is not a multiple of vector length (arg 1)
 #>                              Min.      1st Qu.       Median         Mean
 #> Ref                  0.000000e+00 1.966108e+05 3.932215e+05 3.932215e+05
 #> Connectivity         3.900000e+01 6.500000e+01 7.500000e+01 7.106667e+01
@@ -129,17 +130,17 @@ allToAllTraverse(latticeMap,
 #> Angular Mean Depth   1.546766e-03 2.146721e-02 6.614886e-02 1.193368e-01
 #> Angular Node Count   9.000000e+01 9.000000e+01 9.000000e+01 9.000000e+01
 #> Angular Total Depth  1.392090e-01 1.932049e+00 5.953397e+00 1.074031e+01
-#>                           3rd Qu.         Max. NA's
-#> Ref                  5.898322e+05 7.864430e+05    0
-#> Connectivity         8.100000e+01 8.800000e+01   66
-#> Point First Moment   2.021131e+02 2.921885e+02   66
-#> Point Second Moment  6.655625e+02 1.157750e+03   66
-#> blocked              1.000000e+00 1.000000e+00    0
-#> contextfilled        0.000000e+00 0.000000e+00    0
-#> filled               1.000000e+00 1.000000e+00    0
-#> Angular Mean Depth   1.826283e-01 4.806018e-01   66
-#> Angular Node Count   9.000000e+01 9.000000e+01   66
-#> Angular Total Depth  1.643655e+01 4.325416e+01   66
+#>                           3rd Qu.         Max. NAs NA's
+#> Ref                  5.898322e+05 7.864430e+05   0    0
+#> Connectivity         8.100000e+01 8.800000e+01  66    0
+#> Point First Moment   2.021131e+02 2.921885e+02  66    0
+#> Point Second Moment  6.655625e+02 1.157750e+03  66    0
+#> blocked              1.000000e+00 1.000000e+00   0    0
+#> contextfilled        0.000000e+00 0.000000e+00   0    0
+#> filled               1.000000e+00 1.000000e+00   0    0
+#> Angular Mean Depth   1.826283e-01 4.806018e-01  66    0
+#> Angular Node Count   9.000000e+01 9.000000e+01  66    0
+#> Angular Total Depth  1.643655e+01 4.325416e+01  66    0
 #> dimension(s):
 #>   from to offset delta x/y
 #> x    1 13   1.75   0.5 [x]

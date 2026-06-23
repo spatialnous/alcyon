@@ -93,6 +93,7 @@ oneToAllTraverse(
 )
 #> stars object with 2 dimensions and 10 attributes
 #> attribute(s):
+#> Warning: number of columns of result is not a multiple of vector length (arg 1)
 #>                                      Min.      1st Qu.       Median
 #> Ref                               0.00000 1.966108e+05 3.932215e+05
 #> Connectivity                     39.00000 6.500000e+01 7.500000e+01
@@ -104,17 +105,17 @@ oneToAllTraverse(
 #> Metric Step Shortest-Path A...    0.00000 0.000000e+00 0.000000e+00
 #> Metric Step Shortest-Path L...    0.00000 1.852082e+00 3.041381e+00
 #> Metric Straight-Line Distance     0.00000 1.852082e+00 3.041381e+00
-#>                                         Mean      3rd Qu.         Max. NA's
-#> Ref                             3.932215e+05 5.898322e+05 7.864430e+05    0
-#> Connectivity                    7.106667e+01 8.100000e+01 8.800000e+01   66
-#> Point First Moment              1.750389e+02 2.021131e+02 2.921885e+02   66
-#> Point Second Moment             5.387111e+02 6.655625e+02 1.157750e+03   66
-#> blocked                         3.205128e-01 1.000000e+00 1.000000e+00    0
-#> contextfilled                   0.000000e+00 0.000000e+00 0.000000e+00    0
-#> filled                          5.769231e-01 1.000000e+00 1.000000e+00    0
-#> Metric Step Shortest-Path A...  1.721897e-02 0.000000e+00 6.559583e-01   66
-#> Metric Step Shortest-Path L...  2.940409e+00 4.032915e+00 5.408327e+00   66
-#> Metric Straight-Line Distance   2.934198e+00 4.031129e+00 5.408327e+00   66
+#>                                         Mean      3rd Qu.         Max. NAs NA's
+#> Ref                             3.932215e+05 5.898322e+05 7.864430e+05   0    0
+#> Connectivity                    7.106667e+01 8.100000e+01 8.800000e+01  66    0
+#> Point First Moment              1.750389e+02 2.021131e+02 2.921885e+02  66    0
+#> Point Second Moment             5.387111e+02 6.655625e+02 1.157750e+03  66    0
+#> blocked                         3.205128e-01 1.000000e+00 1.000000e+00   0    0
+#> contextfilled                   0.000000e+00 0.000000e+00 0.000000e+00   0    0
+#> filled                          5.769231e-01 1.000000e+00 1.000000e+00   0    0
+#> Metric Step Shortest-Path A...  1.721897e-02 0.000000e+00 6.559583e-01  66    0
+#> Metric Step Shortest-Path L...  2.940409e+00 4.032915e+00 5.408327e+00  66    0
+#> Metric Straight-Line Distance   2.934198e+00 4.031129e+00 5.408327e+00  66    0
 #> dimension(s):
 #>   from to offset delta x/y
 #> x    1 13   1.75   0.5 [x]

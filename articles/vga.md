@@ -1,6 +1,7 @@
 # Visibility Graph Analysis
 
 ``` r
+
 library(alcyon)
 #> Loading required package: sf
 #> Linking to GEOS 3.12.1, GDAL 3.8.4, PROJ 9.4.0; sf_use_s2() is TRUE
@@ -18,6 +19,7 @@ galleryMap <- st_read(
 ```
 
 ``` r
+
 latticeMap <- makeVGALatticeMap(
     galleryMap,
     fillX = 3.01,
@@ -30,10 +32,12 @@ plot(latticeMap["Connectivity"])
 ![](vga_files/figure-html/unnamed-chunk-2-1.png)
 
 ``` r
+
 linkedLatticeMap <- linkCoords(latticeMap, 1.74, 6.7, 5.05, 5.24)
 ```
 
 ``` r
+
 vgaMap <- allToAllTraverse(
     latticeMap,
     traversalType = TraversalType$Metric,
@@ -46,6 +50,7 @@ plot(vgaMap["Metric Mean Shortest-Path Angle"])
 ![](vga_files/figure-html/unnamed-chunk-4-1.png)
 
 ``` r
+
 vgaMap <- allToAllTraverse(
     vgaMap,
     traversalType = TraversalType$Angular,
@@ -59,6 +64,7 @@ plot(vgaMap["Angular Mean Depth"])
 ![](vga_files/figure-html/unnamed-chunk-5-1.png)
 
 ``` r
+
 vgaMap <- allToAllTraverse(
     vgaMap,
     traversalType = TraversalType$Topological,
@@ -71,6 +77,7 @@ plot(vgaMap["Visual Integration [HH]"])
 ![](vga_files/figure-html/unnamed-chunk-6-1.png)
 
 ``` r
+
 vgaMap <- vgaThroughVision(vgaMap)
 plot(vgaMap["Through vision"])
 ```
@@ -78,6 +85,7 @@ plot(vgaMap["Through vision"])
 ![](vga_files/figure-html/unnamed-chunk-7-1.png)
 
 ``` r
+
 vgaMap <- vgaVisualLocal(vgaMap, FALSE)
 plot(vgaMap["Visual Control"])
 ```
@@ -85,6 +93,7 @@ plot(vgaMap["Visual Control"])
 ![](vga_files/figure-html/unnamed-chunk-8-1.png)
 
 ``` r
+
 boundaryMap <- as(galleryMap[, vector()], "ShapeMap")
 vgaMap <- vgaIsovist(vgaMap, boundaryMap)
 plot(vgaMap["Isovist Area"])
@@ -93,6 +102,7 @@ plot(vgaMap["Isovist Area"])
 ![](vga_files/figure-html/unnamed-chunk-9-1.png)
 
 ``` r
+
 vgaMap <- oneToAllTraverse(
     vgaMap,
     traversalType = TraversalType$Metric,
@@ -105,6 +115,7 @@ plot(vgaMap["Metric Step Shortest-Path Angle"])
 ![](vga_files/figure-html/unnamed-chunk-10-1.png)
 
 ``` r
+
 vgaMap <- oneToAllTraverse(
     vgaMap,
     traversalType = TraversalType$Angular,
@@ -117,6 +128,7 @@ plot(vgaMap["Angular Step Depth"])
 ![](vga_files/figure-html/unnamed-chunk-11-1.png)
 
 ``` r
+
 vgaMap <- oneToAllTraverse(
     vgaMap,
     traversalType = TraversalType$Topological,
@@ -129,6 +141,7 @@ plot(vgaMap["Visual Step Depth"])
 ![](vga_files/figure-html/unnamed-chunk-12-1.png)
 
 ``` r
+
 vgaMap <- oneToOneTraverse(
     vgaMap,
     traversalType = TraversalType$Topological,
@@ -148,6 +161,7 @@ plot(vgaMap["Visual Shortest Path"],
 ![](vga_files/figure-html/unnamed-chunk-13-1.png)
 
 ``` r
+
 vgaMap <- oneToOneTraverse(
     vgaMap,
     traversalType = TraversalType$Topological,
@@ -167,6 +181,7 @@ plot(vgaMap["Visual Shortest Path Visual Zone"],
 ![](vga_files/figure-html/unnamed-chunk-14-1.png)
 
 ``` r
+
 vgaMap <- oneToOneTraverse(
     vgaMap,
     traversalType = TraversalType$Metric,
@@ -186,6 +201,7 @@ plot(vgaMap["Metric Shortest Path"],
 ![](vga_files/figure-html/unnamed-chunk-15-1.png)
 
 ``` r
+
 vgaMap <- oneToOneTraverse(
     vgaMap,
     traversalType = TraversalType$Angular,
@@ -205,6 +221,7 @@ plot(vgaMap["Angular Shortest Path"],
 ![](vga_files/figure-html/unnamed-chunk-16-1.png)
 
 ``` r
+
 vgaMap <- oneToOneTraverse(
     vgaMap,
     traversalType = TraversalType$Angular,

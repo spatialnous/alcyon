@@ -1,6 +1,7 @@
 # Axial Analysis
 
 ``` r
+
 library(alcyon)
 #> Loading required package: sf
 #> Linking to GEOS 3.12.1, GDAL 3.8.4, PROJ 9.4.0; sf_use_s2() is TRUE
@@ -18,12 +19,14 @@ axMap <- as(lineStringMap, "AxialShapeGraph")
 ```
 
 ``` r
+
 plot(axMap[, "Connectivity"])
 ```
 
 ![](axialAnalysis_files/figure-html/unnamed-chunk-2-1.png)
 
 ``` r
+
 axAnalysed <- allToAllTraverse(
     axMap,
     traversalType = TraversalType$Topological,
@@ -36,6 +39,7 @@ plot(axAnalysed[, "Choice [Norm] R3"])
 ![](axialAnalysis_files/figure-html/unnamed-chunk-3-1.png)
 
 ``` r
+
 axAnalysed <- oneToAllTraverse(
     axAnalysed,
     traversalType = TraversalType$Topological,

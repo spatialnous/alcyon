@@ -103,6 +103,7 @@ oneToOneTraverse(
 )
 #> stars object with 2 dimensions and 14 attributes
 #> attribute(s):
+#> Warning: number of columns of result is not a multiple of vector length (arg 1)
 #>                                        Min.       1st Qu.        Median
 #> Ref                               0.0000000  1.966108e+05 393221.500000
 #> Connectivity                     39.0000000  6.500000e+01     75.000000
@@ -118,21 +119,36 @@ oneToOneTraverse(
 #> Metric Shortest Path Metric...    0.0000000  5.000000e-01      1.118034
 #> Metric Shortest Path Order       -1.0000000 -1.000000e+00     -1.000000
 #> Metric Shortest Path Visual...    0.0000000  1.000000e+00      1.000000
-#>                                          Mean       3rd Qu.         Max. NA's
-#> Ref                              3.932215e+05  5.898322e+05 7.864430e+05    0
-#> Connectivity                     7.106667e+01  8.100000e+01 8.800000e+01   66
-#> Point First Moment               1.750389e+02  2.021131e+02 2.921885e+02   66
-#> Point Second Moment              5.387111e+02  6.655625e+02 1.157750e+03   66
-#> blocked                          3.205128e-01  1.000000e+00 1.000000e+00    0
-#> contextfilled                    0.000000e+00  0.000000e+00 0.000000e+00    0
-#> filled                           5.769231e-01  1.000000e+00 1.000000e+00    0
-#> Metric Shortest Path             2.777778e-01 -1.000000e+00 1.500000e+01   66
-#> Metric Shortest Path Distance    8.800187e+00  1.144408e+01 1.416942e+01   66
-#> Metric Shortest Path Inv Me...   5.325789e-01  6.666667e-01 1.000000e+00   66
-#> Metric Shortest Path Linked     -9.555556e-01 -1.000000e+00 0.000000e+00   66
-#> Metric Shortest Path Metric...   1.235573e+00  2.000000e+00 3.201562e+00   66
-#> Metric Shortest Path Order      -7.888889e-01 -1.000000e+00 5.000000e+00   66
-#> Metric Shortest Path Visual...   2.066667e+00  3.000000e+00 9.000000e+00   66
+#>                                          Mean       3rd Qu.         Max. NAs
+#> Ref                              3.932215e+05  5.898322e+05 7.864430e+05   0
+#> Connectivity                     7.106667e+01  8.100000e+01 8.800000e+01  66
+#> Point First Moment               1.750389e+02  2.021131e+02 2.921885e+02  66
+#> Point Second Moment              5.387111e+02  6.655625e+02 1.157750e+03  66
+#> blocked                          3.205128e-01  1.000000e+00 1.000000e+00   0
+#> contextfilled                    0.000000e+00  0.000000e+00 0.000000e+00   0
+#> filled                           5.769231e-01  1.000000e+00 1.000000e+00   0
+#> Metric Shortest Path             2.777778e-01 -1.000000e+00 1.500000e+01  66
+#> Metric Shortest Path Distance    8.800187e+00  1.144408e+01 1.416942e+01  66
+#> Metric Shortest Path Inv Me...   5.325789e-01  6.666667e-01 1.000000e+00  66
+#> Metric Shortest Path Linked     -9.555556e-01 -1.000000e+00 0.000000e+00  66
+#> Metric Shortest Path Metric...   1.235573e+00  2.000000e+00 3.201562e+00  66
+#> Metric Shortest Path Order      -7.888889e-01 -1.000000e+00 5.000000e+00  66
+#> Metric Shortest Path Visual...   2.066667e+00  3.000000e+00 9.000000e+00  66
+#>                                 NA's
+#> Ref                                0
+#> Connectivity                       0
+#> Point First Moment                 0
+#> Point Second Moment                0
+#> blocked                            0
+#> contextfilled                      0
+#> filled                             0
+#> Metric Shortest Path               0
+#> Metric Shortest Path Distance      0
+#> Metric Shortest Path Inv Me...     0
+#> Metric Shortest Path Linked        0
+#> Metric Shortest Path Metric...     0
+#> Metric Shortest Path Order         0
+#> Metric Shortest Path Visual...     0
 #> dimension(s):
 #>   from to offset delta x/y
 #> x    1 13   1.75   0.5 [x]

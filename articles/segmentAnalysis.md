@@ -1,6 +1,7 @@
 # Segment Analysis
 
 ``` r
+
 library(alcyon)
 #> Loading required package: sf
 #> Linking to GEOS 3.12.1, GDAL 3.8.4, PROJ 9.4.0; sf_use_s2() is TRUE
@@ -22,12 +23,14 @@ segMap <- axialToSegmentShapeGraph(
 ```
 
 ``` r
+
 plot(segMap[, "Connectivity"])
 ```
 
 ![](segmentAnalysis_files/figure-html/unnamed-chunk-2-1.png)
 
 ``` r
+
 segmentAnalysed <- allToAllTraverse(
     segMap,
     radii = c("n", "200"),
@@ -42,6 +45,7 @@ plot(segmentAnalysed[, "T1024 Total Depth"])
 ![](segmentAnalysis_files/figure-html/unnamed-chunk-3-1.png)
 
 ``` r
+
 segmentAnalysed <- allToAllTraverse(
     segmentAnalysed,
     radii = c("n", "100"),
@@ -55,6 +59,7 @@ plot(segmentAnalysed[, "Topological Total Length R100 metric"])
 ![](segmentAnalysis_files/figure-html/unnamed-chunk-4-1.png)
 
 ``` r
+
 segmentResult <- allToAllTraverse(
     segmentAnalysed,
     radii = c("n", "200"),
@@ -68,6 +73,7 @@ plot(segmentResult[, "Metric Total Length R200 metric"])
 ![](segmentAnalysis_files/figure-html/unnamed-chunk-5-1.png)
 
 ``` r
+
 segmentAnalysed <- oneToAllTraverse(
     segmentAnalysed,
     traversalType = TraversalType$Topological,
@@ -81,6 +87,7 @@ plot(segmentAnalysed[, "Topological Step Depth"])
 ![](segmentAnalysis_files/figure-html/unnamed-chunk-6-1.png)
 
 ``` r
+
 segmentAnalysed <- oneToAllTraverse(
     segmentAnalysed,
     traversalType = TraversalType$Metric,
@@ -94,6 +101,7 @@ plot(segmentAnalysed[, "Metric Step Depth"])
 ![](segmentAnalysis_files/figure-html/unnamed-chunk-7-1.png)
 
 ``` r
+
 segmentAnalysed <- oneToAllTraverse(
     segmentAnalysed,
     traversalType = TraversalType$Angular,
@@ -108,6 +116,7 @@ plot(segmentAnalysed[, "Angular Step Depth"])
 ![](segmentAnalysis_files/figure-html/unnamed-chunk-8-1.png)
 
 ``` r
+
 segmentAnalysed <- oneToOneTraverse(
     segmentAnalysed,
     traversalType = TraversalType$Angular,
@@ -130,6 +139,7 @@ plot(segmentAnalysed[
 ![](segmentAnalysis_files/figure-html/unnamed-chunk-9-1.png)
 
 ``` r
+
 segmentAnalysed <- oneToOneTraverse(
     segmentAnalysed,
     traversalType = TraversalType$Metric,
@@ -152,6 +162,7 @@ plot(segmentAnalysed[
 ![](segmentAnalysis_files/figure-html/unnamed-chunk-10-1.png)
 
 ``` r
+
 segmentAnalysed <- oneToOneTraverse(
     segmentAnalysed,
     traversalType = TraversalType$Topological,
