@@ -25,7 +25,7 @@ runSegmentAnalysis(Rcpp::XPtr<ShapeGraph> mapPtr, const Rcpp::NumericVector radi
                    const Rcpp::Nullable<std::string> weightedMeasureColNameNV = R_NilValue,
                    const Rcpp::Nullable<bool> includeChoiceNV = R_NilValue,
                    const Rcpp::Nullable<int> tulipBinsNV = R_NilValue,
-                   const Rcpp::Nullable<bool> selOnlyNV = R_NilValue,
+                   const Rcpp::Nullable<std::vector<int>> selectedOriginRefsNV = R_NilValue,
                    const Rcpp::Nullable<bool> copyMapNV = R_NilValue,
                    const Rcpp::Nullable<bool> verboseNV = R_NilValue,
                    const Rcpp::Nullable<bool> progressNV = R_NilValue) {
@@ -33,9 +33,15 @@ runSegmentAnalysis(Rcpp::XPtr<ShapeGraph> mapPtr, const Rcpp::NumericVector radi
     auto weightedMeasureColName = NullableValue::getOptional(weightedMeasureColNameNV);
     auto includeChoice = NullableValue::get(includeChoiceNV, false);
     auto tulipBins = NullableValue::get(tulipBinsNV, 0);
-    // TODO: Instead of expecting things to be selected,
-    // provide indices to select
-    // auto selOnly = NullableValue::get(selOnlyNV, false);
+
+    const auto selectedOriginRefs =
+        selectedOriginRefsNV == R_NilValue ? std::nullopt : [&selectedOriginRefsNV]() {
+            auto selectedOriginRefsVec =
+                NullableValue::get(selectedOriginRefsNV, std::vector<int>());
+            return std::make_optional(
+                std::set<int>(selectedOriginRefsVec.begin(), selectedOriginRefsVec.end()));
+        }();
+
     auto copyMap = NullableValue::get(copyMapNV, true);
     auto verbose = NullableValue::get(verboseNV, false);
     auto progress = NullableValue::get(progressNV, false);
@@ -48,7 +54,7 @@ runSegmentAnalysis(Rcpp::XPtr<ShapeGraph> mapPtr, const Rcpp::NumericVector radi
     return RcppRunner::runAnalysis<ShapeGraph>(
         mapPtr, progress,
         [&radii, &radiusTraversalType, &analysisTraversalType, &includeChoice,
-         &weightedMeasureColName, &tulipBins,
+         &weightedMeasureColName, &tulipBins, &selectedOriginRefs,
          &verbose](Communicator *comm, Rcpp::XPtr<ShapeGraph> mapPtr) {
             if (verbose) {
                 Rcpp::Rcout << "Running segment analysis... " << '\n';
@@ -113,7 +119,7 @@ runSegmentAnalysis(Rcpp::XPtr<ShapeGraph> mapPtr, const Rcpp::NumericVector radi
             switch (analysisTraversalType) {
             case TraversalType::Angular: {
                 if (tulipBins > 0) {
-                    analysisResult = SegmentTulip(radius_set, std::nullopt, tulipBins,
+                    analysisResult = SegmentTulip(radius_set, selectedOriginRefs, tulipBins,
                                                   weightedMeasureColIdx, radiusType, includeChoice)
                                          .run(comm, *mapPtr, false /* interactive */);
                 } else {

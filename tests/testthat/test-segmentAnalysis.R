@@ -36,8 +36,9 @@ test_that("Segment Analysis in C++", {
         NULL, # weightedMeasureColName
         TRUE, # includeChoice
         1024L, # tulipBins
+        NULL, # selectedOriginRefsNV
+        FALSE, # copyMap
         FALSE, # verbose
-        FALSE, # selOnly
         FALSE # progress
     )
 
@@ -82,7 +83,6 @@ test_that("Segment Analysis in R (non user-visible)", {
         includeChoice = TRUE,
         tulipBins = 1024L,
         verbose = FALSE,
-        selOnly = FALSE,
         progress = FALSE
     )
 
@@ -198,8 +198,9 @@ test_that("Segment Tulip Leaf Choice in C++", {
         radiusStepType = TraversalType$Metric,
         NULL, # weightedMeasureColName
         1024L, # tulipBins
+        NULL, # selectedOriginRefsNV
+        FALSE, # copyMap
         FALSE, # verbose
-        FALSE, # selOnly
         FALSE # progress
     )
 
@@ -211,9 +212,7 @@ test_that("Segment Tulip Leaf Choice in C++", {
     expectedColNameAfter <- c(
         expectedColNameBefore,
         "T1024 Leaf Choice R100.00 metric",
-        "T1024 Leaf R100.00 metric",
-        "T1024 Leaf Choice",
-        "T1024 Leaf"
+        "T1024 Leaf Choice"
     )
     attrNameBefore <- Rcpp_ShapeMap_getAttributeNames(segmentGraph)
     expect_identical(expectedColNameAfter, attrNameBefore)
@@ -249,12 +248,10 @@ test_that("Segment Tulip Leaf Choice in R (user-visible)", {
         "Connectivity",
         "Data Map Ref",
         "Segment Length",
-        "T1024 Leaf",
         "T1024 Leaf Choice",
         "T1024 Leaf Choice R100.00 metric",
         "T1024 Leaf Choice [df_1_Segment_Length Wgt]",
-        "T1024 Leaf Choice [df_1_Segment_Length Wgt] R100.00 metric",
-        "T1024 Leaf R100.00 metric"
+        "T1024 Leaf Choice [df_1_Segment_Length Wgt] R100.00 metric"
     )
 
     expect_named(segmentGraph, expectedCols)

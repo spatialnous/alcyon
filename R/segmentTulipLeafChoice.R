@@ -21,6 +21,8 @@
 #' continuous values for the cost of traversal. This is equivalent to the "tulip
 #' bins" for depthmapX's tulip analysis (1024 tulip bins = pi/1024
 #' quantizationWidth). Only works for Segment ShapeGraphs
+#' @param selectedOriginRefs Optional. Limit the analysis to specific refs
+#' @param recordSelLeafs Record the leaf column of the selected refs
 #' @param copyMap Optional. Copy the internal sala map
 #' @param verbose Optional. Show more information of the process.
 #' @param progress Optional. Enable progress display
@@ -61,6 +63,8 @@ segmentTulipLeafChoice <- function(map,
                                    radiusTraversalType,
                                    weightByAttribute = NULL,
                                    quantizationWidth = NA,
+                                   selectedOriginRefs = NULL,
+                                   recordSelLeafs = FALSE,
                                    copyMap = TRUE,
                                    verbose = FALSE,
                                    progress = FALSE) {
@@ -84,7 +88,8 @@ segmentTulipLeafChoice <- function(map,
         radiusTraversalType,
         weightByAttribute,
         tulipBins,
-        selOnlyNV = FALSE,
+        selectedOriginRefsNV = selectedOriginRefs,
+        recordSelLeafsNV = recordSelLeafs,
         copyMapNV = copyMap,
         verboseNV = verbose,
         progressNV = progress

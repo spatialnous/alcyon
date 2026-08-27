@@ -11,6 +11,7 @@ allToAllTraverse(
   radiusTraversalType,
   weightByAttribute = NULL,
   includeBetweenness = FALSE,
+  selectedOriginRefs = NULL,
   quantizationWidth = NA,
   gatesOnly = FALSE,
   nthreads = 1L,
@@ -33,6 +34,9 @@ analysis is within the each radius limit. See \link{TraversalType}}
 
 \item{includeBetweenness}{Set to TRUE to also calculate betweenness (known as
 Choice in the Space Syntax domain)}
+
+\item{selectedOriginRefs}{Specifies specific Refs to do the analysis from or
+to (currently only works for tulip segment Choice)}
 
 \item{quantizationWidth}{Set this to use chunks of this width instead of
 continuous values for the cost of traversal. This is equivalent to the "tulip

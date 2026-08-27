@@ -2,6 +2,40 @@
 #
 # SPDX-License-Identifier: GPL-3.0-only
 
+allToAllTraverseCheckFail <- function(map,
+                                      traversalType,
+                                      radii,
+                                      includeBetweenness,
+                                      selectedOriginRefs,
+                                      quantizationWidth,
+                                      nthreads) {
+    if (!(traversalType %in% as.list(TraversalType))) {
+        stop("Unknown traversalType type: ", traversalType, call. = FALSE)
+    }
+    if (!is.na(quantizationWidth) && !inherits(map, "SegmentShapeGraph")) {
+        stop("quantizationWidth can only be used with Segment ShapeGraphs", call. = FALSE)
+    }
+    if (!is.null(selectedOriginRefs)) {
+        if (!inherits(map, "SegmentShapeGraph")) {
+            stop("selectedOriginRefs can only be used with Segment ShapeGraphs", call. = FALSE)
+        }
+        if (!includeBetweenness) {
+            stop("selectedOriginRefs can only be used with Betweenness", call. = FALSE)
+        }
+        if (length(selectedOriginRefs) == 0L) {
+            stop("selectedOriginRefs can only be used with Betweenness", call. = FALSE)
+        }
+    }
+    if (length(radii) < 1L) {
+        stop("At least one radius is required", call. = FALSE)
+    }
+
+    if (!inherits(map, "LatticeMap") && nthreads != 1L) {
+        stop("Setting the number of threads is only possible for LatticeMaps (VGA)",
+             call. = FALSE)
+    }
+}
+
 #' All-to-all traversal
 #'
 #' Runs all-to-all traversal on a map with a graph. This is applicable to:
@@ -19,6 +53,8 @@
 #' @param weightByAttribute The attribute to weigh the analysis with
 #' @param includeBetweenness Set to TRUE to also calculate betweenness (known as
 #' Choice in the Space Syntax domain)
+#' @param selectedOriginRefs Specifies specific Refs to do the analysis from or
+#' to (currently only works for tulip segment Choice)
 #' @param quantizationWidth Set this to use chunks of this width instead of
 #' continuous values for the cost of traversal. This is equivalent to the "tulip
 #' bins" for depthmapX's tulip analysis (1024 tulip bins = pi/1024
@@ -70,26 +106,20 @@ allToAllTraverse <- function(map,
                              radiusTraversalType,
                              weightByAttribute = NULL,
                              includeBetweenness = FALSE,
+                             selectedOriginRefs = NULL,
                              quantizationWidth = NA,
                              gatesOnly = FALSE,
                              nthreads = 1L,
                              copyMap = TRUE,
                              verbose = FALSE,
                              progress = FALSE) {
-    if (!(traversalType %in% as.list(TraversalType))) {
-        stop("Unknown traversalType type: ", traversalType, call. = FALSE)
-    }
-    if (!is.na(quantizationWidth) && !inherits(map, "SegmentShapeGraph")) {
-        stop("quantizationWidth can only be used with Segment ShapeGraphs", call. = FALSE)
-    }
-    if (length(radii) < 1L) {
-        stop("At least one radius is required", call. = FALSE)
-    }
-
-    if (!inherits(map, "LatticeMap") && nthreads != 1L) {
-        stop("Setting the number of threads is only possible for LatticeMaps (VGA)",
-             call. = FALSE)
-    }
+    allToAllTraverseCheckFail(map,
+                              traversalType,
+                              radii,
+                              includeBetweenness,
+                              selectedOriginRefs,
+                              quantizationWidth,
+                              nthreads)
 
     if (inherits(map, "LatticeMap")) {
         return(allToAllTraverseLatticeMap(
@@ -130,7 +160,7 @@ allToAllTraverse <- function(map,
             weightWithColumn = weightByAttribute,
             includeChoice = includeBetweenness,
             tulipBins = tulipBins,
-            selOnly = FALSE,
+            selectedOriginRefs = selectedOriginRefs,
             copyMap = copyMap,
             verbose = verbose,
             progress = progress
