@@ -238,7 +238,7 @@ segmentTulipLeafChoice(
   verbose = FALSE,
   progress = FALSE
 )
-#> Simple feature collection with 173 features and 16 fields
+#> Simple feature collection with 173 features and 14 fields
 #> Geometry type: LINESTRING
 #> Dimension:     XY
 #> Bounding box:  xmin: 989.1063 ymin: -2040.514 xmax: 1377.667 ymax: -1535.739
@@ -266,17 +266,17 @@ segmentTulipLeafChoice(
 #> 8       35.278736 LINESTRING (1347.381 -1638....             2.035002
 #> 9       34.014023 LINESTRING (1357.306 -1672....             2.948040
 #> 10       9.775865 LINESTRING (1366.875 -1704....             4.000000
-#>    Axial Line Ref Data Map Ref Segment Length T1024 Leaf T1024 Leaf Choice
-#> 1              -1            0      65.799698          0               203
-#> 2              -1            1      77.203362          1               484
-#> 3              -1            2      90.154808          0              1406
-#> 4              -1            3      91.088219          2               674
-#> 5              -1            4      35.005592          0               497
-#> 6              -1            5      69.541687          0               526
-#> 7              -1            6      37.176987          0               767
-#> 8              -1            7      35.278736          0              1348
-#> 9              -1            8      34.014023          1              2059
-#> 10             -1            9       9.775865          0              3136
+#>    Axial Line Ref Data Map Ref Segment Length T1024 Leaf Choice
+#> 1              -1            0      65.799698               203
+#> 2              -1            1      77.203362               484
+#> 3              -1            2      90.154808              1406
+#> 4              -1            3      91.088219               674
+#> 5              -1            4      35.005592               497
+#> 6              -1            5      69.541687               526
+#> 7              -1            6      37.176987               767
+#> 8              -1            7      35.278736              1348
+#> 9              -1            8      34.014023              2059
+#> 10             -1            9       9.775865              3136
 #>    T1024 Leaf Choice R100.00 metric T1024 Leaf Choice [Segment Length Wgt]
 #> 1                                 2                               659726.2
 #> 2                                 0                               997757.4
@@ -299,15 +299,4 @@ segmentTulipLeafChoice(
 #> 8                                               19874.78
 #> 9                                               25365.45
 #> 10                                              32525.98
-#>    T1024 Leaf R100.00 metric
-#> 1                          3
-#> 2                          3
-#> 3                          3
-#> 4                          3
-#> 5                          3
-#> 6                          3
-#> 7                          3
-#> 8                          3
-#> 9                          3
-#> 10                         3
 ```
