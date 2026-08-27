@@ -49,10 +49,9 @@ axialAnalysis <- function(shapeGraph,
 #' rxLoadSmallAxialLines(),
 #' "axialAnalysisLocal(shapeGraph)")
 #' @export
-axialAnalysisLocal <- function(
-        shapeGraph,
-        copyMap = TRUE,
-        verbose = FALSE) {
+axialAnalysisLocal <- function(shapeGraph,
+                               copyMap = TRUE,
+                               verbose = FALSE) {
     result <- Rcpp_runAxialLocalAnalysis(
         attr(shapeGraph, "sala_map"),
         copyMapNV = copyMap,
