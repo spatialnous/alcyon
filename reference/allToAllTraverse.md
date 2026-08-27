@@ -18,6 +18,7 @@ allToAllTraverse(
   radiusTraversalType,
   weightByAttribute = NULL,
   includeBetweenness = FALSE,
+  selectedOriginRefs = NULL,
   quantizationWidth = NA,
   gatesOnly = FALSE,
   nthreads = 1L,
@@ -56,6 +57,11 @@ allToAllTraverse(
 
   Set to TRUE to also calculate betweenness (known as Choice in the
   Space Syntax domain)
+
+- selectedOriginRefs:
+
+  Specifies specific Refs to do the analysis from or to (currently only
+  works for tulip segment Choice)
 
 - quantizationWidth:
 

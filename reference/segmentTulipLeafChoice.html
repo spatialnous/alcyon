@@ -65,6 +65,8 @@ path)</p>
 <span>  <span class="va">radiusTraversalType</span>,</span>
 <span>  weightByAttribute <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  quantizationWidth <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>  selectedOriginRefs <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  recordSelLeafs <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  copyMap <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  progress <span class="op">=</span> <span class="cn">FALSE</span></span>
@@ -97,6 +99,14 @@ analysis is within the each radius limit. See <a href="TraversalType.html">Trave
 continuous values for the cost of traversal. This is equivalent to the "tulip
 bins" for depthmapX's tulip analysis (1024 tulip bins = pi/1024
 quantizationWidth). Only works for Segment ShapeGraphs</p></dd>
+
+
+<dt id="arg-selectedoriginrefs">selectedOriginRefs<a class="anchor" aria-label="anchor" href="#arg-selectedoriginrefs"></a></dt>
+<dd><p>Optional. Limit the analysis to specific refs</p></dd>
+
+
+<dt id="arg-recordselleafs">recordSelLeafs<a class="anchor" aria-label="anchor" href="#arg-recordselleafs"></a></dt>
+<dd><p>Record the leaf column of the selected refs</p></dd>
 
 
 <dt id="arg-copymap">copyMap<a class="anchor" aria-label="anchor" href="#arg-copymap"></a></dt>

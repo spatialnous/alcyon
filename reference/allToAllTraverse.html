@@ -66,6 +66,7 @@ Segment ShapeGraphs (Segment analysis)
 <span>  <span class="va">radiusTraversalType</span>,</span>
 <span>  weightByAttribute <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  includeBetweenness <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  selectedOriginRefs <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  quantizationWidth <span class="op">=</span> <span class="cn">NA</span>,</span>
 <span>  gatesOnly <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  nthreads <span class="op">=</span> <span class="fl">1L</span>,</span>
@@ -103,6 +104,11 @@ analysis is within the each radius limit. See <a href="TraversalType.html">Trave
 <dt id="arg-includebetweenness">includeBetweenness<a class="anchor" aria-label="anchor" href="#arg-includebetweenness"></a></dt>
 <dd><p>Set to TRUE to also calculate betweenness (known as
 Choice in the Space Syntax domain)</p></dd>
+
+
+<dt id="arg-selectedoriginrefs">selectedOriginRefs<a class="anchor" aria-label="anchor" href="#arg-selectedoriginrefs"></a></dt>
+<dd><p>Specifies specific Refs to do the analysis from or
+to (currently only works for tulip segment Choice)</p></dd>
 
 
 <dt id="arg-quantizationwidth">quantizationWidth<a class="anchor" aria-label="anchor" href="#arg-quantizationwidth"></a></dt>
