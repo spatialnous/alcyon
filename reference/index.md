@@ -36,15 +36,15 @@
   : VGA Local Analysis algorithms.
 - [`agentAnalysis()`](https://spatialnous.github.io/alcyon/reference/agentAnalysis.md)
   : Agent Analysis
+- [`coerce(`*`<sf>`*`,`*`<ShapeMap>`*`)`](https://spatialnous.github.io/alcyon/reference/alcyon-coercion.md)
+  [`coerce(`*`<ShapeMap>`*`,`*`<sf>`*`)`](https://spatialnous.github.io/alcyon/reference/alcyon-coercion.md)
+  [`coerce(`*`<ShapeMap>`*`,`*`<AxialShapeGraph>`*`)`](https://spatialnous.github.io/alcyon/reference/alcyon-coercion.md)
+  [`coerce(`*`<sf>`*`,`*`<AxialShapeGraph>`*`)`](https://spatialnous.github.io/alcyon/reference/alcyon-coercion.md)
+  [`coerce(`*`<ShapeMap>`*`,`*`<SegmentShapeGraph>`*`)`](https://spatialnous.github.io/alcyon/reference/alcyon-coercion.md)
+  [`coerce(`*`<sf>`*`,`*`<SegmentShapeGraph>`*`)`](https://spatialnous.github.io/alcyon/reference/alcyon-coercion.md)
+  : Coercion between sf and alcyon map classes
 - [`allToAllTraverse()`](https://spatialnous.github.io/alcyon/reference/allToAllTraverse.md)
   : All-to-all traversal
-- [`coerce(`*`<sf>`*`,`*`<ShapeMap>`*`)`](https://spatialnous.github.io/alcyon/reference/as.md)
-  [`coerce(`*`<ShapeMap>`*`,`*`<sf>`*`)`](https://spatialnous.github.io/alcyon/reference/as.md)
-  [`coerce(`*`<ShapeMap>`*`,`*`<AxialShapeGraph>`*`)`](https://spatialnous.github.io/alcyon/reference/as.md)
-  [`coerce(`*`<sf>`*`,`*`<AxialShapeGraph>`*`)`](https://spatialnous.github.io/alcyon/reference/as.md)
-  [`coerce(`*`<ShapeMap>`*`,`*`<SegmentShapeGraph>`*`)`](https://spatialnous.github.io/alcyon/reference/as.md)
-  [`coerce(`*`<sf>`*`,`*`<SegmentShapeGraph>`*`)`](https://spatialnous.github.io/alcyon/reference/as.md)
-  : as("sf", "ShapeMap")
 - [`axialAnalysisLocal()`](https://spatialnous.github.io/alcyon/reference/axialAnalysisLocal.md)
   : Axial analysis - local metrics
 - [`axialToSegmentShapeGraph()`](https://spatialnous.github.io/alcyon/reference/axialToSegmentShapeGraph.md)

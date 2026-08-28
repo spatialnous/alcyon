@@ -81,7 +81,7 @@
 <span class="r-in"><span>  <span class="va">sfMap</span> <span class="op">&lt;-</span> <span class="fu">st_read</span><span class="op">(</span><span class="va">mifFile</span>,</span></span>
 <span class="r-in"><span>    geometry_column <span class="op">=</span> <span class="fl">1L</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="va">shapeGraph</span> <span class="op">&lt;-</span> <span class="fu"><a href="as.html">as</a></span><span class="op">(</span><span class="va">sfMap</span>, <span class="st">"AxialShapeGraph"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="va">shapeGraph</span> <span class="op">&lt;-</span> <span class="fu">as</span><span class="op">(</span><span class="va">sfMap</span>, <span class="st">"AxialShapeGraph"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">shapeGraph</span> <span class="op">&lt;-</span> <span class="fu"><a href="allToAllTraverse.html">allToAllTraverse</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">shapeGraph</span>,</span></span>
 <span class="r-in"><span>  traversalType <span class="op">=</span> <span class="va">TraversalType</span><span class="op">$</span><span class="va">Topological</span>,</span></span>

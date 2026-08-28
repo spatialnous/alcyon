@@ -78,7 +78,7 @@ percentage (for example provide 0.4 for 40%)</p></dd>
 <span class="r-in"><span>  <span class="va">sfMap</span> <span class="op">&lt;-</span> <span class="fu">st_read</span><span class="op">(</span><span class="va">mifFile</span>,</span></span>
 <span class="r-in"><span>    geometry_column <span class="op">=</span> <span class="fl">1L</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="va">shapeGraph</span> <span class="op">&lt;-</span> <span class="fu"><a href="as.html">as</a></span><span class="op">(</span><span class="va">sfMap</span>, <span class="st">"AxialShapeGraph"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="va">shapeGraph</span> <span class="op">&lt;-</span> <span class="fu">as</span><span class="op">(</span><span class="va">sfMap</span>, <span class="st">"AxialShapeGraph"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">axialToSegmentShapeGraph</span><span class="op">(</span><span class="va">shapeGraph</span>, stubRemoval <span class="op">=</span> <span class="fl">0.4</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 191 features and 13 fields</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: LINESTRING</span>

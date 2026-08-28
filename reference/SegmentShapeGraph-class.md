@@ -6,4 +6,4 @@ Segment ShapeGraph pointer and operates on that
 ## See also
 
 Other SegmentShapeGraph:
-[`as`](https://spatialnous.github.io/alcyon/reference/as.md)
+[`alcyon-coercion`](https://spatialnous.github.io/alcyon/reference/alcyon-coercion.md)
