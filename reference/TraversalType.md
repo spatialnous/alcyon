@@ -9,10 +9,6 @@ be carried out.
 TraversalType
 ```
 
-## Format
-
-An object of class `list` of length 4.
-
 ## Value
 
 A list of numbers representing each particular analysis type

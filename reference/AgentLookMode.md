@@ -34,10 +34,6 @@ agents use to look around and decide where to go next. Possible values:
 AgentLookMode
 ```
 
-## Format
-
-An object of class `list` of length 12.
-
 ## Value
 
 A list of numbers representing each agent look mode

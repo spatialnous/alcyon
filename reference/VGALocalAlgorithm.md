@@ -15,10 +15,6 @@ Controllability, Clustering Coefficient).
 VGALocalAlgorithm
 ```
 
-## Format
-
-An object of class `list` of length 3.
-
 ## Value
 
 A list of numbers representing each algorithm

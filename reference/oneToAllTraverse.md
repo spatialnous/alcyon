@@ -91,7 +91,7 @@ oneToAllTraverse(
   fromX = 3.01,
   fromY = 6.7
 )
-#> stars object with 2 dimensions and 10 attributes
+#> stars object with 2 dimensions and 11 attributes
 #> attribute(s):
 #> Warning: number of columns of result is not a multiple of vector length (arg 1)
 #>                                      Min.      1st Qu.       Median
@@ -102,6 +102,7 @@ oneToAllTraverse(
 #> blocked                           0.00000 0.000000e+00 0.000000e+00
 #> contextfilled                     0.00000 0.000000e+00 0.000000e+00
 #> filled                            0.00000 0.000000e+00 1.000000e+00
+#> Metric Step Penn Distance         0.00000 0.000000e+00 0.000000e+00
 #> Metric Step Shortest-Path A...    0.00000 0.000000e+00 0.000000e+00
 #> Metric Step Shortest-Path L...    0.00000 1.852082e+00 3.041381e+00
 #> Metric Straight-Line Distance     0.00000 1.852082e+00 3.041381e+00
@@ -113,6 +114,7 @@ oneToAllTraverse(
 #> blocked                         3.205128e-01 1.000000e+00 1.000000e+00   0    0
 #> contextfilled                   0.000000e+00 0.000000e+00 0.000000e+00   0    0
 #> filled                          5.769231e-01 1.000000e+00 1.000000e+00   0    0
+#> Metric Step Penn Distance       6.211029e-03 0.000000e+00 2.908692e-01  66    0
 #> Metric Step Shortest-Path A...  1.721897e-02 0.000000e+00 6.559583e-01  66    0
 #> Metric Step Shortest-Path L...  2.940409e+00 4.032915e+00 5.408327e+00  66    0
 #> Metric Straight-Line Distance   2.934198e+00 4.031129e+00 5.408327e+00  66    0

@@ -38,8 +38,13 @@
   : Agent Analysis
 - [`allToAllTraverse()`](https://spatialnous.github.io/alcyon/reference/allToAllTraverse.md)
   : All-to-all traversal
-- [`as`](https://spatialnous.github.io/alcyon/reference/as.md) :
-  as("sf", "ShapeMap")
+- [`coerce(`*`<sf>`*`,`*`<ShapeMap>`*`)`](https://spatialnous.github.io/alcyon/reference/as.md)
+  [`coerce(`*`<ShapeMap>`*`,`*`<sf>`*`)`](https://spatialnous.github.io/alcyon/reference/as.md)
+  [`coerce(`*`<ShapeMap>`*`,`*`<AxialShapeGraph>`*`)`](https://spatialnous.github.io/alcyon/reference/as.md)
+  [`coerce(`*`<sf>`*`,`*`<AxialShapeGraph>`*`)`](https://spatialnous.github.io/alcyon/reference/as.md)
+  [`coerce(`*`<ShapeMap>`*`,`*`<SegmentShapeGraph>`*`)`](https://spatialnous.github.io/alcyon/reference/as.md)
+  [`coerce(`*`<sf>`*`,`*`<SegmentShapeGraph>`*`)`](https://spatialnous.github.io/alcyon/reference/as.md)
+  : as("sf", "ShapeMap")
 - [`axialAnalysisLocal()`](https://spatialnous.github.io/alcyon/reference/axialAnalysisLocal.md)
   : Axial analysis - local metrics
 - [`axialToSegmentShapeGraph()`](https://spatialnous.github.io/alcyon/reference/axialToSegmentShapeGraph.md)
