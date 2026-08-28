@@ -10,6 +10,6 @@ ShapeGraph pointer and operates on that
 }
 \seealso{
 Other AxialShapeGraph:
-\code{\link{as}}
+\code{\link{alcyon-coercion}}
 }
 \concept{AxialShapeGraph}

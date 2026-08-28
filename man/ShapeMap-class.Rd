@@ -10,6 +10,6 @@ pointer and operates on that
 }
 \seealso{
 Other ShapeMap:
-\code{\link{as}}
+\code{\link{alcyon-coercion}}
 }
 \concept{ShapeMap}

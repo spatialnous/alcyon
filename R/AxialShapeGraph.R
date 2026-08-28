@@ -199,7 +199,7 @@ setMethod(
 
 #' as("ShapeMap", "AxialShapeGraph")
 #'
-#' @name as
+#' @rdname alcyon-coercion
 #' @family AxialShapeGraph
 #'
 #' @importFrom methods as
@@ -211,7 +211,7 @@ setAs("ShapeMap", "AxialShapeGraph", function(from) {
 
 #' as("sf", "AxialShapeGraph")
 #'
-#' @name as
+#' @rdname alcyon-coercion
 #' @family AxialShapeGraph
 #'
 #' @importFrom methods as

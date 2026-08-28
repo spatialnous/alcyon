@@ -64,7 +64,7 @@ axialToSegmentShapeGraph <- function(axialShapeGraph,
 #' This is a direct conversion, for ShapeMap -> Axial -> Segment see
 #' \link{axialToSegmentShapeGraph}
 #'
-#' @name as
+#' @rdname alcyon-coercion
 #' @family SegmentShapeGraph
 #'
 #' @importFrom methods as
@@ -79,7 +79,7 @@ setAs("ShapeMap", "SegmentShapeGraph", function(from) {
 #' This is a direct conversion, for ShapeMap -> Axial -> Segment see
 #' \link{axialToSegmentShapeGraph}
 #'
-#' @name as
+#' @rdname alcyon-coercion
 #' @family SegmentShapeGraph
 #'
 #' @importFrom methods as

@@ -70,6 +70,7 @@ Collate:
     'rcppRoxygen.R'
     'helper-loadMapsRoxygen.R'
     'helper-processResult.R'
+    'coercion.R'
     'ShapeMap.R'
     'AxialShapeGraph.R'
     'AllLineShapeGraph.R'

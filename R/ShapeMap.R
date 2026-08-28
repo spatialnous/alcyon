@@ -32,7 +32,7 @@ setMethod(
 
 #' as("sf", "ShapeMap")
 #'
-#' @name as
+#' @rdname alcyon-coercion
 #' @family ShapeMap
 #'
 #' @importFrom methods as S3Part<-
@@ -61,8 +61,9 @@ setAs("sf", "ShapeMap", function(from) {
 
 #' as("ShapeMap", "sf")
 #'
-#' @name as
+#' @rdname alcyon-coercion
 #' @family ShapeMap
+#'
 #' @importFrom sf st_sf st_sfc
 #' @importFrom methods as
 setAs("ShapeMap", "sf", function(from) {
