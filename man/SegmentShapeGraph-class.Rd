@@ -9,7 +9,7 @@ A representation of sala's Segment ShapeGraph in R. Holds onto a sala Segment
 ShapeGraph pointer and operates on that
 }
 \seealso{
-Other SegmentShapeGraph: 
-\code{\link{as}()}
+Other SegmentShapeGraph:
+\code{\link{as}}
 }
 \concept{SegmentShapeGraph}

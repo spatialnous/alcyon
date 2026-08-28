@@ -4,6 +4,19 @@
 \name{as}
 \alias{as}
 \title{as("sf", "ShapeMap")}
+\usage{
+\S4method{coerce}{sf,ShapeMap}(from, to = "ShapeMap", strict = TRUE)
+
+\S4method{coerce}{ShapeMap,sf}(from, to = "sf", strict = TRUE)
+
+\S4method{coerce}{ShapeMap,AxialShapeGraph}(from, to = "AxialShapeGraph", strict = TRUE)
+
+\S4method{coerce}{sf,AxialShapeGraph}(from, to = "AxialShapeGraph", strict = TRUE)
+
+\S4method{coerce}{ShapeMap,SegmentShapeGraph}(from, to = "SegmentShapeGraph", strict = TRUE)
+
+\S4method{coerce}{sf,SegmentShapeGraph}(from, to = "SegmentShapeGraph", strict = TRUE)
+}
 \description{
 This is a direct conversion, for ShapeMap -> Axial -> Segment see
 \link{axialToSegmentShapeGraph}
@@ -12,22 +25,13 @@ This is a direct conversion, for ShapeMap -> Axial -> Segment see
 \link{axialToSegmentShapeGraph}
 }
 \seealso{
-Other ShapeMap: 
+Other ShapeMap:
 \code{\link{ShapeMap-class}}
 
-Other ShapeMap: 
-\code{\link{ShapeMap-class}}
-
-Other AxialShapeGraph: 
+Other AxialShapeGraph:
 \code{\link{AxialShapeGraph-class}}
 
-Other AxialShapeGraph: 
-\code{\link{AxialShapeGraph-class}}
-
-Other SegmentShapeGraph: 
-\code{\link{SegmentShapeGraph-class}}
-
-Other SegmentShapeGraph: 
+Other SegmentShapeGraph:
 \code{\link{SegmentShapeGraph-class}}
 }
 \concept{AxialShapeGraph}

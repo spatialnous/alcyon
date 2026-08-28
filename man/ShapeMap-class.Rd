@@ -9,7 +9,7 @@ A representation of sala's ShapeMap in R. Holds onto a sala ShapeMap
 pointer and operates on that
 }
 \seealso{
-Other ShapeMap: 
-\code{\link{as}()}
+Other ShapeMap:
+\code{\link{as}}
 }
 \concept{ShapeMap}

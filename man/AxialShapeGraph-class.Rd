@@ -9,7 +9,7 @@ A representation of sala's Axial ShapeGraph in R. Holds onto a sala Axial
 ShapeGraph pointer and operates on that
 }
 \seealso{
-Other AxialShapeGraph: 
-\code{\link{as}()}
+Other AxialShapeGraph:
+\code{\link{as}}
 }
 \concept{AxialShapeGraph}
