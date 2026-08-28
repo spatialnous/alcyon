@@ -3,6 +3,8 @@
 ## alcyon 0.9.0
 
 - Rename PointMap to LatticeMap (following sala)
+- Split up Tulip analysis between Full and Leaf (following sala)
+- Sala: Fix issues with C++ includes for clang23
 
 ## alcyon 0.8.1
 

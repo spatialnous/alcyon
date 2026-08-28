@@ -37,14 +37,14 @@ Source:
 [`inst/CITATION`](https://github.com/spatialnous/alcyon/blob/main/inst/CITATION)
 
 Koutsolampros P (2024). “alcyon: An R package for Spatial Network
-Analysis.” R package version 0.8.1,
+Analysis.” R package version 0.9.0,
 <https://github.com/spatialnous/alcyon>.
 
     @Misc{,
       title = {{alcyon}: An R package for Spatial Network Analysis},
       author = {Petros Koutsolampros},
       year = {2024},
-      note = {R package version 0.8.1},
-      version = {0.8.1},
+      note = {R package version 0.9.0},
+      version = {0.9.0},
       url = {https://github.com/spatialnous/alcyon},
     }
