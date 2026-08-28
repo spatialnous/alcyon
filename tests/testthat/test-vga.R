@@ -75,6 +75,7 @@ test_that("VGA in R, Metric all-to-all", {
             ))
         },
         newExpectedCols = c(
+            "Metric Mean Penn Distance",
             "Metric Mean Shortest-Path Angle",
             "Metric Mean Shortest-Path Distance",
             "Metric Mean Straight-Line Distance",
@@ -162,6 +163,7 @@ test_that("VGA in R, Metric one-to-all", {
             ))
         },
         newExpectedCols = c(
+            "Metric Step Penn Distance",
             "Metric Step Shortest-Path Angle",
             "Metric Step Shortest-Path Length",
             "Metric Straight-Line Distance"

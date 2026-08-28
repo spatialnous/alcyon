@@ -66,6 +66,7 @@ test_that("VGA in C++, Metric all-to-all", {
             return(Rcpp_VGA_metric(latticeMapPtr, -1.0, FALSE))
         },
         newExpectedCols = c(
+            "Metric Mean Penn Distance",
             "Metric Mean Shortest-Path Angle",
             "Metric Mean Shortest-Path Distance",
             "Metric Mean Straight-Line Distance",
@@ -138,6 +139,7 @@ test_that("VGA in C++, Metric one-to-all", {
             return(Rcpp_VGA_metricDepth(latticeMapPtr, cbind(7.52, 6.02)))
         },
         newExpectedCols = c(
+            "Metric Step Penn Distance",
             "Metric Step Shortest-Path Angle",
             "Metric Step Shortest-Path Length",
             "Metric Straight-Line Distance"
