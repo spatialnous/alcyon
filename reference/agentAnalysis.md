@@ -76,7 +76,7 @@ agentAnalysis(
 
 - getGateCounts:
 
-  Get values at gates
+  Get values at gates (currently not working)
 
 - copyMap:
 
