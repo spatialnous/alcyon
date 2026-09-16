@@ -6,4 +6,4 @@
 
 #include <Rcpp.h>
 
-RCPP_EXPOSED_CLASS(AllLineMap);
+RCPP_EXPOSED_CLASS(AllLineMap)

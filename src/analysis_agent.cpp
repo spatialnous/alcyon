@@ -85,6 +85,9 @@ Rcpp::List agentAnalysis(Rcpp::XPtr<LatticeMap> mapPtr, int systemTimesteps, flo
     // 'data map', but the functionality does not seem to actually be
     // there thus it is skipped for now
     std::optional<std::reference_wrapper<ShapeMap>> gateLayer = std::nullopt;
+    if (getGateCounts) {
+        gateLayer = std::nullopt;
+    }
 
     ShapeMap trailMap("Agent Trails");
 
@@ -101,7 +104,8 @@ Rcpp::List agentAnalysis(Rcpp::XPtr<LatticeMap> mapPtr, int systemTimesteps, flo
 
     try {
         auto analysisResult =
-            AgentAnalysis(*mapPtr, systemTimesteps, releaseRate, agentLifeTimesteps, agentFov,
+            AgentAnalysis(*mapPtr, systemTimesteps, static_cast<double>(releaseRate),
+                          agentLifeTimesteps, static_cast<unsigned short>(agentFov),
                           agentStepsToDecision, agentAlgorithm, randomReleaseLocationSeed,
                           releasePoints, gateLayer, recordTrails)
                 .run(getCommunicator(progress).get());

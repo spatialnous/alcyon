@@ -26,6 +26,7 @@ namespace AttrHelper {
     }
 
     int getGeometryColumnIndex(Rcpp::DataFrame &df) {
-        return df.findName(Rcpp::as<std::string>(*getStringVectorAttr(df, "sf_column").begin()));
+        return static_cast<int>(
+            df.findName(Rcpp::as<std::string>(*getStringVectorAttr(df, "sf_column").begin())));
     }
 } // namespace AttrHelper

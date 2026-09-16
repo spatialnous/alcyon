@@ -22,7 +22,7 @@ Rcpp::List vgaVisualShortestPath(Rcpp::XPtr<LatticeMap> mapPtr, Rcpp::NumericMat
                                  const Rcpp::Nullable<bool> verboseNV = R_NilValue,
                                  const Rcpp::Nullable<bool> progressNV = R_NilValue) {
     auto copyMap = NullableValue::get(copyMapNV, true);
-    // auto verbose = NullableValue::get(verboseNV, false);
+    [[maybe_unused]] auto verbose = NullableValue::get(verboseNV, false);
     auto progress = NullableValue::get(progressNV, false);
 
     if (origPoints.rows() != destPoints.rows()) {
@@ -87,7 +87,7 @@ Rcpp::List vgaMetricShortestPath(Rcpp::XPtr<LatticeMap> mapPtr, Rcpp::NumericMat
                                  const Rcpp::Nullable<bool> verboseNV = R_NilValue,
                                  const Rcpp::Nullable<bool> progressNV = R_NilValue) {
     auto copyMap = NullableValue::get(copyMapNV, true);
-    // auto verbose = NullableValue::get(verboseNV, false);
+    [[maybe_unused]] auto verbose = NullableValue::get(verboseNV, false);
     auto progress = NullableValue::get(progressNV, false);
 
     if (origPoints.rows() != destPoints.rows()) {
@@ -152,7 +152,7 @@ Rcpp::List vgaAngularShortestPath(Rcpp::XPtr<LatticeMap> mapPtr, Rcpp::NumericMa
                                   const Rcpp::Nullable<bool> verboseNV = R_NilValue,
                                   const Rcpp::Nullable<bool> progressNV = R_NilValue) {
     auto copyMap = NullableValue::get(copyMapNV, true);
-    // auto verbose = NullableValue::get(verboseNV, false);
+    [[maybe_unused]] auto verbose = NullableValue::get(verboseNV, false);
     auto progress = NullableValue::get(progressNV, false);
 
     if (origPoints.rows() != destPoints.rows()) {

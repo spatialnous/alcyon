@@ -14,10 +14,16 @@
 
 class ProgressCommunicator : public Communicator {
     mutable SEXP progress = nullptr;
+    bool printProgress = false;
+    [[maybe_unused]] unsigned _padding0 : 3 * 8;
+    [[maybe_unused]] unsigned _padding1 : 4 * 8;
 
   public:
-    ProgressCommunicator(bool displayProgress = false) {}
+    ProgressCommunicator(bool displayProgress = false)
+        : printProgress(displayProgress), _padding0(0), _padding1(0) {}
     ~ProgressCommunicator() {
+        if (!printProgress)
+            return;
         cli_progress_done(progress);
         UNPROTECT(1);
     }
@@ -30,11 +36,13 @@ class ProgressCommunicator : public Communicator {
             return;
         }
 
+        if (!printProgress)
+            return;
         if (m == Communicator::NUM_RECORDS && x > 0) {
-            progress = PROTECT(cli_progress_bar(x, NULL));
+            progress = PROTECT(cli_progress_bar(static_cast<double>(x), NULL));
 
         } else if (CLI_SHOULD_TICK && m == Communicator::CURRENT_RECORD) {
-            cli_progress_set(progress, x);
+            cli_progress_set(progress, static_cast<double>(x));
         }
     }
 

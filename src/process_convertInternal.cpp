@@ -30,8 +30,8 @@ Rcpp::List toAxialShapeGraph(Rcpp::XPtr<ShapeMap> shapeMap,
     auto shapeMapNames = getShapeMapAttributeNames(shapeMap.get());
     auto newNames = getShapeMapAttributeNames(axMap.get());
 
-    for (const auto &name : shapeMapNames) {
-        auto axIt = std::find(newNames.begin(), newNames.end(), name);
+    for (const auto &mapName : shapeMapNames) {
+        auto axIt = std::find(newNames.begin(), newNames.end(), mapName);
         if (axIt != newNames.end()) {
             newNames.erase(axIt);
         }
@@ -82,8 +82,8 @@ Rcpp::List shapeMapToSegment(Rcpp::XPtr<ShapeMap> shapeMap,
 
     auto shapeMapNames = getShapeMapAttributeNames(shapeMap.get());
     auto newNames = getShapeMapAttributeNames(segMap.get());
-    for (const auto &name : shapeMapNames) {
-        auto axIt = std::find(newNames.begin(), newNames.end(), name);
+    for (const auto &mapName : shapeMapNames) {
+        auto axIt = std::find(newNames.begin(), newNames.end(), mapName);
         if (axIt != newNames.end()) {
             newNames.erase(axIt);
         }

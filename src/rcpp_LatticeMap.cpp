@@ -9,7 +9,7 @@
 #include "communicator.hpp"
 #include "helper_nullablevalue.hpp"
 
-RCPP_EXPOSED_CLASS(LatticeMap);
+RCPP_EXPOSED_CLASS(LatticeMap)
 
 // [[Rcpp::export("Rcpp_LatticeMap_createFromGrid")]]
 Rcpp::XPtr<LatticeMap> createFromGrid(const double minX, const double minY, const double maxX,
@@ -159,7 +159,7 @@ std::string latticeMapGetName(Rcpp::XPtr<LatticeMap> latticeMapPtr) {
 // [[Rcpp::export("Rcpp_LatticeMap_getLinks")]]
 Rcpp::IntegerMatrix latticeMapGetLinks(Rcpp::XPtr<LatticeMap> latticeMapPtr) {
     auto mergedPixelPairs = latticeMapPtr->getMergedPixelPairs();
-    Rcpp::IntegerMatrix linkData(mergedPixelPairs.size(), 2L);
+    Rcpp::IntegerMatrix linkData(static_cast<int>(mergedPixelPairs.size()), 2L);
     Rcpp::colnames(linkData) = Rcpp::CharacterVector({"from", "to"});
     int rowIdx = 0;
     for (auto link : mergedPixelPairs) {
@@ -179,7 +179,7 @@ Rcpp::IntegerMatrix latticeMapGetConnections(Rcpp::XPtr<LatticeMap> latticeMapPt
         for (size_t j = 0; j < points.rows(); j++) {
             Point &pnt = points(static_cast<size_t>(j), static_cast<size_t>(i));
             if (pnt.filled() && pnt.hasNode()) {
-                PixelRef pix(i, j);
+                PixelRef pix(static_cast<short>(i), static_cast<short>(j));
                 PixelRefVector connections;
                 pnt.getNode().contents(connections);
                 numConnections += connections.size();
@@ -194,7 +194,7 @@ Rcpp::IntegerMatrix latticeMapGetConnections(Rcpp::XPtr<LatticeMap> latticeMapPt
         for (size_t j = 0; j < points.rows(); j++) {
             Point &pnt = points(static_cast<size_t>(j), static_cast<size_t>(i));
             if (pnt.filled() && pnt.hasNode()) {
-                PixelRef pix(i, j);
+                PixelRef pix(static_cast<short>(i), static_cast<short>(j));
                 PixelRefVector hood;
                 pnt.getNode().contents(hood);
                 for (PixelRef &p : hood) {
@@ -211,7 +211,8 @@ Rcpp::IntegerMatrix latticeMapGetConnections(Rcpp::XPtr<LatticeMap> latticeMapPt
 
 // [[Rcpp::export("Rcpp_LatticeMap_getGridCoordinates")]]
 Rcpp::NumericMatrix getGridCoordinates(Rcpp::XPtr<LatticeMap> latticeMapPtr) {
-    Rcpp::NumericMatrix coords(latticeMapPtr->getRows() * latticeMapPtr->getCols(), 3);
+    Rcpp::NumericMatrix coords(
+        static_cast<int>(latticeMapPtr->getRows() * latticeMapPtr->getCols()), 3);
     Rcpp::CharacterVector colNames(3);
     colNames[0] = "x";
     colNames[1] = "y";
@@ -220,7 +221,7 @@ Rcpp::NumericMatrix getGridCoordinates(Rcpp::XPtr<LatticeMap> latticeMapPtr) {
     int rowIdx = 0;
     for (size_t i = 0; i < latticeMapPtr->getRows(); i++) {
         for (size_t j = 0; j < latticeMapPtr->getCols(); j++) {
-            PixelRef ref(j, i);
+            PixelRef ref(static_cast<short>(j), static_cast<short>(i));
             const auto &point = latticeMapPtr->getPoint(ref);
             const Rcpp::NumericMatrix::Row &row = coords(rowIdx, Rcpp::_);
             row[0] = point.getLocation().x;
@@ -235,7 +236,7 @@ Rcpp::NumericMatrix getGridCoordinates(Rcpp::XPtr<LatticeMap> latticeMapPtr) {
 std::vector<std::string> getLatticeMapAttributeNames(LatticeMap *latticeMap) {
     std::vector<std::string> names;
     auto &attributes = latticeMap->getAttributeTable();
-    int numCols = attributes.getNumColumns();
+    size_t numCols = attributes.getNumColumns();
     // + 1 for the key column
     names.reserve(1 + numCols);
     names.push_back(attributes.getColumnName(size_t(-1)));
@@ -262,7 +263,7 @@ getLatticeMapAttributeData(Rcpp::XPtr<LatticeMap> latticeMap,
         if (attributeName == attrbs.getColumnName(size_t(-1))) {
             for (size_t i = 0; i < latticeMap->getRows(); i++) {
                 for (size_t j = 0; j < latticeMap->getCols(); j++) {
-                    PixelRef ref(j, i);
+                    PixelRef ref(static_cast<short>(j), static_cast<short>(i));
                     const auto &point = latticeMap->getPoint(ref);
                     if (point.filled()) {
                         attributeData.push_back(ref);
@@ -276,11 +277,11 @@ getLatticeMapAttributeData(Rcpp::XPtr<LatticeMap> latticeMap,
 
             for (size_t i = 0; i < latticeMap->getRows(); i++) {
                 for (size_t j = 0; j < latticeMap->getCols(); j++) {
-                    PixelRef ref(j, i);
+                    PixelRef ref(static_cast<short>(j), static_cast<short>(i));
                     const auto &point = latticeMap->getPoint(ref);
                     if (point.filled()) {
                         const auto &row = latticeMap->getAttributeTable().getRow(AttributeKey(ref));
-                        attributeData.push_back(row.getValue(colIdx));
+                        attributeData.push_back(static_cast<double>(row.getValue(colIdx)));
                     } else {
                         attributeData.push_back(nan(""));
                     }
@@ -310,7 +311,7 @@ getLatticeMapPropertyData(Rcpp::XPtr<LatticeMap> latticeMap,
         propertyData.reserve(latticeMap->getCols() * latticeMap->getRows());
         for (size_t i = 0; i < latticeMap->getRows(); i++) {
             for (size_t j = 0; j < latticeMap->getCols(); j++) {
-                PixelRef ref(j, i);
+                PixelRef ref(static_cast<short>(j), static_cast<short>(i));
                 double propertyValue = -1;
                 if (propertyName == "Ref") {
                     propertyValue = ref;
@@ -342,11 +343,11 @@ getLatticeMapPropertyData(Rcpp::XPtr<LatticeMap> latticeMap,
 // [[Rcpp::export("Rcpp_LatticeMap_getFilledPoints")]]
 Rcpp::NumericMatrix getFilledPoints(Rcpp::XPtr<LatticeMap> latticeMapPtr) {
     const auto &attrTable = latticeMapPtr->getAttributeTable();
-    int numCols = attrTable.getNumColumns();
+    size_t numCols = attrTable.getNumColumns();
     std::vector<std::string> cellProperties{"x",    "y",  "filled", "blocked", "contextfilled",
                                             "edge", "Ref"};
     Rcpp::NumericMatrix coordsData(latticeMapPtr->getFilledPointCount(),
-                                   cellProperties.size() + numCols);
+                                   static_cast<int>(cellProperties.size() + numCols));
     Rcpp::CharacterVector colNames(cellProperties.size() + numCols);
     {
         int i = 0;
@@ -355,7 +356,7 @@ Rcpp::NumericMatrix getFilledPoints(Rcpp::XPtr<LatticeMap> latticeMapPtr) {
             ++i;
         }
     }
-    for (int i = 0; i < numCols; ++i) {
+    for (size_t i = 0; i < numCols; ++i) {
         colNames[cellProperties.size() + i] = attrTable.getColumnName(i);
     }
 
@@ -375,8 +376,9 @@ Rcpp::NumericMatrix getFilledPoints(Rcpp::XPtr<LatticeMap> latticeMapPtr) {
         row[4] = point.contextfilled();
         row[5] = point.edge();
         row[6] = attrRowIt->getKey().value;
-        for (int i = 0; i < numCols; ++i) {
-            row[cellProperties.size() + i] = attrRowIt->getRow().getValue(i);
+        for (size_t i = 0; i < numCols; ++i) {
+            row[static_cast<int>(cellProperties.size() + i)] =
+                static_cast<double>(attrRowIt->getRow().getValue(i));
         }
         rowIdx++;
         attrRowIt++;

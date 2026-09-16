@@ -6,7 +6,7 @@
 
 #include <Rcpp.h>
 
-RCPP_EXPOSED_CLASS(ShapeGraph);
+RCPP_EXPOSED_CLASS(ShapeGraph)
 
 // [[Rcpp::export("Rcpp_ShapeGraph_getAxialConnections")]]
 std::map<std::string, std::vector<int>> getAxialConnections(Rcpp::XPtr<ShapeMap> shapeGraphPtr) {
@@ -16,9 +16,9 @@ std::map<std::string, std::vector<int>> getAxialConnections(Rcpp::XPtr<ShapeMap>
     std::vector<int> &axialConnectionsTo = axialConnections["to"];
     for (size_t i = 0; i < connectors.size(); i++) {
         const auto &connections = connectors[i].connections;
-        for (int connection : connections) {
-            axialConnectionsFrom.push_back(i);
-            axialConnectionsTo.push_back(connection);
+        for (auto connection : connections) {
+            axialConnectionsFrom.push_back(static_cast<int>(i));
+            axialConnectionsTo.push_back(static_cast<int>(connection));
         }
     }
     return axialConnections;
@@ -37,17 +37,17 @@ std::map<std::string, std::vector<int>> getSegmentConnections(Rcpp::XPtr<ShapeMa
     // directed links
     for (size_t i = 0; i < connectors.size(); i++) {
         for (auto &segconn : connectors[i].forwardSegconns) {
-            segmentConnectionsFrom.push_back(i);
+            segmentConnectionsFrom.push_back(static_cast<int>(i));
             segmentConnectionsTo.push_back(segconn.first.ref);
-            segmentConnectionsSSWeight.push_back(segconn.second);
+            segmentConnectionsSSWeight.push_back(static_cast<int>(std::floor(segconn.second)));
             segmentConnectionsBackward.push_back(0);
             segmentConnectionsDirection.push_back(int(segconn.first.dir));
         }
 
         for (auto &segconn : connectors[i].backSegconns) {
-            segmentConnectionsFrom.push_back(i);
+            segmentConnectionsFrom.push_back(static_cast<int>(i));
             segmentConnectionsTo.push_back(segconn.first.ref);
-            segmentConnectionsSSWeight.push_back(segconn.second);
+            segmentConnectionsSSWeight.push_back(static_cast<int>(std::floor(segconn.second)));
             segmentConnectionsBackward.push_back(1);
             segmentConnectionsDirection.push_back(int(segconn.first.dir));
         }
@@ -59,20 +59,20 @@ std::map<std::string, std::vector<int>> getSegmentConnections(Rcpp::XPtr<ShapeMa
 Rcpp::NumericMatrix getLinksUnlinks(Rcpp::XPtr<ShapeGraph> shapeGraphPtr) {
     const auto &links = shapeGraphPtr->getLinks();
     const auto &unlinks = shapeGraphPtr->getUnlinks();
-    Rcpp::NumericMatrix linkUnlinkData(links.size() + unlinks.size(), 3L);
+    Rcpp::NumericMatrix linkUnlinkData(static_cast<int>(links.size() + unlinks.size()), 3L);
     Rcpp::colnames(linkUnlinkData) = Rcpp::CharacterVector({"from", "to", "isunlink"});
     int rowIdx = 0;
     for (auto link : links) {
         const Rcpp::NumericMatrix::Row &row = linkUnlinkData(rowIdx, Rcpp::_);
-        row[0] = link.a;
-        row[1] = link.b;
+        row[0] = static_cast<double>(link.a);
+        row[1] = static_cast<double>(link.b);
         row[2] = 0; // link
         rowIdx++;
     }
     for (auto unlink : unlinks) {
         const Rcpp::NumericMatrix::Row &row = linkUnlinkData(rowIdx, Rcpp::_);
-        row[0] = unlink.a;
-        row[1] = unlink.b;
+        row[0] = static_cast<double>(unlink.a);
+        row[1] = static_cast<double>(unlink.b);
         row[2] = 1; // unlink
         rowIdx++;
     }

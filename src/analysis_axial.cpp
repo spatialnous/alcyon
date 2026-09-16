@@ -109,9 +109,21 @@ Rcpp::List axialStepDepth(Rcpp::XPtr<ShapeGraph> mapPtr, const int stepType,
 
     mapPtr = RcppRunner::copyMap(mapPtr, copyMap);
 
+    // Wrap TraversalType with this struct to allow padding it to
+    // 8 bytes so that the lambda captures explicitly align
+    struct TraversalPadded {
+        TraversalType type;
+
+      private:
+        [[maybe_unused]] unsigned _padding0 : 4 * 8;
+
+      public:
+        explicit TraversalPadded(TraversalType t) : type(t), _padding0(0) {}
+    };
+
     return RcppRunner::runAnalysis<ShapeGraph>(
         mapPtr, progress,
-        [&stepDepthPointsX, &stepDepthPointsY, traversalStepType,
+        [&stepDepthPointsX, &stepDepthPointsY, ts = TraversalPadded(traversalStepType),
          &verbose](Communicator *comm, Rcpp::XPtr<ShapeGraph> mapPtr) {
             if (verbose)
                 Rcpp::Rcout << "ok\nSelecting cells... " << '\n';
@@ -133,7 +145,7 @@ Rcpp::List axialStepDepth(Rcpp::XPtr<ShapeGraph> mapPtr, const int stepType,
             Rcpp::List result = Rcpp::List::create(Rcpp::Named("completed") = false);
 
             AnalysisResult analysisResult;
-            switch (traversalStepType) {
+            switch (ts.type) {
             case TraversalType::Topological:
                 // currently axial only allows for topological analysis
                 analysisResult =

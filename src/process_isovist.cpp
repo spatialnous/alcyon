@@ -57,7 +57,7 @@ std::set<std::string> setIsovistData(Isovist &isovist, AttributeTable &table, At
     double perimeter = isovist.getPerimeter();
 
     std::string colText = "Isovist Area";
-    int col = table.getOrInsertColumn(colText);
+    size_t col = table.getOrInsertColumn(colText);
     newAttributes.insert(colText);
     row.setValue(col, float(area));
 

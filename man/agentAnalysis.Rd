@@ -48,7 +48,7 @@ to 10). Default is 0.}
 \item{numberOfTrails}{Record trails for this amount of agents (set to 0 to
 record all, with max possible currently = 50).}
 
-\item{getGateCounts}{Get values at gates}
+\item{getGateCounts}{Get values at gates (currently not working)}
 
 \item{copyMap}{Optional. Copy the internal sala map}
 

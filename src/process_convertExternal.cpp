@@ -62,7 +62,7 @@ toShapeMap(Rcpp::DataFrame &df,
         rIts;
 
     { // create the row-names column in the ShapeMap
-        const int rowNameColIdx = shp->addAttribute("df_row_name");
+        auto rowNameColIdx = static_cast<int>(shp->addAttribute("df_row_name"));
         if (rowNameColIdx == -1) {
             // error adding column (e.g., duplicate column names)
             Rcpp::stop("Error creating df row column");
@@ -94,7 +94,8 @@ toShapeMap(Rcpp::DataFrame &df,
         case INTSXP: {
             if (Rf_isFactor(col))
                 Rcpp::stop("Non-numeric columns are not supported (%d: %s)", colIdx, colName);
-            int newColIdx = shp->addAttribute(getSfShapeMapExpectedColName(rColIdx, colName));
+            auto newColIdx =
+                static_cast<int>(shp->addAttribute(getSfShapeMapExpectedColName(rColIdx, colName)));
 
             if (newColIdx == -1) {
                 // error adding column (e.g., duplicate column names)
@@ -106,7 +107,8 @@ toShapeMap(Rcpp::DataFrame &df,
             break;
         }
         case REALSXP: {
-            int newColIdx = shp->addAttribute(getSfShapeMapExpectedColName(rColIdx, colName));
+            auto newColIdx =
+                static_cast<int>(shp->addAttribute(getSfShapeMapExpectedColName(rColIdx, colName)));
 
             if (newColIdx == -1) {
                 // error adding column (e.g., duplicate column names)

@@ -20,7 +20,7 @@
 #' to 10). Default is 0.
 #' @param numberOfTrails Record trails for this amount of agents (set to 0 to
 #' record all, with max possible currently = 50).
-#' @param getGateCounts Get values at gates
+#' @param getGateCounts Get values at gates (currently not working)
 #' @param copyMap Optional. Copy the internal sala map
 #' @param verbose Optional. Show more information of the process.
 #' @param progress Optional. Show process progress.

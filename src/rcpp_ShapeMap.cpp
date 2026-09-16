@@ -6,7 +6,7 @@
 
 #include <Rcpp.h>
 
-RCPP_EXPOSED_CLASS(ShapeMap);
+RCPP_EXPOSED_CLASS(ShapeMap)
 
 // [[Rcpp::export("Rcpp_ShapeMap_make")]]
 Rcpp::XPtr<ShapeMap> make(std::string name) {
@@ -19,7 +19,7 @@ std::string getName(Rcpp::XPtr<ShapeMap> shapeMap) { return shapeMap->getName();
 std::vector<std::string> getShapeMapAttributeNames(ShapeMap *shapeMap) {
     std::vector<std::string> names;
     auto &attributes = shapeMap->getAttributeTable();
-    int numCols = attributes.getNumColumns();
+    auto numCols = attributes.getNumColumns();
     // + 1 for the key column
     names.reserve(1 + numCols);
     names.push_back(attributes.getColumnName(size_t(-1)));
@@ -49,7 +49,7 @@ getShapeMapAttributeData(Rcpp::XPtr<ShapeMap> shapeMap, std::vector<std::string>
         } else {
             size_t colIdx = attrbs.getColumnIndex(attributeName);
             for (auto rowIt = attrbs.begin(); rowIt != attrbs.end(); ++rowIt) {
-                attributeData.push_back(rowIt->getRow().getValue(colIdx));
+                attributeData.push_back(static_cast<double>(rowIt->getRow().getValue(colIdx)));
             }
         }
     }
@@ -60,7 +60,7 @@ getShapeMapAttributeData(Rcpp::XPtr<ShapeMap> shapeMap, std::vector<std::string>
 Rcpp::NumericMatrix getShapesAsLineCoords(Rcpp::XPtr<ShapeMap> shapeMap) {
     std::vector<std::string> names;
     const auto &lines = shapeMap->getAllShapesAsLines();
-    Rcpp::NumericMatrix coords(lines.size(), 4);
+    Rcpp::NumericMatrix coords(static_cast<int>(lines.size()), 4);
     Rcpp::colnames(coords) = Rcpp::CharacterVector({"x1", "y1", "x2", "y2"});
     int rowIdx = 0;
     for (auto &line : lines) {
@@ -76,7 +76,7 @@ Rcpp::NumericMatrix getShapesAsLineCoords(Rcpp::XPtr<ShapeMap> shapeMap) {
 
 // [[Rcpp::export("Rcpp_ShapeMap_getShapesAsPolygonCoords")]]
 Rcpp::GenericVector getShapesAsPolygonCoords(Rcpp::XPtr<ShapeMap> shapeMap) {
-    float TOLERANCE = 0.0001;
+    double TOLERANCE = 0.0001;
     std::vector<std::string> names;
     Rcpp::GenericVector coords;
     const auto &shapes = shapeMap->getAllShapes();
@@ -88,7 +88,8 @@ Rcpp::GenericVector getShapesAsPolygonCoords(Rcpp::XPtr<ShapeMap> shapeMap) {
         const auto &lastPoint = *shape.second.points.rbegin();
         bool lastPointIsFirst = fabs(firstPoint.x - lastPoint.x) < TOLERANCE &&
                                 fabs(firstPoint.y - lastPoint.y) < TOLERANCE;
-        Rcpp::NumericMatrix poly(shape.second.points.size() + (lastPointIsFirst ? 0 : 1), 2);
+        Rcpp::NumericMatrix poly(
+            static_cast<int>(shape.second.points.size()) + (lastPointIsFirst ? 0 : 1), 2);
         Rcpp::colnames(poly) = Rcpp::CharacterVector({"x", "y"});
         int rowIdx = 0;
         for (const auto &point : shape.second.points) {
@@ -119,7 +120,7 @@ Rcpp::GenericVector getShapesAsPolylineCoords(Rcpp::XPtr<ShapeMap> shapeMap) {
             continue;
         // const auto &firstPoint = *shape.second.points.begin();
         // const auto &lastPoint = *shape.second.points.rbegin();
-        Rcpp::NumericMatrix poly(shape.second.points.size(), 2);
+        Rcpp::NumericMatrix poly(static_cast<int>(shape.second.points.size()), 2);
         Rcpp::colnames(poly) = Rcpp::CharacterVector({"x", "y"});
         int rowIdx = 0;
         for (const auto &point : shape.second.points) {
@@ -135,7 +136,7 @@ Rcpp::GenericVector getShapesAsPolylineCoords(Rcpp::XPtr<ShapeMap> shapeMap) {
 
 // [[Rcpp::export("Rcpp_ShapeMap_getShapeCoords")]]
 Rcpp::List getShapeCoords(Rcpp::XPtr<ShapeMap> shapeMapPtr, int ref) {
-    float TOLERANCE = 0.0001;
+    double TOLERANCE = 0.0001;
     auto &shapes = shapeMapPtr->getAllShapes();
     auto shape = shapes.find(ref);
     if (shape != shapes.end()) {
@@ -153,8 +154,8 @@ Rcpp::List getShapeCoords(Rcpp::XPtr<ShapeMap> shapeMapPtr, int ref) {
     bool isPolyAndlastPointIsFirst = shape->second.isPolygon() &&
                                      fabs(firstPoint.x - lastPoint.x) < TOLERANCE &&
                                      fabs(firstPoint.y - lastPoint.y) < TOLERANCE;
-    Rcpp::NumericMatrix coords(shape->second.points.size() + (isPolyAndlastPointIsFirst ? 0 : 1),
-                               2);
+    Rcpp::NumericMatrix coords(
+        static_cast<int>(shape->second.points.size()) + (isPolyAndlastPointIsFirst ? 0 : 1), 2);
     Rcpp::colnames(coords) = Rcpp::CharacterVector({"x", "y"});
     int rowIdx = 0;
     for (const auto &point : shape->second.points) {
