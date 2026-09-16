@@ -7,12 +7,11 @@ project(alcyon_gensala)
 
 set(CMAKE_COMPILE_WARNING_AS_ERROR OFF)
 
-set (FORCE_GLOBAL_COMPILE_WARNINGS ON)
+set (FORCE_GLOBAL_COMPILE_WARNINGS OFF)
 
-if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR
-    "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+if (CMAKE_CXX_COMPILER_ID MATCHES "^(GNU|Clang|AppleClang)$")
     set(COMPILE_WARNINGS -Wall -Wextra)
-elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
+elseif (CMAKE_CXX_COMPILER_ID MATCHES "^MSVC$")
     set(COMPILE_WARNINGS /W4 /EHsc)
 endif()
 
@@ -35,6 +34,8 @@ foreach (source ${salalib_SRCS})
 endforeach ()
 
 add_library(alcyon_gensala STATIC ${real_salalib_SRCS})
+
+target_compile_options(alcyon_gensala PRIVATE ${COMPILE_WARNINGS})
 
 # Set C++17 as the minimum
 target_compile_features(alcyon_gensala PUBLIC cxx_std_17)
