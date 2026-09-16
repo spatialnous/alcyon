@@ -4,7 +4,6 @@
 
 cmake_minimum_required(VERSION 3.13.0..4.0)
 project(alcyon_gensala)
-set(CMAKE_CXX_STANDARD 17)
 
 set(CMAKE_COMPILE_WARNING_AS_ERROR OFF)
 
@@ -36,6 +35,9 @@ foreach (source ${salalib_SRCS})
 endforeach ()
 
 add_library(alcyon_gensala STATIC ${real_salalib_SRCS})
+
+# Set C++17 as the minimum
+target_compile_features(alcyon_gensala PUBLIC cxx_std_17)
 
 if (NOT DISABLE_OPENMP)
     find_package(OpenMP)
