@@ -10,7 +10,7 @@ Subsetting LatticeMap objects essentially passes the data to stars See
 x[...]
 
 # S3 method for class 'LatticeMap'
-x[...] <- value
+x[i] <- value
 ```
 
 ## Arguments
@@ -21,7 +21,11 @@ x[...] <- value
 
 - ...:
 
-  other parameters passed to `stars[] <- `
+  other parameters passed to `stars[]`
+
+- i:
+
+  selector passed to `stars[] <- `
 
 - value:
 
