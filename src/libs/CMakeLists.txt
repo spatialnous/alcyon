@@ -21,7 +21,7 @@ cmake_policy(SET CMP0076 NEW)
 
 include_directories(".")
 
-add_subdirectory(salalib)
+add_subdirectory(salalib EXCLUDE_FROM_ALL)
 
 # get all the sources from salalib
 get_target_property(salalib_SRCS salalib SOURCES)
