@@ -2,6 +2,8 @@
 
 ## alcyon 0.9.0
 
+CRAN release: 2026-08-29
+
 - Rename PointMap to LatticeMap (following sala)
 - Split up Tulip analysis between Full and Leaf (following sala)
 - Sala: Fix issues with C++ includes for clang23

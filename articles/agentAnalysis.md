@@ -7,6 +7,9 @@ library(alcyon)
 #> Linking to GEOS 3.12.1, GDAL 3.8.4, PROJ 9.4.0; sf_use_s2() is TRUE
 #> Loading required package: stars
 #> Loading required package: abind
+#> Registered S3 method overwritten by 'stars':
+#>   method                  from
+#>   st_interpolate_aw.stars sf
 
 galleryMap <- st_read(
     system.file(
