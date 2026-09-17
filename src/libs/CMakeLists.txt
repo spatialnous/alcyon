@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: GPL-3.0-only
 
 cmake_minimum_required(VERSION 3.13.0..4.0)
-project(alcyon_gensala)
+project(alcyon_sala)
 
 set(CMAKE_COMPILE_WARNING_AS_ERROR OFF)
 
@@ -20,32 +20,13 @@ cmake_policy(SET CMP0076 NEW)
 
 include_directories(".")
 
-add_subdirectory(salalib EXCLUDE_FROM_ALL)
+add_subdirectory(salalib)
 
-# get all the sources from salalib
-get_target_property(salalib_SRCS salalib SOURCES)
+target_compile_features(salalib PUBLIC cxx_std_17)
 
-# fix paths if they are not absolute
-set(real_salalib_SRCS "")
-foreach (source ${salalib_SRCS})
-  get_filename_component(newSource ${source}
-                         REALPATH BASE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/salalib")
-  list(APPEND real_salalib_SRCS ${newSource})
-endforeach ()
-
-add_library(alcyon_gensala STATIC ${real_salalib_SRCS})
-
-target_compile_options(alcyon_gensala PRIVATE ${COMPILE_WARNINGS})
-
-# Set C++17 as the minimum
-target_compile_features(alcyon_gensala PUBLIC cxx_std_17)
-
-if (NOT DISABLE_OPENMP)
-    find_package(OpenMP)
-    if(OpenMP_CXX_FOUND)
-        target_link_libraries(alcyon_gensala PUBLIC OpenMP::OpenMP_CXX)
-    endif()
-endif()
+# R's Makevars links $(BLDDIR)/libalcyon_gensala.a
+set_target_properties(salalib PROPERTIES
+    ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
 
 
