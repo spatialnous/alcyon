@@ -28,6 +28,8 @@ agents use to look around and decide where to go next. Possible values:
 
 - AgentLookMode\$BinMemory (Per bin memory)
 
+- AgentLookMode\$Weighted (Standard weighted)
+
 ## Usage
 
 ``` r
