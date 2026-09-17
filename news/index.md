@@ -1,5 +1,13 @@
 # Changelog
 
+## alcyon 0.10.0
+
+- Sala: Make all platforms agree on floating-point arithmetic
+  (-ffp-contract=off)
+- Sala: Expose Penn’s Relative Asymmetry (RA \[Penn\])
+- Sala: Fix Integration \[P-Value\] to use pyramid normalisation
+- Makefile clean-up
+
 ## alcyon 0.9.0
 
 CRAN release: 2026-08-29
