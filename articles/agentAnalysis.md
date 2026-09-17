@@ -23,17 +23,6 @@ galleryMap <- st_read(
 
 ``` r
 
-str(alcyon:::Rcpp_debugLockedColumn())
-#> List of 5
-#>  $ idxPlain  : num 0
-#>  $ idxLocked : num 1
-#>  $ numCols   : num 2
-#>  $ namePlain : chr "plain"
-#>  $ nameLocked: chr "locked"
-```
-
-``` r
-
 latticeMap <- makeVGALatticeMap(
     galleryMap,
     fillX = 3.01,
@@ -43,7 +32,7 @@ latticeMap <- makeVGALatticeMap(
 plot(latticeMap["Connectivity"])
 ```
 
-![](agentAnalysis_files/figure-html/unnamed-chunk-3-1.png)
+![](agentAnalysis_files/figure-html/unnamed-chunk-2-1.png)
 
 ``` r
 
@@ -58,7 +47,7 @@ agentAnalysis <- agentAnalysis(latticeMap,
 plot(agentAnalysis$latticeMap["Gate Counts"])
 ```
 
-![](agentAnalysis_files/figure-html/unnamed-chunk-4-1.png)
+![](agentAnalysis_files/figure-html/unnamed-chunk-3-1.png)
 
 ``` r
 
@@ -74,4 +63,4 @@ agentAnalysis <- agentAnalysis(latticeMap,
 plot(agentAnalysis$trailMap)
 ```
 
-![](agentAnalysis_files/figure-html/unnamed-chunk-5-1.png)
+![](agentAnalysis_files/figure-html/unnamed-chunk-4-1.png)
