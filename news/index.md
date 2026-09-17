@@ -4,8 +4,12 @@
 
 - Sala: Make all platforms agree on floating-point arithmetic
   (-ffp-contract=off)
-- Sala: Expose Penn’s Relative Asymmetry (RA \[Penn\])
-- Sala: Fix Integration \[P-Value\] to use pyramid normalisation
+- Sala: Metric tulip miscalculation fixed (c6307d0)
+- Sala: Long double removed, precision change across 49 files
+- Sala: Corrected node calculation in weighted agent look
+- Sala: Non-trigonometric 32-bin calculation for agents
+- Analysis column names were empty on Windows
+- Now validating agentFov range
 - Makefile clean-up
 
 ## alcyon 0.9.0
@@ -15,6 +19,8 @@ CRAN release: 2026-08-29
 - Rename PointMap to LatticeMap (following sala)
 - Split up Tulip analysis between Full and Leaf (following sala)
 - Sala: Fix issues with C++ includes for clang23
+- Sala: Expose Penn’s Relative Asymmetry (RA \[Penn\])
+- Sala: Fix Integration \[P-Value\] to use pyramid normalisation
 
 ## alcyon 0.8.1
 
