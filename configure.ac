@@ -16,10 +16,6 @@ if test -z "${R_HOME}"; then
 else
   echo "R_HOME set at: ${R_HOME}"
 fi
-CC=`"${R_HOME}/bin/R" CMD config CC`
-CFLAGS=`"${R_HOME}/bin/R" CMD config CFLAGS`
-CPPFLAGS=`"${R_HOME}/bin/R" CMD config CPPFLAGS`
-LDFLAGS=`"${R_HOME}/bin/R" CMD config LDFLAGS`
 
 ### Force enable openmp using --enable-force-openmp
 AC_ARG_ENABLE([force-openmp],

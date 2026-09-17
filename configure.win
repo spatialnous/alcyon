@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2024 Petros Koutsolampros
+# SPDX-FileCopyrightText: 2024-2026 Petros Koutsolampros
 #
 # SPDX-License-Identifier: GPL-3.0-only
 
@@ -7,10 +7,18 @@ if test -z "${R_HOME}"; then
   echo "could not determine R_HOME"
   exit 1
 fi
-CC=`"${R_HOME}/bin/R.exe" CMD config CC`
-CFLAGS=`"${R_HOME}/bin/R.exe" CMD config CFLAGS`
-CPPFLAGS=`"${R_HOME}/bin/R.exe" CMD config CPPFLAGS`
-LDFLAGS=`"${R_HOME}/bin/R.exe" CMD config LDFLAGS`
+
+# Check whether R has been built with OpenMP support. If it has not, tell CMake
+# to disable it rather than have salalib link something R cannot provide.
+R_HAS_OMP=`"${R_HOME}/bin/Rscript.exe" -e 'mk <- readLines(file.path(R.home("etc"), .Platform[["r_arch"]], "Makeconf")); ln <- grep("^SHLIB_OPENMP_CXXFLAGS", mk, value = TRUE); cat(length(ln) == 1L && trimws(sub("^[^=]*=", "", ln)) == "-fopenmp")'`
+
+DISABLE_OPENMP=OFF
+if test "$R_HAS_OMP" = "FALSE" ; then
+  echo "R has NOT been built with OpenMP support, disabling"
+  DISABLE_OPENMP=ON
+else
+  echo "R has been built with OpenMP support, enabling"
+fi
 
 "${R_HOME}/bin/Rscript.exe" -e 'library(Rcpp); compileAttributes(".")'
 
@@ -20,7 +28,8 @@ cmake.exe ../libs \
   -DCMAKE_VERBOSE_MAKEFILE=ON \
   -DCMAKE_BUILD_TYPE=Release \
   -DBUILD_SHARED_LIBS:bool=OFF \
-  -DCMAKE_POSITION_INDEPENDENT_CODE:bool=ON
+  -DCMAKE_POSITION_INDEPENDENT_CODE:bool=ON \
+  -DDISABLE_OPENMP=${DISABLE_OPENMP}
 
 # remove .NOTPARALLEL to stop CMD Check from complaining
 find . -name Makefile -exec sed -i '/^.NOTPARALLEL:$/s/^/#/' {} \;
