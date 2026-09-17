@@ -24,7 +24,7 @@ add_subdirectory(salalib)
 
 target_compile_features(salalib PUBLIC cxx_std_17)
 
-# R's Makevars links $(BLDDIR)/libalcyon_gensala.a
+# R's Makevars links $(BLDDIR)/libsalalib.a
 set_target_properties(salalib PROPERTIES
     ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 

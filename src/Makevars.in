@@ -8,7 +8,7 @@ CXX_STD = CXX17
 BLDDIR = build-Release
 
 # Make sure libraries are included so that they can refer to each other
-PKG_CXXFLAGS = $(SHLIB_OPENMP_CXXFLAGS) -ffp-contract=off
+PKG_CXXFLAGS = $(SHLIB_OPENMP_CXXFLAGS)
 PKG_CPPFLAGS = -I../src/libs -I../../inst/include/ -I..
 PKG_LIBS = $(SHLIB_OPENMP_CXXFLAGS) $(BLDDIR)/libsalalib.a @EXTRA_LIBS@
 
@@ -47,10 +47,13 @@ all: $(SHLIB)
 $(BLDDIR):
 	mkdir -p $@
 
+# Keep cross-platform floating point arithmetic the same
+FPFLAGS = -ffp-contract=off
+
 # Build each object. This is necessary to override
 # becasue otherwise .o files would end up in src/
 $(BLDDIR)/%.o: %.cpp | $(BLDDIR)
-	$(CXX) $(ALL_CPPFLAGS) $(ALL_CXXFLAGS) -c $< -o $@
+	$(CXX) $(ALL_CPPFLAGS) $(ALL_CXXFLAGS) $(FPFLAGS) -c $< -o $@
 
 # Provide recipe to remove all objects
 clean:
