@@ -26,6 +26,7 @@ the agents use to look around and decide where to go next. Possible values:
   \item{AgentLookMode$BinFarDistanceAngle (Per bin far-distance and angle
   weighted)}
   \item{AgentLookMode$BinMemory (Per bin memory)}
+  \item{AgentLookMode$Weighted (Standard weighted)}
 }
 }
 \examples{

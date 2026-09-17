@@ -21,7 +21,8 @@ enum class AgentLookMode {
     BinAngle = 9,
     BinFarDistanceAngle = 10,
     BinMemory = 11,
+    Weighted = 12,
     // remember to change maximum if adding values here
     min = None,
-    max = BinMemory
+    max = Weighted
 };

@@ -63,6 +63,9 @@ Rcpp::List agentAnalysis(Rcpp::XPtr<LatticeMap> mapPtr, int systemTimesteps, flo
     case AgentLookMode::BinMemory:
         agentAlgorithm = AgentProgram::SEL_OCC_MEMORY;
         break;
+    case AgentLookMode::Weighted:
+        agentAlgorithm = AgentProgram::SEL_WEIGHTED;
+        break;
     }
 
     std::vector<Point2f> releasePoints;

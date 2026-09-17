@@ -24,6 +24,7 @@
 #'   \item{AgentLookMode$BinFarDistanceAngle (Per bin far-distance and angle
 #'   weighted)}
 #'   \item{AgentLookMode$BinMemory (Per bin memory)}
+#'   \item{AgentLookMode$Weighted (Standard weighted)}
 #' }
 #'
 #' @returns A list of numbers representing each agent look mode
@@ -44,5 +45,6 @@ AgentLookMode <- list(
     BinFarDistance = 8L,
     BinAngle = 9L,
     BinFarDistanceAngle = 10L,
-    BinMemory = 11L
+    BinMemory = 11L,
+    Weighted = 12L
 )
