@@ -29,6 +29,7 @@ cmake.exe ../libs \
   -DCMAKE_BUILD_TYPE=Release \
   -DBUILD_SHARED_LIBS:bool=OFF \
   -DCMAKE_POSITION_INDEPENDENT_CODE:bool=ON \
+  -DCMAKE_CXX_FLAGS_RELEASE=-DNDEBUG \
   -DDISABLE_OPENMP=${DISABLE_OPENMP}
 
 # remove .NOTPARALLEL to stop CMD Check from complaining
