@@ -88,6 +88,14 @@
 <span>    geometry_column <span class="op">=</span> <span class="fl">1L</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="fu">alcyon</span><span class="fu">:::</span><span class="fu">Rcpp_debugLockedColumn</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; List of 5</span></span>
+<span><span class="co">#&gt;  $ idxPlain  : num 0</span></span>
+<span><span class="co">#&gt;  $ idxLocked : num 1</span></span>
+<span><span class="co">#&gt;  $ numCols   : num 2</span></span>
+<span><span class="co">#&gt;  $ namePlain : chr "plain"</span></span>
+<span><span class="co">#&gt;  $ nameLocked: chr "locked"</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">latticeMap</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/makeVGALatticeMap.html">makeVGALatticeMap</a></span><span class="op">(</span></span>
 <span>    <span class="va">galleryMap</span>,</span>
 <span>    fillX <span class="op">=</span> <span class="fl">3.01</span>,</span>
@@ -95,8 +103,8 @@
 <span>    gridSize <span class="op">=</span> <span class="fl">0.06</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">latticeMap</span><span class="op">[</span><span class="st">"Connectivity"</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
-<p><img src="agentAnalysis_files/figure-html/unnamed-chunk-2-1.png" class="r-plt" alt="" width="700"></p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<p><img src="agentAnalysis_files/figure-html/unnamed-chunk-3-1.png" class="r-plt" alt="" width="700"></p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">agentAnalysis</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/agentAnalysis.html">agentAnalysis</a></span><span class="op">(</span><span class="va">latticeMap</span>,</span>
 <span>    timesteps <span class="op">=</span> <span class="fl">10000</span>,</span>
 <span>    releaseRate <span class="op">=</span> <span class="fl">0.1</span>,</span>
@@ -106,8 +114,8 @@
 <span>    agentLookMode <span class="op">=</span> <span class="va">AgentLookMode</span><span class="op">$</span><span class="va">Standard</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">agentAnalysis</span><span class="op">$</span><span class="va">latticeMap</span><span class="op">[</span><span class="st">"Gate Counts"</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
-<p><img src="agentAnalysis_files/figure-html/unnamed-chunk-3-1.png" class="r-plt" alt="" width="700"></p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<p><img src="agentAnalysis_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" alt="" width="700"></p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">agentAnalysis</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/agentAnalysis.html">agentAnalysis</a></span><span class="op">(</span><span class="va">latticeMap</span>,</span>
 <span>    timesteps <span class="op">=</span> <span class="fl">10000</span>,</span>
 <span>    releaseRate <span class="op">=</span> <span class="fl">0.1</span>,</span>
@@ -118,7 +126,7 @@
 <span>    numberOfTrails <span class="op">=</span> <span class="fl">50</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">agentAnalysis</span><span class="op">$</span><span class="va">trailMap</span><span class="op">)</span></span></code></pre></div>
-<p><img src="agentAnalysis_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" alt="" width="700"></p>
+<p><img src="agentAnalysis_files/figure-html/unnamed-chunk-5-1.png" class="r-plt" alt="" width="700"></p>
   </main>
 </div>
 
