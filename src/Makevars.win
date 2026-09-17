@@ -47,7 +47,7 @@ all: $(SHLIB)
 FPFLAGS = -ffp-contract=off
 
 %.o: %.cpp
-      $(CXX) $(ALL_CPPFLAGS) $(ALL_CXXFLAGS) $(FPFLAGS) -c $< -o $@
+	$(CXX) $(ALL_CPPFLAGS) $(ALL_CXXFLAGS) $(FPFLAGS) -c $< -o $@
 
 # Provide recipe to remove all objects
 clean:
