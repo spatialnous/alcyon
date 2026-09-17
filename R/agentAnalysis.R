@@ -68,7 +68,7 @@ agentAnalysis <- function(latticeMap,
         stop("Unknown agent look mode: ", agentLookMode, call. = FALSE)
     }
     if (length(agentFov) != 1L || is.na(agentFov) || agentFov < 1L || agentFov > 32L) {
-        stop("Agent field-of-view (agentFov) must be a single value between 1 and 32",
+        stop("Agent field-of-view (agentFov) must be a single value between 1 and 32 ",
              "(32 bins = 360 degrees), got: ", agentFov, call. = FALSE)
     }
     agentAnalysis <- Rcpp_agentAnalysis(
