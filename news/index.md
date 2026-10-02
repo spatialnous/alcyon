@@ -2,6 +2,8 @@
 
 ## alcyon 0.10.0
 
+CRAN release: 2026-09-18
+
 - Sala: Make all platforms agree on floating-point arithmetic
   (-ffp-contract=off)
 - Sala: Metric tulip miscalculation fixed (c6307d0)
