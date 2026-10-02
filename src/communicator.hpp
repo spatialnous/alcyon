@@ -24,6 +24,8 @@ class ProgressCommunicator : public Communicator {
     ~ProgressCommunicator() {
         if (!printProgress)
             return;
+        if (progress == nullptr)
+            return;
         cli_progress_done(progress);
         UNPROTECT(1);
     }
@@ -39,6 +41,10 @@ class ProgressCommunicator : public Communicator {
         if (!printProgress)
             return;
         if (m == Communicator::NUM_RECORDS && x > 0) {
+            if (progress != nullptr) {
+                cli_progress_done(progress);
+                UNPROTECT(1);
+            }
             progress = PROTECT(cli_progress_bar(static_cast<double>(x), NULL));
 
         } else if (CLI_SHOULD_TICK && m == Communicator::CURRENT_RECORD) {
