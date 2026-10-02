@@ -58,7 +58,7 @@ Rcpp::List vgaVisualLocal(Rcpp::XPtr<LatticeMap> mapPtr,
                     analysisResult =
                         VGAVisualLocalOpenMP(
                             *mapPtr, nthreads == 0 ? std::nullopt : std::make_optional(nthreads),
-                            true)
+                            false)
                             .run(comm);
                 }
             } else if (algorithm == VGALocalAlgorithm::AdjacencyMatrix) {
@@ -66,7 +66,7 @@ Rcpp::List vgaVisualLocal(Rcpp::XPtr<LatticeMap> mapPtr,
                 analysisResult =
                     VGAVisualLocalAdjMatrix(
                         *mapPtr, gatesOnly,
-                        nthreads == 0 ? std::nullopt : std::make_optional(nthreads), true)
+                        nthreads == 0 ? std::nullopt : std::make_optional(nthreads), false)
                         .run(comm);
             }
             return analysisResult;

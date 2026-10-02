@@ -47,7 +47,7 @@ Rcpp::List vgaAngular(Rcpp::XPtr<LatticeMap> mapPtr, double radius,
                 // openmp algorithm
                 auto analysis = VGAAngularOpenMP(
                     *mapPtr, radius, gatesOnly,
-                    nthreads == 0 ? std::nullopt : std::make_optional(nthreads), true);
+                    nthreads == 0 ? std::nullopt : std::make_optional(nthreads), false);
                 analysisResult = analysis.run(comm);
                 analysis.copyResultToMap(analysisResult.getAttributes(),
                                          std::move(analysisResult.getAttributeData()), *mapPtr,
@@ -90,7 +90,7 @@ Rcpp::List vgaMetric(Rcpp::XPtr<LatticeMap> mapPtr, double radius,
                 // openmp algorithm
                 auto analysis = VGAMetricOpenMP(
                     *mapPtr, radius, gatesOnly,
-                    nthreads == 0 ? std::nullopt : std::make_optional(nthreads), true);
+                    nthreads == 0 ? std::nullopt : std::make_optional(nthreads), false);
                 analysisResult = analysis.run(comm);
                 analysis.copyResultToMap(analysisResult.getAttributes(),
                                          std::move(analysisResult.getAttributeData()), *mapPtr,
@@ -134,7 +134,7 @@ Rcpp::List vgaVisualGlobal(Rcpp::XPtr<LatticeMap> mapPtr, int radius,
                 analysisResult = VGAVisualGlobalOpenMP(*mapPtr, radius, gatesOnly,
                                                        nthreads == 0 ? std::nullopt
                                                                      : std::make_optional(nthreads),
-                                                       true)
+                                                       false)
                                      .run(comm);
             }
             return analysisResult;
