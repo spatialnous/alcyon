@@ -39,7 +39,7 @@ Rcpp::List extractFewestLineMaps(Rcpp::XPtr<ShapeGraph> allLineMap,
     auto progress = NullableValue::get(progressNV, false);
 
     auto [fewestlinemap_subsets, fewestlinemap_minimal] =
-        AllLine::extractFewestLineMaps(getCommunicator(progress).get(), *allLineMap, *mapData, 0);
+        AllLine::extractFewestLineMaps(getCommunicator(progress).get(), *allLineMap, *mapData);
 
     return Rcpp::List::create(Rcpp::Named("Fewest-Line Map (Subsets)") = Rcpp::XPtr<ShapeGraph>(
                                   new ShapeGraph(std::move(fewestlinemap_subsets)), true),

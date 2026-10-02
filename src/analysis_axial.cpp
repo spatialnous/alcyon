@@ -66,7 +66,7 @@ Rcpp::List runAxialAnalysis(Rcpp::XPtr<ShapeGraph> mapPtr, const Rcpp::NumericVe
             std::set<double> radius_set;
             radius_set.insert(radii.begin(), radii.end());
             auto analysis = AxialIntegration(radius_set, weightedMeasureColIdx, includeChoice,
-                                             includeIntermediateMetrics);
+                                             includeIntermediateMetrics, pafmath::defaultSeed);
             AnalysisResult analysisResult = analysis.run(comm, *mapPtr, false /* simple version*/);
             return analysisResult;
         });

@@ -80,9 +80,10 @@ Rcpp::List segmentShortestPath(Rcpp::XPtr<ShapeGraph> mapPtr, const int stepType
                 switch (traversalStepType) {
                 case TraversalType::Angular:
                     if (tulipBins != 0) {
-                        analysisResult.append(
-                            SegmentTulipShortestPath(*mapPtr, tulipBins, origin, *destIt)
-                                .run(comm));
+                        analysisResult.append(SegmentTulipShortestPath(*mapPtr, tulipBins, origin,
+                                                                       *destIt,
+                                                                       pafmath::defaultSeed)
+                                                  .run(comm));
                     } else {
                         // full angular was never created as a step-function
                         // do normal tulip

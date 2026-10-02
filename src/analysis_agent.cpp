@@ -109,8 +109,8 @@ Rcpp::List agentAnalysis(Rcpp::XPtr<LatticeMap> mapPtr, int systemTimesteps, flo
         auto analysisResult =
             AgentAnalysis(*mapPtr, systemTimesteps, static_cast<double>(releaseRate),
                           agentLifeTimesteps, static_cast<unsigned short>(agentFov),
-                          agentStepsToDecision, agentAlgorithm, randomReleaseLocationSeed,
-                          releasePoints, gateLayer, recordTrails)
+                          agentStepsToDecision, agentAlgorithm, pafmath::defaultSeed,
+                          randomReleaseLocationSeed, releasePoints, gateLayer, recordTrails)
                 .run(getCommunicator(progress).get());
 
         result.setFromResult(std::move(analysisResult));

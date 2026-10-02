@@ -60,7 +60,7 @@ Rcpp::List segmentStepDepth(Rcpp::XPtr<ShapeGraph> mapPtr, const int stepType,
             switch (traversalStepType) {
             case TraversalType::Angular:
                 if (tulipBins != 0) {
-                    analysisResult = SegmentTulipDepth(tulipBins, origins)
+                    analysisResult = SegmentTulipDepth(tulipBins, origins, pafmath::defaultSeed)
                                          .run(comm, *mapPtr, false /* simple mode */
                                          );
                 } else {
